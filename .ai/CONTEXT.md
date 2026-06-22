@@ -132,6 +132,7 @@ This file is living memory for AI agents working on this repository. Read it bef
 
 ## Current Progress
 
+- **Versioning started.** First beta release tagged: `v1.0.0-beta`. Version is set in `package.json` and flows to Electron's `app.getVersion()` (About page, Sidebar, electron-builder artifact names).
 - Initial repository scan completed.
 - Confirmed GPLv3 license file exists at `LICENSE`.
 - Identified main renderer redesign entry points and branding references.
