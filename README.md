@@ -1,59 +1,76 @@
-# WorkspAIce
+<p align="center">
+  <img src="assets/icons/256x256.png" alt="WorkspAIce" width="128" height="128" />
+</p>
 
-WorkspAIce is a personal GPLv3 fork of the original Chatbox app: https://chatboxai.app/en.
+<h1 align="center">WorkspAIce</h1>
 
-The goal of this fork is to redesign and refactor the app into a local-first desktop AI workspace for macOS and Windows. This project is not affiliated with the original Chatbox project.
+<p align="center">
+  <strong>Your AI, your machine, your rules.</strong><br />
+  A local-first desktop AI workspace — fast, private, multi-provider.<br />
+  Forked with ❤️ from <a href="https://chatboxai.app/en">Chatbox</a>.
+</p>
 
-## Direction
+---
 
-- Local-first desktop app for macOS and Windows.
-- No bundled hosted AI service.
-- No license service, subscriptions, premium gates, or account requirement.
-- No telemetry, analytics, or hosted remote configuration.
-- Keep user-configured providers, including local providers and user-supplied external API providers.
-- Preserve GPLv3 licensing for any future release.
+## 🙏 Credits
 
-## Provider Model
+WorkspAIce is built on the shoulders of **[Chatbox](https://chatboxai.app/en)** — a sleek, open-source desktop AI client created by the Chatbox team.
 
-WorkspAIce is intended to connect only to providers configured by the user.
+We're deeply grateful to the Chatbox maintainers and contributors for building such a solid foundation. Their work made this project possible, and we encourage you to check out the original:
 
-Relevant provider types include:
+- 🌐 [chatboxai.app](https://chatboxai.app/en)
+- 📦 [Chatbox on GitHub](https://github.com/Bin-Huang/chatbox)
 
-- Local providers such as Ollama and LM Studio-style endpoints.
-- User-supplied OpenAI-compatible providers.
-- User-configured external providers such as OpenAI, Anthropic, Gemini, OpenRouter, and similar APIs.
+Thank you, Chatbox team! 🫶
 
-Any feature that depends on an upstream hosted service should be removed, disabled, or converted into a user-configured integration.
+---
 
-## Current Status
+## 🧭 Direction
 
-This repository is in early fork cleanup.
+WorkspAIce is an independent project that takes Chatbox in a different direction:
 
-Completed initial cleanup:
+- 💻 **Local-first** desktop app for macOS and Windows.
+- 🔓 **No accounts, no subscriptions, no premium gates.** Just download and use.
+- 🛡️ **No telemetry, no analytics, no hosted remote config.** Your conversations stay on your machine.
+- 🧠 **No bundled hosted AI service.** You own your API keys and choose your providers.
+- 📜 **GPLv3 licensed** — free and open source, today and tomorrow.
 
-- Rebranded the app toward WorkspAIce.
-- Added `.ai/CONTEXT.md` as shared memory for AI agents.
-- Added `.ai/AGENT_RULES.md` with mandatory agent workflow rules.
-- Removed the bundled hosted provider registration.
-- Removed hosted provider settings routes.
-- Disabled hosted telemetry, hosted remote config, license reconciliation, and hosted update listeners from renderer startup.
-- Replaced the renderer hosted remote API module with local-first stubs.
+---
 
-Known follow-up work:
+## 🔌 Provider Model
 
-- Finish removing leftover hosted-service concepts from UI copy and settings flows.
-- Verify and fix TypeScript/build issues after installing the supported Node version and dependencies.
-- Continue the visual redesign of the app shell and chat surface.
-- Decide whether mobile/web build paths should be removed or only deprioritized.
+WorkspAIce connects only to providers that **you** configure. No built-in middleman.
 
-## Development Requirements
+- 🏠 **Local providers** — Ollama, LM Studio, and any OpenAI-compatible local endpoint.
+- ☁️ **External APIs** — OpenAI, Anthropic, Gemini, OpenRouter, DeepSeek, SiliconFlow, and more.
+- ⚙️ **You're in control** — every provider, model, and API key is yours to manage.
 
-Use the versions declared in `package.json`.
+Any feature that once depended on an upstream hosted service has been removed, disabled, or converted into a user-configured integration.
 
-- Node.js: `>=22.12.0 <25.0.0`
-- pnpm: `>=10.17.0`
-- Git
-- Xcode Command Line Tools on macOS for native dependency builds
+---
+
+## 🛠️ Development
+
+### Current Status
+
+This repository is in early fork cleanup. Completed so far:
+
+- ✅ Rebranded from Chatbox to WorkspAIce (icons, naming, theme, palette).
+- ✅ Removed hosted provider registration, telemetry, analytics, remote config, license reconciliation, and updater endpoints.
+- ✅ Replaced hosted remote API with local-first stubs.
+- ✅ Removed account/license/premium flows, onboarding guide, and copilot features.
+- ✅ Repaired TypeScript/build after hosted-service removals.
+- 🚧 Ongoing visual redesign of the app shell and chat surface.
+- 🚧 TBD whether mobile/web build paths are removed or deprioritized.
+
+### Requirements
+
+Use the versions declared in `package.json`:
+
+- **Node.js** `>=22.12.0 <25.0.0`
+- **pnpm** `>=10.17.0`
+- **Git**
+- **Xcode Command Line Tools** (macOS, for native dependency builds)
 
 Recommended on Apple Silicon macOS with Homebrew:
 
@@ -62,7 +79,7 @@ brew install node@22 pnpm git
 xcode-select --install
 ```
 
-## Setup
+### Setup
 
 ```bash
 pnpm install
@@ -72,13 +89,13 @@ pnpm dev
 Useful commands:
 
 ```bash
-pnpm check
-pnpm lint
-pnpm test
-pnpm build
+pnpm check    # Type-check
+pnpm lint     # Lint
+pnpm test     # Run tests
+pnpm build    # Production build
 ```
 
-## Project Layout
+### Project Layout
 
 ```text
 src/main/       Electron main process
@@ -88,23 +105,10 @@ src/shared/     Shared types, providers, model code, utilities
 .ai/            AI-agent memory and workflow rules
 ```
 
-## AI Agent Workflow
+---
 
-Agents working in this repository must read and follow:
+## 📄 License
 
-- `.ai/CONTEXT.md`
-- `.ai/AGENT_RULES.md`
-
-Important rules:
-
-- Always work on the `dev` branch.
-- Update `.ai/CONTEXT.md` after code changes.
-- Make reasonable scoped commits after code changes.
-- Do not push unless explicitly asked.
-- Ask when requirements are ambiguous.
-
-## License
-
-This fork is licensed under GPLv3, same as the upstream project.
+This fork is licensed under **GPLv3**, same as the upstream Chatbox project.
 
 See [LICENSE](./LICENSE).
