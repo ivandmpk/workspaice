@@ -132,6 +132,7 @@ This file is living memory for AI agents working on this repository. Read it bef
 
 ## Current Progress
 
+- **v1.0.0-beta released for testing.** Built for macOS (arm64/x64, DMG) and Windows (x64/arm64, NSIS Setup.exe). All unsigned. Removed broken `signtoolOptions` reference to missing `custom_win_sign.js` from electron-builder.yml. **Development frozen until beta testing completes — no further code changes until test feedback is received.**
 - **Versioning started.** First beta release tagged: `v1.0.0-beta`. Version is set in `package.json` and flows to Electron's `app.getVersion()` (About page, Sidebar, electron-builder artifact names).
 - Initial repository scan completed.
 - Confirmed GPLv3 license file exists at `LICENSE`.
