@@ -4,7 +4,16 @@
      #F5F5F5  bg / surface (light)
      #76ABAE  accent (teal)
      #303841  bg (dark) / text (light)
-     #FF5722  highlight (orange)
+     #FF5722  highlight (brand orange — used decoratively)
+
+   Accessibility notes:
+   - Bright teal #76ABAE only hits 2.1:1 on light, so text on light
+     uses a darker variant (--accent-text = #3F7679 ≈ 4.7:1).
+   - Bright orange #FF5722 only hits 3.5:1 on white, so text/button
+     uses a darker variant (--highlight = #C2410C ≈ 5.2:1).
+   - #FF5722 is kept for purely decorative brand surfaces (heart,
+     card icon shape, AI badge in icon) where contrast rules don't
+     apply.
    ============================================================ */
 
 /* ---- Reset / base ---- */
@@ -31,7 +40,7 @@ body {
 
 img, svg { display: block; max-width: 100%; height: auto; }
 
-a { color: var(--accent); text-decoration: none; }
+a { color: var(--accent-text); text-decoration: none; }
 a:hover { color: var(--accent-hover); }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 
@@ -50,10 +59,13 @@ ul { padding: 0; list-style: none; }
   --text-muted: #5B6470;
   --border: #E1E3E6;
   --accent: #76ABAE;
-  --accent-hover: #5A8F92;
+  --accent-text: #3F7679;
+  --accent-hover: #2E5C5E;
   --accent-soft: rgba(118, 171, 174, 0.14);
-  --highlight: #FF5722;
-  --highlight-hover: #E64A19;
+  --highlight: #C2410C;       /* darker orange — accessible on white */
+  --highlight-hover: #9A3309;
+  --highlight-soft: rgba(194, 65, 12, 0.12);
+  --highlight-bright: #FF5722; /* brand orange — decorative only (icon, heart) */
   --shadow-sm: 0 1px 2px rgba(48, 56, 65, 0.04);
   --shadow-md: 0 4px 16px rgba(48, 56, 65, 0.06);
   --focus-ring: 0 0 0 3px rgba(118, 171, 174, 0.45);
@@ -67,10 +79,13 @@ ul { padding: 0; list-style: none; }
   --text-muted: #B0B5BD;
   --border: #4A5260;
   --accent: #76ABAE;
-  --accent-hover: #8FBFC1;
+  --accent-text: #8FC6C9;
+  --accent-hover: #A6D4D6;
   --accent-soft: rgba(118, 171, 174, 0.18);
-  --highlight: #FF5722;
-  --highlight-hover: #FF7043;
+  --highlight: #C2410C;       /* same in both modes — works with white text */
+  --highlight-hover: #E65100;
+  --highlight-soft: rgba(255, 87, 34, 0.16);
+  --highlight-bright: #FF5722;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.30);
   --focus-ring: 0 0 0 3px rgba(118, 171, 174, 0.55);
@@ -336,7 +351,7 @@ ul { padding: 0; list-style: none; }
   margin-bottom: 18px;
 }
 .card-icon--teal { background: var(--accent-soft); color: var(--accent); }
-.card-icon--orange { background: rgba(255, 87, 34, 0.12); color: var(--highlight); }
+.card-icon--orange { background: var(--highlight-soft); color: var(--highlight); }
 
 .card-title {
   font-size: 18px;
@@ -373,8 +388,8 @@ ul { padding: 0; list-style: none; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.provider-tag--local { background: var(--accent-soft); color: var(--accent); }
-.provider-tag--cloud { background: rgba(255, 87, 34, 0.12); color: var(--highlight); }
+.provider-tag--local { background: var(--accent-soft); color: var(--accent-text); }
+.provider-tag--cloud { background: var(--highlight-soft); color: var(--highlight); }
 
 .provider-list {
   display: flex;
@@ -412,7 +427,7 @@ ul { padding: 0; list-style: none; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: 16px;
 }
 
@@ -425,15 +440,15 @@ ul { padding: 0; list-style: none; }
   color: var(--text);
 }
 
-.heart { color: var(--highlight); display: inline-block; transform: translateY(-2px); }
+.heart { color: var(--highlight-bright); display: inline-block; transform: translateY(-2px); }
 
 .credits-link {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 700;
   border-bottom: 2px solid transparent;
   transition: border-color 150ms ease;
 }
-.credits-link:hover { border-bottom-color: var(--accent); }
+.credits-link:hover { border-bottom-color: var(--accent-text); }
 
 .credits-body {
   font-size: 16px;
