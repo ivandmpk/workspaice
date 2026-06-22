@@ -26,6 +26,12 @@ These rules apply to all AI agents working in this repository.
 - Do not add bundled hosted services, license services, subscription flows, premium gates, account requirements, telemetry, or hosted remote configuration.
 - If a feature requires a hosted service, either remove it, make it user-configured, or ask the user before proceeding.
 
+## Available Tools And Services
+
+- **Playwright MCP** — available for browser-based testing and interacting with the running dev app. Use it to verify UI behavior, inspect rendered pages, or test interactions.
+- **Context7** — available for fetching up-to-date documentation about the project's tech stack (React, Electron, Mantine, TanStack Router, TypeScript, Vite, etc.). Use it when you need current API docs or usage examples.
+- Both services are available to all agents working in this repository. Use them proactively when they would improve correctness or speed.
+
 ## Collaboration Discipline
 
 - If requirements are ambiguous, ask the user instead of assuming.
