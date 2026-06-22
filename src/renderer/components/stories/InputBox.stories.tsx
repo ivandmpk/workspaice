@@ -69,8 +69,8 @@ export const CurrentInputBox: StoryObj = {
         <Stack
           className="rounded-md justify-between px-3 py-2 min-h-[92px]"
           style={{
-            backgroundColor: 'var(--chatbox-background-secondary)',
-            border: '1px solid var(--chatbox-border-primary)',
+            backgroundColor: 'var(--workspaice-background-secondary)',
+            border: '1px solid var(--workspaice-border-primary)',
           }}
           gap="xs"
         >
@@ -94,52 +94,52 @@ export const CurrentInputBox: StoryObj = {
 
           <Flex align="center" gap={0} className="shrink-0 w-full" justify="space-between">
             <Flex align="center" gap={0}>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconCirclePlus
                   size={toolbarIconSize}
                   strokeWidth={1.8}
-                  style={{ color: 'var(--chatbox-tint-secondary)' }}
+                  style={{ color: 'var(--workspaice-tint-secondary)' }}
                 />
               </UnstyledButton>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconHammer
                   size={toolbarIconSize}
                   strokeWidth={1.8}
-                  style={{ color: 'var(--chatbox-tint-secondary)' }}
+                  style={{ color: 'var(--workspaice-tint-secondary)' }}
                 />
               </UnstyledButton>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconVocabulary
                   size={toolbarIconSize}
                   strokeWidth={1.8}
-                  style={{ color: 'var(--chatbox-tint-secondary)' }}
+                  style={{ color: 'var(--workspaice-tint-secondary)' }}
                 />
               </UnstyledButton>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
-                <IconWorldWww size={toolbarIconSize} strokeWidth={1.8} style={{ color: 'var(--chatbox-tint-brand)' }} />
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                <IconWorldWww size={toolbarIconSize} strokeWidth={1.8} style={{ color: 'var(--workspaice-tint-brand)' }} />
               </UnstyledButton>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconFilePencil
                   size={toolbarIconSize}
                   strokeWidth={1.8}
-                  style={{ color: 'var(--chatbox-tint-secondary)' }}
+                  style={{ color: 'var(--workspaice-tint-secondary)' }}
                 />
               </UnstyledButton>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconAdjustmentsHorizontal
                   size={toolbarIconSize}
                   strokeWidth={1.8}
-                  style={{ color: 'var(--chatbox-tint-secondary)' }}
+                  style={{ color: 'var(--workspaice-tint-secondary)' }}
                 />
               </UnstyledButton>
             </Flex>
 
             <Flex align="center" gap={0}>
-              <Text size="xs" c="chatbox-tertiary" className="px-2 py-1">
+              <Text size="xs" c="workspaice-tertiary" className="px-2 py-1">
                 ↑ ~1,234 (15%)
               </Text>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
-                <Text size="sm" c="chatbox-secondary" className="truncate max-w-[160px]">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                <Text size="sm" c="workspaice-secondary" className="truncate max-w-[160px]">
                   GPT-4o
                 </Text>
               </UnstyledButton>
@@ -159,14 +159,14 @@ export const OptimizedInputBox: StoryObj = {
         Optimized — Structured zones with smart token bar
       </Text>
       <Stack className="max-w-4xl mx-auto" gap="xs">
-        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--chatbox-border-primary)' }}>
+        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--workspaice-border-primary)' }}>
           {/* Model Selector Row */}
           <Flex
             align="center"
             justify="space-between"
             px="sm"
             py={6}
-            style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+            style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
           >
             <Flex align="center" gap="xs">
               <Badge variant="light" color="blue" size="sm" radius="sm" leftSection="🤖">
@@ -181,18 +181,18 @@ export const OptimizedInputBox: StoryObj = {
                 </Badge>
               </Flex>
             </Flex>
-            <Text size="xs" c="chatbox-tertiary" ff="monospace">
+            <Text size="xs" c="workspaice-tertiary" ff="monospace">
               1,234 / 128K tokens
             </Text>
           </Flex>
 
           {/* Token Progress Bar */}
-          <Box h={2} style={{ backgroundColor: 'var(--chatbox-background-tertiary)' }}>
-            <Box h={2} w="15%" style={{ backgroundColor: 'var(--chatbox-tint-success)', transition: 'width 0.3s' }} />
+          <Box h={2} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
+            <Box h={2} w="15%" style={{ backgroundColor: 'var(--workspaice-tint-success)', transition: 'width 0.3s' }} />
           </Box>
 
           {/* Input Area */}
-          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <Textarea
               unstyled
               classNames={{
@@ -213,8 +213,8 @@ export const OptimizedInputBox: StoryObj = {
             px="sm"
             py={6}
             style={{
-              backgroundColor: 'var(--chatbox-background-primary)',
-              borderTop: '1px solid var(--chatbox-border-primary)',
+              backgroundColor: 'var(--workspaice-background-primary)',
+              borderTop: '1px solid var(--workspaice-border-primary)',
             }}
           >
             <Flex align="center" gap={2}>
@@ -258,15 +258,15 @@ export const WithAttachments: StoryObj = {
         Optimized Attachment Preview Strip
       </Text>
       <Stack className="max-w-4xl mx-auto" gap="xs">
-        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--chatbox-border-primary)' }}>
+        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--workspaice-border-primary)' }}>
           {/* Attachments Strip */}
           <Flex
             gap="xs"
             px="sm"
             py="xs"
             style={{
-              backgroundColor: 'var(--chatbox-background-secondary)',
-              borderBottom: '1px solid var(--chatbox-border-primary)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
+              borderBottom: '1px solid var(--workspaice-border-primary)',
               overflowX: 'auto',
             }}
           >
@@ -277,9 +277,9 @@ export const WithAttachments: StoryObj = {
               px={8}
               py={4}
               style={{
-                backgroundColor: 'var(--chatbox-background-primary)',
+                backgroundColor: 'var(--workspaice-background-primary)',
                 borderRadius: 8,
-                border: '1px solid var(--chatbox-border-primary)',
+                border: '1px solid var(--workspaice-border-primary)',
                 flexShrink: 0,
               }}
             >
@@ -289,13 +289,13 @@ export const WithAttachments: StoryObj = {
                 style={{ backgroundColor: '#e3f2fd', borderRadius: 4 }}
                 className="flex items-center justify-center"
               >
-                <IconPhoto size={16} color="var(--chatbox-tint-brand)" />
+                <IconPhoto size={16} color="var(--workspaice-tint-brand)" />
               </Box>
               <Stack gap={0}>
                 <Text size="xs" fw={500} lineClamp={1}>
                   screenshot.png
                 </Text>
-                <Text size="10px" c="chatbox-tertiary">
+                <Text size="10px" c="workspaice-tertiary">
                   245 KB
                 </Text>
               </Stack>
@@ -311,9 +311,9 @@ export const WithAttachments: StoryObj = {
               px={8}
               py={4}
               style={{
-                backgroundColor: 'var(--chatbox-background-primary)',
+                backgroundColor: 'var(--workspaice-background-primary)',
                 borderRadius: 8,
-                border: '1px solid var(--chatbox-border-primary)',
+                border: '1px solid var(--workspaice-border-primary)',
                 flexShrink: 0,
               }}
             >
@@ -329,7 +329,7 @@ export const WithAttachments: StoryObj = {
                 <Text size="xs" fw={500} lineClamp={1}>
                   report.pdf
                 </Text>
-                <Text size="10px" c="chatbox-tertiary">
+                <Text size="10px" c="workspaice-tertiary">
                   1.2 MB · Parsing...
                 </Text>
               </Stack>
@@ -345,9 +345,9 @@ export const WithAttachments: StoryObj = {
               px={8}
               py={4}
               style={{
-                backgroundColor: 'var(--chatbox-background-primary)',
+                backgroundColor: 'var(--workspaice-background-primary)',
                 borderRadius: 8,
-                border: '1px solid var(--chatbox-border-primary)',
+                border: '1px solid var(--workspaice-border-primary)',
                 flexShrink: 0,
               }}
             >
@@ -363,7 +363,7 @@ export const WithAttachments: StoryObj = {
                 <Text size="xs" fw={500} lineClamp={1}>
                   react.dev/docs
                 </Text>
-                <Text size="10px" c="chatbox-success">
+                <Text size="10px" c="workspaice-success">
                   Ready
                 </Text>
               </Stack>
@@ -374,7 +374,7 @@ export const WithAttachments: StoryObj = {
           </Flex>
 
           {/* Input Area */}
-          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <Textarea
               unstyled
               classNames={{
@@ -395,8 +395,8 @@ export const WithAttachments: StoryObj = {
             px="sm"
             py={6}
             style={{
-              backgroundColor: 'var(--chatbox-background-primary)',
-              borderTop: '1px solid var(--chatbox-border-primary)',
+              backgroundColor: 'var(--workspaice-background-primary)',
+              borderTop: '1px solid var(--workspaice-border-primary)',
             }}
           >
             <Flex align="center" gap={2}>
@@ -432,12 +432,12 @@ export const TokenUsageIndicator: StoryObj = {
             py="xs"
             align="center"
             style={{
-              border: '1px solid var(--chatbox-border-primary)',
+              border: '1px solid var(--workspaice-border-primary)',
               borderRadius: 8,
-              backgroundColor: 'var(--chatbox-background-secondary)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
             }}
           >
-            <Text size="xs" c="chatbox-tertiary">
+            <Text size="xs" c="workspaice-tertiary">
               ↑ ~1,234 (15%)
             </Text>
           </Flex>
@@ -447,26 +447,26 @@ export const TokenUsageIndicator: StoryObj = {
           <Text size="xs" c="dimmed" mb="xs">
             Optimized: Progress bar (low usage — green)
           </Text>
-          <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
             <Flex
               px="sm"
               py="xs"
               align="center"
               justify="space-between"
-              style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+              style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
             >
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 Context: 1,234 tokens
               </Text>
-              <Text size="xs" c="chatbox-success" fw={500}>
+              <Text size="xs" c="workspaice-success" fw={500}>
                 15% of 128K
               </Text>
             </Flex>
-            <Box h={3} style={{ backgroundColor: 'var(--chatbox-background-tertiary)' }}>
+            <Box h={3} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
               <Box
                 h={3}
                 w="15%"
-                style={{ backgroundColor: 'var(--chatbox-tint-success)', borderRadius: '0 2px 2px 0' }}
+                style={{ backgroundColor: 'var(--workspaice-tint-success)', borderRadius: '0 2px 2px 0' }}
               />
             </Box>
           </Box>
@@ -476,26 +476,26 @@ export const TokenUsageIndicator: StoryObj = {
           <Text size="xs" c="dimmed" mb="xs">
             Optimized: Progress bar (medium usage — yellow)
           </Text>
-          <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
             <Flex
               px="sm"
               py="xs"
               align="center"
               justify="space-between"
-              style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+              style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
             >
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 Context: 89,600 tokens
               </Text>
-              <Text size="xs" c="chatbox-warning" fw={500}>
+              <Text size="xs" c="workspaice-warning" fw={500}>
                 70% of 128K
               </Text>
             </Flex>
-            <Box h={3} style={{ backgroundColor: 'var(--chatbox-background-tertiary)' }}>
+            <Box h={3} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
               <Box
                 h={3}
                 w="70%"
-                style={{ backgroundColor: 'var(--chatbox-tint-warning)', borderRadius: '0 2px 2px 0' }}
+                style={{ backgroundColor: 'var(--workspaice-tint-warning)', borderRadius: '0 2px 2px 0' }}
               />
             </Box>
           </Box>
@@ -505,26 +505,26 @@ export const TokenUsageIndicator: StoryObj = {
           <Text size="xs" c="dimmed" mb="xs">
             Optimized: Progress bar (high usage — red)
           </Text>
-          <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
             <Flex
               px="sm"
               py="xs"
               align="center"
               justify="space-between"
-              style={{ backgroundColor: 'var(--chatbox-background-error-secondary)' }}
+              style={{ backgroundColor: 'var(--workspaice-background-error-secondary)' }}
             >
-              <Text size="xs" c="chatbox-error">
+              <Text size="xs" c="workspaice-error">
                 Context: 115,200 tokens
               </Text>
-              <Text size="xs" c="chatbox-error" fw={500}>
+              <Text size="xs" c="workspaice-error" fw={500}>
                 90% of 128K — Consider compaction
               </Text>
             </Flex>
-            <Box h={3} style={{ backgroundColor: 'var(--chatbox-background-tertiary)' }}>
+            <Box h={3} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
               <Box
                 h={3}
                 w="90%"
-                style={{ backgroundColor: 'var(--chatbox-tint-error)', borderRadius: '0 2px 2px 0' }}
+                style={{ backgroundColor: 'var(--workspaice-tint-error)', borderRadius: '0 2px 2px 0' }}
               />
             </Box>
           </Box>
@@ -542,14 +542,14 @@ export const GeneratingState: StoryObj = {
         Input Box during AI Generation
       </Text>
       <Stack className="max-w-4xl mx-auto" gap="xs">
-        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--chatbox-border-primary)' }}>
-          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+        <Box className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--workspaice-border-primary)' }}>
+          <Box px="sm" py="xs" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <Textarea
               unstyled
               classNames={{
                 root: 'flex-1',
                 input:
-                  'block w-full outline-none border-none py-1 resize-none bg-transparent text-chatbox-tint-disabled',
+                  'block w-full outline-none border-none py-1 resize-none bg-transparent text-workspaice-tint-disabled',
               }}
               placeholder="Generating response..."
               autosize
@@ -563,12 +563,12 @@ export const GeneratingState: StoryObj = {
             px="sm"
             py={6}
             style={{
-              backgroundColor: 'var(--chatbox-background-primary)',
-              borderTop: '1px solid var(--chatbox-border-primary)',
+              backgroundColor: 'var(--workspaice-background-primary)',
+              borderTop: '1px solid var(--workspaice-border-primary)',
             }}
           >
             <Flex align="center" gap="xs">
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 Generating...
               </Text>
             </Flex>

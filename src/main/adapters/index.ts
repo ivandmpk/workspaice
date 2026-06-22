@@ -25,7 +25,7 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
     storage: {
       async saveImage(folder: string, dataUrl: string): Promise<string> {
         // 将图片写入 /tmp 目录下的临时文件
-        const fileName = `chatbox_${folder}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}.img`
+        const fileName = `workspaice_${folder}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}.img`
         const filePath = path.join(os.tmpdir(), fileName)
         // 支持 data URL 或纯 base64
         let base64Data = dataUrl
@@ -47,7 +47,7 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
       fetchWithOptions: async (
         url: string,
         init?: RequestInit,
-        options?: { retry?: number; parseChatboxRemoteError?: boolean }
+        options?: { retry?: number; parseWorkspAIceRemoteError?: boolean }
       ): Promise<Response> => {
         return afetch(url, init, options)
       },
@@ -62,10 +62,6 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
       },
     },
     sentry,
-    getRemoteConfig: () => {
-      // Main层的远程配置，暂时不需要用到
-      throw new Error('Not implemented')
-    },
   }
 }
 

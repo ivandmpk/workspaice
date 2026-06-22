@@ -2,13 +2,12 @@ import { cachified } from '@epic-web/cachified'
 import type { SearchResultItem } from '@shared/types'
 import { truncate } from 'lodash'
 import platform from '@/platform'
-import { getExtensionSettings, getLanguage, getLicenseKey } from '@/stores/settingActions'
-import { ChatboxAIAPIError } from '../../../shared/models/errors'
+import { getExtensionSettings, getLanguage } from '@/stores/settingActions'
+import { WorkspAIceAIAPIError } from '../../../shared/models/errors'
 import type WebSearch from './base'
 import { BingSearch } from './bing'
 import { BingNewsSearch } from './bing-news'
 import { BochaSearch } from './bocha'
-import { ChatboxSearch } from './chatbox-search'
 import { QueritSearch } from './querit'
 import { TavilySearch } from './tavily'
 
@@ -17,22 +16,12 @@ const MAX_CONTEXT_ITEMS = 10
 // 根据配置的搜索提供方来选择搜索服务
 function getSearchProviders() {
   const settings = getExtensionSettings()
-  const licenseKey = getLicenseKey()
 
   const selectedProviders: WebSearch[] = []
   const provider = settings.webSearch.provider
   const language = getLanguage()
 
   switch (provider) {
-    case 'build-in':
-      if (!licenseKey) {
-        throw ChatboxAIAPIError.fromCodeName(
-          'chatbox_search_license_key_required',
-          'chatbox_search_license_key_required'
-        )
-      }
-      selectedProviders.push(new ChatboxSearch(licenseKey))
-      break
     case 'bing':
       selectedProviders.push(new BingSearch())
       if (language !== 'zh-Hans' && platform.type !== 'mobile') {
@@ -41,19 +30,19 @@ function getSearchProviders() {
       break
     case 'tavily':
       if (!settings.webSearch.tavilyApiKey) {
-        throw ChatboxAIAPIError.fromCodeName('tavily_api_key_required', 'tavily_api_key_required')
+        throw WorkspAIceAIAPIError.fromCodeName('tavily_api_key_required', 'tavily_api_key_required')
       }
       selectedProviders.push(new TavilySearch(settings.webSearch.tavilyApiKey))
       break
     case 'bocha':
       if (!settings.webSearch.bochaApiKey) {
-        throw ChatboxAIAPIError.fromCodeName('bocha_api_key_required', 'bocha_api_key_required')
+        throw WorkspAIceAIAPIError.fromCodeName('bocha_api_key_required', 'bocha_api_key_required')
       }
       selectedProviders.push(new BochaSearch(settings.webSearch.bochaApiKey))
       break
     case 'querit':
       if (!settings.webSearch.queritApiKey) {
-        throw ChatboxAIAPIError.fromCodeName('querit_api_key_required', 'querit_api_key_required')
+        throw WorkspAIceAIAPIError.fromCodeName('querit_api_key_required', 'querit_api_key_required')
       }
       selectedProviders.push(
         new QueritSearch(
@@ -131,7 +120,7 @@ export const webSearchExecutor = async (
  * Single source of truth: which configured providers offer the parse_link tool.
  * Keep in sync with the provider classes' `supportsParseLink` flags.
  */
-export const PROVIDERS_WITH_PARSE_LINK: ReadonlySet<string> = new Set(['build-in', 'tavily'])
+export const PROVIDERS_WITH_PARSE_LINK: ReadonlySet<string> = new Set(['tavily'])
 
 /**
  * Returns the first configured search provider that supports parseLink.

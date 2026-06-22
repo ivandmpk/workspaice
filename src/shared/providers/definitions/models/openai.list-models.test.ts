@@ -23,7 +23,6 @@ function createDependencies(): ModelDependencies {
       captureException: vi.fn(),
       withScope: vi.fn((callback: (scope: SentryScope) => void) => callback(mockScope)),
     },
-    getRemoteConfig: vi.fn(),
     platformType: 'desktop',
     oauth: {
       refreshCredential: vi.fn(),

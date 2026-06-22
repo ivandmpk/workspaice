@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { ApiError, NetworkError } from '@shared/models/errors'
 import type { Language, Message, ModelProvider, SessionSettings, Settings } from '@shared/types'
 import { createModel } from '@/adapters'
@@ -62,18 +62,6 @@ export async function generateSummary(options: SummaryGeneratorOptions): Promise
 }
 
 function buildModelSettings(globalSettings: Settings, sessionSettings?: SessionSettings): SessionSettings & Settings {
-  const remoteConfig = settingActions.getRemoteConfig()
-
-  const fastModel = (remoteConfig as { fastModel?: { provider: string; model: string } })?.fastModel
-  if (fastModel?.provider && fastModel?.model) {
-    return {
-      ...globalSettings,
-      ...sessionSettings,
-      provider: fastModel.provider as ModelProvider,
-      modelId: fastModel.model,
-    }
-  }
-
   if (globalSettings.threadNamingModel?.provider && globalSettings.threadNamingModel?.model) {
     return {
       ...globalSettings,
@@ -98,12 +86,6 @@ function buildModelSettings(globalSettings: Settings, sessionSettings?: SessionS
 
 export function isSummaryGenerationAvailable(): boolean {
   const globalSettings = settingsStore.getState().getSettings()
-  const remoteConfig = settingActions.getRemoteConfig()
-
-  const fastModel = (remoteConfig as { fastModel?: { provider: string; model: string } })?.fastModel
-  if (fastModel?.provider && fastModel?.model) {
-    return true
-  }
 
   if (globalSettings.threadNamingModel?.provider && globalSettings.threadNamingModel?.model) {
     return true

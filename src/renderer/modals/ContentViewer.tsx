@@ -38,7 +38,7 @@ const ContentViewer = NiceModal.create(({ title, content: directContent, storage
           <Loader />
         </Flex>
       ) : content ? (
-        <div className="bg-chatbox-background-secondary border border-solid border-chatbox-border-secondary rounded-xs max-h-[60vh] overflow-y-auto p-sm">
+        <div className="bg-workspaice-background-secondary border border-solid border-workspaice-border-secondary rounded-xs max-h-[60vh] overflow-y-auto p-sm">
           <Text
             style={{
               whiteSpace: 'pre-wrap',
@@ -50,7 +50,7 @@ const ContentViewer = NiceModal.create(({ title, content: directContent, storage
           </Text>
         </div>
       ) : (
-        <div className="bg-chatbox-background-secondary border border-solid border-chatbox-border-secondary rounded-xs p-sm">
+        <div className="bg-workspaice-background-secondary border border-solid border-workspaice-border-secondary rounded-xs p-sm">
           <Text c="dimmed">{t('No content available')}</Text>
         </div>
       )}

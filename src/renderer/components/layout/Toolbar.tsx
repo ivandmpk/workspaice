@@ -68,26 +68,26 @@ export default function Toolbar({ sessionId }: { sessionId: string }) {
           px="xs"
           radius="sm"
           variant="outline"
-          color="chatbox-tertiary"
+          color="workspaice-tertiary"
           leftSection={<ScalableIcon icon={IconSearch} size={16} strokeWidth={1.8} />}
-          className="border-chatbox-border-primary"
+          className="border-workspaice-border-primary"
           onClick={() => setOpenSearchDialog(true)}
         >
           {t('Search')}...
         </Button>
       ) : (
-        <ActionIcon variant="subtle" size={28} color="chatbox-secondary" onClick={() => setOpenSearchDialog(true)}>
+        <ActionIcon variant="subtle" size={28} color="workspaice-secondary" onClick={() => setOpenSearchDialog(true)}>
           <IconSearch strokeWidth={1.8} />
         </ActionIcon>
       )}
 
       {isLargeScreen && (
-        <ActionIcon variant="subtle" size={28} color="chatbox-secondary" onClick={() => setWidthFull(!widthFull)}>
+        <ActionIcon variant="subtle" size={28} color="workspaice-secondary" onClick={() => setWidthFull(!widthFull)}>
           {widthFull ? <LayoutExpand strokeWidth={1.8} /> : <LayoutShrink strokeWidth={1.8} />}
         </ActionIcon>
       )}
 
-      <ActionIcon variant="subtle" size={28} color="chatbox-secondary" onClick={() => setThreadHistoryDrawerOpen(true)}>
+      <ActionIcon variant="subtle" size={28} color="workspaice-secondary" onClick={() => setThreadHistoryDrawerOpen(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -131,32 +131,32 @@ export default function Toolbar({ sessionId }: { sessionId: string }) {
           },
           {
             doubleCheck: {
-              color: 'chatbox-error',
+              color: 'workspaice-error',
             },
             text: t('Clear All Messages'),
             icon: Broom,
-            color: 'chatbox-primary',
+            color: 'workspaice-primary',
             onClick: handleSessionClean,
           },
           {
             doubleCheck: {
-              color: 'chatbox-error',
+              color: 'workspaice-error',
             },
             text: t('Delete Current Session'),
             icon: IconTrash,
-            color: 'chatbox-primary',
+            color: 'workspaice-primary',
             onClick: handleSessionDelete,
           },
         ]}
       >
-        <ActionIcon variant="subtle" size={28} color="chatbox-secondary">
+        <ActionIcon variant="subtle" size={28} color="workspaice-secondary">
           <IconDots strokeWidth={1.8} />
         </ActionIcon>
       </ActionMenu>
     </Flex>
   ) : (
     <Flex align="center" gap="xs">
-      <ActionIcon variant="subtle" size={24} color="chatbox-secondary" onClick={() => setOpenSearchDialog(true)}>
+      <ActionIcon variant="subtle" size={24} color="workspaice-secondary" onClick={() => setOpenSearchDialog(true)}>
         <IconSearch strokeWidth={1.8} />
       </ActionIcon>
       <ActionMenu
@@ -187,25 +187,25 @@ export default function Toolbar({ sessionId }: { sessionId: string }) {
           },
           {
             doubleCheck: {
-              color: 'chatbox-error',
+              color: 'workspaice-error',
             },
             text: t('Clear All Messages'),
             icon: IconClearAll,
-            color: 'chatbox-primary',
+            color: 'workspaice-primary',
             onClick: handleSessionClean,
           },
           {
             doubleCheck: {
-              color: 'chatbox-error',
+              color: 'workspaice-error',
             },
             text: t('Delete Current Session'),
             icon: IconTrash,
-            color: 'chatbox-primary',
+            color: 'workspaice-primary',
             onClick: handleSessionDelete,
           },
         ]}
       >
-        <ActionIcon variant="subtle" size={24} color="chatbox-secondary">
+        <ActionIcon variant="subtle" size={24} color="workspaice-secondary">
           <IconDots strokeWidth={1.8} />
         </ActionIcon>
       </ActionMenu>

@@ -129,10 +129,10 @@ export const CompactionStatus = memo(function CompactionStatus({ sessionId }: Co
   }
 
   return (
-    <Box className="rounded-xl bg-chatbox-background-tertiary border border-chatbox-border-primary shadow-sm p-3">
+    <Box className="rounded-xl bg-workspaice-background-tertiary border border-workspaice-border-primary shadow-sm p-3">
       <Flex align="center" gap="xs" justify="center">
-        <ScalableIcon icon={IconLoader2} size={16} className="animate-spin text-chatbox-tertiary" />
-        <Text size="sm" c="chatbox-tertiary">
+        <ScalableIcon icon={IconLoader2} size={16} className="animate-spin text-workspaice-tertiary" />
+        <Text size="sm" c="workspaice-tertiary">
           {t('Compacting conversation...')}
         </Text>
       </Flex>

@@ -23,7 +23,7 @@ const meta: Meta<typeof Header> = {
         <Box
           style={{
             maxWidth: 900,
-            border: '1px solid var(--chatbox-border-primary)',
+            border: '1px solid var(--workspaice-border-primary)',
             borderRadius: 8,
             overflow: 'hidden',
           }}

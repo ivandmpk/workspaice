@@ -15,12 +15,12 @@ interface WebBrowsingButtonProps {
 export const WebBrowsingButton = forwardRef<HTMLButtonElement, WebBrowsingButtonProps>(
   ({ active, onClick, isMobile = false, size, variant }, ref) => {
     const actionIconProps = isMobile
-      ? { ...mobileActionIconProps, color: active ? 'chatbox-brand' : 'chatbox-secondary' }
+      ? { ...mobileActionIconProps, color: active ? 'workspaice-brand' : 'workspaice-secondary' }
       : {
           ...desktopActionIconProps,
           size: size || desktopActionIconProps.size,
           variant: variant || desktopActionIconProps.variant,
-          color: active ? 'chatbox-brand' : 'chatbox-secondary',
+          color: active ? 'workspaice-brand' : 'workspaice-secondary',
         }
 
     return (

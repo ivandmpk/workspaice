@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Flex, Indicator, Stack, Text } from '@mantine/core'
+import { ActionIcon, Box, Flex, Stack, Text } from '@mantine/core'
 import {
   IconAdjustmentsHorizontal,
   IconBook,
@@ -11,7 +11,6 @@ import {
   IconInfoCircle,
   IconKeyboard,
   IconMessages,
-  IconSparkles,
   IconWand,
   IconWorldWww,
 } from '@tabler/icons-react'
@@ -22,17 +21,11 @@ import { Toaster } from 'sonner'
 import Divider from '@/components/common/Divider'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
 import Page from '@/components/layout/Page'
-import { useProviders } from '@/hooks/useProviders'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
 import platform from '@/platform'
 import { featureFlags } from '@/utils/feature-flags'
 
 const ITEMS = [
-  {
-    key: 'chatbox-ai',
-    label: 'Chatbox AI',
-    icon: <IconSparkles className="w-full h-full" />,
-  },
   {
     key: 'provider',
     label: 'Model Provider',
@@ -120,7 +113,7 @@ export function RouteComponent() {
             className="controls"
             variant="subtle"
             size={28}
-            color="chatbox-secondary"
+            color="workspaice-secondary"
             mr="sm"
             onClick={() => router.history.back()}
           >
@@ -145,8 +138,6 @@ export function SettingsRoot() {
   const routerState = useRouterState()
   const key = routerState.location.pathname.split('/')[2]
   const isSmallScreen = useIsSmallScreen()
-  const { providers: availableProviders } = useProviders()
-  const isChatboxAIActivated = availableProviders.some((p) => p.id === 'chatbox-ai')
 
   return (
     <Flex flex={1} h="100%" miw={isSmallScreen ? undefined : 800}>
@@ -156,7 +147,7 @@ export function SettingsRoot() {
           gap={isSmallScreen ? 0 : 'xs'}
           maw={isSmallScreen ? undefined : 256}
           className={clsx(
-            'border-solid border-0 border-r overflow-auto border-chatbox-border-primary',
+            'border-solid border-0 border-r overflow-auto border-workspaice-border-primary',
             isSmallScreen ? 'w-full border-r-0' : 'flex-[1_0_auto]'
           )}
         >
@@ -177,11 +168,11 @@ export function SettingsRoot() {
                 pr="xl"
                 py={isSmallScreen ? 'sm' : undefined}
                 align="center"
-                c={item.key === key ? 'chatbox-brand' : 'chatbox-secondary'}
-                bg={item.key === key ? 'var(--chatbox-background-brand-secondary)' : 'transparent'}
+                c={item.key === key ? 'workspaice-brand' : 'workspaice-secondary'}
+                bg={item.key === key ? 'var(--workspaice-background-brand-secondary)' : 'transparent'}
                 className={clsx(
                   ' cursor-pointer select-none rounded-md',
-                  item.key === key ? '' : 'hover:!bg-chatbox-background-gray-secondary'
+                  item.key === key ? '' : 'hover:!bg-workspaice-background-gray-secondary'
                 )}
               >
                 <Box component="span" flex="0 0 auto" w={20} h={20} mr="xs">
@@ -195,11 +186,8 @@ export function SettingsRoot() {
                 >
                   {t(item.label)}
                 </Text>
-                {item.key === 'chatbox-ai' && isChatboxAIActivated && (
-                  <Indicator size={8} color="chatbox-success" className="ml-auto" />
-                )}
                 {isSmallScreen && (
-                  <ScalableIcon icon={IconChevronRight} size={20} className="!text-chatbox-tint-tertiary" />
+                  <ScalableIcon icon={IconChevronRight} size={20} className="!text-workspaice-tint-tertiary" />
                 )}
               </Flex>
 
@@ -216,7 +204,7 @@ export function SettingsRoot() {
                 pr="xl"
                 py="sm"
                 align="center"
-                c={'chatbox-secondary'}
+                c={'workspaice-secondary'}
                 className={clsx(' cursor-pointer select-none rounded-md')}
               >
                 <Box component="span" flex="0 0 auto" w={20} h={20} mr="xs">
@@ -230,7 +218,7 @@ export function SettingsRoot() {
                 >
                   {t('About')}
                 </Text>
-                <ScalableIcon icon={IconChevronRight} size={20} className="!text-chatbox-tint-tertiary" />
+                <ScalableIcon icon={IconChevronRight} size={20} className="!text-workspaice-tint-tertiary" />
               </Flex>
 
               {isSmallScreen && <Divider />}

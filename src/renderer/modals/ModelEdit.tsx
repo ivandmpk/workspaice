@@ -220,12 +220,12 @@ const ModelEdit = NiceModal.create((props: { model?: ProviderModelInfo; provider
 
         <AdaptiveModal.Actions>
           {testState.basicTest?.status === 'success' ? (
-            <Text c="chatbox-success" className="text-center">
+            <Text c="workspaice-success" className="text-center">
               {t('Test successful')}
             </Text>
           ) : testState.basicTest?.status === 'error' ? (
             <Tooltip label={testState.basicTest.error} multiline maw={300}>
-              <Text c="chatbox-error" style={{ cursor: 'help' }} className="text-center">
+              <Text c="workspaice-error" style={{ cursor: 'help' }} className="text-center">
                 {t('Test failed')}
               </Text>
             </Tooltip>

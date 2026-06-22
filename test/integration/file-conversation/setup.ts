@@ -29,8 +29,8 @@ if (typeof globalThis.window === 'undefined') {
 
 // Mock settingActions（避免依赖真实的 store）
 vi.mock('@/stores/settingActions', () => ({
-  getLicenseKey: () => process.env.CHATBOX_LICENSE_KEY || '',
-  isPro: () => !!process.env.CHATBOX_LICENSE_KEY,
+  getLicenseKey: () => process.env.WORKSPAICE_LICENSE_KEY || '',
+  isPro: () => !!process.env.WORKSPAICE_LICENSE_KEY,
   getRemoteConfig: () => ({}),
 }))
 
@@ -39,7 +39,7 @@ vi.mock('@/stores/settingsStore', () => ({
   settingsStore: {
     getState: () => ({
       getSettings: () => ({
-        licenseKey: process.env.CHATBOX_LICENSE_KEY || '',
+        licenseKey: process.env.WORKSPAICE_LICENSE_KEY || '',
         language: 'en',
       }),
     }),

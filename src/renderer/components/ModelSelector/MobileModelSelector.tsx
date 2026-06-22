@@ -89,7 +89,7 @@ export const MobileModelSelector = forwardRef<HTMLDivElement, MobileModelSelecto
       if (!favoritedModels || favoritedModels.length === 0) {
         return (
           <Flex align="center" justify="center" py="lg" px="xs">
-            <Text c="chatbox-tertiary" size="sm">
+            <Text c="workspaice-tertiary" size="sm">
               {t('No favorite models')}
             </Text>
           </Flex>
@@ -139,10 +139,10 @@ export const MobileModelSelector = forwardRef<HTMLDivElement, MobileModelSelecto
       <Drawer.Root open={open} onOpenChange={setOpen} noBodyStyles>
         <Drawer.Trigger asChild>{children}</Drawer.Trigger>
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
+          <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
           <Drawer.Content className="flex flex-col rounded-t-[10px] h-fit fixed bottom-0 left-0 right-0 outline-none">
-            <Stack gap={0} className="bg-chatbox-background-primary rounded-t-lg h-[85vh]">
-              <div aria-hidden className="mx-auto w-16 h-1 flex-shrink-0 rounded-full bg-chatbox-tint-tertiary my-3" />
+            <Stack gap={0} className="bg-workspaice-background-primary rounded-t-lg h-[85vh]">
+              <div aria-hidden className="mx-auto w-16 h-1 flex-shrink-0 rounded-full bg-workspaice-tint-tertiary my-3" />
               <Drawer.Title className="hidden">{t('Select Model')}</Drawer.Title>
               <Tabs value={activeTab} onChange={onTabChange}>
                 <Tabs.List grow>
@@ -186,7 +186,7 @@ export const MobileModelSelector = forwardRef<HTMLDivElement, MobileModelSelecto
                           'rounded-md outline-none',
                           !selectedProviderId && !selectedModelId
                             ? SELECTED_BG_CLASS
-                            : 'bg-transparent active:bg-chatbox-background-brand-secondary-hover'
+                            : 'bg-transparent active:bg-workspaice-background-brand-secondary-hover'
                         )}
                         onClick={() => {
                           handleOptionSubmit('')
@@ -195,7 +195,7 @@ export const MobileModelSelector = forwardRef<HTMLDivElement, MobileModelSelecto
                         <Text
                           span
                           size="md"
-                          c="chatbox-secondary"
+                          c="workspaice-secondary"
                           lineClamp={1}
                           className="flex-grow-0 flex-shrink text-left"
                         >

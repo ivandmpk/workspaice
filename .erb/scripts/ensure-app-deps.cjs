@@ -26,7 +26,7 @@ exports.default = async function ensureAppDeps(context) {
   }
 
   console.log('[ensure-app-deps] Installing production dependencies in release/app/ ...')
-  execSync('npm install --production --ignore-scripts', {
+  execSync('npm install --omit=dev --ignore-scripts --legacy-peer-deps', {
     cwd: appDir,
     stdio: 'inherit',
     env: { ...process.env, npm_config_registry: 'https://registry.npmmirror.com' },

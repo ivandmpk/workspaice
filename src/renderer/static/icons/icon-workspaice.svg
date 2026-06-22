@@ -1,0 +1,7 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="20" height="20" rx="5" fill="#303841"/>
+  <path d="M5.6 7.5 L7.6 16.5 L10.2 10.5 L12 14 L13.8 10.5 L16.4 16.5 L18.4 7.5" stroke="#F5F5F5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M7.6 7.5 L16.4 7.5" stroke="#76ABAE" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <rect x="13.6" y="13.6" width="6" height="6" rx="1.4" fill="#FF5722"/>
+  <text x="16.6" y="18.4" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="3.6" font-weight="700" fill="#F5F5F5" text-anchor="middle">AI</text>
+</svg>

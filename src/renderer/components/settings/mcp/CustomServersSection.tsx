@@ -37,10 +37,10 @@ const ServerCard: FC<{
         />
       </Flex>
       <Flex justify="space-between" align="center" mt="lg">
-        <Badge size="sm" variant="light" color="chatbox-brand">
+        <Badge size="sm" variant="light" color="workspaice-brand">
           {config.transport.type}
         </Badge>
-        <Anchor size="xs" c="chatbox-brand" onClick={() => triggerEdit(config)}>
+        <Anchor size="xs" c="workspaice-brand" onClick={() => triggerEdit(config)}>
           {t('Edit')}
         </Anchor>
       </Flex>
@@ -148,7 +148,7 @@ const CustomServersSection: FC<Props> = (props) => {
           shadow="xs"
           radius="md"
           withBorder
-          bd="1px dashed var(--chatbox-border-primary)"
+          bd="1px dashed var(--workspaice-border-primary)"
           p="sm"
           className="cursor-pointer"
           onClick={spotlight.open}
@@ -157,7 +157,7 @@ const CustomServersSection: FC<Props> = (props) => {
             <ActionIcon variant="filled" size="sm">
               <ScalableIcon icon={IconPlus} />
             </ActionIcon>
-            <Text size="xs" c="chatbox-brand">
+            <Text size="xs" c="workspaice-brand">
               {t('Add Server')}
             </Text>
           </Flex>

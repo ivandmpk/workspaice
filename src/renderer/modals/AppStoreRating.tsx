@@ -30,14 +30,14 @@ const AppStoreRating = NiceModal.create(() => {
   return (
     <AdaptiveModal opened={modal.visible} onClose={onClose} centered>
       <Stack align="center">
-        <ScalableIcon icon={IconThumbUpFilled} size={64} color="var(--chatbox-tint-success)" />
+        <ScalableIcon icon={IconThumbUpFilled} size={64} color="var(--workspaice-tint-success)" />
         <Text size="xl" fw={600} className="text-center">
-          {t('Enjoying Chatbox?')}
+          {t('Enjoying WorkspAIce?')}
         </Text>
-        <Text size="md" c="chatbox-secondary" className="text-center">
-          {t('Your rating on the App Store would help make Chatbox even better!')}
+        <Text size="md" c="workspaice-secondary" className="text-center">
+          {t('Your rating on the App Store would help make WorkspAIce even better!')}
         </Text>
-        <Text size="sm" c="chatbox-tertiary" className="text-center">
+        <Text size="sm" c="workspaice-tertiary" className="text-center">
           {t('It only takes a few seconds and helps a lot.')}
         </Text>
 
@@ -45,7 +45,7 @@ const AppStoreRating = NiceModal.create(() => {
           <AdaptiveModal.CloseButton onClick={onClose}>{t('Maybe Later')}</AdaptiveModal.CloseButton>
           <Button
             onClick={handleRateNow}
-            color="chatbox-success"
+            color="workspaice-success"
             rightSection={<ScalableIcon icon={IconStarFilled} size={16} />}
           >
             {t('Rate Now')}

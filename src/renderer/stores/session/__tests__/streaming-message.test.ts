@@ -15,7 +15,7 @@ vi.mock('../../uiStore', () => ({
 
 vi.mock('@/platform', () => ({ default: { type: 'test' } }))
 
-vi.mock('@sentry/react', () => ({ captureException: vi.fn() }))
+vi.mock('@/adapters/sentry_shim', () => ({ captureException: vi.fn() }))
 
 vi.mock('@/adapters', () => ({ createModel: vi.fn() }))
 

@@ -52,8 +52,7 @@ export default class OpenAI extends AbstractAISDKModel {
       headers = this.options.extraHeaders
     } else if (this.options.apiHost.includes('openrouter.ai')) {
       headers = {
-        'HTTP-Referer': 'https://chatboxai.app',
-        'X-Title': 'Chatbox AI',
+        'X-Title': 'WorkspAIce AI',
       }
     } else if (this.options.apiHost.includes('aihubmix.com')) {
       headers = {

@@ -26,7 +26,7 @@ export interface RequestAdapter {
   fetchWithOptions(
     url: string,
     init?: RequestInit,
-    options?: { retry?: number; parseChatboxRemoteError?: boolean }
+    options?: { retry?: number; parseWorkspAIceRemoteError?: boolean }
   ): Promise<Response>
   apiRequest(options: ApiRequestOptions): Promise<Response>
 }
@@ -35,7 +35,6 @@ export interface ModelDependencies {
   request: RequestAdapter
   storage: StorageAdapter
   sentry: SentryAdapter
-  getRemoteConfig(): any
   oauth?: OAuthAdapter
   /** Current platform type, used for OAuth auth resolution */
   platformType?: 'desktop' | 'web' | 'mobile'

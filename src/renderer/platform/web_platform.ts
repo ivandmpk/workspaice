@@ -53,9 +53,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
   public onWindowFocused(callback: () => void): () => void {
     return () => null
   }
-  public onUpdateDownloaded(callback: () => void): () => void {
-    return () => null
-  }
   public async openLink(url: string): Promise<void> {
     window.open(url)
   }
@@ -110,30 +107,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
     return localforage.keys()
   }
 
-  public async initTracking() {
-    const GAID = 'G-B365F44W6E'
-    try {
-      const conf = await this.getConfig()
-      window.gtag('config', GAID, {
-        app_name: 'chatbox',
-        user_id: conf.uuid,
-        client_id: conf.uuid,
-        app_version: await this.getVersion(),
-        chatbox_platform_type: 'web',
-        chatbox_platform: await this.getPlatform(),
-        app_platform: await this.getPlatform(),
-      })
-    } catch (e) {
-      window.gtag('config', GAID, {
-        app_name: 'chatbox',
-      })
-      throw e
-    }
-  }
-  public trackingEvent(name: string, params: { [key: string]: string }) {
-    window.gtag('event', name, params)
-  }
-
   public async shouldShowAboutDialogWhenStartUp(): Promise<boolean> {
     return false
   }
@@ -178,10 +151,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
 
   public async setFullscreen(enabled: boolean): Promise<void> {
     return
-  }
-
-  installUpdate(): Promise<void> {
-    throw new Error('Method not implemented.')
   }
 
   public getKnowledgeBaseController(): KnowledgeBaseController {

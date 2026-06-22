@@ -73,10 +73,10 @@ export function findModelInRegistry(modelId: string, registry: ProviderModelRegi
  */
 export function enrichModelFromRegistry<T extends { modelId: string; [key: string]: unknown }>(
   model: T,
-  chatboxProviderId: string
+  workspaiceProviderId: string
 ): T {
   const registry = getRegistry()
-  const providerRegistry = registry[chatboxProviderId]
+  const providerRegistry = registry[workspaiceProviderId]
   if (!providerRegistry) return model
 
   const meta = findModelInRegistry(model.modelId, providerRegistry)

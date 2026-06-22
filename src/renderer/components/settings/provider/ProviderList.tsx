@@ -1,5 +1,5 @@
 import { Button, Flex, Image, Indicator, ScrollArea, Stack, Text } from '@mantine/core'
-import { ModelProviderEnum, type ProviderBaseInfo } from '@shared/types'
+import type { ProviderBaseInfo } from '@shared/types'
 import { IconChevronRight, IconPlus } from '@tabler/icons-react'
 import { Link, useRouterState } from '@tanstack/react-router'
 import clsx from 'clsx'
@@ -32,15 +32,12 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
 
   const activatedProviderIds = useMemo(() => new Set(availableProviders.map((p) => p.id)), [availableProviders])
 
-  // Sort providers: ChatboxAI first, then activated/custom providers, then featured presets
+  // Sort providers: activated/custom providers first, then featured presets.
   const sortedProviders = useMemo(() => {
-    const chatboxAI = providers.filter((p) => p.id === ModelProviderEnum.ChatboxAI)
     const activated: ProviderBaseInfo[] = []
     const featured: ProviderBaseInfo[] = []
 
     for (const p of providers) {
-      if (p.id === ModelProviderEnum.ChatboxAI) continue
-
       if (activatedProviderIds.has(p.id) || p.isCustom) {
         activated.push(p)
       } else if (FEATURED_PROVIDER_IDS.includes(p.id)) {
@@ -48,14 +45,14 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
       }
     }
 
-    return [...chatboxAI, ...activated, ...featured]
+    return [...activated, ...featured]
   }, [providers, activatedProviderIds])
 
   return (
     <Stack
       maw={isSmallScreen ? undefined : 256}
       className={clsx(
-        'border-solid border-0 border-r border-chatbox-border-primary',
+        'border-solid border-0 border-r border-workspaice-border-primary',
         isSmallScreen ? 'w-full border-r-0' : 'flex-[1_0_auto]'
       )}
       gap={0}
@@ -65,7 +62,7 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
           {sortedProviders.map((provider) => (
             <Link
               key={provider.id}
-              to={provider.id === 'chatbox-ai' ? `/settings/provider/chatbox-ai` : `/settings/provider/$providerId`}
+              to={`/settings/provider/$providerId`}
               params={{ providerId: provider.id }}
               className={'block no-underline'}
             >
@@ -76,11 +73,11 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
                 p="md"
                 pr="xl"
                 py={isSmallScreen ? 'sm' : undefined}
-                c={provider.id === providerId ? 'chatbox-brand' : 'chatbox-secondary'}
-                bg={provider.id === providerId ? 'var(--chatbox-background-brand-secondary)' : 'transparent'}
+                c={provider.id === providerId ? 'workspaice-brand' : 'workspaice-secondary'}
+                bg={provider.id === providerId ? 'var(--workspaice-background-brand-secondary)' : 'transparent'}
                 className={clsx(
                   'cursor-pointer select-none rounded-md',
-                  provider.id === providerId ? '' : 'hover:!bg-chatbox-background-gray-secondary'
+                  provider.id === providerId ? '' : 'hover:!bg-workspaice-background-gray-secondary'
                 )}
               >
                 {provider.isCustom ? (
@@ -103,11 +100,11 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
                 </Text>
 
                 {activatedProviderIds.has(provider.id) && (
-                  <Indicator size={8} color="chatbox-success" className="ml-auto" />
+                  <Indicator size={8} color="workspaice-success" className="ml-auto" />
                 )}
 
                 {isSmallScreen && (
-                  <ScalableIcon icon={IconChevronRight} size={20} className="!text-chatbox-tint-tertiary ml-2" />
+                  <ScalableIcon icon={IconChevronRight} size={20} className="!text-workspaice-tint-tertiary ml-2" />
                 )}
               </Flex>
 

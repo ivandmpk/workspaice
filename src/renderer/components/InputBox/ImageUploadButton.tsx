@@ -14,7 +14,7 @@ interface ImageUploadButtonProps {
 export const ImageUploadButton = forwardRef<HTMLButtonElement, ImageUploadButtonProps>(
   ({ onClick, tooltipLabel, isMobile = false, size, variant }, ref) => {
     const actionIconProps = isMobile
-      ? { ...mobileActionIconProps, color: 'chatbox-secondary' }
+      ? { ...mobileActionIconProps, color: 'workspaice-secondary' }
       : {
           ...desktopActionIconProps,
           size: size || desktopActionIconProps.size,

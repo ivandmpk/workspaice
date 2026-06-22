@@ -1,7 +1,7 @@
 import type { EmbeddingModel } from 'ai'
 import { CohereClient } from 'cohere-ai'
 import { getProviderSettings } from '../../shared/models'
-import { getChatboxAPIOrigin } from '../../shared/request/chatboxai_pool'
+import { getWorkspAIceAPIOrigin } from '../../shared/request/workspaiceai_pool'
 import { parseKnowledgeBaseModelString } from '../../shared/utils/knowledge-base-model-parser'
 import { sentry } from '../adapters/sentry'
 import { cache } from '../cache'
@@ -11,7 +11,7 @@ import { getSettings, store } from '../store-node'
 
 const log = getLogger('session-attachment-rag:model-providers')
 
-const SESSION_ATTACHMENT_EMBEDDING_MODEL = 'chatbox-ai:text-embedding-3-small'
+const SESSION_ATTACHMENT_EMBEDDING_MODEL = 'openai:text-embedding-3-small'
 
 export async function getSessionAttachmentEmbeddingProvider(): Promise<EmbeddingModel> {
   try {
@@ -58,10 +58,6 @@ export async function getSessionAttachmentRerankProvider(modelString?: string | 
 
         let apiHost = formattedApiHost
         let token = providerSetting.apiKey
-        if (providerId === 'chatbox-ai') {
-          apiHost = getChatboxAPIOrigin()
-          token = store.get('settings.licenseKey')
-        }
 
         if (!token) {
           throw new Error(`Missing token for rerank provider: ${providerId}`)

@@ -12,9 +12,9 @@ const log = getLogger('session-attachment-rag:db')
 // Do not use `${userData}/databases`: Chromium/Electron profile storage may
 // unlink files in that directory. Keep app-owned sqlite files in our own folder.
 const userDataPath = app.getPath('userData')
-const appDatabaseDir = path.join(userDataPath, 'chatbox-databases')
-const defaultDbPath = path.join(appDatabaseDir, 'chatbox_session_rag.db')
-const defaultVectorDbPath = path.join(appDatabaseDir, 'chatbox_session_rag_vectors.db')
+const appDatabaseDir = path.join(userDataPath, 'workspaice-databases')
+const defaultDbPath = path.join(appDatabaseDir, 'workspaice_session_rag.db')
+const defaultVectorDbPath = path.join(appDatabaseDir, 'workspaice_session_rag_vectors.db')
 const dbPath = process.env.SESSION_ATTACHMENT_RAG_DB_PATH || defaultDbPath
 const vectorDbPath = process.env.SESSION_ATTACHMENT_RAG_VECTOR_DB_PATH || defaultVectorDbPath
 

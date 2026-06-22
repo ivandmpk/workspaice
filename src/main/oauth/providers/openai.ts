@@ -66,7 +66,7 @@ export const openaiOAuthProvider: CallbackOAuthProvider = {
     authUrl.searchParams.set('state', state)
     authUrl.searchParams.set('id_token_add_organizations', 'true')
     authUrl.searchParams.set('codex_cli_simplified_flow', 'true')
-    authUrl.searchParams.set('originator', 'chatbox')
+    authUrl.searchParams.set('originator', 'workspaice')
 
     const { promise, close } = createCallbackServer(CALLBACK_PORT, signal, CALLBACK_HOST)
 

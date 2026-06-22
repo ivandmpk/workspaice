@@ -32,15 +32,15 @@ export function MessageLayoutSelector({ value, onValueChange, size = 'md', ...pr
             <Box
               p={size === 'sm' ? 10 : 16}
               className={clsx(
-                'rounded-lg border border-solid border-chatbox-border-primary',
-                selected ? 'border-chatbox-tint-brand outline-2 outline outline-chatbox-tint-brand' : ''
+                'rounded-lg border border-solid border-workspaice-border-primary',
+                selected ? 'border-workspaice-tint-brand outline-2 outline outline-workspaice-tint-brand' : ''
               )}
             >
               <Preview size={size} />
             </Box>
             <Flex align="center" justify="center" gap={4} mt="xs">
-              {selected && <ScalableIcon icon={IconCircleCheckFilled} size={18} className="text-chatbox-tint-brand" />}
-              <Text size="sm" fw={selected ? 500 : 400} c={selected ? 'chatbox-brand' : undefined}>
+              {selected && <ScalableIcon icon={IconCircleCheckFilled} size={18} className="text-workspaice-tint-brand" />}
+              <Text size="sm" fw={selected ? 500 : 400} c={selected ? 'workspaice-brand' : undefined}>
                 {t(labelKey)}
               </Text>
             </Flex>
@@ -58,14 +58,14 @@ export function ClassicLayoutPreview({ size = 'md' }: { size?: 'sm' | 'md' }) {
     <Stack gap="sm">
       {/* Row 1: avatar + short message */}
       <Flex gap="xs" align="center">
-        <Box className="rounded-full bg-chatbox-tint-brand flex-shrink-0" w={avatarSize} h={avatarSize} />
+        <Box className="rounded-full bg-workspaice-tint-brand flex-shrink-0" w={avatarSize} h={avatarSize} />
         <Flex className="flex-1">
           <Flex
             h={avatarSize}
             w="90%"
             align="center"
             justify="center"
-            className="bg-chatbox-background-tertiary rounded-full"
+            className="bg-workspaice-background-tertiary rounded-full"
           >
             <Box h={lineHeight} w="80%" bg="#ADB5BD" className="rounded-full" />
           </Flex>
@@ -73,13 +73,13 @@ export function ClassicLayoutPreview({ size = 'md' }: { size?: 'sm' | 'md' }) {
       </Flex>
       {/* Row 2: avatar + long message */}
       <Flex align="self-start" gap="xs">
-        <Box className="rounded-full bg-chatbox-tint-brand flex-shrink-0" w={avatarSize} h={avatarSize} />
+        <Box className="rounded-full bg-workspaice-tint-brand flex-shrink-0" w={avatarSize} h={avatarSize} />
 
         <Stack gap={lineHeight / 2} flex="1">
-          <Box h={lineHeight} className="w-full rounded-full bg-chatbox-background-tertiary" />
-          <Box h={lineHeight} className="w-full rounded-full bg-chatbox-background-tertiary" />
-          <Box h={lineHeight} className="w-full rounded-full bg-chatbox-background-tertiary" />
-          <Box h={lineHeight} className="w-1/2 rounded-full bg-chatbox-background-tertiary" />
+          <Box h={lineHeight} className="w-full rounded-full bg-workspaice-background-tertiary" />
+          <Box h={lineHeight} className="w-full rounded-full bg-workspaice-background-tertiary" />
+          <Box h={lineHeight} className="w-full rounded-full bg-workspaice-background-tertiary" />
+          <Box h={lineHeight} className="w-1/2 rounded-full bg-workspaice-background-tertiary" />
         </Stack>
       </Flex>
     </Stack>
@@ -97,7 +97,7 @@ export function BubbleLayoutPreview({ size = 'md' }: { size?: 'sm' | 'md' }) {
         justify="center"
         h={avatarSize}
         px={avatarSize / 2}
-        className="self-end w-3/4 bg-chatbox-tint-brand rounded-full"
+        className="self-end w-3/4 bg-workspaice-tint-brand rounded-full"
       >
         <Box h={lineHeight} className="rounded-sm bg-[rgba(255,255,255,0.32)]"></Box>
       </Stack>
@@ -106,7 +106,7 @@ export function BubbleLayoutPreview({ size = 'md' }: { size?: 'sm' | 'md' }) {
         gap={lineHeight / 2}
         px={lineHeight}
         py={0.75 * lineHeight}
-        className="w-3/4 bg-chatbox-background-tertiary rounded-lg"
+        className="w-3/4 bg-workspaice-background-tertiary rounded-lg"
       >
         <Box h={lineHeight} className="rounded-sm bg-[#ADB5BD] opacity-40 w-3/4"></Box>
         <Box h={lineHeight} className="rounded-sm bg-[#ADB5BD] opacity-40"></Box>

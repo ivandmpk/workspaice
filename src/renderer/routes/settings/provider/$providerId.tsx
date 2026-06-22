@@ -476,13 +476,13 @@ function ProviderSettings({ providerId }: { providerId: string }) {
   return (
     <Stack key={baseInfo.id} gap="xxl">
       <Flex gap="xs" align="center">
-        <Title order={3} c="chatbox-secondary">
+        <Title order={3} c="workspaice-secondary">
           {t(baseInfo.name)}
         </Title>
         {providerWebsite && (
           <Button
             variant="transparent"
-            c="chatbox-tertiary"
+            c="workspaice-tertiary"
             px={0}
             h={24}
             onClick={() => platform.openLink(providerWebsite)}
@@ -493,7 +493,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
         {baseInfo.isCustom && (
           <PopoverConfirm
             title={t('Confirm to delete this custom provider?')}
-            confirmButtonColor="chatbox-error"
+            confirmButtonColor="workspaice-error"
             onConfirm={() => {
               setSettings({
                 customProviders: customProviders?.filter((p) => p.id !== baseInfo.id),
@@ -505,7 +505,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               variant="transparent"
               size="compact-xs"
               leftSection={<ScalableIcon icon={IconTrash} size={24} />}
-              color="chatbox-error"
+              color="workspaice-error"
             ></Button>
           </PopoverConfirm>
         )}
@@ -513,9 +513,9 @@ function ProviderSettings({ providerId }: { providerId: string }) {
       {baseInfo.isCustom && language === 'zh-Hans' && (
         <Flex>
           <ScalableIcon icon={IconHelpCircle} />
-          <Text span size="xs" c="chatbox-tertiary">
-            <a href="https://docs.chatboxai.app/guides/providers" target="_blank" rel="noopener">
-              {t('Setup guide')}
+          <Text span size="xs" c="workspaice-tertiary">
+            <a href="https://github.com/ivandmpk/workspaice" target="_blank" rel="noopener">
+              {t('Provider documentation')}
             </a>
           </Text>
         </Flex>
@@ -581,7 +581,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
         {/* Provider description */}
         {baseInfo.description && (
           <Stack gap="xxs">
-            <Text span size="xs" c="chatbox-tertiary">
+            <Text span size="xs" c="workspaice-tertiary">
               {t(baseInfo.description)}
             </Text>
           </Stack>
@@ -626,7 +626,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               ) : oauthLoading ? (
                 <Flex gap="xs" align="center">
                   <Loader size="xs" />
-                  <Text size="sm" c="chatbox-tertiary">
+                  <Text size="sm" c="workspaice-tertiary">
                     {t('Waiting for authorization...')}
                   </Text>
                   <Button variant="light" color="red" size="compact-sm" onClick={handleCancelOAuth}>
@@ -645,7 +645,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               )}
             </Flex>
             {usesResponsesTransportForOAuth && (
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 {t(
                   'When OAuth Login is enabled, OpenAI requests use the Responses transport instead of the legacy Chat Completions transport.'
                 )}
@@ -665,7 +665,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   {t('API Key')}
                 </Text>
                 {isOAuthActive && (
-                  <Text span size="xs" c="chatbox-tertiary">
+                  <Text span size="xs" c="workspaice-tertiary">
                     ({t('Using OAuth')})
                   </Text>
                 )}
@@ -707,7 +707,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               <Text span fw="600" className=" whitespace-nowrap">
                 {t('API Host')}
               </Text>
-              {/* <Text span size="xs" flex="0 1 auto" c="chatbox-secondary" lineClamp={1}>
+              {/* <Text span size="xs" flex="0 1 auto" c="workspaice-secondary" lineClamp={1}>
                 {t('Ending with / ignores v1, ending with # forces use of input address')}
               </Text> */}
             </Flex>
@@ -719,7 +719,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                 onChange={handleApiHostChange}
               />
             </Flex>
-            <Text span size="xs" flex="0 1 auto" c="chatbox-secondary">
+            <Text span size="xs" flex="0 1 auto" c="workspaice-secondary">
               {normalizedBuiltinApiHost.apiHost + normalizedBuiltinApiHost.apiPath}
             </Text>
           </Stack>
@@ -762,15 +762,15 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   </Flex>
                 </Stack>
               </Flex>
-              <Text span size="xs" flex="0 1 auto" c="chatbox-secondary">
+              <Text span size="xs" flex="0 1 auto" c="workspaice-secondary">
                 {normalizeAPIHost(providerSettings, baseInfo.type).apiHost +
                   normalizeAPIHost(providerSettings, baseInfo.type).apiPath}
               </Text>
               {providerSettings?.apiHost?.includes('aihubmix.com') && (
                 <Flex align="center" gap={4}>
-                  <ScalableIcon icon={IconDiscount2} size={14} color="var(--chatbox-tint-tertiary)" />
-                  <Text span size="xs" c="chatbox-tertiary">
-                    {t('AIHubMix integration in Chatbox offers 10% discount')}
+                  <ScalableIcon icon={IconDiscount2} size={14} color="var(--workspaice-tint-tertiary)" />
+                  <Text span size="xs" c="workspaice-tertiary">
+                    {t('AIHubMix integration in WorkspAIce offers 10% discount')}
                   </Text>
                 </Flex>
               )}
@@ -820,7 +820,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   }
                 />
               </Flex>
-              <Text span size="xs" flex="0 1 auto" c="chatbox-secondary">
+              <Text span size="xs" flex="0 1 auto" c="workspaice-secondary">
                 {baseInfo.id === ModelProviderEnum.Azure
                   ? normalizeAzureEndpoint(providerSettings?.endpoint || baseInfo.defaultSettings?.endpoint || '')
                       .endpoint +
@@ -944,8 +944,8 @@ function ProviderSettings({ providerId }: { providerId: string }) {
 
               <Button
                 variant="light"
-                color="chatbox-gray"
-                c="chatbox-secondary"
+                color="workspaice-gray"
+                c="workspaice-secondary"
                 size="compact-xs"
                 px="sm"
                 onClick={resetModels}
@@ -957,8 +957,8 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               <Button
                 loading={fetchingModels}
                 variant="light"
-                color="chatbox-gray"
-                c="chatbox-secondary"
+                color="workspaice-gray"
+                c="workspaice-secondary"
                 size="compact-xs"
                 px="sm"
                 onClick={handleFetchModels}
@@ -1030,7 +1030,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                 </Button>
               ))
             ) : (
-              <Text c="chatbox-secondary" ta="center" py="md">
+              <Text c="workspaice-secondary" ta="center" py="md">
                 {t('No models available')}
               </Text>
             )}
@@ -1047,7 +1047,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
         >
           <Stack gap="md">
             {codeInputInstructions && (
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 {codeInputInstructions}
               </Text>
             )}
@@ -1082,7 +1082,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
           closeOnClickOutside={false}
         >
           <Stack gap="md" align="center">
-            <Text size="sm" c="chatbox-secondary" ta="center">
+            <Text size="sm" c="workspaice-secondary" ta="center">
               {t('Enter the code below on the authorization page, then wait for approval.')}
             </Text>
             <Text
@@ -1090,15 +1090,15 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               fw={700}
               ff="monospace"
               p="md"
-              bg="var(--chatbox-background-secondary)"
-              bd="1px solid var(--chatbox-border-primary)"
+              bg="var(--workspaice-background-secondary)"
+              bd="1px solid var(--workspaice-border-primary)"
               style={{ borderRadius: 'var(--mantine-radius-md)', letterSpacing: '0.2em', userSelect: 'all' }}
             >
               {deviceUserCode}
             </Text>
             <Flex align="center" gap="xs">
               <Loader size="xs" />
-              <Text size="sm" c="chatbox-tertiary">
+              <Text size="sm" c="workspaice-tertiary">
                 {t('Waiting for authorization...')}
               </Text>
             </Flex>
@@ -1138,36 +1138,36 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                 {/* Basic Test */}
                 {modelTestResult.basicTest?.status === 'success' ? (
                   <>
-                    <Text span c="chatbox-success">
+                    <Text span c="workspaice-success">
                       {t('Connection successful!')}
                     </Text>
                     <Flex
                       direction="column"
                       gap="md"
-                      bg="var(--chatbox-background-secondary)"
-                      bd="1px solid var(--chatbox-border-primary)"
+                      bg="var(--workspaice-background-secondary)"
+                      bd="1px solid var(--workspaice-border-primary)"
                       p="xs"
                     >
                       <Flex align="center" gap="xs">
                         <Text style={{ minWidth: '120px' }}>{t('Text Request')}:</Text>
-                        <ScalableIcon icon={IconCircleCheck} color="var(--chatbox-tint-success)" />
+                        <ScalableIcon icon={IconCircleCheck} color="var(--workspaice-tint-success)" />
                       </Flex>
                       {/* Vision Test */}
                       <Flex align="center" gap="xs">
                         <Text style={{ minWidth: '120px' }}>{t('Vision Request')}:</Text>
                         {modelTestResult.visionTest?.status === 'success' ? (
-                          <ScalableIcon icon={IconCircleCheck} color="var(--chatbox-tint-success)" />
+                          <ScalableIcon icon={IconCircleCheck} color="var(--workspaice-tint-success)" />
                         ) : modelTestResult.visionTest?.status === 'error' ? (
                           <Flex align="center" gap="xs" maw={400}>
                             <Tooltip label={modelTestResult.visionTest.error} multiline>
-                              <ScalableIcon icon={IconX} className="cursor-help" color="var(--chatbox-tint-error)" />
+                              <ScalableIcon icon={IconX} className="cursor-help" color="var(--workspaice-tint-error)" />
                             </Tooltip>
                             <Text>{t('This model does not support vision')}</Text>
                           </Flex>
                         ) : (
                           <Flex align="center" gap="xs">
                             <Loader size="xs" />
-                            <Text c="chatbox-tertiary" size="sm">
+                            <Text c="workspaice-tertiary" size="sm">
                               {t('Testing...')}
                             </Text>
                           </Flex>
@@ -1178,18 +1178,18 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                       <Flex align="center" gap="xs">
                         <Text style={{ minWidth: '120px' }}>{t('Tool Use Request')}:</Text>
                         {modelTestResult.toolTest?.status === 'success' ? (
-                          <ScalableIcon icon={IconCircleCheck} color="var(--chatbox-tint-success)" />
+                          <ScalableIcon icon={IconCircleCheck} color="var(--workspaice-tint-success)" />
                         ) : modelTestResult.toolTest?.status === 'error' ? (
                           <Flex align="center" gap="xs" maw={400}>
                             <Tooltip label={modelTestResult.toolTest.error} multiline>
-                              <ScalableIcon icon={IconX} className="cursor-help" color="var(--chatbox-tint-error)" />
+                              <ScalableIcon icon={IconX} className="cursor-help" color="var(--workspaice-tint-error)" />
                             </Tooltip>
                             <Text>{t('This model does not support tool use')}</Text>
                           </Flex>
                         ) : (
                           <Flex align="center" gap="xs">
                             <Loader size="xs" />
-                            <Text c="chatbox-tertiary" size="sm">
+                            <Text c="workspaice-tertiary" size="sm">
                               {t('Testing...')}
                             </Text>
                           </Flex>
@@ -1199,10 +1199,10 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   </>
                 ) : modelTestResult.basicTest?.status === 'error' ? (
                   <Flex align="center" gap="xs" className="w-full">
-                    <Text span c="chatbox-error" maw="100%">
+                    <Text span c="workspaice-error" maw="100%">
                       {t('Connection failed!')}
                       <div className="bg-red-50 dark:bg-red-900/20 px-2 py-2">
-                        <Text size="xs" c="chatbox-error">
+                        <Text size="xs" c="workspaice-error">
                           {modelTestResult.basicTest.error}
                         </Text>
                       </div>
@@ -1211,7 +1211,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                 ) : (
                   <Flex align="center" gap="xs">
                     <Loader size="xs" />
-                    <Text c="chatbox-tertiary" size="sm">
+                    <Text c="workspaice-tertiary" size="sm">
                       {t('Testing...')}
                     </Text>
                   </Flex>

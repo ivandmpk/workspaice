@@ -1,6 +1,7 @@
-productName: Chatbox
-appId: xyz.chatboxapp.app
+productName: WorkspAIce
+appId: xyz.workspaiceapp.app
 asar: true
+npmRebuild: false
 asarUnpack:
   - "**\\*.{node,dll}"
   - "**/node_modules/libsql/**"
@@ -29,9 +30,7 @@ mac:
       - arm64
       - x64
   type: distribution
-  hardenedRuntime: true
-  entitlements: assets/entitlements.mac.plist
-  entitlementsInherit: assets/entitlements.mac.plist
+  hardenedRuntime: false
   gatekeeperAssess: false
 
 dmg:
@@ -51,10 +50,6 @@ win:
         - arm64
   verifyUpdateCodeSignature: false
   artifactName: ${productName}-${version}-Setup.${ext}
-  signtoolOptions:
-    sign: ./custom_win_sign.js
-    signingHashAlgorithms:
-      - sha256
 
 nsis:
   oneClick: false
@@ -81,10 +76,3 @@ directories:
 
 extraResources:
   - ./assets/**
-
-publish:
-  - provider: s3
-    bucket: chatbox
-    endpoint: https://208624959c9d215edea0720162a740c1.r2.cloudflarestorage.com
-    path: /releases
-    channel: ${env.UPDATE_CHANNEL}

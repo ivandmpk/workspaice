@@ -1,4 +1,4 @@
-import { type RemoteConfig, Theme } from '@shared/types'
+import { Theme } from '@shared/types'
 import { z } from 'zod'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import Toasts from '@/components/common/Toasts'
@@ -44,30 +44,20 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import { useQuery } from '@tanstack/react-query'
 import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useRef } from 'react'
-import { trackJkViewEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import SettingsModal, { navigateToSettings } from '@/modals/Settings'
 import { prefetchModelRegistry } from '@/packages/model-registry'
 import { getOS } from '@/packages/navigator'
-import * as remote from '@/packages/remote'
 import PictureDialog from '@/pages/PictureDialog'
-import RemoteDialogWindow from '@/pages/RemoteDialogWindow'
 import SearchDialog from '@/pages/SearchDialog'
 import platform from '@/platform'
 import { router } from '@/router'
 import Sidebar from '@/Sidebar'
 import storage from '@/storage'
-import * as atoms from '@/stores/atoms'
-import { getSession, useSession } from '@/stores/chatStore'
-import { initOnboardingStore, onboardingStore } from '@/stores/onboardingStore'
-import * as premiumActions from '@/stores/premiumActions'
-import * as settingActions from '@/stores/settingActions'
+import { useSession } from '@/stores/chatStore'
 import { initSettingsStore, settingsStore, useLanguage, useSettingsStore, useTheme } from '@/stores/settingsStore'
-import { getTaskSession } from '@/stores/taskSessionStore'
 import { useUIStore } from '@/stores/uiStore'
-import { CHATBOX_BUILD_CHANNEL, CHATBOX_BUILD_PLATFORM } from '@/variables'
 import { blobToDataUrl } from './image-creator/-components/constants'
 
 function BackgroundImageOverlay() {
@@ -115,35 +105,33 @@ function BackgroundImageOverlay() {
         `,
         }}
       />
-      <div className="hidden sm:block absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-chatbox-background-primary from-0 to-transparent to-100%" />
+      <div className="hidden sm:block absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-workspaice-background-primary from-0 to-transparent to-100%" />
       {showSidebar && (
         <div
-          className="hidden sm:block absolute top-0 left-0 h-full bg-gradient-to-r from-chatbox-background-primary from-[25%] to-transparent to-100%"
+          className="hidden sm:block absolute top-0 left-0 h-full bg-gradient-to-r from-workspaice-background-primary from-[25%] to-transparent to-100%"
           style={{
             width: `${sidebarWidth * 2}px`,
           }}
         />
       )}
 
-      <Flex h={48} className="sm:hidden bg-chatbox-background-primary" />
+      <Flex h={48} className="sm:hidden bg-workspaice-background-primary" />
 
-      <Flex className="sm:hidden relative h-36 bg-gradient-to-b from-chatbox-background-primary from-0 to-transparent to-100%" />
+      <Flex className="sm:hidden relative h-36 bg-gradient-to-b from-workspaice-background-primary from-0 to-transparent to-100%" />
 
-      <Flex className="sm:hidden absolute bottom-0 left-0 w-full h-36 bg-gradient-to-t from-chatbox-background-primary from-0 to-transparent to-100%" />
+      <Flex className="sm:hidden absolute bottom-0 left-0 w-full h-36 bg-gradient-to-t from-workspaice-background-primary from-0 to-transparent to-100%" />
     </div>
   )
 }
 
 function Root() {
-  const { isExceeded, isExceededResolved } = useVersion()
+  useVersion()
   const location = useLocation()
   const spellCheck = useSettingsStore((state) => state.spellCheck)
   const language = useLanguage()
   const initialized = useRef(false)
 
   const setOpenAboutDialog = useUIStore((s) => s.setOpenAboutDialog)
-
-  const setRemoteConfig = useSetAtom(atoms.remoteConfigAtom)
 
   useEffect(() => {
     if (initialized.current) {
@@ -152,53 +140,23 @@ function Root() {
     // biome-ignore lint/nursery/noFloatingPromises: inline call
     ;(async () => {
       // Wait for stores to hydrate from persistent storage
-      await Promise.all([initSettingsStore(), initOnboardingStore()])
+      await initSettingsStore()
       void prefetchModelRegistry()
 
-      const remoteConfig = await remote
-        .getRemoteConfig('setting_chatboxai_first')
-        .catch(() => ({ setting_chatboxai_first: false }) as RemoteConfig)
-      setRemoteConfig(async (prev) => ({ ...(await prev), ...remoteConfig }))
-
-      // Skip guide-related checks if already on guide or settings/mcp page
-      if (location.pathname === '/guide' || location.pathname === '/settings/mcp') {
+      if (location.pathname === '/settings/mcp') {
         initialized.current = true
-        return
-      }
-
-      // On store builds (iOS / Google Play), wait for both version AND remoteConfig.current_version
-      // before making guide/navigation decisions. isExceeded depends on both async data sources;
-      // if we only wait for version, remoteConfig may still be empty, causing isExceeded to be
-      // falsely falsy and letting the guide navigation slip through during store review.
-      const isStoreReviewPlatform =
-        CHATBOX_BUILD_PLATFORM === 'ios' ||
-        (CHATBOX_BUILD_PLATFORM === 'android' && CHATBOX_BUILD_CHANNEL === 'google_play')
-      if (isStoreReviewPlatform && !isExceededResolved) {
         return
       }
 
       initialized.current = true
 
-      // Check if user needs onboarding guide
-      // Conditions: not completed onboarding AND no valid config
-      const onboardingCompleted = onboardingStore.getState().completed
-      const needsSetup = settingActions.needEditSetting()
-
-      // Auto-navigate to guide for new users who need setup
-      if (!isExceeded && !onboardingCompleted && needsSetup) {
-        router.navigate({ to: '/guide', replace: true })
-        return
-      }
-
-      // 是否需要弹出关于窗口（更新后首次启动）
-      // 目前仅在桌面版本更新后首次启动、且网络环境为"外网"的情况下才自动弹窗
       const shouldShowAboutDialogWhenStartUp = await platform.shouldShowAboutDialogWhenStartUp()
-      if (shouldShowAboutDialogWhenStartUp && remoteConfig.setting_chatboxai_first) {
+      if (shouldShowAboutDialogWhenStartUp) {
         setOpenAboutDialog(true)
         return
       }
     })()
-  }, [setOpenAboutDialog, setRemoteConfig, location.pathname, isExceeded, isExceededResolved])
+  }, [setOpenAboutDialog, location.pathname])
 
   const showSidebar = useUIStore((s) => s.showSidebar)
   const sidebarWidth = useSidebarWidth()
@@ -217,18 +175,7 @@ function Root() {
   }, [_theme])
 
   useEffect(() => {
-    ;(() => {
-      const { startupPage } = settingsStore.getState()
-      const sid = JSON.parse(localStorage.getItem('_currentSessionIdCachedAtom') || '""') as string
-      if (sid && startupPage === 'session') {
-        router.navigate({
-          to: '/session/$sessionId',
-          params: { sessionId: sid },
-          search: (prev) => prev,
-          replace: true,
-        })
-      }
-    })()
+    router.navigate({ to: '/', replace: true })
   }, [])
 
   useEffect(() => {
@@ -259,56 +206,6 @@ function Root() {
     }
     // Other routes (settings, copilots, about, etc.) don't change sidebarMode
   }, [location.pathname, setSidebarMode])
-
-  // Page view tracking
-  const settingsSearch = (location.search as Record<string, unknown>)?.settings as string | undefined
-  useEffect(() => {
-    const pathname = location.pathname
-    let pageName: string | undefined
-
-    // 桌面端 settings 以 modal 方式打开，pathname 不变，通过 search.settings 控制
-    if (settingsSearch) {
-      pageName = JK_PAGE_NAMES.SETTING_PAGE
-    } else if (pathname === '/' || pathname.startsWith('/session/')) {
-      pageName = JK_PAGE_NAMES.CHAT_PAGE
-    } else if (pathname === '/task' || pathname.startsWith('/task/')) {
-      pageName = JK_PAGE_NAMES.TASK_PAGE
-    } else if (pathname.startsWith('/image-creator')) {
-      pageName = JK_PAGE_NAMES.IMAGE_PAGE
-    } else if (pathname.startsWith('/copilots')) {
-      pageName = JK_PAGE_NAMES.COPILOTS_PAGE
-    } else if (pathname.startsWith('/settings')) {
-      pageName = JK_PAGE_NAMES.SETTING_PAGE
-    } else if (pathname.startsWith('/guide')) {
-      pageName = JK_PAGE_NAMES.HELP_PAGE
-    } else if (pathname === '/about') {
-      pageName = JK_PAGE_NAMES.ABOUT_PAGE
-    }
-
-    if (!pageName) return
-
-    const trackPageView = async () => {
-      let content: string | undefined
-
-      if (pathname.startsWith('/session/')) {
-        const sessionId = pathname.slice('/session/'.length)
-        const session = await getSession(sessionId).catch(() => null)
-        content = session?.name
-      } else if (pathname.startsWith('/task/') && pathname.length > '/task/'.length) {
-        const taskId = pathname.slice('/task/'.length)
-        const taskSession = await getTaskSession(taskId).catch(() => null)
-        content = taskSession?.name
-      }
-
-      trackJkViewEvent(JK_EVENTS.PAGE_VIEW, {
-        pageName,
-        content,
-      })
-    }
-
-    // biome-ignore lint/nursery/noFloatingPromises: analytics tracking
-    trackPageView()
-  }, [location.pathname, settingsSearch])
 
   const { needRoomForMacWindowControls } = useNeedRoomForWinControls()
   useEffect(() => {
@@ -359,8 +256,7 @@ function Root() {
       {/* <OpenAttachLinkDialog /> */}
       {/* 图片预览 */}
       <PictureDialog />
-      {/* 似乎是从后端拉一个弹窗的配置 */}
-      <RemoteDialogWindow />
+      {/* Hosted remote dialogs are disabled for the local-first fork. */}
       {/* 手机端举报内容 */}
       {/* <ReportContentDialog /> */}
       {/* 搜索 */}
@@ -378,17 +274,18 @@ const creteMantineTheme = (scale = 1) =>
   createTheme({
     /** Put your mantine theme override here */
     scale,
-    primaryColor: 'chatbox-brand',
+    primaryColor: 'workspaice-brand',
     colors: {
-      'chatbox-brand': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-brand)')),
-      'chatbox-gray': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-gray)')),
-      'chatbox-success': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-success)')),
-      'chatbox-error': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-error)')),
-      'chatbox-warning': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-warning)')),
+      'workspaice-brand': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-brand)')),
+      'workspaice-accent2': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-accent2)')),
+      'workspaice-gray': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-gray)')),
+      'workspaice-success': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-success)')),
+      'workspaice-error': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-error)')),
+      'workspaice-warning': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-warning)')),
 
-      'chatbox-primary': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-primary)')),
-      'chatbox-secondary': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-secondary)')),
-      'chatbox-tertiary': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-tertiary)')),
+      'workspaice-primary': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-primary)')),
+      'workspaice-secondary': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-secondary)')),
+      'workspaice-tertiary': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-tertiary)')),
     },
     headings: {
       fontWeight: 'Bold',
@@ -457,17 +354,17 @@ const creteMantineTheme = (scale = 1) =>
       Text: Text.extend({
         defaultProps: {
           size: 'sm',
-          c: 'chatbox-primary',
+          c: 'workspaice-primary',
         },
       }),
       Title: Title.extend({
         defaultProps: {
-          c: 'chatbox-primary',
+          c: 'workspaice-primary',
         },
       }),
       Button: Button.extend({
         defaultProps: {
-          color: 'chatbox-brand',
+          color: 'workspaice-brand',
         },
         styles: () => ({
           root: {
@@ -483,8 +380,8 @@ const creteMantineTheme = (scale = 1) =>
             '--input-height-sm': rem('32px'),
             ...(props.error
               ? {
-                  '--input-color': 'var(--chatbox-tint-error)',
-                  '--input-bd': 'var(--chatbox-tint-error)',
+                  '--input-color': 'var(--workspaice-tint-error)',
+                  '--input-bd': 'var(--workspaice-tint-error)',
                 }
               : {}),
           },
@@ -496,7 +393,7 @@ const creteMantineTheme = (scale = 1) =>
         },
         styles: () => ({
           label: {
-            marginBottom: 'var(--chatbox-spacing-xxs)',
+            marginBottom: 'var(--workspaice-spacing-xxs)',
             fontWeight: '600',
             lineHeight: '1.5',
           },
@@ -508,7 +405,7 @@ const creteMantineTheme = (scale = 1) =>
         },
         styles: () => ({
           label: {
-            marginBottom: 'var(--chatbox-spacing-xxs)',
+            marginBottom: 'var(--workspaice-spacing-xxs)',
             fontWeight: '600',
             lineHeight: '1.5',
           },
@@ -521,7 +418,7 @@ const creteMantineTheme = (scale = 1) =>
         },
         styles: () => ({
           label: {
-            marginBottom: 'var(--chatbox-spacing-xxs)',
+            marginBottom: 'var(--workspaice-spacing-xxs)',
             fontWeight: '600',
             lineHeight: '1.5',
           },
@@ -533,7 +430,7 @@ const creteMantineTheme = (scale = 1) =>
         },
         styles: () => ({
           label: {
-            marginBottom: 'var(--chatbox-spacing-xxs)',
+            marginBottom: 'var(--workspaice-spacing-xxs)',
             fontWeight: '600',
             lineHeight: '1.5',
           },
@@ -546,7 +443,7 @@ const creteMantineTheme = (scale = 1) =>
         styles: (_theme, props) => {
           return {
             label: {
-              color: props.checked ? 'var(--chatbox-tint-primary)' : 'var(--chatbox-tint-tertiary)',
+              color: props.checked ? 'var(--workspaice-tint-primary)' : 'var(--workspaice-tint-tertiary)',
             },
           }
         },
@@ -557,7 +454,7 @@ const creteMantineTheme = (scale = 1) =>
         },
         styles: (_theme, props) => ({
           label: {
-            color: props.checked ? 'var(--chatbox-tint-primary)' : 'var(--chatbox-tint-tertiary)',
+            color: props.checked ? 'var(--workspaice-tint-primary)' : 'var(--workspaice-tint-tertiary)',
           },
         }),
       }),
@@ -568,19 +465,19 @@ const creteMantineTheme = (scale = 1) =>
         styles: () => ({
           title: {
             fontWeight: '600',
-            color: 'var(--chatbox-tint-primary)',
+            color: 'var(--workspaice-tint-primary)',
             fontSize: 'var(--mantine-font-size-sm)',
           },
           close: {
             width: rem('24px'),
             height: rem('24px'),
-            color: 'var(--chatbox-tint-secondary)',
+            color: 'var(--workspaice-tint-secondary)',
           },
           content: {
-            backgroundColor: 'var(--chatbox-background-primary)',
+            backgroundColor: 'var(--workspaice-background-primary)',
           },
           overlay: {
-            '--overlay-bg': 'var(--chatbox-background-mask-overlay)',
+            '--overlay-bg': 'var(--workspaice-background-mask-overlay)',
           },
         }),
       }),
@@ -591,19 +488,19 @@ const creteMantineTheme = (scale = 1) =>
         styles: () => ({
           title: {
             fontWeight: '600',
-            color: 'var(--chatbox-tint-primary)',
+            color: 'var(--workspaice-tint-primary)',
             fontSize: 'var(--mantine-font-size-sm)',
           },
           close: {
             width: rem('24px'),
             height: rem('24px'),
-            color: 'var(--chatbox-tint-secondary)',
+            color: 'var(--workspaice-tint-secondary)',
           },
           content: {
-            backgroundColor: 'var(--chatbox-background-primary)',
+            backgroundColor: 'var(--workspaice-background-primary)',
           },
           overlay: {
-            '--overlay-bg': 'var(--chatbox-background-mask-overlay)',
+            '--overlay-bg': 'var(--workspaice-background-mask-overlay)',
           },
         }),
       }),
@@ -645,14 +542,13 @@ export const Route = createRootRoute({
   }),
   component: () => {
     useI18nEffect()
-    premiumActions.useAutoValidate() // 每次启动都执行 license 检查，防止用户在lemonsqueezy管理页面中取消了当前设备的激活
     useSystemLanguageWhenInit()
     useShortcut()
     const theme = useAppTheme()
     const _theme = useTheme()
     const fontSize = useSettingsStore((state) => state.fontSize)
     useEffect(() => {
-      document.documentElement.style.setProperty('--chatbox-msg-font-size', `${fontSize}px`)
+      document.documentElement.style.setProperty('--workspaice-msg-font-size', `${fontSize}px`)
     }, [fontSize])
     const mantineTheme = useMemo(() => creteMantineTheme(), [])
 
@@ -675,14 +571,15 @@ export const Route = createRootRoute({
 })
 
 type ExtendedCustomColors =
-  | 'chatbox-brand'
-  | 'chatbox-gray'
-  | 'chatbox-success'
-  | 'chatbox-error'
-  | 'chatbox-warning'
-  | 'chatbox-primary'
-  | 'chatbox-secondary'
-  | 'chatbox-tertiary'
+  | 'workspaice-brand'
+  | 'workspaice-accent2'
+  | 'workspaice-gray'
+  | 'workspaice-success'
+  | 'workspaice-error'
+  | 'workspaice-warning'
+  | 'workspaice-primary'
+  | 'workspaice-secondary'
+  | 'workspaice-tertiary'
   | DefaultMantineColor
 
 declare module '@mantine/core' {

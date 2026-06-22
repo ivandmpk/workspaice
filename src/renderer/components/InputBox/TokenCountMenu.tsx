@@ -180,7 +180,7 @@ const TokenCountMenu: FC<Props> = ({
             <Menu.Item
               leftSection={<ScalableIcon icon={IconFileZip} size={16} />}
               onClick={onCompressClick}
-              color="chatbox-brand"
+              color="workspaice-brand"
             >
               {t('Compress Conversation')}
             </Menu.Item>

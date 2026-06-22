@@ -50,7 +50,7 @@ export const MessageFileSchema = z.object({
   url: z.string().optional(),
   storageKey: z.string().optional(),
   localPath: z.string().optional(),
-  chatboxAIFileUUID: z.string().optional(),
+  workspaiceAIFileUUID: z.string().optional(),
   ragMode: z.enum(['inline', 'session-retrieval']).optional(),
   sessionAttachmentId: z.number().optional(),
   sessionAttachmentAvailability: z.enum(['allowed', 'blocked']).optional(),
@@ -73,7 +73,7 @@ export const MessageLinkSchema = z.object({
   url: z.string(),
   title: z.string(),
   storageKey: z.string().optional(),
-  chatboxAILinkUUID: z.string().optional(),
+  workspaiceAILinkUUID: z.string().optional(),
   tokenCountMap: TokenCountMapSchema.optional(),
   tokenCalculatedAt: TokenCalculatedAtSchema,
   lineCount: z.number().optional(),
@@ -237,7 +237,7 @@ export const CompactionPointSchema = z.object({
 })
 
 // Session schemas
-export const SessionTypeSchema = z.enum(['chat', 'picture', 'guide'])
+export const SessionTypeSchema = z.enum(['chat', 'picture'])
 
 export const MessageForkListSchema = z.object({
   id: z.string(),

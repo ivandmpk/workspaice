@@ -78,12 +78,12 @@ export const KnowledgeBaseModelSelectors: React.FC<ModelSelectorsProps> = ({
   )
 }
 
-interface KnowledgeBaseChatboxAIInfoProps {
+interface KnowledgeBaseWorkspAIceAIInfoProps {
   showModelsLabel?: boolean
   hasError?: boolean
 }
 
-export const KnowledgeBaseChatboxAIInfo: React.FC<KnowledgeBaseChatboxAIInfoProps> = ({
+export const KnowledgeBaseWorkspAIceAIInfo: React.FC<KnowledgeBaseWorkspAIceAIInfoProps> = ({
   showModelsLabel = false,
   hasError = false,
 }) => {
@@ -93,17 +93,17 @@ export const KnowledgeBaseChatboxAIInfo: React.FC<KnowledgeBaseChatboxAIInfoProp
     <Stack gap="sm">
       {showModelsLabel && (
         <Group>
-          {t('Models')}: <Pill>Chatbox AI</Pill>
+          {t('Models')}: <Pill>WorkspAIce AI</Pill>
         </Group>
       )}
       <Text size="sm" c="dimmed">
         {t(
-          'Chatbox AI provides all the essential model support required for knowledge base processing. Consumes compute points.'
+          'WorkspAIce AI provides all the essential model support required for knowledge base processing. Consumes compute points.'
         )}
       </Text>
       {hasError && (
         <Text size="sm" c="red">
-          {t('Failed to load Chatbox AI models configuration')}
+          {t('Failed to load WorkspAIce AI models configuration')}
         </Text>
       )}
     </Stack>
@@ -111,15 +111,15 @@ export const KnowledgeBaseChatboxAIInfo: React.FC<KnowledgeBaseChatboxAIInfoProp
 }
 
 interface KnowledgeBaseProviderModeSelectProps {
-  value: 'chatbox-ai' | 'custom'
-  onChange: (value: 'chatbox-ai' | 'custom') => void
-  isChatboxAIDisabled?: boolean
+  value: 'local' | 'custom'
+  onChange: (value: 'local' | 'custom') => void
+  isWorkspAIceAIDisabled?: boolean
 }
 
 export const KnowledgeBaseProviderModeSelect: React.FC<KnowledgeBaseProviderModeSelectProps> = ({
   value,
   onChange,
-  isChatboxAIDisabled = false,
+  isWorkspAIceAIDisabled = false,
 }) => {
   const { t } = useTranslation()
 
@@ -127,10 +127,10 @@ export const KnowledgeBaseProviderModeSelect: React.FC<KnowledgeBaseProviderMode
     <Radio.Group
       label={t('Model Provider')}
       value={value}
-      onChange={(value) => onChange(value as 'chatbox-ai' | 'custom')}
+      onChange={(value) => onChange(value as 'local' | 'custom')}
     >
       <Group mt="xs">
-        <Radio value="chatbox-ai" label="Chatbox AI" disabled={isChatboxAIDisabled} />
+        <Radio value='local' label="WorkspAIce AI" disabled={isWorkspAIceAIDisabled} />
         <Radio value="custom" label={t('Custom')} />
       </Group>
     </Radio.Group>
@@ -223,8 +223,8 @@ const PARSER_OPTIONS: { value: DocumentParserType; label: string; description: s
       'Uses built-in document parsing feature, supports common file types. Free usage, no compute points will be consumed.',
   },
   {
-    value: 'chatbox-ai',
-    label: 'Chatbox AI',
+    value: 'local',
+    label: 'WorkspAIce AI',
     description:
       'Cloud-based document parsing service, supports PDF, Office files, EPUB and many other file types. Consumes compute points.',
   },

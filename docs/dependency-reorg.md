@@ -9,7 +9,6 @@
 - @mastra/rag
 - @modelcontextprotocol/sdk
 - @mozilla/readability
-- @sentry/node
 - ai
 - auto-launch
 - chardet
@@ -19,7 +18,6 @@
 - electron-devtools-installer
 - electron-log
 - electron-store
-- electron-updater
 - epub
 - fs-extra
 - iconv-lite

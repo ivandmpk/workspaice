@@ -11,7 +11,7 @@ function ProviderGroupLabel({ providerId, name, isCustom }: { providerId: string
   return (
     <Flex align="center" gap={6} className="px-2 pt-2.5 pb-1">
       {isCustom ? (
-        <ScalableIcon icon={IconServer} size={12} className="text-chatbox-tint-gray" />
+        <ScalableIcon icon={IconServer} size={12} className="text-workspaice-tint-gray" />
       ) : (
         <ProviderIcon size={12} provider={providerId} className="opacity-50" />
       )}
@@ -61,7 +61,7 @@ export const ImageModelSelect = forwardRef<HTMLButtonElement, ImageModelSelectPr
           </button>
         </Combobox.Target>
 
-        <Combobox.Dropdown className="!rounded-2xl !border-[var(--chatbox-border-primary)] !shadow-lg overflow-hidden">
+        <Combobox.Dropdown className="!rounded-2xl !border-[var(--workspaice-border-primary)] !shadow-lg overflow-hidden">
           <Combobox.Options mah={400} style={{ overflowY: 'auto' }} className="p-1">
             {modelGroups.length === 0 ? (
               <Text size="sm" c="dimmed" px="sm" py="xs">

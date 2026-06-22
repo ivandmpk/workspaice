@@ -1,7 +1,6 @@
 import { SplashScreen } from '@capacitor/splash-screen'
 import '@mantine/core/styles.css'
 import '@mantine/spotlight/styles.css'
-import * as Sentry from '@sentry/react'
 import { RouterProvider } from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
 import 'photoswipe/dist/photoswipe.css'
@@ -18,49 +17,27 @@ import './static/index.css'
 import { initLogAtom, migrationProcessAtom } from './stores/atoms/utilAtoms'
 import * as migration from './stores/migration'
 import queryClient from './stores/queryClient'
-import { CHATBOX_BUILD_PLATFORM, CHATBOX_BUILD_TARGET } from './variables'
+import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET } from './variables'
 
 const log = getLogger('index')
 
 // 按需加载 polyfill
 import './setup/load_polyfill'
 
-// Sentry 初始化
-import './setup/sentry_init'
-
 // 全局错误处理
 import './setup/global_error_handler'
 
-// GA4 初始化
-import './setup/ga_init'
-
-// Plausible 初始化
-import './setup/plausible_init'
-
-// jk analytics 初始化
-import './setup/jk_analytics_init'
-
-// 引入保护代码
-import './setup/protect'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { initSessionAttachmentRagMaintenance } from './setup/session_attachment_rag_maintenance'
 import { initLastUsedModelStore } from './stores/lastUsedModelStore'
-import { initOnboardingStore } from './stores/onboardingStore'
-import { initLoginLicenseStateReconciliation } from './stores/premiumActions'
 import { initRecentDirectoriesStore } from './stores/recentDirectoriesStore'
 import { initSettingsStore } from './stores/settingsStore'
-import { initUpdateListeners } from './stores/updateStore'
-
-// 开发环境下引入错误测试工具
-// if (process.env.NODE_ENV === 'development') {
-//   import('./utils/error-testing')
-// }
 
 // Token estimation system initialization (runs in all environments)
 import('./setup/token_estimation_init')
 
 // 引入移动端安全区域代码，主要为了解决异形屏幕的问题
-if (CHATBOX_BUILD_TARGET === 'mobile_app' && CHATBOX_BUILD_PLATFORM === 'ios') {
+if (WORKSPAICE_BUILD_TARGET === 'mobile_app' && WORKSPAICE_BUILD_PLATFORM === 'ios') {
   import('./setup/mobile_safe_area')
 }
 
@@ -74,7 +51,6 @@ async function initializeApp() {
     log.info('migrate done')
   } catch (e) {
     log.error('migrate error', e)
-    Sentry.captureException(e as Error)
   }
 
   // 最后执行 storage 清理，清理不 block 进入UI
@@ -138,7 +114,6 @@ const tid = setTimeout(() => {
 initializeApp()
   .catch((e) => {
     // 初始化中的各个步骤已经捕获了错误，这里防止未来添加未捕获的逻辑
-    Sentry.captureException(e)
     log.error('initializeApp error', e)
   })
   .finally(async () => {
@@ -148,19 +123,14 @@ initializeApp()
     const [settings] = await Promise.all([
       initSettingsStore(),
       initLastUsedModelStore(),
-      initOnboardingStore(),
       initRecentDirectoriesStore(),
     ])
 
     i18n.changeLanguage(settings.language)
-    initLoginLicenseStateReconciliation()
-
-    // Initialize auto-updater event listeners (desktop only, idempotent)
     if (platform.type === 'desktop') {
-      initUpdateListeners()
       initSessionAttachmentRagMaintenance()
+      window.location.hash = '/'
     }
-    // Cleanup is intentionally not captured — listeners persist for the app lifetime
 
     // 初始化完成，可以开始渲染
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

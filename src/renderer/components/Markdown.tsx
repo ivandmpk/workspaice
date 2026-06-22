@@ -19,7 +19,6 @@ import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import * as latex from '../packages/latex'
-import { isRenderableCodeLanguage } from './Artifact'
 import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
 import NiceModal from '@ebay/nice-modal-react'
 import { ActionIcon, Flex, Loader, Stack, Text, Tooltip, useComputedColorScheme } from '@mantine/core'
@@ -229,7 +228,7 @@ const InlineCode = memo((props: { children: string; className?: string }) => {
   return (
     <code
       className={clsx(
-        'bg-chatbox-background-secondary border border-solid border-chatbox-border-secondary rounded-sm px-1 py-0.5 mx-1',
+        'bg-workspaice-background-secondary border border-solid border-workspaice-border-secondary rounded-sm px-1 py-0.5 mx-1',
         className
       )}
     >
@@ -439,11 +438,11 @@ const BlockCode = memo(
     const colorScheme = forceColorScheme || computedColorScheme
     const shikiTheme: ShikiTheme = colorScheme !== 'light' ? 'one-dark-pro' : 'one-light'
     const languageName = useMemo(() => language.toUpperCase(), [language])
-    const isRenderableCode = useMemo(() => isRenderableCodeLanguage(language), [language])
+    const isHtmlCode = language.toLowerCase() === 'html'
     const [deploying, setDeploying] = useState(false)
     const canDeploy = useMemo(
-      () => isRenderableCode && String(children).trim().length > 0,
-      [children, isRenderableCode]
+      () => isHtmlCode && String(children).trim().length > 0,
+      [children, isHtmlCode]
     )
 
     const icon = useMemo(() => CodeIcons[languageName] || IconCode, [languageName])
@@ -457,16 +456,6 @@ const BlockCode = memo(
         onCodeCopy?.()
       },
       [copy, onCodeCopy]
-    )
-    const onClickArtifact = useCallback(
-      (event: React.MouseEvent) => {
-        event.stopPropagation()
-        event.preventDefault()
-        NiceModal.show('artifact-preview', {
-          htmlCode: String(children),
-        }).catch(() => null)
-      },
-      [children]
     )
 
     const onClickDeploy = useCallback(
@@ -507,7 +496,7 @@ const BlockCode = memo(
         <Flex
           justify="space-between"
           className={clsx(
-            'p-xs bg-chatbox-background-secondary rounded-t-md border border-solid border-[var(--chatbox-border-primary)] select-none',
+            'p-xs bg-workspaice-background-secondary rounded-t-md border border-solid border-[var(--workspaice-border-primary)] select-none',
             !needCollapse || !collapsed ? 'sticky top-0 z-10' : ''
           )}
         >
@@ -515,9 +504,9 @@ const BlockCode = memo(
             {generating ? (
               <Loader size={10} />
             ) : (
-              <ScalableIcon size={16} icon={icon} color="var(--chatbox-tint-tertiary)" />
+              <ScalableIcon size={16} icon={icon} color="var(--workspaice-tint-tertiary)" />
             )}
-            <Text span c="chatbox-tertiary" fw="600" className="font-mono">
+            <Text span c="workspaice-tertiary" fw="600" className="font-mono">
               {languageName}
             </Text>
           </Flex>
@@ -527,7 +516,7 @@ const BlockCode = memo(
               <Tooltip label={t('copy')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color={copied ? 'chatbox-success' : 'chatbox-tertiary'}
+                  color={copied ? 'workspaice-success' : 'workspaice-tertiary'}
                   size={20}
                   onClick={onClickCopy}
                 >
@@ -536,19 +525,11 @@ const BlockCode = memo(
               </Tooltip>
             )}
 
-            {isRenderableCode && (
-              <Tooltip label={t('Preview')} withArrow openDelay={1000}>
-                <ActionIcon variant="transparent" color="chatbox-tertiary" size={20} onClick={onClickArtifact}>
-                  <IconPlayerPlayFilled />
-                </ActionIcon>
-              </Tooltip>
-            )}
-
             {canDeploy && (
               <Tooltip label={t('Publish Webpage')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-tertiary"
+                  color="workspaice-tertiary"
                   size={20}
                   onClick={onClickDeploy}
                   disabled={deploying}
@@ -562,7 +543,7 @@ const BlockCode = memo(
               <Tooltip label={collapsed ? t('Expand') : t('Collapse')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-tertiary"
+                  color="workspaice-tertiary"
                   size={20}
                   onClick={onClickCollapse}
                   className={clsx('transition-transform ease-linear', !collapsed ? 'rotate-90' : '')}
@@ -576,7 +557,7 @@ const BlockCode = memo(
 
         <Stack
           className={clsx(
-            'border border-t-0 border-solid border-[var(--chatbox-border-primary)] rounded-b-md',
+            'border border-t-0 border-solid border-[var(--workspaice-border-primary)] rounded-b-md',
             needCollapse && collapsed && generating ? 'h-[10rem] overflow-hidden justify-end' : '',
             needCollapse && collapsed && !generating ? 'h-[10rem] overflow-auto' : ''
           )}

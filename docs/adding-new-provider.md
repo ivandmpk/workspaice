@@ -1,6 +1,6 @@
 # Adding a New Provider (Registry Architecture)
 
-This guide documents how to add a new AI provider to Chatbox using the **registry-based architecture**.
+This guide documents how to add a new AI provider to WorkspAIce using the **registry-based architecture**.
 
 ## Overview
 

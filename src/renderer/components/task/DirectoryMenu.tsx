@@ -43,16 +43,16 @@ export default function DirectoryMenu({ currentDirectory, onSelect, menuProps }:
   return (
     <Menu position="top-start" shadow="md" width={280} {...menuProps}>
       <Menu.Target>
-        <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+        <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
           {hasDirectory ? (
-            <IconFolder size={16} className="text-[var(--chatbox-tint-secondary)] shrink-0" />
+            <IconFolder size={16} className="text-[var(--workspaice-tint-secondary)] shrink-0" />
           ) : (
-            <IconFolderPlus size={16} className="text-[var(--chatbox-tint-secondary)] shrink-0" />
+            <IconFolderPlus size={16} className="text-[var(--workspaice-tint-secondary)] shrink-0" />
           )}
-          <Text size="sm" className="text-[var(--chatbox-tint-secondary)] truncate max-w-[160px]">
+          <Text size="sm" className="text-[var(--workspaice-tint-secondary)] truncate max-w-[160px]">
             {hasDirectory ? dirName : t('Add Directory')}
           </Text>
-          <IconChevronDown size={14} className="text-[var(--chatbox-tint-tertiary)] shrink-0" />
+          <IconChevronDown size={14} className="text-[var(--workspaice-tint-tertiary)] shrink-0" />
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>

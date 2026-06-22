@@ -478,7 +478,7 @@ const MessageList = forwardRef<MessageListRef, MessageListProps>((props, ref) =>
                 {(transitionStyle) => (
                   <Flex
                     style={transitionStyle}
-                    className="absolute z-10 top-0 left-0 right-0 leading-tight bg-chatbox-background-secondary"
+                    className="absolute z-10 top-0 left-0 right-0 leading-tight bg-workspaice-background-secondary"
                   >
                     {[
                       { text: t('Return to the top'), icon: IconArrowBarToUp, onClick: handleScrollToTop },
@@ -491,14 +491,14 @@ const MessageList = forwardRef<MessageListRef, MessageListProps>((props, ref) =>
                       <Button
                         key={item.text}
                         variant="transparent"
-                        className={cn('w-1/2', idx === 0 ? 'border-r border-r-chatbox-border-primary' : '')}
+                        className={cn('w-1/2', idx === 0 ? 'border-r border-r-workspaice-border-primary' : '')}
                         classNames={{
                           section: '!mr-xxs',
                         }}
                         size="xs"
                         h="auto"
                         py={6}
-                        c="chatbox-tertiary"
+                        c="workspaice-tertiary"
                         onClick={item.onClick}
                         leftSection={<ScalableIcon icon={item.icon} size={16} />}
                       >
@@ -542,7 +542,7 @@ function ForkNav(props: { sessionId: string; msgId: string; forks: NonNullable<S
         variant="subtle"
         size={20}
         radius="xl"
-        color={flash ? 'chatbox-secondary' : 'chatbox-tertiary'}
+        color={flash ? 'workspaice-secondary' : 'workspaice-tertiary'}
         onClick={() => void switchFork(sessionId, msgId, 'prev')}
       >
         <IconChevronLeft />
@@ -566,7 +566,7 @@ function ForkNav(props: { sessionId: string; msgId: string; forks: NonNullable<S
           },
         ]}
       >
-        <Text c={flash ? 'chatbox-secondary' : 'chatbox-tertiary'} size="xs" className="cursor-pointer">
+        <Text c={flash ? 'workspaice-secondary' : 'workspaice-tertiary'} size="xs" className="cursor-pointer">
           {forks.position + 1} / {forks.lists.length}
         </Text>
       </ActionMenu>
@@ -574,7 +574,7 @@ function ForkNav(props: { sessionId: string; msgId: string; forks: NonNullable<S
         variant="subtle"
         size={20}
         radius="xl"
-        color={flash ? 'chatbox-secondary' : 'chatbox-tertiary'}
+        color={flash ? 'workspaice-secondary' : 'workspaice-tertiary'}
         onClick={() => switchFork(sessionId, msgId, 'next')}
       >
         <IconChevronRight />

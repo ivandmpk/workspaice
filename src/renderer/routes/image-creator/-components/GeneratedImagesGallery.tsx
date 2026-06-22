@@ -197,10 +197,10 @@ function GeneratedImageGalleryItem({
         radius="lg"
         h={displayHeight}
         w={displayWidth}
-        className="bg-[var(--chatbox-background-tertiary)] flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-[var(--chatbox-background-secondary)] transition-colors"
+        className="bg-[var(--workspaice-background-tertiary)] flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-[var(--workspaice-background-secondary)] transition-colors"
         onClick={() => void refetch()}
       >
-        <IconPhotoOff size={32} className="text-[var(--chatbox-tint-tertiary)]" />
+        <IconPhotoOff size={32} className="text-[var(--workspaice-tint-tertiary)]" />
         <Text size="xs" c="dimmed">
           {t('Failed to load')}
         </Text>
@@ -218,7 +218,7 @@ function GeneratedImageGalleryItem({
         h={displayHeight}
         w={displayWidth}
         radius="lg"
-        className="bg-[var(--chatbox-background-tertiary)]"
+        className="bg-[var(--workspaice-background-tertiary)]"
         animate
       />
     )
@@ -229,7 +229,7 @@ function GeneratedImageGalleryItem({
       {({ ref, open }: { ref: React.RefCallback<HTMLImageElement>; open: (e: React.MouseEvent) => void }) => (
         <Paper
           radius="lg"
-          className="group relative overflow-hidden bg-[var(--chatbox-background-secondary)] shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+          className="group relative overflow-hidden bg-[var(--workspaice-background-secondary)] shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           onClick={open}

@@ -45,15 +45,15 @@ export function MobileHistoryDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange} noBodyStyles>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
-        <Drawer.Content className="flex flex-col rounded-t-xl h-[70vh] fixed bottom-0 left-0 right-0 outline-none bg-[var(--chatbox-background-primary)]">
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
+        <Drawer.Content className="flex flex-col rounded-t-xl h-[70vh] fixed bottom-0 left-0 right-0 outline-none bg-[var(--workspaice-background-primary)]">
           <Drawer.Handle />
           <Flex
             align="center"
             justify="space-between"
             px="md"
             py="sm"
-            className="border-b border-[var(--chatbox-border-primary)]"
+            className="border-b border-[var(--workspaice-border-primary)]"
           >
             <Drawer.Title asChild>
               <Text size="xs" fw={600} c="dimmed" tt="uppercase" style={{ letterSpacing: 0.5 }}>
@@ -127,15 +127,15 @@ export function MobileModelDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange} noBodyStyles>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
-        <Drawer.Content className="flex flex-col rounded-t-xl max-h-[70vh] fixed bottom-0 left-0 right-0 outline-none bg-[var(--chatbox-background-primary)]">
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
+        <Drawer.Content className="flex flex-col rounded-t-xl max-h-[70vh] fixed bottom-0 left-0 right-0 outline-none bg-[var(--workspaice-background-primary)]">
           <Drawer.Handle />
           <Flex
             align="center"
             justify="space-between"
             px="md"
             py="sm"
-            className="border-b border-[var(--chatbox-border-primary)]"
+            className="border-b border-[var(--workspaice-border-primary)]"
           >
             <Drawer.Title asChild>
               <Text size="xs" fw={600} c="dimmed" tt="uppercase" style={{ letterSpacing: 0.5 }}>
@@ -150,7 +150,7 @@ export function MobileModelDrawer({
                 <Stack key={group.providerId} gap={2}>
                   <Flex align="center" gap={6} px="sm">
                     {group.isCustom ? (
-                      <ScalableIcon icon={IconServer} size={14} className="text-chatbox-tint-gray" />
+                      <ScalableIcon icon={IconServer} size={14} className="text-workspaice-tint-gray" />
                     ) : (
                       <ProviderIcon size={14} provider={group.providerId} className="opacity-50" />
                     )}
@@ -169,7 +169,7 @@ export function MobileModelDrawer({
                         }}
                         className={`
                           w-full px-4 py-3 rounded-lg transition-colors
-                          ${isSelected ? 'bg-[var(--chatbox-background-brand-secondary)]' : 'hover:bg-[var(--chatbox-background-secondary)]'}
+                          ${isSelected ? 'bg-[var(--workspaice-background-brand-secondary)]' : 'hover:bg-[var(--workspaice-background-secondary)]'}
                         `}
                       >
                         <Text size="sm" fw={isSelected ? 600 : 400}>
@@ -179,7 +179,7 @@ export function MobileModelDrawer({
                     )
                   })}
                   {groupIndex < modelGroups.length - 1 && (
-                    <div className="h-px bg-[var(--chatbox-border-primary)] mx-2 mt-2" />
+                    <div className="h-px bg-[var(--workspaice-border-primary)] mx-2 mt-2" />
                   )}
                 </Stack>
               ))}
@@ -209,15 +209,15 @@ export function MobileRatioDrawer({ open, onOpenChange, options, selectedRatio, 
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange} noBodyStyles>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
-        <Drawer.Content className="flex flex-col rounded-t-xl fixed bottom-0 left-0 right-0 outline-none bg-[var(--chatbox-background-primary)]">
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
+        <Drawer.Content className="flex flex-col rounded-t-xl fixed bottom-0 left-0 right-0 outline-none bg-[var(--workspaice-background-primary)]">
           <Drawer.Handle />
           <Flex
             align="center"
             justify="space-between"
             px="md"
             py="sm"
-            className="border-b border-[var(--chatbox-border-primary)]"
+            className="border-b border-[var(--workspaice-border-primary)]"
           >
             <Drawer.Title asChild>
               <Text size="xs" fw={600} c="dimmed" tt="uppercase" style={{ letterSpacing: 0.5 }}>
@@ -236,7 +236,7 @@ export function MobileRatioDrawer({ open, onOpenChange, options, selectedRatio, 
                 }}
                 className={`
                   w-full px-4 py-3 rounded-lg transition-colors
-                  ${selectedRatio === ratio ? 'bg-[var(--chatbox-background-brand-secondary)]' : 'hover:bg-[var(--chatbox-background-secondary)]'}
+                  ${selectedRatio === ratio ? 'bg-[var(--workspaice-background-brand-secondary)]' : 'hover:bg-[var(--workspaice-background-secondary)]'}
                 `}
               >
                 <Text size="sm" fw={selectedRatio === ratio ? 600 : 400} ta="center">

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ApiError, ChatboxAIAPIError } from '../models/errors'
+import { ApiError, WorkspAIceAIAPIError } from '../models/errors'
 import { createAfetch } from './request'
 
 const platformInfo = {
@@ -14,7 +14,7 @@ describe('createAfetch', () => {
     vi.unstubAllGlobals()
   })
 
-  it('stores request id from Chatbox error body on known Chatbox errors', async () => {
+  it('stores request id from WorkspAIce error body on known WorkspAIce errors', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -34,14 +34,14 @@ describe('createAfetch', () => {
 
     await expect(
       afetch(
-        'https://api.chatboxai.app/gateway/openai/v1/chat/completions',
+        'https://api.workspaiceai.app/gateway/openai/v1/chat/completions',
         {},
-        { parseChatboxRemoteError: true }
+        { parseWorkspAIceRemoteError: true }
       )
     ).rejects.toMatchObject({
       code: 10004,
       requestId: 'req-from-body',
-    } satisfies Partial<ChatboxAIAPIError>)
+    } satisfies Partial<WorkspAIceAIAPIError>)
   })
 
   it('stores request id from response headers on generic API errors', async () => {
@@ -59,9 +59,9 @@ describe('createAfetch', () => {
 
     await expect(
       afetch(
-        'https://api.chatboxai.app/gateway/openai/v1/chat/completions',
+        'https://api.workspaiceai.app/gateway/openai/v1/chat/completions',
         {},
-        { parseChatboxRemoteError: true }
+        { parseWorkspAIceRemoteError: true }
       )
     ).rejects.toMatchObject({
       code: 10001,

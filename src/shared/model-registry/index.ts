@@ -10,7 +10,7 @@ export type {
 export {
   PROVIDER_ID_MAP,
   REVERSE_PROVIDER_MAP,
-  getChatboxProviderIds,
+  getWorkspAIceProviderIds,
   getModelsDevProviderId,
 } from './provider-mapping'
 

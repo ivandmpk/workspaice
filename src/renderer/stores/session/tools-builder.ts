@@ -133,7 +133,7 @@ export async function buildToolsForSession(
   if (webBrowsing && webSupported) {
     tools.web_search = webSearchTool
     // Inject parse_link based on the selected provider's declared capability.
-    // Validation (Pro for build-in, API key for third parties) happens at execution time.
+    // Provider-specific validation, such as API keys, happens at execution time.
     if (includeParseLinkTool) {
       tools.parse_link = parseLinkTool
     }

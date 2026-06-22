@@ -5,12 +5,10 @@ import { useCallback, useMemo } from 'react'
 import { enrichModelsFromRegistry, useModelRegistryVersion } from '@/packages/model-registry'
 import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
-import useChatboxAIModels from './useChatboxAIModels'
 
 export const useProviders = () => {
   useModelRegistryVersion()
 
-  const { chatboxAIModels } = useChatboxAIModels()
   const { setSettings, ...settings } = useSettingsStore((state) => state)
   const providerSettingsMap = settings.providers
 
@@ -23,13 +21,7 @@ export const useProviders = () => {
       allProviderBaseInfos
         .map((p) => {
           const providerSettings = mergeSharedOAuthProviderSettings(p.id, providerSettingsMap)
-          if (p.id === ModelProviderEnum.ChatboxAI && settings.licenseKey) {
-            return {
-              ...p,
-              ...providerSettings,
-              models: chatboxAIModels,
-            }
-          } else if (
+          if (
             (!p.isCustom &&
               (providerSettings?.apiKey ||
                 isUsingOAuth(providerSettings || {}, platform.type) ||
@@ -44,12 +36,11 @@ export const useProviders = () => {
               // 如果没有自定义 models 列表，使用 defaultSettings，否则被自定义的列表（可能有添加或删除部分 model）覆盖, 不能包含用户排除过的 models
               models: enrichModelsFromRegistry(baseModels, p.id),
             } as ProviderInfo
-          } else {
-            return null
           }
+          return null
         })
         .filter((p) => !!p),
-    [providerSettingsMap, allProviderBaseInfos, chatboxAIModels, settings.licenseKey]
+    [providerSettingsMap, allProviderBaseInfos]
   )
 
   const favoritedModels = useMemo(

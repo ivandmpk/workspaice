@@ -211,7 +211,7 @@ function ToolCallItem({ tc }: { tc: ToolCallInfo }) {
   const isError = tc.state === 'error'
 
   return (
-    <Box className="border-l-2 border-[var(--chatbox-border-primary)] pl-2 py-0.5">
+    <Box className="border-l-2 border-[var(--workspaice-border-primary)] pl-2 py-0.5">
       <Flex
         align="center"
         gap={4}
@@ -497,7 +497,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
               className="controls"
               variant="subtle"
               size={isSmallScreen ? 24 : 20}
-              color={isSmallScreen ? 'chatbox-secondary' : 'chatbox-tertiary'}
+              color={isSmallScreen ? 'workspaice-secondary' : 'workspaice-tertiary'}
               mr="xs"
               onClick={() => setShowSidebar(!showSidebar)}
             >
@@ -529,7 +529,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                     <>
                       <Box
                         className="flex items-center justify-center rounded-full"
-                        style={{ width: 72, height: 72, backgroundColor: 'var(--chatbox-background-secondary)' }}
+                        style={{ width: 72, height: 72, backgroundColor: 'var(--workspaice-background-secondary)' }}
                       >
                         <IconRocket size={48} className="text-[var(--mantine-color-dimmed)]" stroke={1.5} />
                       </Box>
@@ -541,7 +541,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                     <>
                       <Box
                         className="flex items-center justify-center rounded-full"
-                        style={{ width: 72, height: 72, backgroundColor: 'var(--chatbox-background-secondary)' }}
+                        style={{ width: 72, height: 72, backgroundColor: 'var(--workspaice-background-secondary)' }}
                       >
                         <IconFolder size={48} className="text-[var(--mantine-color-dimmed)]" stroke={1.5} />
                       </Box>
@@ -567,8 +567,8 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
         <Box maw={800} mx="auto">
           <Stack
             gap={6}
-            className="rounded-md bg-[var(--chatbox-background-secondary)] px-3 py-2 min-h-[92px]"
-            style={{ border: '1px solid var(--chatbox-border-primary)' }}
+            className="rounded-md bg-[var(--workspaice-background-secondary)] px-3 py-2 min-h-[92px]"
+            style={{ border: '1px solid var(--workspaice-border-primary)' }}
           >
             <Flex align="flex-end" gap={4}>
               <Textarea
@@ -584,7 +584,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                   root: 'flex-1',
                   wrapper: 'flex-1',
                   input:
-                    'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-chatbox-tint-primary text-sm',
+                    'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-workspaice-tint-primary text-sm',
                 }}
                 onKeyDown={(e) => {
                   if (e.nativeEvent.isComposing || e.keyCode === 229) return
@@ -611,7 +611,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                 <ActionIcon
                   size={32}
                   variant="filled"
-                  color="chatbox-brand"
+                  color="workspaice-brand"
                   radius="xl"
                   onClick={handleSend}
                   disabled={!input.trim()}
@@ -640,10 +640,10 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                     align="center"
                     gap="2"
                     className={[
-                      'text-xs cursor-pointer hover:text-chatbox-tint-secondary',
+                      'text-xs cursor-pointer hover:text-workspaice-tint-secondary',
                       'transition-colors px-2 py-1 rounded-lg',
-                      'hover:bg-[var(--chatbox-background-tertiary)]',
-                      tokenPercentage && tokenPercentage > 80 ? 'text-red-500' : 'text-chatbox-tint-tertiary',
+                      'hover:bg-[var(--workspaice-background-tertiary)]',
+                      tokenPercentage && tokenPercentage > 80 ? 'text-red-500' : 'text-workspaice-tint-tertiary',
                     ].join(' ')}
                   >
                     <ScalableIcon icon={IconArrowUp} size={14} />
@@ -662,18 +662,18 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                   selectedModelId={model?.modelId}
                   modelFilter={(m, providerId) => {
                     if (!m.capabilities?.includes('tool_use')) return false
-                    if (providerId === 'chatbox-ai' && DEEPSEEK_EXCLUDED_RE.test(m.modelId)) return false
+                    if (providerId === 'workspaice-ai' && DEEPSEEK_EXCLUDED_RE.test(m.modelId)) return false
                     return true
                   }}
                   position="top-end"
                   transitionProps={{ transition: 'fade-up', duration: 200 }}
                 >
-                  <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
+                  <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                     {!!model && <ProviderImageIcon size={18} provider={model.provider} />}
-                    <Text size="sm" className="text-[var(--chatbox-tint-secondary)] truncate max-w-[160px]">
+                    <Text size="sm" className="text-[var(--workspaice-tint-secondary)] truncate max-w-[160px]">
                       {modelDisplayText}
                     </Text>
-                    <IconChevronDown size={14} className="text-[var(--chatbox-tint-tertiary)] shrink-0" />
+                    <IconChevronDown size={14} className="text-[var(--workspaice-tint-tertiary)] shrink-0" />
                   </UnstyledButton>
                 </ModelSelector>
               </Flex>

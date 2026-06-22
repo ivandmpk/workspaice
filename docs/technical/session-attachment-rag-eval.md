@@ -22,19 +22,19 @@ The eval suite checks:
 Default local path:
 
 ```bash
-../../chatbox-session-rag-eval-fixtures
+../../workspaice-session-rag-eval-fixtures
 ```
 
 The fixture repo contains:
 
 - synthetic long documents with hidden, non-pretrained "needle" facts;
 - Wikipedia-derived real documents with source attribution and CC BY-SA notes;
-- JSON cases shared by the standalone and Chatbox-flow harnesses.
+- JSON cases shared by the standalone and WorkspAIce-flow harnesses.
 
 Regenerate fixtures:
 
 ```bash
-cd ../../chatbox-session-rag-eval-fixtures
+cd ../../workspaice-session-rag-eval-fixtures
 node scripts/generate-fixtures.mjs
 node scripts/fetch-real-fixtures.mjs
 ```
@@ -44,9 +44,9 @@ node scripts/fetch-real-fixtures.mjs
 Use this for fast tool-use behavior checks against an OpenAI-compatible endpoint:
 
 ```bash
-CHATBOX_EVAL_BASE_URL="https://your-openai-compatible-endpoint/v1" \
-CHATBOX_EVAL_MODEL="your-model" \
-CHATBOX_EVAL_API_KEY="your-api-key" \
+WORKSPAICE_EVAL_BASE_URL="https://your-openai-compatible-endpoint/v1" \
+WORKSPAICE_EVAL_MODEL="your-model" \
+WORKSPAICE_EVAL_API_KEY="your-api-key" \
 pnpm eval:session-rag
 ```
 
@@ -56,7 +56,7 @@ Dry-run fixture loading:
 pnpm eval:session-rag -- --dry-run
 ```
 
-## Chatbox Conversation Flow
+## WorkspAIce Conversation Flow
 
 Use this when validating product behavior end to end. It exercises Electron, renderer config loading, license loading,
 local API routing, file upload, session attachment indexing, tool registration, model calls, and persisted messages.
@@ -65,7 +65,7 @@ Start the local API first. Then build the app with the local API flag because th
 
 ```bash
 USE_LOCAL_API=true node ./node_modules/electron-vite/bin/electron-vite.js build --mode development
-pnpm eval:session-rag:chatbox -- --case long-citrine-threshold --keep-user-data
+pnpm eval:session-rag:workspaice -- --case long-citrine-threshold --keep-user-data
 ```
 
 The harness copies the real `config.json` into a temporary userDataDir and sets `SESSION_ATTACHMENT_RAG_DB_PATH` to a
@@ -88,11 +88,11 @@ separate temp sqlite path. It does not mutate the real app profile.
 ## High-Signal Cases
 
 ```bash
-pnpm eval:session-rag:chatbox -- --case long-citrine-threshold
-pnpm eval:session-rag:chatbox -- --case implicit-citrine-current-policy
-pnpm eval:session-rag:chatbox -- --case implicit-multi-doc-release-followup
-pnpm eval:session-rag:chatbox -- --case real-wiki-apollo-implicit-landing-site
-pnpm eval:session-rag:chatbox -- --case multi-turn-real-wiki-apollo-followup
-pnpm eval:session-rag:chatbox -- --case unrelated-simple-math
-pnpm eval:session-rag:chatbox -- --case real-wiki-unrelated-capital
+pnpm eval:session-rag:workspaice -- --case long-citrine-threshold
+pnpm eval:session-rag:workspaice -- --case implicit-citrine-current-policy
+pnpm eval:session-rag:workspaice -- --case implicit-multi-doc-release-followup
+pnpm eval:session-rag:workspaice -- --case real-wiki-apollo-implicit-landing-site
+pnpm eval:session-rag:workspaice -- --case multi-turn-real-wiki-apollo-followup
+pnpm eval:session-rag:workspaice -- --case unrelated-simple-math
+pnpm eval:session-rag:workspaice -- --case real-wiki-unrelated-capital
 ```

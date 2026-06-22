@@ -244,7 +244,7 @@ function checkConfigValid(filepath: string) {
 }
 
 export async function getStoreBlob(key: string) {
-  const filename = path.resolve(app.getPath('userData'), 'chatbox-blobs', sanitizeFilename(key))
+  const filename = path.resolve(app.getPath('userData'), 'workspaice-blobs', sanitizeFilename(key))
   const exists = await fs.pathExists(filename)
   if (!exists) {
     return null
@@ -253,13 +253,13 @@ export async function getStoreBlob(key: string) {
 }
 
 export async function setStoreBlob(key: string, value: string) {
-  const filename = path.resolve(app.getPath('userData'), 'chatbox-blobs', sanitizeFilename(key))
+  const filename = path.resolve(app.getPath('userData'), 'workspaice-blobs', sanitizeFilename(key))
   await fs.ensureDir(path.dirname(filename))
   return fs.writeFile(filename, value, { encoding: 'utf-8' })
 }
 
 export async function delStoreBlob(key: string) {
-  const filename = path.resolve(app.getPath('userData'), 'chatbox-blobs', sanitizeFilename(key))
+  const filename = path.resolve(app.getPath('userData'), 'workspaice-blobs', sanitizeFilename(key))
   const exists = await fs.pathExists(filename)
   if (!exists) {
     return
@@ -268,7 +268,7 @@ export async function delStoreBlob(key: string) {
 }
 
 export async function listStoreBlobKeys() {
-  const dir = path.resolve(app.getPath('userData'), 'chatbox-blobs')
+  const dir = path.resolve(app.getPath('userData'), 'workspaice-blobs')
   const exists = await fs.pathExists(dir)
   if (!exists) {
     return []

@@ -11,12 +11,12 @@ const meta: Meta = {
         component: `
 ## Design Tokens Overview
 
-Chatbox uses CSS custom properties (design tokens) for theming. These tokens are defined in \`globals.css\`
+WorkspAIce uses CSS custom properties (design tokens) for theming. These tokens are defined in \`globals.css\`
 and consumed via Tailwind and Mantine. The system supports light and dark modes automatically.
 
 ### Optimization Suggestions
 
-1. **Token Naming Consistency**: The current tokens use a flat \`chatbox-*\` namespace. Consider adopting a
+1. **Token Naming Consistency**: The current tokens use a flat \`workspaice-*\` namespace. Consider adopting a
    more structured naming convention like \`--cb-color-bg-primary\` for better discoverability.
 
 2. **Missing Semantic Tokens**: Add semantic tokens for common patterns like \`--cb-message-bg-user\`,
@@ -43,7 +43,7 @@ const ColorSwatch = ({ label, cssVar, value }: { label: string; cssVar: string; 
       style={{
         backgroundColor: `var(${cssVar})`,
         borderRadius: 6,
-        border: '1px solid var(--chatbox-border-primary)',
+        border: '1px solid var(--workspaice-border-primary)',
         flexShrink: 0,
       }}
     />
@@ -60,7 +60,7 @@ const ColorSwatch = ({ label, cssVar, value }: { label: string; cssVar: string; 
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <Stack gap="sm" mb="xl">
-    <Title order={4} c="chatbox-primary">
+    <Title order={4} c="workspaice-primary">
       {title}
     </Title>
     {children}
@@ -81,31 +81,31 @@ export const Colors: StoryObj = {
       <Grid>
         <Grid.Col span={6}>
           <Section title="Tint Colors (Text)">
-            <ColorSwatch label="Primary" cssVar="--chatbox-tint-primary" />
-            <ColorSwatch label="Secondary" cssVar="--chatbox-tint-secondary" />
-            <ColorSwatch label="Tertiary" cssVar="--chatbox-tint-tertiary" />
-            <ColorSwatch label="Disabled" cssVar="--chatbox-tint-disabled" />
-            <ColorSwatch label="Brand" cssVar="--chatbox-tint-brand" />
-            <ColorSwatch label="Error" cssVar="--chatbox-tint-error" />
-            <ColorSwatch label="Warning" cssVar="--chatbox-tint-warning" />
-            <ColorSwatch label="Success" cssVar="--chatbox-tint-success" />
+            <ColorSwatch label="Primary" cssVar="--workspaice-tint-primary" />
+            <ColorSwatch label="Secondary" cssVar="--workspaice-tint-secondary" />
+            <ColorSwatch label="Tertiary" cssVar="--workspaice-tint-tertiary" />
+            <ColorSwatch label="Disabled" cssVar="--workspaice-tint-disabled" />
+            <ColorSwatch label="Brand" cssVar="--workspaice-tint-brand" />
+            <ColorSwatch label="Error" cssVar="--workspaice-tint-error" />
+            <ColorSwatch label="Warning" cssVar="--workspaice-tint-warning" />
+            <ColorSwatch label="Success" cssVar="--workspaice-tint-success" />
           </Section>
         </Grid.Col>
         <Grid.Col span={6}>
           <Section title="Background Colors">
-            <ColorSwatch label="Primary" cssVar="--chatbox-background-primary" />
-            <ColorSwatch label="Secondary" cssVar="--chatbox-background-secondary" />
-            <ColorSwatch label="Tertiary" cssVar="--chatbox-background-tertiary" />
-            <ColorSwatch label="Brand Primary" cssVar="--chatbox-background-brand-primary" />
-            <ColorSwatch label="Brand Secondary" cssVar="--chatbox-background-brand-secondary" />
-            <ColorSwatch label="Error Secondary" cssVar="--chatbox-background-error-secondary" />
+            <ColorSwatch label="Primary" cssVar="--workspaice-background-primary" />
+            <ColorSwatch label="Secondary" cssVar="--workspaice-background-secondary" />
+            <ColorSwatch label="Tertiary" cssVar="--workspaice-background-tertiary" />
+            <ColorSwatch label="Brand Primary" cssVar="--workspaice-background-brand-primary" />
+            <ColorSwatch label="Brand Secondary" cssVar="--workspaice-background-brand-secondary" />
+            <ColorSwatch label="Error Secondary" cssVar="--workspaice-background-error-secondary" />
           </Section>
 
           <Section title="Border Colors">
-            <ColorSwatch label="Primary" cssVar="--chatbox-border-primary" />
-            <ColorSwatch label="Secondary" cssVar="--chatbox-border-secondary" />
-            <ColorSwatch label="Brand" cssVar="--chatbox-border-brand" />
-            <ColorSwatch label="Error" cssVar="--chatbox-border-error" />
+            <ColorSwatch label="Primary" cssVar="--workspaice-border-primary" />
+            <ColorSwatch label="Secondary" cssVar="--workspaice-border-secondary" />
+            <ColorSwatch label="Brand" cssVar="--workspaice-border-brand" />
+            <ColorSwatch label="Error" cssVar="--workspaice-border-error" />
           </Section>
         </Grid.Col>
       </Grid>
@@ -125,15 +125,15 @@ export const Spacing: StoryObj = {
         properties.
       </Text>
       {[
-        { name: 'none', var: '--chatbox-spacing-none', px: '0' },
-        { name: '3xs', var: '--chatbox-spacing-3xs', px: '2' },
-        { name: 'xxs', var: '--chatbox-spacing-xxs', px: '4' },
-        { name: 'xs', var: '--chatbox-spacing-xs', px: '8' },
-        { name: 'sm', var: '--chatbox-spacing-sm', px: '12' },
-        { name: 'md', var: '--chatbox-spacing-md', px: '16' },
-        { name: 'lg', var: '--chatbox-spacing-lg', px: '20' },
-        { name: 'xl', var: '--chatbox-spacing-xl', px: '24' },
-        { name: 'xxl', var: '--chatbox-spacing-xxl', px: '32' },
+        { name: 'none', var: '--workspaice-spacing-none', px: '0' },
+        { name: '3xs', var: '--workspaice-spacing-3xs', px: '2' },
+        { name: 'xxs', var: '--workspaice-spacing-xxs', px: '4' },
+        { name: 'xs', var: '--workspaice-spacing-xs', px: '8' },
+        { name: 'sm', var: '--workspaice-spacing-sm', px: '12' },
+        { name: 'md', var: '--workspaice-spacing-md', px: '16' },
+        { name: 'lg', var: '--workspaice-spacing-lg', px: '20' },
+        { name: 'xl', var: '--workspaice-spacing-xl', px: '24' },
+        { name: 'xxl', var: '--workspaice-spacing-xxl', px: '32' },
       ].map((s) => (
         <Flex key={s.name} align="center" gap="md" mb="xs">
           <Text size="sm" w={40} fw={500}>
@@ -143,7 +143,7 @@ export const Spacing: StoryObj = {
             h={20}
             style={{
               width: `var(${s.var})`,
-              backgroundColor: 'var(--chatbox-tint-brand)',
+              backgroundColor: 'var(--workspaice-tint-brand)',
               borderRadius: 4,
               minWidth: 2,
             }}
@@ -166,20 +166,20 @@ export const BorderRadius: StoryObj = {
       </Title>
       <Flex gap="lg" wrap="wrap">
         {[
-          { name: 'none', var: '--chatbox-radius-none' },
-          { name: 'xs', var: '--chatbox-radius-xs' },
-          { name: 'sm', var: '--chatbox-radius-sm' },
-          { name: 'md', var: '--chatbox-radius-md' },
-          { name: 'lg', var: '--chatbox-radius-lg' },
-          { name: 'xl', var: '--chatbox-radius-xl' },
-          { name: 'xxl', var: '--chatbox-radius-xxl' },
+          { name: 'none', var: '--workspaice-radius-none' },
+          { name: 'xs', var: '--workspaice-radius-xs' },
+          { name: 'sm', var: '--workspaice-radius-sm' },
+          { name: 'md', var: '--workspaice-radius-md' },
+          { name: 'lg', var: '--workspaice-radius-lg' },
+          { name: 'xl', var: '--workspaice-radius-xl' },
+          { name: 'xxl', var: '--workspaice-radius-xxl' },
         ].map((r) => (
           <Stack key={r.name} align="center" gap={4}>
             <Box
               w={60}
               h={60}
               style={{
-                backgroundColor: 'var(--chatbox-background-brand-primary)',
+                backgroundColor: 'var(--workspaice-background-brand-primary)',
                 borderRadius: `var(${r.var})`,
               }}
             />

@@ -1,5 +1,5 @@
 import { createSpotlight, Spotlight, type SpotlightActionData, type SpotlightActionGroupData } from '@mantine/spotlight'
-import { type BuiltinProviderBaseInfo, ModelProviderEnum } from '@shared/types'
+import type { BuiltinProviderBaseInfo } from '@shared/types'
 import { IconFileImport, IconSearch, IconSquareRoundedPlusFilled } from '@tabler/icons-react'
 import { type FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,12 +20,8 @@ const ProviderSpotlight: FC<{
   const { t } = useTranslation()
 
   const actions = useMemo<SpotlightActionGroupData[]>(() => {
-    const featured = allSystemProviders.filter(
-      (p) => FEATURED_PROVIDER_IDS.includes(p.id) && p.id !== ModelProviderEnum.ChatboxAI
-    )
-    const others = allSystemProviders.filter(
-      (p) => !FEATURED_PROVIDER_IDS.includes(p.id) && p.id !== ModelProviderEnum.ChatboxAI
-    )
+    const featured = allSystemProviders.filter((p) => FEATURED_PROVIDER_IDS.includes(p.id))
+    const others = allSystemProviders.filter((p) => !FEATURED_PROVIDER_IDS.includes(p.id))
 
     const quickActions: SpotlightActionData[] = [
       {
@@ -36,7 +32,7 @@ const ProviderSpotlight: FC<{
           providerSpotlight.close()
           onAddCustomProvider()
         },
-        leftSection: <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-chatbox-tint-brand" />,
+        leftSection: <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-workspaice-tint-brand" />,
       },
     ]
 
@@ -50,7 +46,7 @@ const ProviderSpotlight: FC<{
           providerSpotlight.close()
           onImportProvider()
         },
-        leftSection: <ScalableIcon icon={IconFileImport} size={24} className="text-chatbox-tint-brand" />,
+        leftSection: <ScalableIcon icon={IconFileImport} size={24} className="text-workspaice-tint-brand" />,
       })
     }
 

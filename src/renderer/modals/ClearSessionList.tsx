@@ -69,7 +69,7 @@ const ClearSessionList = NiceModal.create(() => {
 
       <AdaptiveModal.Actions>
         <AdaptiveModal.CloseButton onClick={handleClose} />
-        <Button onClick={clean} color="chatbox-error" loading={cleaning}>
+        <Button onClick={clean} color="workspaice-error" loading={cleaning}>
           {t('clean it up')}
         </Button>
       </AdaptiveModal.Actions>

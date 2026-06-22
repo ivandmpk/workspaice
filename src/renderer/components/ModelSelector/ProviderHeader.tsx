@@ -39,21 +39,21 @@ export const ProviderHeader = ({
   // 根据是否是移动端决定样式
   const iconSize = isMobile ? 16 : 12
   const padding = isMobile ? 'py-xs pb-0 px-xxs' : 'px-sm py-xs'
-  const textColor = isMobile ? 'chatbox-tertiary' : 'chatbox-secondary'
+  const textColor = isMobile ? 'workspaice-tertiary' : 'workspaice-secondary'
   const textWeight = isMobile ? 600 : 500
   const iconClass = isMobile
     ? 'text-inherit'
     : isFavorite
-      ? 'text-chatbox-tint-tertiary'
+      ? 'text-workspaice-tint-tertiary'
       : provider.isCustom
-        ? 'text-chatbox-tint-gray'
+        ? 'text-workspaice-tint-gray'
         : ''
 
   // Desktop 版本的容器样式
-  const desktopContainerClass = `${isClickable ? 'cursor-pointer select-none hover:bg-chatbox-background-primary-hover' : ''} ${padding} sticky top-0 z-10 bg-chatbox-background-primary border-0 border-b border-solid border-chatbox-border-primary ${className}`
+  const desktopContainerClass = `${isClickable ? 'cursor-pointer select-none hover:bg-workspaice-background-primary-hover' : ''} ${padding} sticky top-0 z-10 bg-workspaice-background-primary border-0 border-b border-solid border-workspaice-border-primary ${className}`
 
   // Mobile 版本的容器样式
-  const mobileContainerClass = `${padding} ${isMobile ? 'text-chatbox-tint-tertiary' : ''} sticky top-0 z-10 bg-chatbox-background-primary ${className}`
+  const mobileContainerClass = `${padding} ${isMobile ? 'text-workspaice-tint-tertiary' : ''} sticky top-0 z-10 bg-workspaice-background-primary ${className}`
 
   const containerClass = isMobile ? mobileContainerClass : desktopContainerClass
 

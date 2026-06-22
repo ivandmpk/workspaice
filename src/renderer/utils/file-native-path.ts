@@ -1,4 +1,4 @@
-const FILE_NATIVE_PATH_PROPERTY = '__chatboxNativePath'
+const FILE_NATIVE_PATH_PROPERTY = '__workspaiceNativePath'
 
 type FileWithRememberedNativePath = File & {
   [FILE_NATIVE_PATH_PROPERTY]?: string

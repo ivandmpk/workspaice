@@ -30,12 +30,12 @@ const Welcome = NiceModal.create(() => {
           <Stack gap="sm" align="center">
             <Image src={icon} w={86} h={86} />
             <Stack gap="3xs" align="center">
-              <Title order={3}>Chatbox</Title>
+              <Title order={3}>WorkspAIce</Title>
               <Text size="md">{t('An easy-to-use AI client app')}</Text>
             </Stack>
           </Stack>
 
-          <List size="sm" c="chatbox-secondary" className="flex flex-col items-center">
+          <List size="sm" c="workspaice-secondary" className="flex flex-col items-center">
             <List.Item>{t('Supports a variety of advanced AI models')}</List.Item>
             <List.Item>{t('All data is stored locally, ensuring privacy and rapid access')}</List.Item>
             <List.Item>{t('Ideal for both work and educational scenarios')}</List.Item>
@@ -51,7 +51,7 @@ const Welcome = NiceModal.create(() => {
               radius="md"
               classNames={{ root: '!outline-none', label: 'flex flex-col items-center justify-center' }}
               onClick={() => {
-                navigateToSettings('/provider/chatbox-ai')
+                navigateToSettings('/provider')
                 modal.resolve('setup')
                 modal.hide()
               }}
@@ -61,7 +61,7 @@ const Welcome = NiceModal.create(() => {
           </Stack>
         </Paper>
 
-        <Button variant="transparent" c="chatbox-secondary" size="compact-md" onClick={onClose}>
+        <Button variant="transparent" c="workspaice-secondary" size="compact-md" onClick={onClose}>
           {t('Setup later')}
         </Button>
       </Stack>

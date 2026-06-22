@@ -1,9 +1,9 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import {
   AIProviderNoImplementedPaintError,
   ApiError,
   BaseError,
-  ChatboxAIAPIError,
+  WorkspAIceAIAPIError,
   NetworkError,
 } from '@shared/models/errors'
 import { createMessage, type Message } from '@shared/types'
@@ -215,7 +215,6 @@ export async function submitNewUserMessage(
 
   const globalSettings = settingsStore.getState().getSettings()
   const isPro = settingActions.isPro()
-  const remoteConfig = await settingActions.getRemoteConfig()
 
   // 根据需要，插入空白的回复消息
   let newAssistantMsg = createMessage('assistant', '')
@@ -247,11 +246,7 @@ export async function submitNewUserMessage(
     // 桌面版&手机端总是支持联网问答，不再需要检查模型是否支持
     const model = await createModel(settings)
     if (webBrowsing && platform.type === 'web' && !model.isSupportToolUse()) {
-      if (remoteConfig.setting_chatboxai_first) {
-        throw ChatboxAIAPIError.fromCodeName('model_not_support_web_browsing', 'model_not_support_web_browsing')
-      } else {
-        throw ChatboxAIAPIError.fromCodeName('model_not_support_web_browsing_2', 'model_not_support_web_browsing_2')
-      }
+      throw WorkspAIceAIAPIError.fromCodeName('model_not_support_web_browsing_2', 'model_not_support_web_browsing_2')
     }
 
     // Files and links are now preprocessed in InputBox with storage keys, so no need to process them here

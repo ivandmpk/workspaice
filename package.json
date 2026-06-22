@@ -1,7 +1,7 @@
 {
-  "name": "xyz.chatboxapp.ce",
-  "productName": "xyz.chatboxapp.ce",
-  "version": "0.0.1",
+  "name": "xyz.workspaiceapp.ce",
+  "productName": "xyz.workspaiceapp.ce",
+  "version": "1.0.0-beta",
   "engines": {
     "node": ">=22.12.0 <25.0.0",
     "pnpm": ">=10.17.0"
@@ -15,7 +15,7 @@
     "build:main": "electron-vite build",
     "build:preload": "electron-vite build",
     "build:renderer": "electron-vite build",
-    "build:web": "cross-env CHATBOX_BUILD_PLATFORM=web electron-vite build && pnpm run delete-sourcemaps",
+    "build:web": "cross-env WORKSPAICE_BUILD_PLATFORM=web electron-vite build && pnpm run delete-sourcemaps",
     "delete-sourcemaps": "ts-node ./.erb/scripts/delete-source-maps-runner.js",
     "postinstall": "node .erb/scripts/postinstall.cjs",
     "package": "ts-node ./.erb/scripts/clean.js && pnpm run build && electron-builder build --publish never",
@@ -30,7 +30,7 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "dev": "pnpm start",
     "dev:local": "cross-env USE_LOCAL_API=true pnpm start",
-    "dev:web": "cross-env DEV_WEB_ONLY=true CHATBOX_BUILD_PLATFORM=web pnpm start",
+    "dev:web": "cross-env DEV_WEB_ONLY=true WORKSPAICE_BUILD_PLATFORM=web pnpm start",
     "dev:debug": "cross-env MAIN_ARGS=\"--inspect=5858\" pnpm start",
     "start": "electron-vite dev",
     "start:cdp": "electron-vite dev -- --remote-debugging-port=9333",
@@ -46,7 +46,7 @@
     "test:file-conversation": "vitest run test/integration/file-conversation --testTimeout=120000",
     "test:model-provider": "vitest run test/integration/model-provider --testTimeout=120000",
     "eval:session-rag": "node scripts/session-rag-eval/run-session-rag-eval.mjs",
-    "eval:session-rag:chatbox": "node scripts/session-rag-eval/run-chatbox-flow-eval.mjs",
+    "eval:session-rag:workspaice": "node scripts/session-rag-eval/run-workspaice-flow-eval.mjs",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --write",
     "check": "npx tsc --noEmit",
@@ -54,8 +54,8 @@
     "check:biome": "biome check",
     "check:ci": "biome ci",
     "mobile:sync": "pnpm run mobile:sync:ios && pnpm run mobile:sync:android",
-    "mobile:sync:ios": "cross-env CHATBOX_BUILD_TARGET=mobile_app CHATBOX_BUILD_PLATFORM=ios electron-vite build && pnpm run delete-sourcemaps && npx cap sync ios",
-    "mobile:sync:android": "cross-env CHATBOX_BUILD_TARGET=mobile_app CHATBOX_BUILD_PLATFORM=android electron-vite build && pnpm run delete-sourcemaps && npx cap sync android",
+    "mobile:sync:ios": "cross-env WORKSPAICE_BUILD_TARGET=mobile_app WORKSPAICE_BUILD_PLATFORM=ios electron-vite build && pnpm run delete-sourcemaps && npx cap sync ios",
+    "mobile:sync:android": "cross-env WORKSPAICE_BUILD_TARGET=mobile_app WORKSPAICE_BUILD_PLATFORM=android electron-vite build && pnpm run delete-sourcemaps && npx cap sync android",
     "mobile:ios": "pnpm run mobile:sync:ios && npx cap open ios",
     "mobile:android": "pnpm run mobile:sync:android && npx cap open android",
     "mobile:assets": "npx capacitor-assets generate --ios --android",
@@ -66,7 +66,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chatboxai/chatbox.git"
+    "url": "https://github.com/workspaiceai/workspaice.git"
   },
   "keywords": [],
   "author": {
@@ -130,9 +130,6 @@
     "@openrouter/ai-sdk-provider": "^2.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@radix-ui/react-dialog": "^1.0.5",
-    "@sentry/react": "^10.12.0",
-    "@sentry/vite-plugin": "^4.6.1",
-    "@sentry/webpack-plugin": "^4.3.0",
     "@svgr/webpack": "^8.0.1",
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-query": "^5.74.4",
@@ -149,7 +146,6 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/d3": "^7.4.3",
     "@types/epub": "^0.0.11",
-    "@types/gtag.js": "^0.0.13",
     "@types/highlight.js": "^10.1.0",
     "@types/katex": "^0.16.2",
     "@types/lodash": "^4.14.197",
@@ -233,6 +229,7 @@
     "p-map": "^7.0.3",
     "p-timeout": "^6.1.4",
     "photoswipe": "^5.4.4",
+    "png2icons": "^2.0.1",
     "postcss": "^8.5.3",
     "postcss-loader": "^7.3.3",
     "postcss-preset-mantine": "^1.17.0",
@@ -301,7 +298,6 @@
     "@mastra/rag": "^1.0.8",
     "@modelcontextprotocol/sdk": "^1.15.1",
     "@mozilla/readability": "^0.5.0",
-    "@sentry/node": "^9.28.1",
     "auto-launch": "^5.0.6",
     "chardet": "^2.1.0",
     "cohere-ai": "^7.17.1",
@@ -309,7 +305,6 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^5.3.4",
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.8.3",
     "epub": "^1.3.0",
     "es-toolkit": "^1.43.0",
     "fs-extra": "^11.1.1",
@@ -335,7 +330,6 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
-      "@sentry/cli",
       "core-js",
       "core-js-pure",
       "electron",

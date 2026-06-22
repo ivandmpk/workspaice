@@ -121,7 +121,7 @@ export function normalizeAzureEndpoint(endpoint: string) {
 }
 
 export function isOpenAICompatible(providerId: string, _modelId: string) {
-  if (providerId === 'chatbox-ai') {
+  if (providerId === 'workspaice-ai') {
     return false
   }
   return (

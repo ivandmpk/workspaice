@@ -68,8 +68,8 @@ export const CurrentHeader: StoryObj = {
         <Text fw={600} size="sm" mb="xs">
           Current Desktop Header
         </Text>
-        <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
-          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+        <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <ActionIcon variant="subtle" size={20} color="gray" mr="sm">
               <IconLayoutSidebarLeftExpand size={18} />
             </ActionIcon>
@@ -105,13 +105,13 @@ export const CurrentHeader: StoryObj = {
         </Text>
         <Box
           style={{
-            border: '1px solid var(--chatbox-border-primary)',
+            border: '1px solid var(--workspaice-border-primary)',
             borderRadius: 8,
             overflow: 'hidden',
             maxWidth: 375,
           }}
         >
-          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <ActionIcon variant="subtle" size={24} color="gray">
               <IconMenu2 size={20} />
             </ActionIcon>
@@ -146,21 +146,21 @@ export const OptimizedHeader: StoryObj = {
         <Text fw={600} size="sm" mb="xs">
           Optimized Desktop Header — Breadcrumb + Status Indicators
         </Text>
-        <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
-          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+        <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Flex h={54} align="center" px="sm" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <ActionIcon variant="subtle" size={20} color="gray" mr="sm">
               <IconLayoutSidebarLeftExpand size={18} />
             </ActionIcon>
 
             <Stack gap={0} flex={1} className="min-w-0">
               <Flex align="center" gap={4}>
-                <Text size="xs" c="chatbox-tertiary" className="cursor-pointer hover:underline">
+                <Text size="xs" c="workspaice-tertiary" className="cursor-pointer hover:underline">
                   Chat
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   /
                 </Text>
-                <Text size="xs" c="chatbox-secondary" fw={500} lineClamp={1}>
+                <Text size="xs" c="workspaice-secondary" fw={500} lineClamp={1}>
                   Understanding React Server Components
                 </Text>
                 <ActionIcon variant="subtle" color="gray" size={16}>
@@ -168,7 +168,7 @@ export const OptimizedHeader: StoryObj = {
                 </ActionIcon>
               </Flex>
               <Flex align="center" gap="xs">
-                <Text size="10px" c="chatbox-tertiary">
+                <Text size="10px" c="workspaice-tertiary">
                   Thread 3
                 </Text>
                 <Flex gap={4}>
@@ -216,8 +216,8 @@ export const OptimizedHeader: StoryObj = {
         <Text fw={600} size="sm" mb="xs">
           Optimized Header — Minimal Clean Variant
         </Text>
-        <Box style={{ border: '1px solid var(--chatbox-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
-          <Flex h={48} align="center" px="md" style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+        <Box style={{ border: '1px solid var(--workspaice-border-primary)', borderRadius: 8, overflow: 'hidden' }}>
+          <Flex h={48} align="center" px="md" style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
             <ActionIcon variant="subtle" size={20} color="gray" mr="xs">
               <IconLayoutSidebarLeftCollapse size={18} />
             </ActionIcon>
@@ -243,7 +243,7 @@ export const OptimizedHeader: StoryObj = {
               </ActionIcon>
             </Flex>
           </Flex>
-          <Box h={2} style={{ background: 'linear-gradient(to right, var(--chatbox-tint-brand), transparent)' }} />
+          <Box h={2} style={{ background: 'linear-gradient(to right, var(--workspaice-tint-brand), transparent)' }} />
         </Box>
       </Box>
     </Stack>
@@ -266,9 +266,9 @@ export const ToolbarVariants: StoryObj = {
           px="md"
           py="xs"
           style={{
-            border: '1px solid var(--chatbox-border-primary)',
+            border: '1px solid var(--workspaice-border-primary)',
             borderRadius: 8,
-            backgroundColor: 'var(--chatbox-background-primary)',
+            backgroundColor: 'var(--workspaice-background-primary)',
           }}
         >
           <Button h={28} px="xs" variant="outline" color="gray" leftSection={<IconSearch size={14} />}>
@@ -293,9 +293,9 @@ export const ToolbarVariants: StoryObj = {
           px="md"
           py="xs"
           style={{
-            border: '1px solid var(--chatbox-border-primary)',
+            border: '1px solid var(--workspaice-border-primary)',
             borderRadius: 8,
-            backgroundColor: 'var(--chatbox-background-primary)',
+            backgroundColor: 'var(--workspaice-background-primary)',
           }}
         >
           <Flex
@@ -305,7 +305,7 @@ export const ToolbarVariants: StoryObj = {
             py={2}
             style={{
               borderRadius: 6,
-              backgroundColor: 'var(--chatbox-background-secondary)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
             }}
           >
             <ActionIcon variant="subtle" color="gray" size={24} radius="sm">
@@ -324,7 +324,7 @@ export const ToolbarVariants: StoryObj = {
             py={2}
             style={{
               borderRadius: 6,
-              backgroundColor: 'var(--chatbox-background-secondary)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
             }}
           >
             <ActionIcon variant="subtle" color="gray" size={24} radius="sm">
@@ -352,9 +352,9 @@ export const ToolbarVariants: StoryObj = {
           px="md"
           py="xs"
           style={{
-            border: '1px solid var(--chatbox-border-primary)',
+            border: '1px solid var(--workspaice-border-primary)',
             borderRadius: 8,
-            backgroundColor: 'var(--chatbox-background-primary)',
+            backgroundColor: 'var(--workspaice-background-primary)',
           }}
         >
           <SegmentedControl

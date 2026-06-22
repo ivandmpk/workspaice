@@ -22,7 +22,6 @@ import { estimateTokens } from '@/packages/token'
 import platform from '@/platform'
 import storage from '@/storage'
 import { StorageKey, StorageKeyGenerator } from '@/storage/StoreStorage'
-import { authInfoStore } from '@/stores/authInfoStore'
 import { getMetaStorage } from '@/stores/chatStore'
 import { migrateSession, sortSessions } from '@/utils/session-utils'
 import * as defaults from '../../shared/defaults'
@@ -36,18 +35,18 @@ import { getPlatformDefaultDocumentParser, settingsStore } from './settingsStore
 const log = getLogger('session-helpers')
 const SESSION_ATTACHMENT_RAG_INLINE_BYTE_THRESHOLD = 256 * 1024
 export const SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH = 6 * 1024 * 1024
-export const SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR = 'session_attachment_rag_requires_chatbox_ai'
+export const SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR = 'session_attachment_rag_requires_workspaice_ai'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_KNOWLEDGE_BASE_ERROR = 'session_attachment_rag_requires_knowledge_base'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR = 'session_attachment_rag_requires_tool_use_model'
 export const SESSION_ATTACHMENT_RAG_PARSED_CONTENT_TOO_LARGE_ERROR = 'session_attachment_rag_parsed_content_too_large'
 export const SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING = 'session_attachment_rag_large_attachment_warning'
 const SESSION_ATTACHMENT_RAG_AUTH_ERROR_PATTERNS = [
-  'provider chatbox-ai not set',
-  'chatbox-ai not set',
-  'missing token for rerank provider: chatbox-ai',
+  'provider workspaice-ai not set',
+  'workspaice-ai not set',
+  'missing token for rerank provider: workspaice-ai',
 ]
 const SESSION_ATTACHMENT_RAG_INDEXING_ERROR_PATTERNS = [
-  'chatbox_session_rag_vectors.db',
+  'workspaice_session_rag_vectors.db',
   'connectionfailed("unable to open connection to local database',
   'session attachment rag vector store not initialized',
 ]
@@ -121,19 +120,11 @@ function getEffectiveDocumentParserConfig(): DocumentParserConfig {
   return globalConfig ?? getPlatformDefaultDocumentParser()
 }
 
-function hasParsedText(content: string): boolean {
-  return content.trim().length > 0
-}
-
-function canFallbackToChatboxAI(): boolean {
-  return Boolean(settingActions.getLicenseKey())
-}
-
 export function isSessionAttachmentRagAuthError(errorCode: string | undefined): boolean {
   if (!errorCode) {
     return false
   }
-  if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR) {
+  if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR) {
     return true
   }
   const normalized = errorCode.toLowerCase()
@@ -154,7 +145,7 @@ function hasUsableSessionAttachmentRagLicense(): boolean {
     return false
   }
   if (settings.licenseActivationMethod === 'login') {
-    return !!authInfoStore.getState().getTokens()
+    return false
   }
   return true
 }
@@ -172,19 +163,14 @@ async function canUseSessionAttachmentRag(): Promise<boolean> {
 
   if (!hasUsableLicense) {
     log.debug(
-      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability skipped: missing active Chatbox license, hasLicense=${Boolean(licenseKey)}, method=${settingsStore.getState().licenseActivationMethod ?? 'none'}, platform=${platform.type}`
+      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability skipped: missing active WorkspAIce license, hasLicense=${Boolean(licenseKey)}, method=${settingsStore.getState().licenseActivationMethod ?? 'none'}, platform=${platform.type}`
     )
     sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
     return false
   }
 
-  const value = !!(await remote.getSessionRagConfig({ licenseKey: licenseKey || undefined }).catch(() => undefined))
-    ?.capabilities?.session_attachment_embedding
-  log.debug(
-    `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability fetched: embedding=${value}, hasLicense=${Boolean(licenseKey)}, platform=${platform.type}`
-  )
-  sessionRagCapabilityCache = { key: capabilityCacheKey, value }
-  return value
+  sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
+  return false
 }
 
 /**
@@ -211,61 +197,12 @@ async function parseFileWithLocalParser(
   return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'local' }
 }
 
-async function fallbackToChatboxAIParser(
-  file: File,
-  uniqKey: string,
-  reason: 'local_parser_failed' | 'empty_content'
-): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  log.warn(`Falling back to Chatbox AI parser for "${file.name}" due to ${reason}`)
-
-  try {
-    return await parseFileWithChatboxAI(file, uniqKey)
-  } catch (error) {
-    log.error(`Chatbox AI fallback parsing failed for "${file.name}":`, error)
-    throw new Error('chatbox_ai_parser_failed')
-  }
-}
-
 async function parseFileWithLocalFallback(
   file: File,
   uniqKey: string
 ): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  try {
-    const result = await parseFileWithLocalParser(file, uniqKey)
-    if (!hasParsedText(result.content) && canFallbackToChatboxAI()) {
-      return await fallbackToChatboxAIParser(file, uniqKey, 'empty_content')
-    }
-    return result
-  } catch (error) {
-    log.error(`Local parsing failed for "${file.name}":`, error)
-
-    if (canFallbackToChatboxAI()) {
-      return await fallbackToChatboxAIParser(file, uniqKey, 'local_parser_failed')
-    }
-
-    throw new Error('local_parser_failed')
-  }
-}
-
-/**
- * Parse file using Chatbox AI cloud service
- */
-async function parseFileWithChatboxAI(
-  file: File,
-  uniqKey: string
-): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  const licenseKey = settingActions.getLicenseKey()
-  const uploadedKey = await remote.uploadAndCreateUserFile(licenseKey || '', file)
-
-  // Get uploaded file content
-  const content = (await storage.getBlob(uploadedKey).catch(() => '')) || ''
-
-  // Store content to unique key
-  if (content) {
-    await storage.setBlob(uniqKey, content)
-  }
-
-  return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'chatbox-ai' }
+  const result = await parseFileWithLocalParser(file, uniqKey)
+  return result
 }
 
 /**
@@ -385,16 +322,6 @@ export async function prepareFileAttachment(
 
         case 'local': {
           result = await parseFileWithLocalFallback(file, uniqKey)
-          break
-        }
-
-        case 'chatbox-ai': {
-          try {
-            result = await parseFileWithChatboxAI(file, uniqKey)
-          } catch (error) {
-            log.error(`Chatbox AI parsing failed for "${file.name}":`, error)
-            throw new Error('chatbox_ai_parser_failed')
-          }
           break
         }
 
@@ -527,7 +454,7 @@ export async function preprocessLink(
     }
 
     if (isPro) {
-      // ChatboxAI 方案：使用远程解析
+      // WorkspAIceAI 方案：使用远程解析
       const licenseKey = settingActions.getLicenseKey()
       const parsed = await remote.parseUserLinkPro({ licenseKey: licenseKey || '', url })
 
@@ -701,7 +628,7 @@ export async function exportChat(session: Session, scope: ExportChatScope, forma
 export function mergeSettings(
   globalSettings: Settings,
   sessionSetting?: SessionSettings,
-  sessionType?: 'picture' | 'chat' | 'guide'
+  sessionType?: 'picture' | 'chat'
 ): SessionSettings {
   if (!sessionSetting) {
     return SessionSettingsSchema.parse(globalSettings)
@@ -722,7 +649,6 @@ export function mergeSettings(
 
 export function initEmptyChatSession(): Omit<Session, 'id'> {
   const settings = settingsStore.getState().getSettings()
-  const { chat: lastUsedChatModel } = lastUsedModelStore.getState()
   const newSession: Omit<Session, 'id'> = {
     name: 'Untitled',
     type: 'chat',
@@ -731,12 +657,6 @@ export function initEmptyChatSession(): Omit<Session, 'id'> {
       maxContextMessageCount: settings.maxContextMessageCount ?? Number.MAX_SAFE_INTEGER,
       temperature: settings.temperature || undefined,
       topP: settings.topP || undefined,
-      ...(settings.defaultChatModel
-        ? {
-            provider: settings.defaultChatModel.provider,
-            modelId: settings.defaultChatModel.model,
-          }
-        : lastUsedChatModel),
     },
   }
   if (settings.defaultPrompt) {

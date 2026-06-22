@@ -44,7 +44,6 @@ import '../../static/Block.css'
 import { generateMore, modifyMessage, regenerateInNewFork, removeMessage } from '@/stores/sessionActions'
 import * as toastActions from '@/stores/toastActions'
 import ActionMenu, { type ActionMenuItemProps } from '../ActionMenu'
-import { isContainRenderableCode, MessageArtifact } from '../Artifact'
 import { AssistantAvatar, SystemAvatar, UserAvatar } from '../common/Avatar'
 import { ScalableIcon } from '../common/ScalableIcon'
 import Loading from '../icons/Loading'
@@ -92,7 +91,6 @@ const _Message: FC<Props> = (props) => {
     enableMarkdownRendering,
     enableLaTeXRendering,
     enableMermaidRendering,
-    autoPreviewArtifacts,
     autoCollapseCodeBlock,
     showAvatar,
     messageLayout,
@@ -100,7 +98,6 @@ const _Message: FC<Props> = (props) => {
 
   const isBubbleLayout = messageLayout === 'bubble'
 
-  const [previewArtifact, setPreviewArtifact] = useState(autoPreviewArtifacts)
   const [shouldThrowError, setShouldThrowError] = useState(false)
 
   const contentLength = useMemo(() => {
@@ -230,14 +227,6 @@ const _Message: FC<Props> = (props) => {
     tips.push({ label: messageTimestamp })
   }
 
-  // 是否需要渲染 Aritfact 组件
-  const needArtifact = useMemo(() => {
-    if (msg.role !== 'assistant') {
-      return false
-    }
-    return isContainRenderableCode(getMessageText(msg))
-  }, [msg.contentParts, msg.role, msg])
-
   const trackWithSessionName = useCallback(
     async (event: string) => {
       const session = await getSession(sessionId).catch(() => null)
@@ -276,9 +265,9 @@ const _Message: FC<Props> = (props) => {
 
   const CollapseButton = (
     <span
-      className="cursor-pointer inline-block text-xs font-medium text-chatbox-tint-brand
-                 hover:text-chatbox-tint-brand-hover px-1.5 py-0.5 rounded
-                 hover:bg-chatbox-background-brand-secondary transition-colors"
+      className="cursor-pointer inline-block text-xs font-medium text-workspaice-tint-brand
+                 hover:text-workspaice-tint-brand-hover px-1.5 py-0.5 rounded
+                 hover:bg-workspaice-background-brand-secondary transition-colors"
       onClick={() => setIsCollapsed(!isCollapsed)}
     >
       {isCollapsed ? t('Expand') : t('Collapse')}
@@ -306,7 +295,7 @@ const _Message: FC<Props> = (props) => {
               icon: IconArrowDown,
               onClick: onGenerateMore,
             },
-            !msg.model?.startsWith('Chatbox-AI') &&
+            !msg.model?.startsWith('WorkspAIce-AI') &&
               !(msg.role === 'assistant' && props.sessionType === 'picture') && {
                 text: t('Edit'),
                 icon: IconPencil,
@@ -395,15 +384,15 @@ const _Message: FC<Props> = (props) => {
             ? cn(
                 'px-4 py-1 rounded-2xl',
                 msg.role === 'user'
-                  ? 'bg-[var(--mantine-color-chatbox-brand-filled)] text-white'
+                  ? 'bg-[var(--mantine-color-workspaice-brand-filled)] text-white'
                   : msg.role === 'assistant'
                     ? msg.error
-                      ? 'bg-chatbox-background-error-secondary border border-solid border-chatbox-border-error'
-                      : 'bg-chatbox-background-secondary'
-                    : 'bg-chatbox-background-secondary rounded-lg'
+                      ? 'bg-workspaice-background-error-secondary border border-solid border-workspaice-border-error'
+                      : 'bg-workspaice-background-secondary'
+                    : 'bg-workspaice-background-secondary rounded-lg'
               )
             : msg.role !== 'assistant'
-              ? 'bg-chatbox-background-secondary px-4 rounded-lg'
+              ? 'bg-workspaice-background-secondary px-4 rounded-lg'
               : ''
         )}
       >
@@ -446,13 +435,13 @@ const _Message: FC<Props> = (props) => {
                 ) : item.type === 'info' ? (
                   <Flex key={`info-${item.text}`} className="mb-2 ">
                     <Flex
-                      className="bg-chatbox-background-brand-secondary border-0 border-l-2 border-solid border-chatbox-tint-brand rounded-r-md"
+                      className="bg-workspaice-background-brand-secondary border-0 border-l-2 border-solid border-workspaice-tint-brand rounded-r-md"
                       align="center"
                       gap="xxs"
                       px="xs"
                     >
-                      <ScalableIcon icon={IconInfoCircle} size={16} className="flex-none text-chatbox-tint-brand" />
-                      <Text size="xs" c="chatbox-brand">
+                      <ScalableIcon icon={IconInfoCircle} size={16} className="flex-none text-workspaice-tint-brand" />
+                      <Text size="xs" c="workspaice-brand">
                         {item.text}
                       </Text>
                     </Flex>
@@ -488,10 +477,10 @@ const _Message: FC<Props> = (props) => {
                             </>
                           ) : (
                             <>
-                              <Text size="xs" className="block mb-1" c="chatbox-tertiary">
+                              <Text size="xs" className="block mb-1" c="workspaice-tertiary">
                                 {t('OCR Text')} ({item.ocrResult.length} {t('characters')})
                               </Text>
-                              <Text size="sm" className="line-clamp-2" c="chatbox-secondary" title={item.ocrResult}>
+                              <Text size="sm" className="line-clamp-2" c="workspaice-secondary" title={item.ocrResult}>
                                 {item.ocrResult}
                               </Text>
                               <Text size="xs" className="mt-1 inline-block" c="blue">
@@ -526,7 +515,7 @@ const _Message: FC<Props> = (props) => {
           <div
             className={cn(
               'inline-flex items-center gap-1.5 py-3',
-              isBubbleLayout ? 'px-1 rounded-2xl bg-chatbox-background-secondary' : 'px-4'
+              isBubbleLayout ? 'px-1 rounded-2xl bg-workspaice-background-secondary' : 'px-4'
             )}
           >
             <Loading />
@@ -541,7 +530,7 @@ const _Message: FC<Props> = (props) => {
     tips.length > 0 &&
     tips.map((tip, i) => {
       const text = (
-        <Text key={i} size="11px" c="chatbox-tertiary" ff="monospace" lh={1.4} className="whitespace-nowrap">
+        <Text key={i} size="11px" c="workspaice-tertiary" ff="monospace" lh={1.4} className="whitespace-nowrap">
           {i > 0 ? `· ${tip.label}` : tip.label}
         </Text>
       )
@@ -569,7 +558,7 @@ const _Message: FC<Props> = (props) => {
         gap={0}
         className={
           isSmallScreen
-            ? 'p-xxs bg-chatbox-background-primary rounded-md border-[0.5px] border-solid border-chatbox-border-primary shadow-sm'
+            ? 'p-xxs bg-workspaice-background-primary rounded-md border-[0.5px] border-solid border-workspaice-border-primary shadow-sm'
             : ''
         }
       >
@@ -579,7 +568,7 @@ const _Message: FC<Props> = (props) => {
         {msg.role !== 'assistant' && (
           <MessageActionIcon icon={IconArrowDown} tooltip={t('Reply Again Below')} onClick={onGenerateMore} />
         )}
-        {!msg.model?.startsWith('Chatbox-AI') && !(msg.role === 'assistant' && props.sessionType === 'picture') && (
+        {!msg.model?.startsWith('WorkspAIce-AI') && !(msg.role === 'assistant' && props.sessionType === 'picture') && (
           <MessageActionIcon icon={IconPencil} tooltip={t('Edit')} onClick={onEditClick} />
         )}
         {!(props.sessionType === 'picture' && msg.role === 'assistant') && (
@@ -909,7 +898,7 @@ export const MessageActionIcon = forwardRef<
       mih="auto"
       p={4}
       bd={0}
-      color="chatbox-secondary"
+      color="workspaice-secondary"
       aria-label={tooltip ?? undefined}
       {...props}
     >

@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { store as keypairStore } from './keypairs'
-import { CHATBOX_BUILD_PLATFORM } from '../variables'
+import { WORKSPAICE_BUILD_PLATFORM } from '../variables'
 import NiceModal from '@ebay/nice-modal-react'
 
 // 本次启动是否已经引导过用户评价 App Store
@@ -36,7 +36,7 @@ export async function recordAppStoreRatingClick() {
 
 let tickCount = 0
 export function tickAfterMessageGenerated() {
-  if (CHATBOX_BUILD_PLATFORM !== 'ios') {
+  if (WORKSPAICE_BUILD_PLATFORM !== 'ios') {
     return
   }
   tickCount++

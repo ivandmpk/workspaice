@@ -29,9 +29,9 @@ export function ReferenceImagesPreview({ images, onRemove, onAddClick }: Referen
           <Tooltip label={t('Add Reference Image')}>
             <UnstyledButton
               onClick={onAddClick}
-              className="w-[64px] h-[64px] rounded-md border border-dashed border-[var(--chatbox-border-primary)] hover:border-[var(--chatbox-tint-tertiary)] flex items-center justify-center transition-colors"
+              className="w-[64px] h-[64px] rounded-md border border-dashed border-[var(--workspaice-border-primary)] hover:border-[var(--workspaice-tint-tertiary)] flex items-center justify-center transition-colors"
             >
-              <IconPlus size={18} className="text-[var(--chatbox-tint-tertiary)]" />
+              <IconPlus size={18} className="text-[var(--workspaice-tint-tertiary)]" />
             </UnstyledButton>
           </Tooltip>
         </div>
@@ -54,7 +54,7 @@ function ReferenceImageItem({ storageKey, onRemove }: { storageKey: string; onRe
           w={64}
           fit="cover"
           radius="md"
-          className="border border-[var(--chatbox-border-primary)]"
+          className="border border-[var(--workspaice-border-primary)]"
         />
       ) : (
         <Skeleton h={64} w={64} radius="md" />

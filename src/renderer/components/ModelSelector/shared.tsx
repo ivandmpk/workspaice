@@ -7,7 +7,7 @@ import { ModelIcon } from '../icons/ModelIcon'
 import { ScalableIcon } from '../common/ScalableIcon'
 
 // Common styles
-export const SELECTED_BG_CLASS = '!bg-chatbox-background-brand-secondary'
+export const SELECTED_BG_CLASS = '!bg-workspaice-background-brand-secondary'
 export const TRANSITION_DURATION = 200
 
 // Helper function to group favorite models by provider
@@ -54,7 +54,7 @@ export const ModelItem = ({
       value={`${providerId}/${model.modelId}`}
       className={clsx(
         'flex flex-row items-center group -mx-xs px-xs',
-        !isSelected && 'hover:bg-chatbox-background-brand-secondary-hover',
+        !isSelected && 'hover:bg-workspaice-background-brand-secondary-hover',
         isSelected && SELECTED_BG_CLASS
       )}
     >
@@ -62,17 +62,17 @@ export const ModelItem = ({
       <Text
         span
         className="flex-shrink"
-        c={model.labels?.includes('recommended') ? 'chatbox-brand' : 'chatbox-primary'}
+        c={model.labels?.includes('recommended') ? 'workspaice-brand' : 'workspaice-primary'}
       >
         {model.nickname || model.modelId}
       </Text>
       {providerName && (
-        <Text span size="xs" c="chatbox-tertiary" className="ml-xxs flex-shrink-0">
+        <Text span size="xs" c="workspaice-tertiary" className="ml-xxs flex-shrink-0">
           ({providerName})
         </Text>
       )}
       {model.labels?.includes('pro') && (
-        <Badge color="chatbox-brand" size="xs" variant="light" ml="xxs" className="flex-shrink-0 flex-grow-0">
+        <Badge color="workspaice-brand" size="xs" variant="light" ml="xxs" className="flex-shrink-0 flex-grow-0">
           Pro
         </Badge>
       )}
@@ -84,21 +84,21 @@ export const ModelItem = ({
 
       {model.capabilities?.includes('reasoning') && (
         <Tooltip label={t('Reasoning')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-warning" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-warning" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconBulb} size={14} />
           </Text>
         </Tooltip>
       )}
       {model.capabilities?.includes('vision') && (
         <Tooltip label={t('Vision')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-brand" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-brand" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconEye} size={14} />
           </Text>
         </Tooltip>
       )}
       {model.capabilities?.includes('tool_use') && (
         <Tooltip label={t('Tool Use')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-success" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-success" className="flex items-center ml-xxs" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconTool} size={14} />
           </Text>
         </Tooltip>
@@ -110,8 +110,8 @@ export const ModelItem = ({
           className={clsx(
             'ml-auto -m-xs p-xs',
             isFavorited
-              ? 'text-chatbox-tint-brand'
-              : 'opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto text-chatbox-border-secondary hover:text-chatbox-tint-brand'
+              ? 'text-workspaice-tint-brand'
+              : 'opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto text-workspaice-border-secondary hover:text-workspaice-tint-brand'
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -158,10 +158,10 @@ export const ModelItemInDrawer = ({
       gap="xs"
       px="sm"
       py="xs"
-      c={isRecommended ? 'chatbox-brand' : 'chatbox-secondary'}
+      c={isRecommended ? 'workspaice-brand' : 'workspaice-secondary'}
       className={clsx(
         'outline-none rounded-md border-0',
-        isSelected ? SELECTED_BG_CLASS : 'bg-transparent active:bg-chatbox-background-brand-secondary-hover'
+        isSelected ? SELECTED_BG_CLASS : 'bg-transparent active:bg-workspaice-background-brand-secondary-hover'
       )}
       onClick={() => {
         onSelect?.()
@@ -173,12 +173,12 @@ export const ModelItemInDrawer = ({
         {model.nickname || model.modelId}
       </Text>
       {providerName && (
-        <Text span size="xs" c="chatbox-tertiary" className="flex-shrink-0">
+        <Text span size="xs" c="workspaice-tertiary" className="flex-shrink-0">
           ({providerName})
         </Text>
       )}
       {model.labels?.includes('pro') && (
-        <Badge color="chatbox-brand" size="xs" variant="light" className="flex-grow-0 flex-shrink-0">
+        <Badge color="workspaice-brand" size="xs" variant="light" className="flex-grow-0 flex-shrink-0">
           Pro
         </Badge>
       )}
@@ -190,21 +190,21 @@ export const ModelItemInDrawer = ({
 
       {model.capabilities?.includes('reasoning') && (
         <Tooltip label={t('Reasoning')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-warning" className="flex items-center" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-warning" className="flex items-center" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconBulb} size={14} />
           </Text>
         </Tooltip>
       )}
       {model.capabilities?.includes('vision') && (
         <Tooltip label={t('Vision')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-brand" className="flex items-center" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-brand" className="flex items-center" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconEye} size={14} />
           </Text>
         </Tooltip>
       )}
       {model.capabilities?.includes('tool_use') && (
         <Tooltip label={t('Tool Use')} events={{ hover: true, focus: true, touch: true }}>
-          <Text span c="chatbox-success" className="flex items-center" style={{ opacity: 0.7 }}>
+          <Text span c="workspaice-success" className="flex items-center" style={{ opacity: 0.7 }}>
             <ScalableIcon icon={IconTool} size={14} />
           </Text>
         </Tooltip>
@@ -215,7 +215,7 @@ export const ModelItemInDrawer = ({
           component="span"
           className={clsx(
             'ml-auto -m-xs p-xs',
-            isFavorited ? 'text-chatbox-tint-brand' : 'text-chatbox-border-secondary'
+            isFavorited ? 'text-workspaice-tint-brand' : 'text-workspaice-border-secondary'
           )}
           onClick={(e) => {
             e.stopPropagation()

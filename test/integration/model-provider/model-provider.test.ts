@@ -41,7 +41,7 @@ const PROVIDER_TEST_MODELS: Record<ModelProvider, ProviderModelInfo[]> = {
   ],
   [ModelProviderEnum.Azure]: [],
   [ModelProviderEnum.ChatGLM6B]: [],
-  [ModelProviderEnum.ChatboxAI]: [],
+  [ModelProviderEnum.WorkspAIceAI]: [],
   [ModelProviderEnum.Claude]: [
     { modelId: 'claude-haiku-4-5', capabilities: ['tool_use', 'reasoning'] },
     { modelId: 'claude-3-5-haiku-20241022', capabilities: ['tool_use'] },
@@ -119,9 +119,9 @@ function runProviderTest(providerName: ModelProviderEnum) {
 describe.concurrent('Model Provider Integration Tests', () => {
   for (const providerName of Object.keys(aiProviderNameHash) as ModelProviderEnum[]) {
     switch (providerName) {
-      case ModelProviderEnum.ChatboxAI: {
-        const apiKey = process.env.CHATBOX_LICENSE_KEY
-        describe.runIf(apiKey).todo('Provider ChatboxAI', () => {
+      case ModelProviderEnum.WorkspAIceAI: {
+        const apiKey = process.env.WORKSPAICE_LICENSE_KEY
+        describe.runIf(apiKey).todo('Provider WorkspAIceAI', () => {
           it('should have correct provider name', () => {
             expect(aiProviderNameHash[providerName]).toBe(aiProviderNameHash[providerName])
           })

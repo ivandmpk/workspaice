@@ -1,5 +1,4 @@
 import path, { resolve } from 'node:path'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
@@ -26,7 +25,7 @@ export function injectBaseTag(): Plugin {
 }
 
 /**
- * Vite plugin to inject window.chatbox_release_date for web builds
+ * Vite plugin to inject window.workspaice_release_date for web builds
  */
 export function injectReleaseDate(): Plugin {
   const releaseDate = new Date().toISOString().slice(0, 10)
@@ -36,7 +35,7 @@ export function injectReleaseDate(): Plugin {
       return [
         {
           tag: 'script',
-          children: `window.chatbox_release_date="${releaseDate}";`,
+          children: `window.workspaice_release_date="${releaseDate}";`,
           injectTo: 'head-prepend',
         },
       ]
@@ -45,22 +44,10 @@ export function injectReleaseDate(): Plugin {
 }
 
 /**
- * Vite plugin to replace Plausible data-domain for web builds
- */
-export function replacePlausibleDomain(): Plugin {
-  return {
-    name: 'replace-plausible-domain',
-    transformIndexHtml(html) {
-      return html.replace('data-domain="app.chatboxai.app"', 'data-domain="web.chatboxai.app"')
-    },
-  }
-}
-
-/**
  * Vite plugin to inject platform-appropriate viewport meta content.
  * Desktop builds omit `height=device-height` and `viewport-fit=cover` which trigger
  * Chromium's Virtual Keyboard API on macOS, causing an empty bottom margin on input focus.
- * See: https://github.com/chatboxai/chatbox/issues/2023
+ * See: https://github.com/workspaiceai/workspaice/issues/2023
  */
 export function injectViewportContent(isDesktop: boolean): Plugin {
   const content = isDesktop
@@ -93,18 +80,10 @@ export function dvhToVh(): Plugin {
   }
 }
 
-const inferredRelease = process.env.SENTRY_RELEASE || packageJson.version
-const inferredDist = process.env.SENTRY_DIST || undefined
-
-process.env.SENTRY_RELEASE = inferredRelease
-if (inferredDist) {
-  process.env.SENTRY_DIST = inferredDist
-}
-
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production'
-  const isWeb = process.env.CHATBOX_BUILD_PLATFORM === 'web'
-  const isMobile = process.env.CHATBOX_BUILD_TARGET === 'mobile_app'
+  const isWeb = process.env.WORKSPAICE_BUILD_PLATFORM === 'web'
+  const isMobile = process.env.WORKSPAICE_BUILD_TARGET === 'mobile_app'
   const isDesktop = !isWeb && !isMobile
 
   return {
@@ -119,22 +98,6 @@ export default defineConfig(({ mode }) => {
               }),
             ]
           : [externalizeDepsPlugin()]),
-        process.env.SENTRY_AUTH_TOKEN
-          ? sentryVitePlugin({
-              authToken: process.env.SENTRY_AUTH_TOKEN,
-              org: 'sentry',
-              project: 'chatbox',
-              url: 'https://sentry.midway.run/',
-              release: {
-                name: inferredRelease,
-                ...(inferredDist ? { dist: inferredDist } : {}),
-              },
-              sourcemaps: {
-                assets: isProduction ? 'release/app/dist/main/**' : 'output/main/**',
-              },
-              telemetry: false,
-            })
-          : undefined,
       ].filter(Boolean),
       build: {
         outDir: isProduction ? 'release/app/dist/main' : undefined,
@@ -161,14 +124,10 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.type': '"browser"',
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'process.env.CHATBOX_BUILD_TARGET': JSON.stringify(process.env.CHATBOX_BUILD_TARGET || 'unknown'),
-        'process.env.CHATBOX_BUILD_PLATFORM': JSON.stringify(process.env.CHATBOX_BUILD_PLATFORM || 'unknown'),
-        'process.env.CHATBOX_BUILD_CHANNEL': JSON.stringify(process.env.CHATBOX_BUILD_CHANNEL || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_TARGET': JSON.stringify(process.env.WORKSPAICE_BUILD_TARGET || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_PLATFORM': JSON.stringify(process.env.WORKSPAICE_BUILD_PLATFORM || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_CHANNEL': JSON.stringify(process.env.WORKSPAICE_BUILD_CHANNEL || 'unknown'),
         'process.env.USE_LOCAL_API': JSON.stringify(process.env.USE_LOCAL_API || ''),
-        'process.env.USE_BETA_API': JSON.stringify(process.env.USE_BETA_API || ''),
-        'process.env.USE_NEWDB_API': JSON.stringify(process.env.USE_NEWDB_API || ''),
-        'process.env.USE_LOCAL_CHATBOX': JSON.stringify(process.env.USE_LOCAL_CHATBOX || ''),
-        'process.env.USE_BETA_CHATBOX': JSON.stringify(process.env.USE_BETA_CHATBOX || ''),
       },
     },
     preload: {
@@ -214,28 +173,11 @@ export default defineConfig(({ mode }) => {
         injectViewportContent(isDesktop),
         isWeb ? injectBaseTag() : undefined,
         injectReleaseDate(),
-        isWeb ? replacePlausibleDomain() : undefined,
         visualizer({
           filename: 'release/app/dist/renderer/stats.html',
           open: false,
           title: 'Renderer Process Dependency Analysis',
         }),
-        process.env.SENTRY_AUTH_TOKEN
-          ? sentryVitePlugin({
-              authToken: process.env.SENTRY_AUTH_TOKEN,
-              org: 'sentry',
-              project: 'chatbox',
-              url: 'https://sentry.midway.run/',
-              release: {
-                name: inferredRelease,
-                ...(inferredDist ? { dist: inferredDist } : {}),
-              },
-              sourcemaps: {
-                assets: isProduction ? 'release/app/dist/renderer/**' : 'output/renderer/**',
-              },
-              telemetry: false,
-            })
-          : undefined,
       ].filter(Boolean),
       build: {
         outDir: isProduction ? 'release/app/dist/renderer' : undefined,
@@ -295,14 +237,10 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.type': '"renderer"',
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'process.env.CHATBOX_BUILD_TARGET': JSON.stringify(process.env.CHATBOX_BUILD_TARGET || 'unknown'),
-        'process.env.CHATBOX_BUILD_PLATFORM': JSON.stringify(process.env.CHATBOX_BUILD_PLATFORM || 'unknown'),
-        'process.env.CHATBOX_BUILD_CHANNEL': JSON.stringify(process.env.CHATBOX_BUILD_CHANNEL || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_TARGET': JSON.stringify(process.env.WORKSPAICE_BUILD_TARGET || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_PLATFORM': JSON.stringify(process.env.WORKSPAICE_BUILD_PLATFORM || 'unknown'),
+        'process.env.WORKSPAICE_BUILD_CHANNEL': JSON.stringify(process.env.WORKSPAICE_BUILD_CHANNEL || 'unknown'),
         'process.env.USE_LOCAL_API': JSON.stringify(process.env.USE_LOCAL_API || ''),
-        'process.env.USE_BETA_API': JSON.stringify(process.env.USE_BETA_API || ''),
-        'process.env.USE_NEWDB_API': JSON.stringify(process.env.USE_NEWDB_API || ''),
-        'process.env.USE_LOCAL_CHATBOX': JSON.stringify(process.env.USE_LOCAL_CHATBOX || ''),
-        'process.env.USE_BETA_CHATBOX': JSON.stringify(process.env.USE_BETA_CHATBOX || ''),
       },
       optimizeDeps: {
         // Force a fresh dep optimization on dev startup. This avoids stale .vite

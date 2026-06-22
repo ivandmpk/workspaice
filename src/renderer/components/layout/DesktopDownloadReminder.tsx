@@ -3,7 +3,7 @@ import { IconDeviceDesktop, IconDownload, IconX } from '@tabler/icons-react'
 import { useLocation } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
 import { useLanguage, useSettingsStore } from '@/stores/settingsStore'
 
@@ -12,7 +12,7 @@ export default function DesktopDownloadReminder() {
   const location = useLocation()
   const language = useLanguage()
   const setSettings = useSettingsStore((state) => state.setSettings)
-  const dismissed = useSettingsStore((state) => state.chatboxAIDesktopPromptDismissed)
+  const dismissed = useSettingsStore((state) => state.workspaiceAIDesktopPromptDismissed)
 
   if (platform.type !== 'web' || dismissed) {
     return null
@@ -24,26 +24,26 @@ export default function DesktopDownloadReminder() {
 
   return (
     <div className="fixed right-4 bottom-4 z-[120] w-[min(360px,calc(100vw-2rem))]">
-      <Paper withBorder radius="lg" p="md" shadow="lg" className="backdrop-blur-sm bg-chatbox-background-primary/95">
+      <Paper withBorder radius="lg" p="md" shadow="lg" className="backdrop-blur-sm bg-workspaice-background-primary/95">
         <Stack gap="sm">
           <Flex justify="space-between" gap="sm" align="flex-start">
             <Flex gap="sm" align="flex-start" flex={1}>
-              <ScalableIcon icon={IconDeviceDesktop} size={20} className="text-chatbox-brand mt-2 shrink-0" />
-                <Text fw={600}>{t('More advanced features are available in Chatbox Desktop.')}
+              <ScalableIcon icon={IconDeviceDesktop} size={20} className="text-workspaice-brand mt-2 shrink-0" />
+                <Text fw={600}>{t('More advanced features are available in WorkspAIce Desktop.')}
                 </Text>
             </Flex>
 
             <ActionIcon
               variant="subtle"
-              color="chatbox-secondary"
-              onClick={() => setSettings({ chatboxAIDesktopPromptDismissed: true })}
+              color="workspaice-secondary"
+              onClick={() => setSettings({ workspaiceAIDesktopPromptDismissed: true })}
               aria-label={t('Close') || 'Close'}
             >
               <ScalableIcon icon={IconX} size={16} />
             </ActionIcon>
           </Flex>
 
-          <Text size="xs" c="chatbox-secondary" style={{ whiteSpace: 'pre-line' }}>
+          <Text size="xs" c="workspaice-secondary" style={{ whiteSpace: 'pre-line' }}>
             {t(
               '1. Your chat history on web version can only be stored in the browser cache (unreliable - it may be cleaned by browser). \n2. MCP and Knowledge Base are currently supported on the desktop app only. '
             )}
@@ -55,7 +55,7 @@ export default function DesktopDownloadReminder() {
             className="mx-2"
             onClick={() =>
               platform.openLink(
-                buildChatboxUrl(`/redirect_app/homepage/${language}?utm_source=web&utm_content=floating_desktop_prompt#download`)
+                buildWorkspAIceUrl(`/redirect_app/homepage/${language}?utm_source=web&utm_content=floating_desktop_prompt#download`)
               )
             }
           >

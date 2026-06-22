@@ -14,9 +14,9 @@ import { getRegistrySync } from './fetch'
  * - type: only filled when missing (embedding/rerank may be set by provider definition)
  * - labels: only filled when missing
  */
-export function enrichModelsFromRegistry(models: ProviderModelInfo[], chatboxProviderId: string): ProviderModelInfo[] {
+export function enrichModelsFromRegistry(models: ProviderModelInfo[], workspaiceProviderId: string): ProviderModelInfo[] {
   const registryData = getRegistrySync()
-  const providerRegistry = registryData[chatboxProviderId]
+  const providerRegistry = registryData[workspaiceProviderId]
 
   if (!providerRegistry || models.length === 0) {
     return models
@@ -41,9 +41,9 @@ export function enrichModelsFromRegistry(models: ProviderModelInfo[], chatboxPro
  * Get all models from the registry for a given provider.
  * Used as fallback when provider API listModels() fails.
  */
-export function getProviderModelsFromRegistry(chatboxProviderId: string): ProviderModelInfo[] {
+export function getProviderModelsFromRegistry(workspaiceProviderId: string): ProviderModelInfo[] {
   const registryData = getRegistrySync()
-  const providerRegistry = registryData[chatboxProviderId]
+  const providerRegistry = registryData[workspaiceProviderId]
 
   if (!providerRegistry) return []
 
@@ -54,19 +54,19 @@ export function getProviderModelsFromRegistry(chatboxProviderId: string): Provid
  * Get recently released models from registry that are NOT in the curated list.
  * Used to show "New" models when user clicks Fetch.
  *
- * @param chatboxProviderId - The Chatbox provider ID
+ * @param workspaiceProviderId - The WorkspAIce provider ID
  * @param curatedModelIds - The curated model ID list for this provider
  * @param existingModelIds - Model IDs already in the user's list
  * @param recentMonths - How many months back to consider "recent" (default: 6)
  */
 export function getDiscoveredModels(
-  chatboxProviderId: string,
+  workspaiceProviderId: string,
   curatedModelIds: string[],
   existingModelIds: string[],
   recentMonths = 6
 ): ProviderModelInfo[] {
   const registryData = getRegistrySync()
-  const providerRegistry = registryData[chatboxProviderId]
+  const providerRegistry = registryData[workspaiceProviderId]
 
   if (!providerRegistry) return []
 

@@ -9,7 +9,7 @@ import type { MCPServerConfig, MCPServerStatus } from './types'
 type TransportConfig = MCPServerConfig['transport']
 type MCPClient = Awaited<ReturnType<typeof createMCPClient>>
 
-async function createClient(transportConfig: TransportConfig, name = 'chatbox-mcp-client'): Promise<MCPClient> {
+async function createClient(transportConfig: TransportConfig, name = 'workspaice-mcp-client'): Promise<MCPClient> {
   if (transportConfig.type === 'stdio') {
     const transport = await IPCStdioTransport.create(transportConfig)
     let errorMessage = ''

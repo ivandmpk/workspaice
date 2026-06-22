@@ -43,8 +43,6 @@ import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { trackJkClickEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { useKnowledgeBaseFiles, useKnowledgeBaseFilesActions, useKnowledgeBaseFilesCount } from '@/hooks/knowledge-base'
 import { useChunksPreview } from '@/hooks/useChunksPreview'
 import { toastError } from '@/packages/toast'
@@ -52,7 +50,6 @@ import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { trackEvent } from '@/utils/track'
 import ChunksPreviewModal from './ChunksPreviewModal'
-import { RemoteRetryModal } from './RemoteRetryModal'
 
 interface KnowledgeBaseDocumentsProps {
   knowledgeBase: KnowledgeBase | null
@@ -69,7 +66,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
   const [showScrollIndicator, setShowScrollIndicator] = useState(true)
   const [isDragOver, setIsDragOver] = useState(false)
   const [showUploadArea, setShowUploadArea] = useState(false)
-  const [showRemoteRetryModal, setShowRemoteRetryModal] = useState(false)
   const [sizeRejectedFiles, setSizeRejectedFiles] = useState<RejectedFile[]>([])
 
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -114,24 +110,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
 
     return () => clearInterval(pollInterval)
   }, [knowledgeBase?.id, allFiles, refetch, refetchCount])
-
-  // Failed files for remote retry feature
-  const failedFiles = useMemo(() => allFiles.filter((file) => file.status === 'failed'), [allFiles])
-
-  // Parser types that should NOT show the "use Chatbox AI" suggestion when they fail
-  const PARSER_NO_SUGGESTION_LIST: string[] = ['mineru', 'chatbox-ai']
-
-  // Check if we should show the Chatbox AI suggestion for failed files
-  // Show suggestion only if there are failed files that are NOT in the exception list
-  const shouldShowChatboxAISuggestion = useMemo(() => {
-    if (failedFiles.length === 0) return false
-    // Check if any failed file used a parser that should show the suggestion
-    return failedFiles.some(
-      (file) =>
-        file.error !== KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR &&
-        !PARSER_NO_SUGGESTION_LIST.includes(file.parser_type || 'local')
-    )
-  }, [failedFiles])
 
   // MIME type correction for Windows compatibility
   const correctMimeType = useCallback((file: File): FileMeta => {
@@ -591,15 +569,15 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
     switch (status) {
       case 'completed':
       case 'done':
-        return <IconCircleCheck size={16} color="var(--chatbox-tint-success)" />
+        return <IconCircleCheck size={16} color="var(--workspaice-tint-success)" />
       case 'processing':
         return (
-          <IconLoader size={16} color="var(--chatbox-tint-warning)" style={{ animation: 'spin 1s linear infinite' }} />
+          <IconLoader size={16} color="var(--workspaice-tint-warning)" style={{ animation: 'spin 1s linear infinite' }} />
         )
       case 'pending':
-        return <IconLoader size={16} color="var(--chatbox-tint-gray)" />
+        return <IconLoader size={16} color="var(--workspaice-tint-gray)" />
       case 'paused':
-        return <IconPlayerPause size={16} color="var(--chatbox-tint-warning)" />
+        return <IconPlayerPause size={16} color="var(--workspaice-tint-warning)" />
       case 'failed': {
         const isParsedContentTooLarge = error === KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR
         // Determine label based on actual parser type used
@@ -610,8 +588,8 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
           switch (parserType) {
             case 'mineru':
               return t('MinerU parse failed')
-            case 'chatbox-ai':
-              return t('Chatbox AI parse failed')
+            case 'local':
+              return t('WorkspAIce AI parse failed')
             default:
               return t('Local parse failed')
           }
@@ -621,7 +599,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
               limit: KNOWLEDGE_BASE_MAX_PARSED_CONTENT_SIZE_LABEL,
             })
           : error || t('Processing failed')
-        const isRemoteParser = parserType === 'mineru' || parserType === 'chatbox-ai'
+        const isRemoteParser = parserType === 'mineru' || parserType === 'local'
         return (
           <Flex gap={4} align="center">
             <Tooltip label={errorLabel} multiline w={300} withArrow position="top" transitionProps={{ duration: 200 }}>
@@ -710,28 +688,28 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
             py="2px"
             style={{
               cursor: 'pointer',
-              backgroundColor: 'var(--chatbox-background-secondary)',
-              borderBottom: '1px solid var(--chatbox-border-secondary-hover)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
+              borderBottom: '1px solid var(--workspaice-border-secondary-hover)',
             }}
             onClick={() => setIsExpanded(!isExpanded)}
           >
             <Group>
               {isExpanded ? (
-                <IconChevronDown size={16} color="var(--chatbox-tint-gray)" />
+                <IconChevronDown size={16} color="var(--workspaice-tint-gray)" />
               ) : (
-                <IconChevronRight size={16} color="var(--chatbox-tint-gray)" />
+                <IconChevronRight size={16} color="var(--workspaice-tint-gray)" />
               )}
-              <Text size="sm" fw={600} className="text-chatbox-tint-primary">
+              <Text size="sm" fw={600} className="text-workspaice-tint-primary">
                 {t('Documents')}
               </Text>
               <Pill
                 size="xs"
                 bg={
                   filesCount > 0
-                    ? 'var(--chatbox-background-brand-secondary)'
-                    : 'var(--chatbox-background-gray-secondary)'
+                    ? 'var(--workspaice-background-brand-secondary)'
+                    : 'var(--workspaice-background-gray-secondary)'
                 }
-                c={filesCount > 0 ? 'var(--chatbox-tint-brand)' : 'var(--chatbox-tint-gray)'}
+                c={filesCount > 0 ? 'var(--workspaice-tint-brand)' : 'var(--workspaice-tint-gray)'}
                 fz="xs"
               >
                 {filesCount}
@@ -739,7 +717,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
             </Group>
             <Button
               variant="subtle"
-              color="var(--chatbox-tint-primary)"
+              color="var(--workspaice-tint-primary)"
               size="xs"
               fw={600}
               leftSection={showUploadArea ? <IconCheck size={14} /> : <IconPlus size={14} />}
@@ -758,7 +736,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
               <Box
                 p="md"
                 style={{
-                  borderBottom: allFiles.length > 0 ? '1px solid var(--chatbox-tint-gray)' : 'none',
+                  borderBottom: allFiles.length > 0 ? '1px solid var(--workspaice-tint-gray)' : 'none',
                 }}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -770,11 +748,11 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                   radius="md"
                   style={{
                     border: isDragOver
-                      ? '2px dashed var(--chatbox-border-brand)'
-                      : '2px dashed var(--chatbox-border-primary)',
+                      ? '2px dashed var(--workspaice-border-brand)'
+                      : '2px dashed var(--workspaice-border-primary)',
                     backgroundColor: isDragOver
-                      ? 'var(--chatbox-background-brand-secondary)'
-                      : 'var(--chatbox-background-gray-secondary)',
+                      ? 'var(--workspaice-background-brand-secondary)'
+                      : 'var(--workspaice-background-gray-secondary)',
                     transition: 'all 0.2s ease',
                     cursor: 'pointer',
                   }}
@@ -783,7 +761,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                   <Stack align="center" gap="sm">
                     <IconUpload
                       size={32}
-                      color={isDragOver ? 'var(--chatbox-tint-brand)' : 'var(--chatbox-tint-gray)'}
+                      color={isDragOver ? 'var(--workspaice-tint-brand)' : 'var(--workspaice-tint-gray)'}
                     />
                     <Text size="sm" fw={500} ta="center" c={isDragOver ? 'blue' : 'dimmed'}>
                       {isDragOver ? t('Drop files here') : t('Drag and drop files here, or click to browse')}
@@ -805,9 +783,9 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                     title={t('Some files were not uploaded')}
                     styles={{
                       root: {
-                        border: '1px solid var(--chatbox-border-primary)',
-                        borderLeft: '3px solid var(--chatbox-tint-error)',
-                        background: 'var(--chatbox-background-primary)',
+                        border: '1px solid var(--workspaice-border-primary)',
+                        borderLeft: '3px solid var(--workspaice-tint-error)',
+                        background: 'var(--workspaice-background-primary)',
                       },
                     }}
                   >
@@ -840,52 +818,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
               </Box>
             )}
 
-            {/* Failed files banner - show Chatbox AI suggestion only for local parser failures */}
-            {shouldShowChatboxAISuggestion && (
-              <Alert variant="light" color="yellow" p="sm">
-                <Flex gap="xs" align="center" justify="space-between">
-                  <Flex gap="xs" align="center" style={{ flex: 1 }}>
-                    <Text size="sm">{t('{{count}} file(s) failed to parse', { count: failedFiles.length })}</Text>
-                  </Flex>
-                  <Stack gap={4} align="flex-end" className="flex-shrink-0">
-                    <Button size="xs" variant="light" onClick={() => setShowRemoteRetryModal(true)}>
-                      {t('Use server parsing')}
-                    </Button>
-                    <Tooltip
-                      label={t(
-                        'If you have never had a license before, you can claim it after logging in on the official website.'
-                      )}
-                      withArrow
-                      multiline
-                      maw={240}
-                      position="bottom-end"
-                      styles={{
-                        tooltip: {
-                          backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                          backdropFilter: 'blur(4px)',
-                        },
-                      }}
-                    >
-                      <Text
-                        size="xs"
-                        c="dimmed"
-                        className="cursor-pointer hover:text-blue-500 transition-colors"
-                        onClick={() => {
-                          trackJkClickEvent(JK_EVENTS.FREE_LICENSE_CLAIM_CLICK, {
-                            pageName: JK_PAGE_NAMES.SETTING_PAGE,
-                            content: 'kb_error',
-                          })
-                          platform.openLink('https://chatboxai.app/login')
-                        }}
-                      >
-                        {t('Free trial available')} →
-                      </Text>
-                    </Tooltip>
-                  </Stack>
-                </Flex>
-              </Alert>
-            )}
-
             {/* Scrollable Document List with Scroll Indicator */}
             {allFiles.length > 0 && (
               <Box style={{ position: 'relative' }}>
@@ -910,7 +842,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                           }}
                         >
                           <Group gap="sm" align="center" style={{ flex: 1 }}>
-                            <IconFile size={20} color="var(--chatbox-tint-brand)" />
+                            <IconFile size={20} color="var(--workspaice-tint-brand)" />
                             <Box style={{ flex: 1 }}>
                               <Text size="sm" fw={500} lineClamp={1}>
                                 {doc.filename}
@@ -937,8 +869,8 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                                     </Text>
                                     {doc.parser_type && (
                                       <Pill size="xs" c="dimmed">
-                                        {doc.parser_type === 'chatbox-ai'
-                                          ? 'Chatbox AI'
+                                        {doc.parser_type === 'local'
+                                          ? 'WorkspAIce AI'
                                           : doc.parser_type === 'mineru'
                                             ? 'MinerU'
                                             : 'Local'}
@@ -1049,7 +981,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                       left: 0,
                       right: 0,
                       height: 30,
-                      background: 'linear-gradient(transparent, var(--chatbox-background-body))',
+                      background: 'linear-gradient(transparent, var(--workspaice-background-body))',
                       pointerEvents: 'none',
                       zIndex: 1,
                     }}
@@ -1066,7 +998,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
             {!isLoading && allFiles.length === 0 && (
               <Box p="xl">
                 <Stack align="center" gap="sm">
-                  <IconFile size={48} color="var(--chatbox-tint-placeholder)" />
+                  <IconFile size={48} color="var(--workspaice-tint-placeholder)" />
                   <Text size="sm" c="dimmed" ta="center">
                     {t('No documents yet')}
                   </Text>
@@ -1088,16 +1020,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         knowledgeBaseId={knowledgeBase?.id}
       />
 
-      {/* Remote Retry Modal */}
-      <RemoteRetryModal
-        opened={showRemoteRetryModal}
-        onClose={() => setShowRemoteRetryModal(false)}
-        failedFiles={failedFiles}
-        onSuccess={() => {
-          refetch()
-          refetchCount()
-        }}
-      />
     </Stack>
   )
 }

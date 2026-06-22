@@ -1,21 +1,45 @@
-/// <reference types="vite/client" />
-
 import { Image } from '@mantine/core'
 import { ModelProviderEnum } from '@shared/types'
 import ProviderIcon from '@/components/icons/ProviderIcon'
+import azureIcon from '../../../static/icons/providers/azure.png'
+import chatglm6bIcon from '../../../static/icons/providers/chatglm-6b.png'
+import claudeIcon from '../../../static/icons/providers/claude.png'
+import deepseekIcon from '../../../static/icons/providers/deepseek.png'
+import geminiIcon from '../../../static/icons/providers/gemini.png'
+import groqIcon from '../../../static/icons/providers/groq.png'
+import lmStudioIcon from '../../../static/icons/providers/lm-studio.png'
+import minimaxIcon from '../../../static/icons/providers/minimax.png'
+import mistralAiIcon from '../../../static/icons/providers/mistral-ai.png'
+import ollamaIcon from '../../../static/icons/providers/ollama.png'
+import openaiIcon from '../../../static/icons/providers/openai.png'
+import openaiResponsesIcon from '../../../static/icons/providers/openai-responses.png'
+import openrouterIcon from '../../../static/icons/providers/openrouter.png'
+import perplexityIcon from '../../../static/icons/providers/perplexity.png'
+import qwenIcon from '../../../static/icons/providers/qwen.png'
+import siliconflowIcon from '../../../static/icons/providers/siliconflow.png'
+import volcengineIcon from '../../../static/icons/providers/volcengine.png'
+import xaiIcon from '../../../static/icons/providers/xAI.png'
 
-// Use Vite's import.meta.glob to dynamically import all PNG files
-// Vite handles import.meta.glob at build time, even though TypeScript doesn't recognize it with commonjs module setting
-// @ts-ignore - import.meta.glob is a Vite feature
-const iconsModules = import.meta.glob<{ default: string }>('../../../static/icons/providers/*.png', { eager: true })
-
-const providerIconMap = new Map<string, string>(
-  Object.entries(iconsModules).map(([path, module]) => {
-    const filename = path.split('/').pop() || ''
-    const name = filename.replace('.png', '')
-    return [name, module.default]
-  })
-)
+const providerIconMap = new Map<string, string>([
+  [ModelProviderEnum.OpenAI, openaiIcon],
+  [ModelProviderEnum.OpenAIResponses, openaiResponsesIcon],
+  [ModelProviderEnum.Azure, azureIcon],
+  [ModelProviderEnum.ChatGLM6B, chatglm6bIcon],
+  [ModelProviderEnum.Claude, claudeIcon],
+  [ModelProviderEnum.Gemini, geminiIcon],
+  [ModelProviderEnum.Qwen, qwenIcon],
+  [ModelProviderEnum.MiniMax, minimaxIcon],
+  [ModelProviderEnum.Ollama, ollamaIcon],
+  [ModelProviderEnum.Groq, groqIcon],
+  [ModelProviderEnum.DeepSeek, deepseekIcon],
+  [ModelProviderEnum.SiliconFlow, siliconflowIcon],
+  [ModelProviderEnum.VolcEngine, volcengineIcon],
+  [ModelProviderEnum.MistralAI, mistralAiIcon],
+  [ModelProviderEnum.LMStudio, lmStudioIcon],
+  [ModelProviderEnum.Perplexity, perplexityIcon],
+  [ModelProviderEnum.XAI, xaiIcon],
+  [ModelProviderEnum.OpenRouter, openrouterIcon],
+])
 
 const PROVIDER_ICON_ALIASES: Record<string, string> = {
   [ModelProviderEnum.QwenPortal]: ModelProviderEnum.Qwen,

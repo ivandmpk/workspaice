@@ -42,7 +42,6 @@ export const uiStore = createStore(
           onSave?: () => void
         } | null,
         widthFull: false, // Stored UI preference
-        showCopilotsInNewSession: false,
         sidebarWidth: null as number | null, // Custom sidebar width, null means use default
         sidebarMode: 'chat' as 'chat' | 'task',
       },
@@ -191,10 +190,6 @@ export const uiStore = createStore(
           })
         },
 
-        setShowCopilotsInNewSession: (showCopilotsInNewSession: boolean) => {
-          set({ showCopilotsInNewSession })
-        },
-
         setSidebarWidth: (sidebarWidth: number | null) => {
           set({ sidebarWidth })
         },
@@ -209,7 +204,6 @@ export const uiStore = createStore(
       version: 0,
       partialize: (state) => ({
         widthFull: state.widthFull,
-        showCopilotsInNewSession: state.showCopilotsInNewSession,
         sidebarWidth: state.sidebarWidth,
         sessionWebBrowsingMap: state.sessionWebBrowsingMap,
       }),

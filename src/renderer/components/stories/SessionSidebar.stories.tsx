@@ -84,7 +84,7 @@ const mockSessions = [
 const SessionItemCurrent = ({ name, starred, selected }: { name: string; starred: boolean; selected: boolean }) => (
   <Flex
     align="center"
-    className={`cursor-pointer rounded-sm ${selected ? 'bg-chatbox-background-brand-secondary' : 'hover:bg-chatbox-background-gray-secondary'}`}
+    className={`cursor-pointer rounded-sm ${selected ? 'bg-workspaice-background-brand-secondary' : 'hover:bg-workspaice-background-gray-secondary'}`}
     mx="xs"
     px="xs"
     py={10}
@@ -93,7 +93,7 @@ const SessionItemCurrent = ({ name, starred, selected }: { name: string; starred
     <Avatar size="sm" color={selected ? 'blue' : 'gray'} radius="xl">
       <IconRobot size={14} />
     </Avatar>
-    <Text span flex={1} lineClamp={1} c={selected ? 'chatbox-brand' : 'chatbox-primary'} size="sm">
+    <Text span flex={1} lineClamp={1} c={selected ? 'workspaice-brand' : 'workspaice-primary'} size="sm">
       {name}
     </Text>
     <ActionIcon variant="transparent" size={20} color={starred ? 'blue' : 'gray'}>
@@ -109,17 +109,17 @@ export const CurrentSidebar: StoryObj = {
       style={{
         width: 280,
         height: 600,
-        border: '1px solid var(--chatbox-border-primary)',
+        border: '1px solid var(--workspaice-border-primary)',
         borderRadius: 8,
         overflow: 'hidden',
       }}
     >
-      <Stack h="100%" gap={0} style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+      <Stack h="100%" gap={0} style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
         <Flex align="center" justify="space-between" px="md" py="sm">
           <Flex align="center" gap="sm">
-            <Box w={20} h={20} style={{ backgroundColor: 'var(--chatbox-tint-brand)', borderRadius: 4 }} />
-            <Text span c="chatbox-secondary" size="xl" lh={1.2} fw="700">
-              Chatbox
+            <Box w={20} h={20} style={{ backgroundColor: 'var(--workspaice-tint-brand)', borderRadius: 4 }} />
+            <Text span c="workspaice-secondary" size="xl" lh={1.2} fw="700">
+              WorkspAIce
             </Text>
           </Flex>
           <ActionIcon variant="subtle" color="gray" size={20}>
@@ -156,28 +156,28 @@ export const CurrentSidebar: StoryObj = {
           <NavLink
             label="My Copilots"
             leftSection={<IconMessageChatbot size={18} />}
-            c="chatbox-secondary"
+            c="workspaice-secondary"
             p="xs"
             className="rounded"
           />
           <NavLink
             label="Settings"
             leftSection={<IconSettingsFilled size={18} />}
-            c="chatbox-secondary"
+            c="workspaice-secondary"
             p="xs"
             className="rounded"
           />
           <NavLink
             label="Help"
             leftSection={<IconHelpCircle size={18} />}
-            c="chatbox-secondary"
+            c="workspaice-secondary"
             p="xs"
             className="rounded"
           />
           <NavLink
             label="About (v1.18)"
             leftSection={<IconInfoCircle size={18} />}
-            c="chatbox-tertiary"
+            c="workspaice-tertiary"
             p="xs"
             className="rounded"
           />
@@ -194,16 +194,16 @@ export const OptimizedSidebar: StoryObj = {
       style={{
         width: 280,
         height: 600,
-        border: '1px solid var(--chatbox-border-primary)',
+        border: '1px solid var(--workspaice-border-primary)',
         borderRadius: 8,
         overflow: 'hidden',
       }}
     >
-      <Stack h="100%" gap={0} style={{ backgroundColor: 'var(--chatbox-background-primary)' }}>
+      <Stack h="100%" gap={0} style={{ backgroundColor: 'var(--workspaice-background-primary)' }}>
         {/* Header */}
         <Flex align="center" justify="space-between" px="md" py="sm">
-          <Text fw={700} size="lg" c="chatbox-primary">
-            Chatbox
+          <Text fw={700} size="lg" c="workspaice-primary">
+            WorkspAIce
           </Text>
           <Flex gap={4}>
             <ActionIcon variant="subtle" color="gray" size={24} radius="md">
@@ -225,7 +225,7 @@ export const OptimizedSidebar: StoryObj = {
         {/* Session List with Date Grouping */}
         <ScrollArea flex={1} px={4}>
           {/* Pinned */}
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} tt="uppercase">
             ⭐ Pinned
           </Text>
           {mockSessions
@@ -238,7 +238,7 @@ export const OptimizedSidebar: StoryObj = {
                 px="xs"
                 py={8}
                 gap={8}
-                className="cursor-pointer rounded-md hover:bg-chatbox-background-gray-secondary"
+                className="cursor-pointer rounded-md hover:bg-workspaice-background-gray-secondary"
               >
                 <Avatar size={28} color="blue" radius="md" variant="light">
                   <IconRobot size={14} />
@@ -247,16 +247,16 @@ export const OptimizedSidebar: StoryObj = {
                   <Text size="sm" lineClamp={1} fw={500}>
                     {s.name}
                   </Text>
-                  <Text size="10px" c="chatbox-tertiary">
+                  <Text size="10px" c="workspaice-tertiary">
                     {s.time}
                   </Text>
                 </Stack>
-                <IconStarFilled size={12} color="var(--chatbox-tint-brand)" />
+                <IconStarFilled size={12} color="var(--workspaice-tint-brand)" />
               </Flex>
             ))}
 
           {/* Today */}
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
             Today
           </Text>
           {mockSessions
@@ -270,16 +270,16 @@ export const OptimizedSidebar: StoryObj = {
                 px="xs"
                 py={8}
                 gap={8}
-                className={`cursor-pointer rounded-md ${i === 0 ? 'bg-chatbox-background-brand-secondary' : 'hover:bg-chatbox-background-gray-secondary'}`}
+                className={`cursor-pointer rounded-md ${i === 0 ? 'bg-workspaice-background-brand-secondary' : 'hover:bg-workspaice-background-gray-secondary'}`}
               >
                 <Avatar size={28} color={i === 0 ? 'blue' : 'gray'} radius="md" variant="light">
                   <IconRobot size={14} />
                 </Avatar>
                 <Stack gap={0} flex={1} className="min-w-0">
-                  <Text size="sm" lineClamp={1} c={i === 0 ? 'chatbox-brand' : 'chatbox-primary'}>
+                  <Text size="sm" lineClamp={1} c={i === 0 ? 'workspaice-brand' : 'workspaice-primary'}>
                     {s.name}
                   </Text>
-                  <Text size="10px" c="chatbox-tertiary">
+                  <Text size="10px" c="workspaice-tertiary">
                     {s.time}
                   </Text>
                 </Stack>
@@ -287,7 +287,7 @@ export const OptimizedSidebar: StoryObj = {
             ))}
 
           {/* Yesterday */}
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
             Yesterday
           </Text>
           {mockSessions
@@ -301,7 +301,7 @@ export const OptimizedSidebar: StoryObj = {
                 px="xs"
                 py={8}
                 gap={8}
-                className="cursor-pointer rounded-md hover:bg-chatbox-background-gray-secondary"
+                className="cursor-pointer rounded-md hover:bg-workspaice-background-gray-secondary"
               >
                 <Avatar size={28} color="gray" radius="md" variant="light">
                   <IconRobot size={14} />
@@ -310,7 +310,7 @@ export const OptimizedSidebar: StoryObj = {
                   <Text size="sm" lineClamp={1}>
                     {s.name}
                   </Text>
-                  <Text size="10px" c="chatbox-tertiary">
+                  <Text size="10px" c="workspaice-tertiary">
                     {s.time}
                   </Text>
                 </Stack>
@@ -318,7 +318,7 @@ export const OptimizedSidebar: StoryObj = {
             ))}
 
           {/* Older */}
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
             Previous 7 days
           </Text>
           {mockSessions
@@ -332,7 +332,7 @@ export const OptimizedSidebar: StoryObj = {
                 px="xs"
                 py={8}
                 gap={8}
-                className="cursor-pointer rounded-md hover:bg-chatbox-background-gray-secondary"
+                className="cursor-pointer rounded-md hover:bg-workspaice-background-gray-secondary"
               >
                 <Avatar size={28} color="gray" radius="md" variant="light">
                   <IconRobot size={14} />
@@ -341,7 +341,7 @@ export const OptimizedSidebar: StoryObj = {
                   <Text size="sm" lineClamp={1}>
                     {s.name}
                   </Text>
-                  <Text size="10px" c="chatbox-tertiary">
+                  <Text size="10px" c="workspaice-tertiary">
                     {s.time}
                   </Text>
                 </Stack>
@@ -422,21 +422,21 @@ export const SessionItemVariants: StoryObj = {
               px="xs"
               py={8}
               gap={8}
-              className={`cursor-pointer rounded-md ${s.selected ? 'bg-chatbox-background-brand-secondary' : 'hover:bg-chatbox-background-gray-secondary'}`}
+              className={`cursor-pointer rounded-md ${s.selected ? 'bg-workspaice-background-brand-secondary' : 'hover:bg-workspaice-background-gray-secondary'}`}
             >
               <Avatar size={32} color={s.selected ? 'blue' : 'gray'} radius="md" variant="light" mt={2}>
                 <IconRobot size={16} />
               </Avatar>
               <Stack gap={2} flex={1} className="min-w-0">
                 <Flex align="center" justify="space-between">
-                  <Text size="sm" fw={500} lineClamp={1} c={s.selected ? 'chatbox-brand' : 'chatbox-primary'}>
+                  <Text size="sm" fw={500} lineClamp={1} c={s.selected ? 'workspaice-brand' : 'workspaice-primary'}>
                     {s.name}
                   </Text>
-                  <Text size="10px" c="chatbox-tertiary" className="flex-shrink-0">
+                  <Text size="10px" c="workspaice-tertiary" className="flex-shrink-0">
                     {s.time}
                   </Text>
                 </Flex>
-                <Text size="xs" c="chatbox-tertiary" lineClamp={1}>
+                <Text size="xs" c="workspaice-tertiary" lineClamp={1}>
                   {s.preview}
                 </Text>
                 <Badge size="xs" variant="light" color="gray" radius="sm">

@@ -9,8 +9,6 @@ import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import { BochaSearch } from '@/packages/web-search/bocha'
 import { QUERIT_SEARCH_URL } from '@/packages/web-search/querit'
 import platform from '@/platform'
-import { trackJkClickEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export const Route = createFileRoute('/settings/web-search')({
@@ -21,7 +19,7 @@ export function RouteComponent() {
   const { t } = useTranslation()
   const setSettings = useSettingsStore((state) => state.setSettings)
   const extension = useSettingsStore((state) => state.extension)
-  const licenseKey = useSettingsStore((state) => state.licenseKey)
+  const searchProvider = extension.webSearch.provider
 
   const [checkingQuerit, setCheckingQuerit] = useState(false)
   const [queritAvailable, setQueritAvailable] = useState<boolean>()
@@ -36,7 +34,7 @@ export function RouteComponent() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${extension.webSearch.queritApiKey}`,
           },
-          body: { query: 'Chatbox' },
+          body: { query: 'WorkspAIce' },
         })
         setQueritAvailable(true)
       } catch (e) {
@@ -54,7 +52,7 @@ export function RouteComponent() {
       setCheckingBocha(true)
       setBochaAvailable(undefined)
       try {
-        await new BochaSearch(extension.webSearch.bochaApiKey).search('Chatbox')
+        await new BochaSearch(extension.webSearch.bochaApiKey).search('WorkspAIce')
         setBochaAvailable(true)
       } catch (e) {
         setBochaAvailable(false)
@@ -78,7 +76,7 @@ export function RouteComponent() {
             Authorization: `Bearer ${extension.webSearch.tavilyApiKey}`,
           },
           body: {
-            query: 'Chatbox',
+            query: 'WorkspAIce',
             search_depth: 'basic',
             include_domains: [],
             exclude_domains: [],
@@ -100,13 +98,12 @@ export function RouteComponent() {
       <AdaptiveSelect
         comboboxProps={{ withinPortal: true, withArrow: true }}
         data={[
-          { value: 'build-in', label: 'Chatbox AI' },
           { value: 'bing', label: 'Bing Search (Free)' },
           { value: 'tavily', label: 'Tavily' },
           { value: 'bocha', label: 'BoCha' },
           { value: 'querit', label: 'Querit' },
         ]}
-        value={extension.webSearch.provider}
+        value={searchProvider}
         onChange={(e) =>
           e &&
           setSettings({
@@ -114,7 +111,7 @@ export function RouteComponent() {
               ...extension,
               webSearch: {
                 ...extension.webSearch,
-                provider: e as 'build-in' | 'bing' | 'tavily' | 'bocha' | 'querit',
+                provider: e as 'bing' | 'tavily' | 'bocha' | 'querit',
               },
             },
           })
@@ -123,11 +120,11 @@ export function RouteComponent() {
         maw={320}
       />
       <Stack gap={4}>
-        <Text size="xs" c="chatbox-gray">
+        <Text size="xs" c="workspaice-gray">
           {t('Provided tools')}
         </Text>
         {(() => {
-          const supportsParseLink = PROVIDERS_WITH_PARSE_LINK.has(extension.webSearch.provider)
+          const supportsParseLink = PROVIDERS_WITH_PARSE_LINK.has(searchProvider)
           const tools: { label: string; supported: boolean }[] = [
             { label: t('Web Search'), supported: true },
             { label: t('Read Webpage'), supported: supportsParseLink },
@@ -135,31 +132,26 @@ export function RouteComponent() {
           return tools.map(({ label, supported }) => (
             <Flex key={label} align="center" gap="xs">
               {supported ? (
-                <IconCheck size={14} color="var(--mantine-color-chatbox-success-6)" />
+                <IconCheck size={14} color="var(--mantine-color-workspaice-success-6)" />
               ) : (
-                <IconX size={14} color="var(--mantine-color-chatbox-gray-5)" />
+                <IconX size={14} color="var(--mantine-color-workspaice-gray-5)" />
               )}
-              <Text size="xs" c={supported ? undefined : 'chatbox-gray'}>
+              <Text size="xs" c={supported ? undefined : 'workspaice-gray'}>
                 {label}
               </Text>
             </Flex>
           ))
         })()}
       </Stack>
-      {extension.webSearch.provider === 'build-in' && (
-        <Text size="xs" c="chatbox-gray">
-          {t('Chatbox Search is a paid feature with advanced capabilities and better performance.')}
-        </Text>
-      )}
-      {extension.webSearch.provider === 'bing' && (
-        <Text size="xs" c="chatbox-gray">
+      {searchProvider === 'bing' && (
+        <Text size="xs" c="workspaice-gray">
           {t(
             'Bing Search is provided for free use, but it may have limitations and is subject to change by Microsoft.'
           )}
         </Text>
       )}
       {/* Tavily API Key */}
-      {extension.webSearch.provider === 'tavily' && (
+      {searchProvider === 'tavily' && (
         <Stack gap="xs">
           <Text fw="600">{t('Tavily API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -194,11 +186,11 @@ export function RouteComponent() {
 
           {typeof tavilyAvaliable === 'boolean' ? (
             tavilyAvaliable ? (
-              <Text size="xs" c="chatbox-success">
+              <Text size="xs" c="workspaice-success">
                 {t('Connection successful!')}
               </Text>
             ) : (
-              <Text size="xs" c="chatbox-error">
+              <Text size="xs" c="workspaice-error">
                 {t('API key invalid!')}
               </Text>
             )
@@ -208,14 +200,14 @@ export function RouteComponent() {
             size="compact-xs"
             px={0}
             className="self-start"
-            onClick={() => platform.openLink('https://app.tavily.com?utm_source=chatbox')}
+            onClick={() => platform.openLink('https://app.tavily.com?utm_source=workspaice')}
           >
             {t('Get API Key')}
           </Button>
         </Stack>
       )}
       {/* BoCha API Key */}
-      {extension.webSearch.provider === 'bocha' && (
+      {searchProvider === 'bocha' && (
         <Stack gap="xs">
           <Text fw="600">{t('BoCha API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -250,11 +242,11 @@ export function RouteComponent() {
 
           {typeof bochaAvailable === 'boolean' ? (
             bochaAvailable ? (
-              <Text size="xs" c="chatbox-success">
+              <Text size="xs" c="workspaice-success">
                 {t('Connection successful!')}
               </Text>
             ) : (
-              <Text size="xs" c="chatbox-error">
+              <Text size="xs" c="workspaice-error">
                 {t('API key invalid!')}
               </Text>
             )
@@ -271,7 +263,7 @@ export function RouteComponent() {
         </Stack>
       )}
       {/* Querit API Key */}
-      {extension.webSearch.provider === 'querit' && (
+      {searchProvider === 'querit' && (
         <Stack gap="xs">
           <Text fw="600">{t('Querit API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -307,11 +299,11 @@ export function RouteComponent() {
 
           {typeof queritAvailable === 'boolean' ? (
             queritAvailable ? (
-              <Text size="xs" c="chatbox-success">
+              <Text size="xs" c="workspaice-success">
                 {t('Connection successful!')}
               </Text>
             ) : (
-              <Text size="xs" c="chatbox-error">
+              <Text size="xs" c="workspaice-error">
                 {t('API key invalid!')}
               </Text>
             )
@@ -409,39 +401,6 @@ export function RouteComponent() {
             </Stack>
           </Stack>
         </Stack>
-      )}
-      {extension.webSearch.provider !== 'build-in' && !licenseKey && (
-        <Tooltip
-          label={t(
-            'Note: If you have never had a license before, you can claim it after logging in on the official website. Quota refreshed daily.'
-          )}
-          withArrow
-          multiline
-          maw={280}
-          position="bottom-start"
-          styles={{
-            tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              backdropFilter: 'blur(4px)',
-            },
-          }}
-        >
-          <Text
-            size="xs"
-            className="cursor-pointer"
-            onClick={() => {
-              trackJkClickEvent(JK_EVENTS.FREE_LICENSE_CLAIM_CLICK, {
-                pageName: JK_PAGE_NAMES.SETTING_PAGE,
-                content: 'settings_websearch',
-              })
-              platform.openLink('https://chatboxai.app/login')
-            }}
-          >
-            {t('You can ')}
-            <span className="text-blue-500 underline decoration-dotted">{t('try Chatbox AI')}</span>
-            {t(' for free now!')}
-          </Text>
-        </Tooltip>
       )}
     </Stack>
   )

@@ -21,7 +21,6 @@ import { useIsSmallScreen } from '@/hooks/useScreenChange'
 import platform from '@/platform'
 import storage, { StorageKey } from '@/storage'
 import { migrateOnData } from '@/stores/migration'
-import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
 
 interface Props {
   settingsEdit: Settings
@@ -82,15 +81,6 @@ export default function AdvancedSettingTab(props: Props) {
           <ExportAndImport onCancel={props.onCancel} />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
-        <AccordionSummary aria-controls="panel1a-content">
-          <Typography>{t('Error Reporting')}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <AnalyticsSetting />
-        </AccordionDetails>
-      </Accordion>
-
       {platform.type === 'desktop' && (
         <Box className="mt-2">
           <FormGroup>
@@ -108,36 +98,6 @@ export default function AdvancedSettingTab(props: Props) {
           </FormGroup>
         </Box>
       )}
-      {platform.type === 'desktop' && (
-        <Box className="mt-2">
-          <FormGroup>
-            <FormControlLabel
-              control={<Switch />}
-              label={t('Automatic updates')}
-              checked={settingsEdit.autoUpdate}
-              onChange={(e, checked) =>
-                setSettingsEdit({
-                  ...settingsEdit,
-                  autoUpdate: checked,
-                })
-              }
-            />
-            {settingsEdit.autoUpdate && (
-              <FormControlLabel
-                control={<Switch />}
-                label={t('Beta updates')}
-                checked={settingsEdit.betaUpdate}
-                onChange={(e, checked) =>
-                  setSettingsEdit({
-                    ...settingsEdit,
-                    betaUpdate: checked,
-                  })
-                }
-              />
-            )}
-          </FormGroup>
-        </Box>
-      )}
     </Box>
   )
 }
@@ -146,7 +106,6 @@ enum ExportDataItem {
   Setting = 'setting',
   Key = 'key',
   Conversations = 'conversations',
-  Copilot = 'copilot',
 }
 
 function ExportAndImport(props: { onCancel: () => void }) {
@@ -156,7 +115,6 @@ function ExportAndImport(props: { onCancel: () => void }) {
   const [exportItems, setExportItems] = useState<ExportDataItem[]>([
     ExportDataItem.Setting,
     ExportDataItem.Conversations,
-    ExportDataItem.Copilot,
   ])
   const importInputRef = useRef<HTMLInputElement>(null)
   const [importTips, setImportTips] = useState('')
@@ -181,14 +139,11 @@ function ExportAndImport(props: { onCancel: () => void }) {
         }
       })
     }
-    if (!exportItems.includes(ExportDataItem.Copilot)) {
-      delete data[StorageKey.MyCopilots]
-    }
     const date = new Date()
     data['__exported_items'] = exportItems
     data['__exported_at'] = date.toISOString()
     const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    platform.exporter.exportTextFile(`chatbox-exported-data-${dateStr}.json`, JSON.stringify(data))
+    platform.exporter.exportTextFile(`workspaice-exported-data-${dateStr}.json`, JSON.stringify(data))
   }
   const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const errTip = t('Import failed, unsupported data format')
@@ -278,7 +233,6 @@ function ExportAndImport(props: { onCancel: () => void }) {
               { label: t('Settings'), value: ExportDataItem.Setting },
               { label: t('API KEY & License'), value: ExportDataItem.Key },
               { label: t('Chat History'), value: ExportDataItem.Conversations },
-              { label: t('My Copilots'), value: ExportDataItem.Copilot },
             ].map((item) => (
               <FormControlLabel
                 key={item.value}
@@ -316,42 +270,5 @@ function ExportAndImport(props: { onCancel: () => void }) {
         </Box>
       )}
     </Box>
-  )
-}
-
-export function AnalyticsSetting() {
-  const { t } = useTranslation()
-  return (
-    <Box>
-      <div>
-        <p className="opacity-70">
-          {t(
-            'Chatbox respects your privacy and only uploads anonymous error data and events when necessary. You can change your preferences at any time in the settings.'
-          )}
-        </p>
-      </div>
-      <div className="my-2">
-        <AllowReportingAndTrackingCheckbox />
-      </div>
-    </Box>
-  )
-}
-
-export function AllowReportingAndTrackingCheckbox(props: { className?: string }) {
-  const { t } = useTranslation()
-  const allowReportingAndTracking = useSettingsStore((state) => state.allowReportingAndTracking)
-  return (
-    <span className={props.className}>
-      <input
-        type="checkbox"
-        checked={allowReportingAndTracking}
-        onChange={(e) =>
-          settingsStore.setState({
-            allowReportingAndTracking: e.target.checked,
-          })
-        }
-      />
-      {t('Enable optional anonymous reporting of crash and event data')}
-    </span>
   )
 }

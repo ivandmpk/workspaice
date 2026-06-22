@@ -20,8 +20,8 @@ export function EmptyState({ onPromptSelect }: EmptyStateProps) {
   return (
     <Flex direction="column" align="center" justify="center" className="min-h-[60vh]">
       {/* Simple Icon */}
-      <div className="w-20 h-20 rounded-2xl bg-[var(--chatbox-background-secondary)] flex items-center justify-center mb-6">
-        <IconPhoto size={40} className="text-[var(--chatbox-tint-tertiary)]" stroke={1.5} />
+      <div className="w-20 h-20 rounded-2xl bg-[var(--workspaice-background-secondary)] flex items-center justify-center mb-6">
+        <IconPhoto size={40} className="text-[var(--workspaice-tint-tertiary)]" stroke={1.5} />
       </div>
 
       <Text size="xl" fw={600} mb="xs" className="text-center">
@@ -37,7 +37,7 @@ export function EmptyState({ onPromptSelect }: EmptyStateProps) {
           <UnstyledButton
             key={promptText}
             onClick={() => onPromptSelect(promptText)}
-            className="px-4 py-3 rounded-xl bg-[var(--chatbox-background-secondary)] hover:bg-[var(--chatbox-background-tertiary)] transition-colors duration-200"
+            className="px-4 py-3 rounded-xl bg-[var(--workspaice-background-secondary)] hover:bg-[var(--workspaice-background-tertiary)] transition-colors duration-200"
             style={{ maxWidth: 280 }}
           >
             <Text size="sm" ta="center">

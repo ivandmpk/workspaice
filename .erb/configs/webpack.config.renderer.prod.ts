@@ -2,7 +2,6 @@
  * Build config for electron renderer process
  */
 
-import { sentryWebpackPlugin } from '@sentry/webpack-plugin'
 import { TanStackRouterWebpack } from '@tanstack/router-plugin/webpack'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -12,21 +11,11 @@ import TerserPlugin from 'terser-webpack-plugin'
 import webpack from 'webpack'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import { merge } from 'webpack-merge'
-import packageJson from '../../release/app/package.json'
 import checkNodeEnv from '../scripts/check-node-env'
+import webpackPaths from '../webpack.paths'
 import baseConfig from './webpack.config.base'
-import webpackPaths from './webpack.paths'
 
 checkNodeEnv('production')
-
-const inferredRelease = process.env.SENTRY_RELEASE || packageJson.version
-const inferredDist = process.env.SENTRY_DIST || undefined
-
-// Ensure downstream tooling sees consistent release/dist values
-process.env.SENTRY_RELEASE = inferredRelease
-if (inferredDist) {
-  process.env.SENTRY_DIST = inferredDist
-}
 
 const configuration: webpack.Configuration = {
   devtool: 'source-map',
@@ -39,7 +28,7 @@ const configuration: webpack.Configuration = {
 
   output: {
     path: webpackPaths.distRendererPath,
-    publicPath: process.env.CHATBOX_BUILD_PLATFORM === 'web' ? '/' : './',
+    publicPath: process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? '/' : './',
     filename: 'assets/js/[name].[contenthash].js', // JS文件放在assets/js目录下
     library: {
       type: 'umd',
@@ -136,7 +125,7 @@ const configuration: webpack.Configuration = {
 
     TanStackRouterWebpack({
       target: 'react',
-      autoCodeSplitting: process.env.CHATBOX_BUILD_PLATFORM === 'web' ? true : false,
+      autoCodeSplitting: process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? true : false,
       routesDirectory: './src/renderer/routes',
       generatedRouteTree: './src/renderer/routeTree.gen.ts',
     }),
@@ -154,7 +143,7 @@ const configuration: webpack.Configuration = {
       filename: 'index.html',
       template: path.join(
         webpackPaths.srcRendererPath,
-        process.env.CHATBOX_BUILD_PLATFORM === 'web' ? 'index.web.ejs' : 'index.ejs'
+        process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? 'index.web.ejs' : 'index.ejs'
       ),
       minify: {
         collapseWhitespace: true,
@@ -184,21 +173,10 @@ const configuration: webpack.Configuration = {
     //   numbersToExpressions: true,
     //   // 保护前端代码不被偷到其他地方部署
     //   // 迁移过程中，暂时关闭保护
-    //   // domainLock: ['localhost', ".chatboxai.app", ".chatboxai.com", ".chatboxapp.xyz", "chatbox-pro.pages.dev"],
-    //   // domainLockRedirectUrl: 'https://chatboxai.app',
+    //   // domainLock: ['localhost', ".workspaiceai.app", ".workspaiceai.com", ".workspaiceapp.xyz", "workspaice-pro.pages.dev"],
+    //   // domainLockRedirectUrl: 'https://workspaiceai.app',
     //   sourceMap: true,
     // }),
-    
-    process.env.SENTRY_AUTH_TOKEN && sentryWebpackPlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'sentry',
-        project: 'chatbox',
-        url: 'https://sentry.midway.run/',
-        release: {
-          name: inferredRelease,
-          ...(inferredDist ? { dist: inferredDist } : {}),
-        },
-      }),
   ],
 }
 

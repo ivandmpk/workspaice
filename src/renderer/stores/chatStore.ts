@@ -198,12 +198,12 @@ async function runInChunks<T>(items: T[], chunkSize: number, worker: (item: T) =
 // create session
 export async function createSession(newSession: Omit<Session, 'id'>, previousId?: string) {
   console.debug('chatStore', 'createSession', newSession)
-  const { chat: lastUsedChatModel, picture: lastUsedPictureModel } = lastUsedModelStore.getState()
+  const { picture: lastUsedPictureModel } = lastUsedModelStore.getState()
   const session = {
     ...newSession,
     id: uuidv4(),
     settings: {
-      ...(newSession.type === 'picture' ? lastUsedPictureModel : lastUsedChatModel),
+      ...(newSession.type === 'picture' ? lastUsedPictureModel : undefined),
       ...newSession.settings,
     },
   }

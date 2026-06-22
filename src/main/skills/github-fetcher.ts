@@ -3,7 +3,7 @@ import { getLogger } from '../util'
 const log = getLogger('skills:github-fetcher')
 
 const GITHUB_API_BASE = 'https://api.github.com'
-const USER_AGENT = 'chatbox-app'
+const USER_AGENT = 'workspaice-app'
 const CACHE_TTL_MS = 5 * 60 * 1000
 
 interface GitHubContentItem {

@@ -62,8 +62,8 @@ export function getThemeDesign(realTheme: 'light' | 'dark', language: Language):
         : {
             // MUI 内部无法处理 css 变量，需要使用具体颜色值
             background: {
-              default: '#242424',
-              paper: '#242424',
+              default: '#303841',
+              paper: '#303841',
             },
           }),
     },
@@ -71,8 +71,8 @@ export function getThemeDesign(realTheme: 'light' | 'dark', language: Language):
       MuiSnackbarContent: {
         styleOverrides: {
           root: {
-            backgroundColor: realTheme === 'dark' ? '#333333' : undefined,
-            color: realTheme === 'dark' ? '#ffffff' : undefined,
+            backgroundColor: realTheme === 'dark' ? '#222831' : undefined,
+            color: realTheme === 'dark' ? '#f5f5f5' : undefined,
           },
         },
       },

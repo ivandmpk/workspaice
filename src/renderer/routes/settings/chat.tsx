@@ -34,14 +34,14 @@ export function RouteComponent() {
       <Stack gap="md">
         <Stack gap="xxs">
           <Text fw="600">{t('Edit Avatars')}</Text>
-          <Text size="xs" c="chatbox-tertiary">
+          <Text size="xs" c="workspaice-tertiary">
             {t('Support jpg or png file smaller than 5MB')}
           </Text>
         </Stack>
 
         {/* User Avatar' */}
         <Stack>
-          <Text size="xs" c="chatbox-secondary">
+          <Text size="xs" c="workspaice-secondary">
             {t('User Avatar')}
           </Text>
           <Flex align="center" gap="xs">
@@ -71,7 +71,7 @@ export function RouteComponent() {
               )}
             </FileButton>
             {!!settings.userAvatarKey && (
-              <Button color="chatbox-gray" size="xs" onClick={() => setSettings({ userAvatarKey: undefined })}>
+              <Button color="workspaice-gray" size="xs" onClick={() => setSettings({ userAvatarKey: undefined })}>
                 {t('Delete')}
               </Button>
             )}
@@ -80,7 +80,7 @@ export function RouteComponent() {
 
         {/* Default Assistant Avatar */}
         <Stack>
-          <Text size="xs" c="chatbox-secondary">
+          <Text size="xs" c="workspaice-secondary">
             {t('Default Assistant Avatar')}
           </Text>
           <Flex align="center" gap="xs">
@@ -111,7 +111,7 @@ export function RouteComponent() {
             </FileButton>
             {!!settings.defaultAssistantAvatarKey && (
               <Button
-                color="chatbox-gray"
+                color="workspaice-gray"
                 size="xs"
                 onClick={() => setSettings({ defaultAssistantAvatarKey: undefined })}
               >
@@ -142,7 +142,7 @@ export function RouteComponent() {
           />
           <Button
             variant="subtle"
-            color="chatbox-gray"
+            color="workspaice-gray"
             onClick={() => {
               setSettings({
                 defaultPrompt: getDefaultPrompt(),
@@ -178,7 +178,7 @@ export function RouteComponent() {
               zIndex={3000}
               events={{ hover: true, focus: true, touch: true }}
             >
-              <ScalableIcon icon={IconInfoCircle} size={20} className="text-chatbox-tint-tertiary" />
+              <ScalableIcon icon={IconInfoCircle} size={20} className="text-workspaice-tint-tertiary" />
             </Tooltip>
           </Flex>
 
@@ -199,7 +199,7 @@ export function RouteComponent() {
               zIndex={3000}
               events={{ hover: true, focus: true, touch: true }}
             >
-              <ScalableIcon icon={IconInfoCircle} size={20} className="text-chatbox-tint-tertiary" />
+              <ScalableIcon icon={IconInfoCircle} size={20} className="text-workspaice-tint-tertiary" />
             </Tooltip>
           </Flex>
 
@@ -211,7 +211,7 @@ export function RouteComponent() {
           <Text>{t('Background Image')}</Text>
           <Flex align="center" gap="sm" wrap="wrap">
             {settings.backgroundImageKey ? (
-              <Box w={160} h={90} className="overflow-hidden rounded bg-chatbox-tertiary/20 flex-shrink-0">
+              <Box w={160} h={90} className="overflow-hidden rounded bg-workspaice-tertiary/20 flex-shrink-0">
                 <ImageInStorage storageKey={settings.backgroundImageKey} className="object-cover w-full h-full" />
               </Box>
             ) : null}
@@ -241,7 +241,7 @@ export function RouteComponent() {
                 )}
               </FileButton>
               {!!settings.backgroundImageKey && (
-                <Button color="chatbox-gray" size="xs" onClick={() => setSettings({ backgroundImageKey: undefined })}>
+                <Button color="workspaice-gray" size="xs" onClick={() => setSettings({ backgroundImageKey: undefined })}>
                   {t('Remove')}
                 </Button>
               )}
@@ -269,7 +269,7 @@ export function RouteComponent() {
 
         {/* Display */}
         <Stack gap="sm">
-          <Text c="chatbox-tertiary">{t('Display')}</Text>
+          <Text c="workspaice-tertiary">{t('Display')}</Text>
 
           <MessageLayoutSelector
             value={settings.messageLayout ?? 'left'}
@@ -349,7 +349,7 @@ export function RouteComponent() {
 
         {/* Function */}
         <Stack gap="sm">
-          <Text c="chatbox-tertiary">{t('Function')}</Text>
+          <Text c="workspaice-tertiary">{t('Function')}</Text>
 
           <Switch
             label={t('Auto-collapse code blocks')}
@@ -422,17 +422,6 @@ export function RouteComponent() {
             }
           />
           <Switch
-            label={t('Auto-preview artifacts')}
-            checked={settings.autoPreviewArtifacts}
-            description={t('Automatically render generated artifacts (e.g., HTML with CSS, JS, Tailwind)')}
-            onChange={() =>
-              setSettings({
-                ...settings,
-                autoPreviewArtifacts: !settings.autoPreviewArtifacts,
-              })
-            }
-          />
-          <Switch
             label={t('Paste long text as a file')}
             checked={settings.pasteLongTextAsAFile}
             description={t(
@@ -491,7 +480,7 @@ function ContextManagementSection() {
               zIndex={3000}
               events={{ hover: true, focus: true, touch: true }}
             >
-              <ScalableIcon icon={IconInfoCircle} size={20} className="text-chatbox-tint-tertiary" />
+              <ScalableIcon icon={IconInfoCircle} size={20} className="text-workspaice-tint-tertiary" />
             </Tooltip>
           </Flex>
           <Switch
@@ -503,7 +492,7 @@ function ContextManagementSection() {
             }
           />
         </Flex>
-        <Text c="chatbox-tertiary" size="xs">
+        <Text c="workspaice-tertiary" size="xs">
           {t('When enabled, conversations will be automatically summarized to manage context window usage.')}
         </Text>
       </Stack>
@@ -522,7 +511,7 @@ function ContextManagementSection() {
             zIndex={3000}
             events={{ hover: true, focus: true, touch: true }}
           >
-            <ScalableIcon icon={IconInfoCircle} size={20} className="text-chatbox-tint-tertiary" />
+            <ScalableIcon icon={IconInfoCircle} size={20} className="text-workspaice-tint-tertiary" />
           </Tooltip>
         </Flex>
 
@@ -537,16 +526,16 @@ function ContextManagementSection() {
             disabled={!(settings.autoCompaction ?? true)}
           />
           <Flex justify="space-between" px={2}>
-            <Text size="xs" c="chatbox-tertiary">
+            <Text size="xs" c="workspaice-tertiary">
               {t('Cost')}
             </Text>
-            <Text size="xs" c="chatbox-tertiary">
+            <Text size="xs" c="workspaice-tertiary">
               {t('Context')}
             </Text>
           </Flex>
         </Stack>
 
-        <Text c="chatbox-tertiary" size="xs">
+        <Text c="workspaice-tertiary" size="xs">
           {strategyHint}
         </Text>
       </Stack>

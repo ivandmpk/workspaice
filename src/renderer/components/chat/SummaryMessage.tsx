@@ -40,13 +40,13 @@ const SummaryMessage: FC<SummaryMessageProps> = ({ msg, className, isLatestSumma
     <Flex
       align="center"
       gap="xxs"
-      className="cursor-pointer select-none px-3 py-1 rounded-full bg-chatbox-background-secondary hover:bg-chatbox-background-secondary-hover transition-colors"
+      className="cursor-pointer select-none px-3 py-1 rounded-full bg-workspaice-background-secondary hover:bg-workspaice-background-secondary-hover transition-colors"
       onClick={() => setExpanded(!expanded)}
     >
-      <ActionIcon variant="transparent" size="xs" c="chatbox-tertiary" p={0}>
+      <ActionIcon variant="transparent" size="xs" c="workspaice-tertiary" p={0}>
         <ScalableIcon icon={expanded ? IconChevronUp : IconChevronDown} size={14} />
       </ActionIcon>
-      <Text size="xs" c="chatbox-tertiary" className="whitespace-nowrap">
+      <Text size="xs" c="workspaice-tertiary" className="whitespace-nowrap">
         {t('Earlier messages summarized')}
       </Text>
     </Flex>
@@ -55,13 +55,13 @@ const SummaryMessage: FC<SummaryMessageProps> = ({ msg, className, isLatestSumma
   return (
     <div className={cn('w-full py-4 group/summary', className)}>
       <Flex align="center" gap="xs" className="w-full">
-        <div className="flex-1 h-px bg-chatbox-border-primary" />
+        <div className="flex-1 h-px bg-workspaice-border-primary" />
         {summaryBadge}
-        <div className="flex-1 h-px bg-chatbox-border-primary" />
+        <div className="flex-1 h-px bg-workspaice-border-primary" />
       </Flex>
 
       <Collapse in={expanded}>
-        <div className="msg-block mt-3 mx-4 p-3 rounded-md bg-chatbox-background-secondary border border-solid border-chatbox-border-primary">
+        <div className="msg-block mt-3 mx-4 p-3 rounded-md bg-workspaice-background-secondary border border-solid border-workspaice-border-primary">
           {enableMarkdownRendering ? (
             <Markdown
               uniqueId={`summary-${msg.id}`}
@@ -71,7 +71,7 @@ const SummaryMessage: FC<SummaryMessageProps> = ({ msg, className, isLatestSumma
               {summaryText}
             </Markdown>
           ) : (
-            <Text size="sm" c="chatbox-secondary" className="whitespace-pre-wrap">
+            <Text size="sm" c="workspaice-secondary" className="whitespace-pre-wrap">
               {summaryText}
             </Text>
           )}
@@ -87,7 +87,7 @@ const SummaryMessage: FC<SummaryMessageProps> = ({ msg, className, isLatestSumma
                   mih="auto"
                   p={4}
                   bd={0}
-                  color="chatbox-secondary"
+                  color="workspaice-secondary"
                   onClick={handleEdit}
                 >
                   <ScalableIcon icon={IconPencil} size={16} />
@@ -103,7 +103,7 @@ const SummaryMessage: FC<SummaryMessageProps> = ({ msg, className, isLatestSumma
                     mih="auto"
                     p={4}
                     bd={0}
-                    color="chatbox-secondary"
+                    color="workspaice-secondary"
                     onClick={() => setShowDeleteConfirm(true)}
                   >
                     <ScalableIcon icon={IconTrash} size={16} />

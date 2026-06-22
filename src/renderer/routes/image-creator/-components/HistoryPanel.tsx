@@ -159,7 +159,7 @@ export function HistoryPanel({
     <Box
       w={show ? width : 0}
       h="100%"
-      className="border-0 border-l border-solid border-[var(--chatbox-border-primary)] bg-[var(--chatbox-background-primary)] transition-all duration-300 ease-in-out overflow-hidden shrink-0"
+      className="border-0 border-l border-solid border-[var(--workspaice-border-primary)] bg-[var(--workspaice-background-primary)] transition-all duration-300 ease-in-out overflow-hidden shrink-0"
     >
       <Flex direction="column" h="100%" w={width}>
         <Flex align="center" justify="space-between" px="xs" py="xs" className="">

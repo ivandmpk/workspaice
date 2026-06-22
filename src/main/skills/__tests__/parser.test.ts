@@ -132,7 +132,7 @@ describe('parseSkillFile', () => {
         name: 'my-skill',
         description: 'A test skill',
         license: 'MIT',
-        compatibility: 'chatbox >= 1.0',
+        compatibility: 'workspaice >= 1.0',
         metadata: { author: 'test', version: '1.0' },
         allowedTools: ['web_search', 'file_read'],
       },
@@ -143,7 +143,7 @@ describe('parseSkillFile', () => {
 
     expect(result).not.toBeNull()
     expect(result!.metadata.license).toBe('MIT')
-    expect(result!.metadata.compatibility).toBe('chatbox >= 1.0')
+    expect(result!.metadata.compatibility).toBe('workspaice >= 1.0')
     expect(result!.metadata.metadata).toEqual({ author: 'test', version: '1.0' })
     expect(result!.metadata.allowedTools).toEqual(['web_search', 'file_read'])
   })

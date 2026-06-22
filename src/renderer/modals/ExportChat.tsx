@@ -40,8 +40,8 @@ const ExportChat = NiceModal.create(() => {
       title={t('Export Chat')}
     >
       <Stack gap="md" p="sm">
-        <div className="rounded-md border border-solid border-chatbox-border-warning bg-chatbox-background-warning-secondary px-sm py-xs">
-          <Text size="sm" c="chatbox-warning" className="leading-snug">
+        <div className="rounded-md border border-solid border-workspaice-border-warning bg-workspaice-background-warning-secondary px-sm py-xs">
+          <Text size="sm" c="workspaice-warning" className="leading-snug">
             {t('Exports are for viewing only. Use Settings → Backup if you need a backup you can restore.')}
           </Text>
         </div>

@@ -81,24 +81,6 @@ export type ImageSource =
       storageKey: string
     }
 
-export interface CopilotDetail {
-  id: string
-  name: string
-  prompt: string
-  picUrl?: string // Deprecated
-  avatar?: ImageSource
-  backgroundImage?: ImageSource
-  description?: string
-  tags?: string[]
-  screenshots?: ImageSource[]
-  createdAt?: number
-  updatedAt?: number
-  usedCount?: number
-  /** If this copilot is copied from a remote copilot, sourceId stores the original copilot's id */
-  sourceId?: string
-  starred?: boolean
-}
-
 export interface Toast {
   id: string
   content: string
@@ -106,9 +88,6 @@ export interface Toast {
 }
 
 export interface RemoteConfig {
-  setting_chatboxai_first: boolean
-  current_version: string
-  product_ids: number[]
   knowledge_base_models?: {
     embedding: string
     vision: string
@@ -163,7 +142,7 @@ export interface SessionAttachmentRagMaintenanceResult {
   orphanDeletedIds: number[]
 }
 
-export type ChatboxAIModel = 'chatboxai-3.5' | 'chatboxai-4' | string
+export type WorkspAIceAIModel = 'workspaiceai-3.5' | 'workspaiceai-4' | string
 
 export function copyMessage(source: Message): Message {
   return {
@@ -311,7 +290,7 @@ export function copyThreads(source?: SessionThread[], idMapping?: Map<string, st
 }
 
 // RAG related types
-export type KnowledgeBaseProviderMode = 'chatbox-ai' | 'custom'
+export type KnowledgeBaseProviderMode = 'custom'
 
 export interface KnowledgeBase {
   id: number

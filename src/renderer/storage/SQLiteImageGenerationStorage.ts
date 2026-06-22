@@ -3,7 +3,7 @@ import type { ImageGeneration, ImageGenerationPage } from '@shared/types'
 import type { ImageGenerationStorage } from './ImageGenerationStorage'
 
 const PAGE_SIZE = 20
-const DB_NAME = 'chatbox-image-generation'
+const DB_NAME = 'workspaice-image-generation'
 
 export class SQLiteImageGenerationStorage implements ImageGenerationStorage {
   private sqlite: SQLiteConnection

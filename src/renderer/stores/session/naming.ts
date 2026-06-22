@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { ApiError, NetworkError } from '@shared/models/errors'
 import type { ModelProvider } from '@shared/types'
 import { createModel } from '@/adapters'

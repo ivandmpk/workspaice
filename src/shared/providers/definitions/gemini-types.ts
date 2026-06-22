@@ -7,7 +7,7 @@ export type GeminiAspectRatio = '1:1' | '2:3' | '3:2' | '3:4' | '4:3' | '4:5' | 
 /**
  * Build an `imageConfig` object for Gemini provider options if a valid aspect ratio is provided.
  * Centralises the `string → GeminiAspectRatio` cast that was duplicated across gemini,
- * custom-gemini, and chatboxai providers.
+ * custom-gemini, and workspaiceai providers.
  */
 export function buildGeminiImageConfig(
   aspectRatio: string | undefined

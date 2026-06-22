@@ -38,8 +38,6 @@ export function settings(): Settings {
     // claudeApiHost: 'https://api.anthropic.com',
     // claudeModel: 'claude-3-5-sonnet-20241022',
 
-    // chatboxAIModel: 'chatboxai-3.5',
-
     // geminiAPIKey: '',
     // geminiAPIHost: 'https://generativelanguage.googleapis.com',
     // geminiModel: 'gemini-1.5-pro-latest',
@@ -85,16 +83,14 @@ export function settings(): Settings {
 
     defaultPrompt: getDefaultPrompt(),
 
-    allowReportingAndTracking: true,
-
+    allowReportingAndTracking: false,
     hasExpiredLicense: false,
-    chatboxAIDesktopPromptDismissed: false,
+    workspaiceAIDesktopPromptDismissed: true,
 
     enableMarkdownRendering: true,
     enableLaTeXRendering: true,
     enableMermaidRendering: true,
     injectDefaultMetadata: true,
-    autoPreviewArtifacts: false,
     autoCollapseCodeBlock: true,
     pasteLongTextAsAFile: true,
 
@@ -104,8 +100,6 @@ export function settings(): Settings {
     compactionThreshold: 0.6,
 
     autoLaunch: false,
-    autoUpdate: true,
-    betaUpdate: false,
 
     shortcuts: {
       quickToggle: 'Alt+`', // 快速切换窗口显隐的快捷键
@@ -125,7 +119,7 @@ export function settings(): Settings {
     },
     extension: {
       webSearch: {
-        provider: 'build-in',
+        provider: 'bing',
         tavilyApiKey: '',
         bochaApiKey: '',
         queritApiKey: '',
@@ -164,15 +158,15 @@ export function getDefaultPrompt() {
 
 export function chatSessionSettings(): SessionSettings {
   return {
-    provider: ModelProviderEnum.ChatboxAI,
-    modelId: 'chatboxai-4',
+    provider: ModelProviderEnum.OpenAI,
+    modelId: 'gpt-4o',
     maxContextMessageCount: Number.MAX_SAFE_INTEGER,
   }
 }
 
 export function pictureSessionSettings(): SessionSettings {
   return {
-    provider: ModelProviderEnum.ChatboxAI,
+    provider: ModelProviderEnum.OpenAI,
     modelId: 'DALL-E-3',
     imageGenerateNum: 1,
     dalleStyle: 'vivid',

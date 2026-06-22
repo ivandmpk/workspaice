@@ -18,12 +18,12 @@ export function AdaptiveSelect(props: AdaptiveSelectProps) {
         <Select {...props} dropdownOpened={false} />
       </Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
 
-        <Drawer.Content className="flex flex-col h-fit fixed bottom-0 left-0 right-0 outline-none bg-chatbox-background-primary rounded-t-lg max-h-[80vh] overflow-hidden select-none">
+        <Drawer.Content className="flex flex-col h-fit fixed bottom-0 left-0 right-0 outline-none bg-workspaice-background-primary rounded-t-lg max-h-[80vh] overflow-hidden select-none">
           <Drawer.Handle />
           {props.label && (
-            <Text c="chatbox-tertiary" size="xs" className="text-center my-xxs">
+            <Text c="workspaice-tertiary" size="xs" className="text-center my-xxs">
               {props.label}
             </Text>
           )}
@@ -46,7 +46,7 @@ export function AdaptiveSelect(props: AdaptiveSelectProps) {
                 <Drawer.Close key={value} asChild>
                   <Button
                     variant="transparent"
-                    color="chatbox-primary"
+                    color="workspaice-primary"
                     className="flex-none"
                     onClick={() => props.onChange?.(value)}
                   >

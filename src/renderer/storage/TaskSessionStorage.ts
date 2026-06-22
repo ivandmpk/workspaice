@@ -1,7 +1,7 @@
 import type { TaskSession, TaskSessionPage } from '@shared/types'
 
 const PAGE_SIZE = 20
-const DB_NAME = 'chatbox-task-session'
+const DB_NAME = 'workspaice-task-session'
 const STORE_NAME = 'records'
 
 export interface TaskSessionStorage {

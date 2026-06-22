@@ -10,5 +10,5 @@ export const mobileActionIconProps = {
 export const desktopActionIconProps = {
   size: '24px',
   variant: 'subtle' as const,
-  color: 'chatbox-secondary',
+  color: 'workspaice-secondary',
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import localforage from 'localforage'
 
-const LOG_STORAGE_KEY = 'chatbox-app-logs'
+const LOG_STORAGE_KEY = 'workspaice-app-logs'
 const MAX_LOG_ENTRIES = 1000 // 最大日志条数
 const MAX_LOG_AGE_DAYS = 30 // 日志保留天数
 

@@ -20,7 +20,7 @@ import { parseTextFileLocally } from './web_platform_utils'
 
 const log = getLogger('desktop-platform')
 
-const store = localforage.createInstance({ name: 'chatboxstore' })
+const store = localforage.createInstance({ name: 'workspaicestore' })
 
 export default class DesktopPlatform implements Platform {
   public type: PlatformType = 'desktop'
@@ -62,32 +62,6 @@ export default class DesktopPlatform implements Platform {
   }
   public onWindowFocused(callback: () => void): () => void {
     return this.ipc.onWindowFocused(callback)
-  }
-  public onUpdateDownloaded(callback: () => void): () => void {
-    return this.ipc.onUpdateDownloaded(callback)
-  }
-  public onUpdaterChecking(callback: () => void): () => void {
-    return this.ipc.onUpdaterChecking(callback)
-  }
-  public onUpdaterAvailable(callback: (data: { version: string }) => void): () => void {
-    return this.ipc.onUpdaterAvailable(callback)
-  }
-  public onUpdaterNotAvailable(callback: () => void): () => void {
-    return this.ipc.onUpdaterNotAvailable(callback)
-  }
-  public onUpdaterProgress(
-    callback: (data: { percent: number; bytesPerSecond: number; transferred: number; total: number }) => void
-  ): () => void {
-    return this.ipc.onUpdaterProgress(callback)
-  }
-  public onUpdaterDownloaded(callback: (data: { version: string }) => void): () => void {
-    return this.ipc.onUpdaterDownloaded(callback)
-  }
-  public onUpdaterError(callback: (data: { message: string }) => void): () => void {
-    return this.ipc.onUpdaterError(callback)
-  }
-  public async checkForUpdate(): Promise<{ started: boolean }> {
-    return this.ipc.invoke('updater:check')
   }
   public onNavigate(callback: (path: string) => void): () => void {
     return window.electronAPI.onNavigate(callback)
@@ -205,16 +179,6 @@ export default class DesktopPlatform implements Platform {
     return this.ipc.invoke('listStoreBlobKeys')
   }
 
-  public initTracking(): void {
-    setTimeout(() => {
-      this.trackingEvent('user_engagement', {})
-    }, 4000) // 怀疑应用初始化后需要一段时间才能正常工作
-  }
-  public trackingEvent(name: string, params: { [key: string]: string }) {
-    const dataJson = JSON.stringify({ name, params })
-    this.ipc.invoke('analysticTrackingEvent', dataJson)
-  }
-
   public async shouldShowAboutDialogWhenStartUp(): Promise<boolean> {
     return cache('ipc:shouldShowAboutDialogWhenStartUp', () => this.ipc.invoke('shouldShowAboutDialogWhenStartUp'), {
       ttl: 30 * 1000,
@@ -302,10 +266,6 @@ export default class DesktopPlatform implements Platform {
 
   public async setFullscreen(enabled: boolean) {
     return this.ipc.invoke('setFullscreen', enabled)
-  }
-
-  public async installUpdate() {
-    return this.ipc.invoke('install-update')
   }
 
   public async switchTheme(theme: 'dark' | 'light') {
