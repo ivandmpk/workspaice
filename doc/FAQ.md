@@ -4,15 +4,15 @@
     English | <a href="./FAQ-CN.md">中文</a>
 </p>
 
-If you still haven't found the answer you're looking for, feel free to submit an [Issue](https://github.com/Bin-Huang/chatbox/issues/new/choose) as well.
+If you still haven't found the answer you're looking for, feel free to submit an [Issue](https://github.com/Bin-Huang/workspaice/issues/new/choose) as well.
 
 ### 1001
 
 #### Message sending failed, showing `Failed to fetch`?
 
-This issue occurs when Chatbox cannot connect to the AI model server you've set up. Please check your current network environment and make sure it can connect properly to the AI model server.
+This issue occurs when WorkspAIce cannot connect to the AI model server you've set up. Please check your current network environment and make sure it can connect properly to the AI model server.
 
-For OpenAI API users, if you've chosen OpenAI API as the AI model provider (meaning you've selected `OpenAI API` in the AI Provider settings), it's typically because Chatbox cannot access the `API HOST` you've set. By default, Chatbox uses `https://api.openai.com` as the API HOST. Please make sure your current network can access this service.
+For OpenAI API users, if you've chosen OpenAI API as the AI model provider (meaning you've selected `OpenAI API` in the AI Provider settings), it's typically because WorkspAIce cannot access the `API HOST` you've set. By default, WorkspAIce uses `https://api.openai.com` as the API HOST. Please make sure your current network can access this service.
 
 ### 1002
 
@@ -24,9 +24,9 @@ If everything was working fine before and now you're unable to use the service, 
 {"error":{"message":"You exceeded your current quota, please check your plan and billing details.","type":"insufficient_quota","param":null,"code":null}}
 ```
 
-Please note that this issue is not related to Chatbox. In this situation, it's likely that you're using your own OpenAI API account and your free quota has either been used up or expired (usually due to expiration). You need to log in to your OpenAI account's dashboard and link a credit card to continue using the service. The OpenAI API account has many requirements for credit cards. If your card doesn't meet these requirements, you'll need to resolve this issue yourself (it can be quite frustrating).
+Please note that this issue is not related to WorkspAIce. In this situation, it's likely that you're using your own OpenAI API account and your free quota has either been used up or expired (usually due to expiration). You need to log in to your OpenAI account's dashboard and link a credit card to continue using the service. The OpenAI API account has many requirements for credit cards. If your card doesn't meet these requirements, you'll need to resolve this issue yourself (it can be quite frustrating).
 
-**Consider using `Chatbox AI`:** If you don't want to deal with these issues, you can also use Chatbox's built-in `Chatbox AI` service. This service allows you to enjoy AI capabilities without any hassle. Go to the settings page and set the AI Provider to `Chatbox AI`, and you'll see the corresponding options.
+**Consider using `WorkspAIce AI`:** If you don't want to deal with these issues, you can also use WorkspAIce's built-in `WorkspAIce AI` service. This service allows you to enjoy AI capabilities without any hassle. Go to the settings page and set the AI Provider to `WorkspAIce AI`, and you'll see the corresponding options.
 
 ### 1003
 

@@ -5,7 +5,7 @@ export function LoadingShimmer() {
     <>
       <Flex justify="center">
         <div
-          className="relative rounded-xl overflow-hidden bg-[var(--chatbox-background-tertiary)]"
+          className="relative rounded-xl overflow-hidden bg-[var(--workspaice-background-tertiary)]"
           style={{ width: 320, height: 320 }}
         >
           <div
@@ -16,7 +16,7 @@ export function LoadingShimmer() {
               width: '200%',
               height: '200%',
               background:
-                'linear-gradient(135deg, transparent 0%, transparent 35%, var(--chatbox-background-secondary) 50%, transparent 65%, transparent 100%)',
+                'linear-gradient(135deg, transparent 0%, transparent 35%, var(--workspaice-background-secondary) 50%, transparent 65%, transparent 100%)',
               animation: 'shimmer-diagonal 3s ease-in-out infinite',
             }}
           />

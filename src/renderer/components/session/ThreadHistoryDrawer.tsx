@@ -12,7 +12,7 @@ import { scrollToIndex } from '@/stores/scrollActions'
 import { removeCurrentThread, removeThread, switchThread as switchThreadAction } from '@/stores/sessionActions'
 import { getAllMessageList, getCurrentThreadHistoryHash } from '@/stores/sessionHelpers'
 import { useLanguage } from '@/stores/settingsStore'
-import { CHATBOX_BUILD_PLATFORM } from '@/variables'
+import { WORKSPAICE_BUILD_PLATFORM } from '@/variables'
 import ActionMenu from '../ActionMenu'
 import { ScalableIcon } from '../common/ScalableIcon'
 
@@ -71,14 +71,14 @@ export default function ThreadHistoryDrawer({ session }: { session: Session }) {
       PaperProps={
         language === 'ar' ? { sx: { direction: 'rtl', overflowY: 'initial' } } : { sx: { overflowY: 'initial' } }
       }
-      disableSwipeToOpen={CHATBOX_BUILD_PLATFORM !== 'ios'} // 只在iOS设备上启用SwipeToOpen
+      disableSwipeToOpen={WORKSPAICE_BUILD_PLATFORM !== 'ios'} // 只在iOS设备上启用SwipeToOpen
       disableEnforceFocus={true} // 关闭 focus trap，避免在侧边栏打开时弹出的 modal 中 input 无法点击
     >
       <Flex align="center" justify="space-between" className="px-sm py-xs">
         <Text size="md" fw={600}>
           {t('Thread History')}
         </Text>
-        <ActionIcon variant="transparent" color="chatbox-primary" onClick={() => setShowDrawer(false)}>
+        <ActionIcon variant="transparent" color="workspaice-primary" onClick={() => setShowDrawer(false)}>
           <ScalableIcon icon={IconX} size={20} />
         </ActionIcon>
       </Flex>
@@ -128,12 +128,12 @@ function ThreadItem(props: {
       onClick={() => {
         goto(thread.id)
       }}
-      className="group/thread-item px-xs py-xxs cursor-pointer hover:bg-chatbox-background-gray-secondary"
+      className="group/thread-item px-xs py-xxs cursor-pointer hover:bg-workspaice-background-gray-secondary"
     >
-      <Badge color="chatbox-tertiary" size="xs">
+      <Badge color="workspaice-tertiary" size="xs">
         {thread.messageCount}
       </Badge>
-      {/* <Text size="xs" c="chatbox-tertiary">
+      {/* <Text size="xs" c="workspaice-tertiary">
         {thread.messageCount}
       </Text> */}
       <Text size="xs" lineClamp={1} flex={1}>
@@ -169,7 +169,7 @@ function ThreadItem(props: {
       >
         <ActionIcon
           variant="transparent"
-          color="chatbox-primary"
+          color="workspaice-primary"
           className={isSmallScreen || menuOpened ? '' : 'group-hover/thread-item:visible invisible'}
           onClick={(e) => e.stopPropagation()}
         >

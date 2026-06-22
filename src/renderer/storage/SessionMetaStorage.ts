@@ -1,6 +1,6 @@
 import type { SessionMetaPage, SessionMetaRecord } from '@shared/types'
 
-const DB_NAME = 'chatbox-session-meta'
+const DB_NAME = 'workspaice-session-meta'
 const STORE_NAME = 'records'
 const DEFAULT_PAGE_SIZE = 50
 

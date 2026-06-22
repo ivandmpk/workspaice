@@ -38,7 +38,7 @@ export const Divider = ({ orientation = 'horizontal', className }: DividerProps)
     }
   }, [isSmallScreen])
 
-  const baseClasses = clsx('bg-chatbox-border-primary', className)
+  const baseClasses = clsx('bg-workspaice-border-primary', className)
 
   if (orientation === 'vertical') {
     return (

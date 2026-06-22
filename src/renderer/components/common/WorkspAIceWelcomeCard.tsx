@@ -9,7 +9,7 @@ import * as remote from '@/packages/remote'
 import { useLanguage } from '@/stores/settingsStore'
 import type { HomeWelcomeCardMode } from '@/utils/homeWelcomeCard'
 
-export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName: string; className?: string }) {
+export function WorkspAIceWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName: string; className?: string }) {
   const { mode, pageName, className } = props
   const { t } = useTranslation()
   const language = useLanguage()
@@ -33,10 +33,10 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
       <Stack gap="sm">
         <Stack gap="xxs" align="center">
           <Text fw={600} className="text-center">
-            {t('Welcome to Chatbox!')}
+            {t('Welcome to WorkspAIce!')}
           </Text>
 
-          <Text size="xs" c="chatbox-tertiary" className="text-center">
+          <Text size="xs" c="workspaice-tertiary" className="text-center">
             {mode === 'login' ? t('Login to start chatting with AI') : t('No licenses found')}
           </Text>
         </Stack>
@@ -61,7 +61,7 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
                   })
                   setPendingAction('purchase-plan')
                   openLinkWithAuth(
-                    remote.buildChatboxUrl(
+                    remote.buildWorkspAIceUrl(
                       `/redirect_app/view_more_plans/${language}/?utm_source=app&utm_content=provider_cb_login_purchase`
                     )
                   )
@@ -81,11 +81,11 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
               <Button
                 size="xs"
                 variant="subtle"
-                c="chatbox-tertiary"
+                c="workspaice-tertiary"
                 h={32}
                 fw={400}
                 flex="0 1 auto"
-                onClick={() => navigateToSettings('chatbox-ai')}
+                onClick={() => navigateToSettings('workspaice-ai')}
               >
                 {t('View License Details')}
               </Button>
@@ -109,7 +109,7 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
                   })
                   setPendingAction('claim-free-plan')
                   openLinkWithAuth(
-                    remote.buildChatboxUrl(
+                    remote.buildWorkspAIceUrl(
                       `/redirect_app/claim_free_plan/${language}/?utm_source=app&utm_content=provider_cb_login_claim_free`
                     )
                   )
@@ -129,7 +129,7 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
               <Button
                 size="xs"
                 variant="subtle"
-                c="chatbox-tertiary"
+                c="workspaice-tertiary"
                 h={32}
                 fw={400}
                 flex="0 1 auto"
@@ -139,7 +139,7 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
                   pendingActionRef.current = true
                   setPendingAction('view-more-plans')
                   openLinkWithAuth(
-                    remote.buildChatboxUrl(
+                    remote.buildWorkspAIceUrl(
                       `/redirect_app/view_more_plans/${language}/?utm_source=app&utm_content=provider_cb_login_more_plans`
                     )
                   )
@@ -170,15 +170,15 @@ export function ChatboxWelcomeCard(props: { mode: HomeWelcomeCardMode; pageName:
                   trackJkClickEvent(JK_EVENTS.LOGIN_BUTTON_CLICK, {
                     pageName,
                   })
-                  navigateToSettings('chatbox-ai')
+                  navigateToSettings('workspaice-ai')
                 }}
               >
-                {t('Login Chatbox AI')}
+                {t('Login WorkspAIce AI')}
               </Button>
               <Button
                 size="xs"
                 variant="subtle"
-                c="chatbox-tertiary"
+                c="workspaice-tertiary"
                 h={32}
                 fw={400}
                 flex="0 1 auto"

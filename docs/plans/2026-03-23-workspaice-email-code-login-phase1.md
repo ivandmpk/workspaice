@@ -1,10 +1,10 @@
-# Chatbox 验证码登录改造计划（阶段一）
+# WorkspAIce 验证码登录改造计划（阶段一）
 
 ## 背景
 
-当前 Chatbox 账号登录流程依赖 `ticket_id + 浏览器 + 官网授权 + app 轮询`。这条链路对用户来说过于绕，尤其是在 app 内登录场景中，用户需要离开当前界面去浏览器完成授权。
+当前 WorkspAIce 账号登录流程依赖 `ticket_id + 浏览器 + 官网授权 + app 轮询`。这条链路对用户来说过于绕，尤其是在 app 内登录场景中，用户需要离开当前界面去浏览器完成授权。
 
-阶段一的目标是把 `chatbox-pro` 中的 Chatbox 账号登录改为应用内邮箱验证码登录，同时保持已登录用户、token 刷新、license 自动激活等既有行为不变。
+阶段一的目标是把 `workspaice-pro` 中的 WorkspAIce 账号登录改为应用内邮箱验证码登录，同时保持已登录用户、token 刷新、license 自动激活等既有行为不变。
 
 ## 当前链路
 
@@ -27,7 +27,7 @@
 
 ## 第一阶段范围
 
-- 仅修改 `chatbox-pro`
+- 仅修改 `workspaice-pro`
 - 完全停用 app 前端对旧 `ticket_id` 登录链路的调用
 - 新增 app 内邮箱验证码登录 modal
 - 使用新接口：

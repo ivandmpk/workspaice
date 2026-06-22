@@ -25,7 +25,7 @@ const ServerCard: FC<{
           disabled={!props.accessible}
         />
       </Flex>
-      <Text size="xs" mt="sm" c="chatbox-tertiary">
+      <Text size="xs" mt="sm" c="workspaice-tertiary">
         {props.config.description}
       </Text>
     </Paper>
@@ -40,10 +40,10 @@ export const BuiltinServersSection: FC = () => {
   return (
     <>
       <Text size="sm" fw={600} mb={4}>
-        Chatbox {t('Builtin MCP Servers')}
+        WorkspAIce {t('Builtin MCP Servers')}
       </Text>
-      <Text size="xs" c="chatbox-tertiary" mb={12}>
-        {t('One-click MCP servers for Chatbox AI subscribers')}
+      <Text size="xs" c="workspaice-tertiary" mb={12}>
+        {t('One-click MCP servers for WorkspAIce AI subscribers')}
       </Text>
       <SimpleGrid type="container" cols={{ base: 1, '450px': 2, '800px': 3, '1200px': 4 }}>
         {BUILTIN_MCP_SERVERS.map((config) => (

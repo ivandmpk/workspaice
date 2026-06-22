@@ -1,5 +1,5 @@
 import { ActionIcon, Button, Flex, Paper, Text, Tooltip } from '@mantine/core'
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { ImageGeneration } from '@shared/types'
 import { IconCheck, IconCopy, IconRefresh, IconSettings, IconX } from '@tabler/icons-react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import LinkTargetBlank from '@/components/common/Link'
 import { useCopied } from '@/hooks/useCopied'
 import { navigateToSettings } from '@/modals/Settings'
 import { trackingEvent } from '@/packages/event'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
 import * as settingActions from '@/stores/settingActions'
 
@@ -42,28 +42,28 @@ function ImageGenerationTaskErrorMessage({ errorCode }: { errorCode: ImageGenera
 export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageGenerationErrorTipsProps) {
   const { t } = useTranslation()
 
-  const chatboxAIErrorDetail =
-    typeof record.errorCode === 'number' ? ChatboxAIAPIError.getDetail(record.errorCode) : null
+  const workspaiceAIErrorDetail =
+    typeof record.errorCode === 'number' ? WorkspAIceAIAPIError.getDetail(record.errorCode) : null
   const imageGenerationTaskErrorCode = isImageGenerationTaskErrorCode(record.errorCode) ? record.errorCode : undefined
   const errorDebugInfo = [
     record.errorItemUuid ? `UUID: ${record.errorItemUuid}` : undefined,
     record.taskId ? `Task ID: ${record.taskId}` : undefined,
   ].filter((item): item is string => !!item)
   const showErrorDebugInfo = Boolean(
-    (chatboxAIErrorDetail || imageGenerationTaskErrorCode) && errorDebugInfo.length > 0
+    (workspaiceAIErrorDetail || imageGenerationTaskErrorCode) && errorDebugInfo.length > 0
   )
   const { copied, copy } = useCopied(errorDebugInfo.join('\n'))
   const isLicenseError =
-    chatboxAIErrorDetail && ['license_not_found', 'expired_license'].includes(chatboxAIErrorDetail.name)
+    workspaiceAIErrorDetail && ['license_not_found', 'expired_license'].includes(workspaiceAIErrorDetail.name)
 
   return (
     <Paper
       p="lg"
       radius="lg"
-      className="bg-[var(--chatbox-background-error-secondary)] border border-[var(--chatbox-border-error)]"
+      className="bg-[var(--workspaice-background-error-secondary)] border border-[var(--workspaice-border-error)]"
     >
       <Flex direction="column" align="center" gap="md">
-        <div className="w-12 h-12 rounded-full bg-[var(--chatbox-background-error-primary)] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[var(--workspaice-background-error-primary)] flex items-center justify-center">
           <IconX size={24} className="text-white" />
         </div>
 
@@ -71,10 +71,10 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
           {t('Generation Failed')}
         </Text>
 
-        {chatboxAIErrorDetail ? (
+        {workspaiceAIErrorDetail ? (
           <Text size="sm" c="dimmed" ta="center" maw={400}>
             <Trans
-              i18nKey={chatboxAIErrorDetail.i18nKey}
+              i18nKey={workspaiceAIErrorDetail.i18nKey}
               values={{
                 model: record.model.modelId,
               }}
@@ -83,7 +83,7 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
                   <Text
                     component="span"
                     className="cursor-pointer underline"
-                    c="chatbox-brand"
+                    c="workspaice-brand"
                     onClick={() => navigateToSettings()}
                   />
                 ),
@@ -91,10 +91,10 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
                   <Text
                     component="span"
                     className="cursor-pointer underline"
-                    c="chatbox-brand"
+                    c="workspaice-brand"
                     onClick={() => {
                       platform.openLink(
-                        buildChatboxUrl(
+                        buildWorkspAIceUrl(
                           `/redirect_app/view_more_plans/${settingActions.getLanguage()}?utm_source=app&utm_content=image_creator_upgrade_required`
                         )
                       )
@@ -104,7 +104,7 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
                     }}
                   />
                 ),
-                LinkToHomePage: <LinkTargetBlank href="https://chatboxai.app" />,
+                LinkToHomePage: <LinkTargetBlank href="https://workspaiceai.app" />,
               }}
             />
           </Text>
@@ -154,7 +154,7 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
           )}
           <Button
             variant="light"
-            color="chatbox-error"
+            color="workspaice-error"
             leftSection={<IconRefresh size={16} />}
             onClick={onRetry}
             disabled={isRetrying}

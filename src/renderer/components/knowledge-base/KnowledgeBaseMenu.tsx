@@ -39,7 +39,7 @@ const KnowledgeBaseMenu: FC<Props> = (props) => {
           <Menu.Label fw={600}>{t('Knowledge Base')}</Menu.Label>
           <Menu.Label>
             <Link to="/settings/knowledge-base">
-              <IconSettings2 size={16} color="var(--chatbox-tint-tertiary)" />
+              <IconSettings2 size={16} color="var(--workspaice-tint-tertiary)" />
             </Link>
           </Menu.Label>
         </Flex>
@@ -48,9 +48,9 @@ const KnowledgeBaseMenu: FC<Props> = (props) => {
             <Flex justify="space-between" align="center" gap="xs">
               <Flex gap="xs" align="center">
                 <IconFile size={14} />
-                <Text c={kb.id === props.currentKnowledgeBaseId ? 'chatbox-brand' : ''}>{kb.name}</Text>
+                <Text c={kb.id === props.currentKnowledgeBaseId ? 'workspaice-brand' : ''}>{kb.name}</Text>
               </Flex>
-              {kb.id === props.currentKnowledgeBaseId && <IconCheck size={14} color="var(--chatbox-tint-brand)" />}
+              {kb.id === props.currentKnowledgeBaseId && <IconCheck size={14} color="var(--workspaice-tint-brand)" />}
             </Flex>
           </Menu.Item>
         ))}

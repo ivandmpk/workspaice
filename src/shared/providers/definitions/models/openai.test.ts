@@ -35,7 +35,7 @@ describe.skip('OpenAI Adapter', () => {
         withScope: vi.fn((callback: (scope: SentryScope) => void) => callback({ setTag: vi.fn(), setExtra: vi.fn() })),
         captureException: vi.fn(),
       },
-      getRemoteConfig: vi.fn().mockReturnValue({ setting_chatboxai_first: false }),
+      getRemoteConfig: vi.fn().mockReturnValue({ setting_workspaiceai_first: false }),
     }
   })
 

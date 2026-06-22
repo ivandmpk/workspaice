@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { remoteConfigAtom } from '@/stores/atoms'
-import { CHATBOX_BUILD_CHANNEL, CHATBOX_BUILD_PLATFORM } from '@/variables'
+import { WORKSPAICE_BUILD_CHANNEL, WORKSPAICE_BUILD_PLATFORM } from '@/variables'
 import * as remote from '../packages/remote'
 import platform from '../platform'
 
@@ -33,8 +33,8 @@ export default function useVersion() {
   const [version, _setVersion] = useState('')
   const [needCheckUpdate, setNeedCheckUpdate] = useState(false)
   const isStoreReviewPlatform =
-    CHATBOX_BUILD_PLATFORM === 'ios' ||
-    (CHATBOX_BUILD_PLATFORM === 'android' && CHATBOX_BUILD_CHANNEL === 'google_play')
+    WORKSPAICE_BUILD_PLATFORM === 'ios' ||
+    (WORKSPAICE_BUILD_PLATFORM === 'android' && WORKSPAICE_BUILD_CHANNEL === 'google_play')
   const isExceeded = useMemo(
     () =>
       isStoreReviewPlatform &&

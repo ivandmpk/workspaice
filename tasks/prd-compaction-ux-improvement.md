@@ -203,11 +203,11 @@
 **Description:** As a user, I expect auto-compaction to trigger correctly when my conversation exceeds the token threshold. Currently it never triggers.
 
 **Root Cause Analysis:**
-`compaction-detector.ts` 使用 `getModelContextWindowSync(modelId)` 从 builtin-data 获取 contextWindow，但 UI 显示的是从 provider settings（ChatboxAI API 返回）获取的 `modelInfo.contextWindow`。
+`compaction-detector.ts` 使用 `getModelContextWindowSync(modelId)` 从 builtin-data 获取 contextWindow，但 UI 显示的是从 provider settings（WorkspAIceAI API 返回）获取的 `modelInfo.contextWindow`。
 
 例如 DeepSeek V3.2：
 - builtin-data 返回 128K（通过 `deepseek-v3` 前缀匹配）
-- provider settings 返回 64K（ChatboxAI API 实际值）
+- provider settings 返回 64K（WorkspAIceAI API 实际值）
 
 导致：
 - UI 显示阈值基于 64K：25K tokens > 19.2K 阈值 → 应触发压缩

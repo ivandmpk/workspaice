@@ -29,7 +29,7 @@ import type {
   StreamTextResult,
 } from '../types'
 import type { ModelDependencies } from '../types/adapters'
-import { ApiError, ChatboxAIAPIError } from './errors'
+import { ApiError, WorkspAIceAIAPIError } from './errors'
 import type {
   CallChatCompletionOptions,
   ChatStreamOptions,
@@ -186,7 +186,7 @@ export default abstract class AbstractAISDKModel implements ModelInterface {
     try {
       return await this._callChatCompletion(messages, options)
     } catch (e) {
-      if (e instanceof ChatboxAIAPIError) {
+      if (e instanceof WorkspAIceAIAPIError) {
         throw e
       }
       // 如果当前模型不支持图片输入，抛出对应的错误
@@ -194,12 +194,12 @@ export default abstract class AbstractAISDKModel implements ModelInterface {
         e instanceof ApiError &&
         e.message.includes('Invalid content type. image_url is only supported by certain models.')
       ) {
-        // 根据当前 IP，判断是否在错误中推荐 Chatbox AI 4
+        // 根据当前 IP，判断是否在错误中推荐 WorkspAIce AI 4
         const remoteConfig = this.dependencies.getRemoteConfig()
-        if (remoteConfig.setting_chatboxai_first) {
-          throw ChatboxAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image')
+        if (remoteConfig.setting_workspaiceai_first) {
+          throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image')
         } else {
-          throw ChatboxAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image_2')
+          throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image_2')
         }
       }
 
@@ -624,7 +624,7 @@ export default abstract class AbstractAISDKModel implements ModelInterface {
     if (error instanceof ApiError) {
       throw error
     }
-    if (error instanceof ChatboxAIAPIError) {
+    if (error instanceof WorkspAIceAIAPIError) {
       throw error
     }
     throw new ApiError(`Error from ${this.name}${context}: ${error}`)

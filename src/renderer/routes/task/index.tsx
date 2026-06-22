@@ -213,11 +213,11 @@ function DirectorySelector() {
             {recentDirs.map((dir) => (
               <UnstyledButton
                 key={dir}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--chatbox-background-secondary)] transition-colors w-full"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--workspaice-background-secondary)] transition-colors w-full"
                 onClick={() => startSession(dir)}
                 disabled={loading}
               >
-                <IconFolder size={20} className="text-[var(--chatbox-tint-secondary)] shrink-0" />
+                <IconFolder size={20} className="text-[var(--workspaice-tint-secondary)] shrink-0" />
                 <Flex direction="column" gap={0} className="min-w-0 flex-1">
                   <Text size="sm" fw={500} truncate>
                     {dir.split('/').filter(Boolean).pop() || dir}

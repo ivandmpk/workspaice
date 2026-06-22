@@ -36,18 +36,18 @@ import { getPlatformDefaultDocumentParser, settingsStore } from './settingsStore
 const log = getLogger('session-helpers')
 const SESSION_ATTACHMENT_RAG_INLINE_BYTE_THRESHOLD = 256 * 1024
 export const SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH = 6 * 1024 * 1024
-export const SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR = 'session_attachment_rag_requires_chatbox_ai'
+export const SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR = 'session_attachment_rag_requires_workspaice_ai'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_KNOWLEDGE_BASE_ERROR = 'session_attachment_rag_requires_knowledge_base'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR = 'session_attachment_rag_requires_tool_use_model'
 export const SESSION_ATTACHMENT_RAG_PARSED_CONTENT_TOO_LARGE_ERROR = 'session_attachment_rag_parsed_content_too_large'
 export const SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING = 'session_attachment_rag_large_attachment_warning'
 const SESSION_ATTACHMENT_RAG_AUTH_ERROR_PATTERNS = [
-  'provider chatbox-ai not set',
-  'chatbox-ai not set',
-  'missing token for rerank provider: chatbox-ai',
+  'provider workspaice-ai not set',
+  'workspaice-ai not set',
+  'missing token for rerank provider: workspaice-ai',
 ]
 const SESSION_ATTACHMENT_RAG_INDEXING_ERROR_PATTERNS = [
-  'chatbox_session_rag_vectors.db',
+  'workspaice_session_rag_vectors.db',
   'connectionfailed("unable to open connection to local database',
   'session attachment rag vector store not initialized',
 ]
@@ -125,7 +125,7 @@ function hasParsedText(content: string): boolean {
   return content.trim().length > 0
 }
 
-function canFallbackToChatboxAI(): boolean {
+function canFallbackToWorkspAIceAI(): boolean {
   return Boolean(settingActions.getLicenseKey())
 }
 
@@ -133,7 +133,7 @@ export function isSessionAttachmentRagAuthError(errorCode: string | undefined): 
   if (!errorCode) {
     return false
   }
-  if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR) {
+  if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR) {
     return true
   }
   const normalized = errorCode.toLowerCase()
@@ -172,7 +172,7 @@ async function canUseSessionAttachmentRag(): Promise<boolean> {
 
   if (!hasUsableLicense) {
     log.debug(
-      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability skipped: missing active Chatbox license, hasLicense=${Boolean(licenseKey)}, method=${settingsStore.getState().licenseActivationMethod ?? 'none'}, platform=${platform.type}`
+      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability skipped: missing active WorkspAIce license, hasLicense=${Boolean(licenseKey)}, method=${settingsStore.getState().licenseActivationMethod ?? 'none'}, platform=${platform.type}`
     )
     sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
     return false
@@ -211,18 +211,18 @@ async function parseFileWithLocalParser(
   return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'local' }
 }
 
-async function fallbackToChatboxAIParser(
+async function fallbackToWorkspAIceAIParser(
   file: File,
   uniqKey: string,
   reason: 'local_parser_failed' | 'empty_content'
 ): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  log.warn(`Falling back to Chatbox AI parser for "${file.name}" due to ${reason}`)
+  log.warn(`Falling back to WorkspAIce AI parser for "${file.name}" due to ${reason}`)
 
   try {
-    return await parseFileWithChatboxAI(file, uniqKey)
+    return await parseFileWithWorkspAIceAI(file, uniqKey)
   } catch (error) {
-    log.error(`Chatbox AI fallback parsing failed for "${file.name}":`, error)
-    throw new Error('chatbox_ai_parser_failed')
+    log.error(`WorkspAIce AI fallback parsing failed for "${file.name}":`, error)
+    throw new Error('workspaice_ai_parser_failed')
   }
 }
 
@@ -232,15 +232,15 @@ async function parseFileWithLocalFallback(
 ): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
   try {
     const result = await parseFileWithLocalParser(file, uniqKey)
-    if (!hasParsedText(result.content) && canFallbackToChatboxAI()) {
-      return await fallbackToChatboxAIParser(file, uniqKey, 'empty_content')
+    if (!hasParsedText(result.content) && canFallbackToWorkspAIceAI()) {
+      return await fallbackToWorkspAIceAIParser(file, uniqKey, 'empty_content')
     }
     return result
   } catch (error) {
     log.error(`Local parsing failed for "${file.name}":`, error)
 
-    if (canFallbackToChatboxAI()) {
-      return await fallbackToChatboxAIParser(file, uniqKey, 'local_parser_failed')
+    if (canFallbackToWorkspAIceAI()) {
+      return await fallbackToWorkspAIceAIParser(file, uniqKey, 'local_parser_failed')
     }
 
     throw new Error('local_parser_failed')
@@ -248,9 +248,9 @@ async function parseFileWithLocalFallback(
 }
 
 /**
- * Parse file using Chatbox AI cloud service
+ * Parse file using WorkspAIce AI cloud service
  */
-async function parseFileWithChatboxAI(
+async function parseFileWithWorkspAIceAI(
   file: File,
   uniqKey: string
 ): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
@@ -265,7 +265,7 @@ async function parseFileWithChatboxAI(
     await storage.setBlob(uniqKey, content)
   }
 
-  return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'chatbox-ai' }
+  return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'workspaice-ai' }
 }
 
 /**
@@ -388,12 +388,12 @@ export async function prepareFileAttachment(
           break
         }
 
-        case 'chatbox-ai': {
+        case 'workspaice-ai': {
           try {
-            result = await parseFileWithChatboxAI(file, uniqKey)
+            result = await parseFileWithWorkspAIceAI(file, uniqKey)
           } catch (error) {
-            log.error(`Chatbox AI parsing failed for "${file.name}":`, error)
-            throw new Error('chatbox_ai_parser_failed')
+            log.error(`WorkspAIce AI parsing failed for "${file.name}":`, error)
+            throw new Error('workspaice_ai_parser_failed')
           }
           break
         }
@@ -527,7 +527,7 @@ export async function preprocessLink(
     }
 
     if (isPro) {
-      // ChatboxAI 方案：使用远程解析
+      // WorkspAIceAI 方案：使用远程解析
       const licenseKey = settingActions.getLicenseKey()
       const parsed = await remote.parseUserLinkPro({ licenseKey: licenseKey || '', url })
 

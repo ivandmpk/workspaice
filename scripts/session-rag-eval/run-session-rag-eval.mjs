@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 function parseArgs(argv) {
   const args = {
-    fixturesRepo: '../../chatbox-session-rag-eval-fixtures',
+    fixturesRepo: '../../workspaice-session-rag-eval-fixtures',
     caseId: undefined,
     dryRun: false,
   }
@@ -257,11 +257,11 @@ async function main() {
     return
   }
 
-  const baseURL = process.env.CHATBOX_EVAL_BASE_URL
-  const apiKey = process.env.CHATBOX_EVAL_API_KEY || process.env.CHATBOX_LICENSE_KEY
-  const modelId = process.env.CHATBOX_EVAL_MODEL
+  const baseURL = process.env.WORKSPAICE_EVAL_BASE_URL
+  const apiKey = process.env.WORKSPAICE_EVAL_API_KEY || process.env.WORKSPAICE_LICENSE_KEY
+  const modelId = process.env.WORKSPAICE_EVAL_MODEL
   if (!baseURL || !apiKey || !modelId) {
-    throw new Error('Set CHATBOX_EVAL_BASE_URL, CHATBOX_EVAL_MODEL, and CHATBOX_EVAL_API_KEY or CHATBOX_LICENSE_KEY.')
+    throw new Error('Set WORKSPAICE_EVAL_BASE_URL, WORKSPAICE_EVAL_MODEL, and WORKSPAICE_EVAL_API_KEY or WORKSPAICE_LICENSE_KEY.')
   }
 
   const provider = createOpenAICompatible({

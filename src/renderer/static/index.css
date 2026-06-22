@@ -39,7 +39,7 @@ body,
 
 html[data-theme="dark"] {
   .ToolBar {
-    background-color: var(--chatbox-background-primary);
+    background-color: var(--workspaice-background-primary);
   }
 
   /* // ------------ 滚动条 --------------- */
@@ -91,7 +91,7 @@ html[data-theme="dark"] {
 
 html[data-theme="light"] {
   .ToolBar {
-    background-color: var(--chatbox-background-primary);
+    background-color: var(--workspaice-background-primary);
   }
 
   /* // ------------ 滚动条 --------------- */

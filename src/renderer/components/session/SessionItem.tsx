@@ -102,8 +102,8 @@ function SessionItem(props: Props) {
         isSmallScreen
           ? ''
           : selected
-            ? 'bg-chatbox-background-brand-secondary'
-            : 'hover:bg-chatbox-background-gray-secondary'
+            ? 'bg-workspaice-background-brand-secondary'
+            : 'hover:bg-workspaice-background-gray-secondary'
       )}
       mx="xs"
       px="xs"
@@ -117,10 +117,10 @@ function SessionItem(props: Props) {
         sessionType={session.type}
         size="sm"
         type="chat"
-        c={selected ? 'chatbox-brand' : 'chatbox-primary'}
+        c={selected ? 'workspaice-brand' : 'workspaice-primary'}
       />
 
-      <Text span flex={1} lineClamp={1} c={selected ? 'chatbox-brand' : 'chatbox-primary'}>
+      <Text span flex={1} lineClamp={1} c={selected ? 'workspaice-brand' : 'workspaice-primary'}>
         {session.name}
       </Text>
 
@@ -134,7 +134,7 @@ function SessionItem(props: Props) {
         <ActionIcon
           variant="transparent"
           size={20}
-          color={session.starred ? 'chatbox-brand' : 'chatbox-tertiary'}
+          color={session.starred ? 'workspaice-brand' : 'workspaice-tertiary'}
           className={isSmallScreen || session.starred || menuOpened ? '' : 'group-hover/session-item:visible invisible'}
           onClick={(event) => {
             event.stopPropagation()

@@ -11,8 +11,8 @@ const log = getLogger('knowledge-base:db')
 // Do not use `${userData}/databases`: Chromium/Electron profile storage may
 // unlink files in that directory. Keep app-owned sqlite files in our own folder.
 const userDataPath = app.getPath('userData')
-const appDatabaseDir = path.join(userDataPath, 'chatbox-databases')
-const dbPath = path.join(appDatabaseDir, 'chatbox_kb.db')
+const appDatabaseDir = path.join(userDataPath, 'workspaice-databases')
+const dbPath = path.join(appDatabaseDir, 'workspaice_kb.db')
 
 // Ensure database directory exists
 const dbDir = path.dirname(dbPath)

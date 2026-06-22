@@ -24,7 +24,7 @@ const ServerItem: FC<{
   const status = useMCPServerStatus(item.id)
   return (
     <Menu.Item
-      c="chatbox-primary"
+      c="workspaice-primary"
       leftSection={<MCPStatus status={status} />}
       rightSection={
         <Switch
@@ -77,7 +77,7 @@ const MCPMenu: FC<{ children: (enabledTools: number) => ReactNode }> = ({ childr
                 navigateToSettings('/mcp')
               }}
             >
-              <ScalableIcon icon={IconSettings2} size={16} color="var(--chatbox-tint-tertiary)" />
+              <ScalableIcon icon={IconSettings2} size={16} color="var(--workspaice-tint-tertiary)" />
             </ActionIcon>
           </Menu.Label>
         </Flex>

@@ -65,7 +65,7 @@ const DesktopActionMenu: FC<ActionMenuProps> = ({
           ) : item.doubleCheck ? (
             <DoubleCheckMenuItem
               key={`${item.text}${index}`}
-              color={item.color ?? 'chatbox-error'}
+              color={item.color ?? 'workspaice-error'}
               text={item.text}
               icon={item.icon}
               doubleCheckText={item.doubleCheck === true ? undefined : item.doubleCheck.text}
@@ -78,10 +78,10 @@ const DesktopActionMenu: FC<ActionMenuProps> = ({
             <Menu.Item
               key={`${item.text}${index}`}
               leftSection={item.icon ? <ScalableIcon icon={item.icon} size={14} /> : undefined}
-              color={item.color || 'chatbox-primary'}
+              color={item.color || 'workspaice-primary'}
               disabled={item.disabled}
               style={{
-                color: theme.variantColorResolver({ color: item.color || 'chatbox-primary', theme, variant: 'light' })
+                color: theme.variantColorResolver({ color: item.color || 'workspaice-primary', theme, variant: 'light' })
                   .color,
               }}
               onClick={item.onClick}
@@ -111,12 +111,12 @@ const MobileActionMenu: FC<ActionMenuProps> = ({ children, items, title }) => {
     <Drawer.Root open={open} onOpenChange={setOpen} noBodyStyles>
       <Drawer.Trigger asChild>{children}</Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
         <Drawer.Content className="flex flex-col h-fit fixed bottom-0 left-0 right-0 outline-none">
-          <div className="bg-chatbox-background-primary rounded-t-lg">
+          <div className="bg-workspaice-background-primary rounded-t-lg">
             <Drawer.Handle />
             {title && (
-              <Text c="chatbox-tertiary" size="md" className="text-center mb-2">
+              <Text c="workspaice-tertiary" size="md" className="text-center mb-2">
                 {title}
               </Text>
             )}
@@ -137,7 +137,7 @@ const MobileActionMenu: FC<ActionMenuProps> = ({ children, items, title }) => {
                     disabled={item.disabled}
                     className="border-0 bg-transparent p-2.5"
                   >
-                    <Text span lineClamp={1} fw={600} c={item.color || 'chatbox-primary'}>
+                    <Text span lineClamp={1} fw={600} c={item.color || 'workspaice-primary'}>
                       {item.text}
                     </Text>
                   </button>
@@ -165,7 +165,7 @@ const MobileDoubleCheckMenuItem: FC<{
 
   const doubleCheckConfig = item.doubleCheck === true ? {} : item.doubleCheck
   const doubleCheckText = doubleCheckConfig.text ?? t('Confirm?')
-  const doubleCheckColor = doubleCheckConfig.color ?? item.color ?? 'chatbox-error'
+  const doubleCheckColor = doubleCheckConfig.color ?? item.color ?? 'workspaice-error'
 
   return (
     <Drawer.NestedRoot noBodyStyles open={confirmOpen} onOpenChange={setConfirmOpen}>
@@ -175,16 +175,16 @@ const MobileDoubleCheckMenuItem: FC<{
             span
             lineClamp={1}
             fw={600}
-            c={(typeof item.doubleCheck !== 'boolean' && item.doubleCheck.color) || item.color || 'chatbox-error'}
+            c={(typeof item.doubleCheck !== 'boolean' && item.doubleCheck.color) || item.color || 'workspaice-error'}
           >
             {item.text}
           </Text>
         </button>
       </Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-chatbox-background-mask-overlay" />
+        <Drawer.Overlay className="fixed inset-0 bg-workspaice-background-mask-overlay" />
         <Drawer.Content className="flex flex-col h-fit fixed bottom-0 left-0 right-0 outline-none">
-          <div className="bg-chatbox-background-primary rounded-t-lg">
+          <div className="bg-workspaice-background-primary rounded-t-lg">
             <Drawer.Handle />
             <Stack className="px-2" gap={0}>
               <Drawer.Close asChild>
@@ -213,7 +213,7 @@ const MobileDoubleCheckMenuItem: FC<{
 
               <Drawer.Close asChild>
                 <button className="border-0 bg-transparent p-2.5">
-                  <Text c="chatbox-tertiary" span lineClamp={1} fw={600}>
+                  <Text c="workspaice-tertiary" span lineClamp={1} fw={600}>
                     {t('Cancel')}
                   </Text>
                 </button>

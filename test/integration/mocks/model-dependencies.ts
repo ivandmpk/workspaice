@@ -35,7 +35,7 @@ export async function createMockModelDependencies(
       fetchWithOptions: async (
         url: string,
         init?: RequestInit,
-        options?: { retry?: number; parseChatboxRemoteError?: boolean }
+        options?: { retry?: number; parseWorkspAIceRemoteError?: boolean }
       ): Promise<Response> => {
         return afetch(url, init, options || {})
       },

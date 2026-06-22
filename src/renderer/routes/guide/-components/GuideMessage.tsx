@@ -141,7 +141,7 @@ export function GuideMessage({
             <div
               className={cn(
                 'max-w-full inline-block',
-                isUser ? 'bg-chatbox-background-secondary px-4 rounded-lg' : 'w-full'
+                isUser ? 'bg-workspaice-background-secondary px-4 rounded-lg' : 'w-full'
               )}
             >
               <Box className="msg-content">

@@ -63,7 +63,7 @@ const SearchBox = ({
   t: (key: string) => string
 }) => (
   <Flex align="center" className="px-xs py-xs">
-    <ScalableIcon icon={IconSearch} className="text-chatbox-tint-gray" />
+    <ScalableIcon icon={IconSearch} className="text-workspaice-tint-gray" />
     <TextInput
       value={search}
       onChange={(event) => onSearchChange(event.currentTarget.value)}
@@ -211,7 +211,7 @@ export const DesktopModelSelector = forwardRef<HTMLDivElement, DesktopModelSelec
 
         <Combobox.Dropdown className="!p-0 overflow-hidden rounded-md">
           {searchPosition === 'top' && (
-            <div className="sticky top-0 z-10" style={{ borderBottom: '1px solid var(--chatbox-border-primary)' }}>
+            <div className="sticky top-0 z-10" style={{ borderBottom: '1px solid var(--workspaice-border-primary)' }}>
               <SearchBox
                 search={search}
                 activeTab={activeTab}
@@ -237,7 +237,7 @@ export const DesktopModelSelector = forwardRef<HTMLDivElement, DesktopModelSelec
             {(isEmpty && !showAuto) ||
             (activeTab === 'favorite' && (!favoritedModels || favoritedModels.length === 0)) ? (
               <Stack gap="xs" pt="xs" align="center" className="overflow-hidden">
-                <Text c="chatbox-tertiary" size="xs">
+                <Text c="workspaice-tertiary" size="xs">
                   {activeTab === 'favorite' ? t('No favorite models') : t('No eligible models available')}
                 </Text>
                 {activeTab === 'all' && (
@@ -319,7 +319,7 @@ export const DesktopModelSelector = forwardRef<HTMLDivElement, DesktopModelSelec
           </Combobox.Options>
 
           {searchPosition === 'bottom' && (
-            <div className="sticky bottom-0 z-10" style={{ borderTop: '1px solid var(--chatbox-border-primary)' }}>
+            <div className="sticky bottom-0 z-10" style={{ borderTop: '1px solid var(--workspaice-border-primary)' }}>
               <SearchBox
                 search={search}
                 activeTab={activeTab}

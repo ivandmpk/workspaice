@@ -1,4 +1,4 @@
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const getLicenseKeyMock = vi.fn()
@@ -61,7 +61,7 @@ describe('parseLinkTool', () => {
     vi.clearAllMocks()
   })
 
-  describe('build-in (Chatbox AI) provider', () => {
+  describe('build-in (WorkspAIce AI) provider', () => {
     beforeEach(() => {
       getExtensionSettingsMock.mockReturnValue({ webSearch: { provider: 'build-in' } })
     })
@@ -70,13 +70,13 @@ describe('parseLinkTool', () => {
       getLicenseKeyMock.mockReturnValue('')
 
       await expect(execParseLink({ url: 'https://example.com' })).rejects.toMatchObject({
-        detail: { name: 'chatbox_search_license_key_required' },
+        detail: { name: 'workspaice_search_license_key_required' },
       })
       expect(parseUserLinkProMock).not.toHaveBeenCalled()
       expect(getParseLinkProviderMock).not.toHaveBeenCalled()
     })
 
-    it('calls Chatbox AI remote API for any licensed user (no Pro check)', async () => {
+    it('calls WorkspAIce AI remote API for any licensed user (no Pro check)', async () => {
       // Lite users can call parse_link too — backend has no Pro restriction.
       getLicenseKeyMock.mockReturnValue('lk-lite-123')
       parseUserLinkProMock.mockResolvedValue({
@@ -176,7 +176,7 @@ describe('parseLinkTool', () => {
     })
 
     it('propagates underlying provider errors (e.g. missing API key)', async () => {
-      const apiKeyError = ChatboxAIAPIError.fromCodeName('tavily_api_key_required', 'tavily_api_key_required')
+      const apiKeyError = WorkspAIceAIAPIError.fromCodeName('tavily_api_key_required', 'tavily_api_key_required')
       getParseLinkProviderMock.mockImplementation(() => {
         throw apiKeyError
       })

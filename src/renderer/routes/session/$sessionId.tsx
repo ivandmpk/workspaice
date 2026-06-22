@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from 'zustand'
 import { JK_PAGE_NAMES } from '@/analytics/jk-events'
-import { ChatboxWelcomeCard } from '@/components/common/ChatboxWelcomeCard'
+import { WorkspAIceWelcomeCard } from '@/components/common/WorkspAIceWelcomeCard'
 import MessageList, { type MessageListRef } from '@/components/chat/MessageList'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import InputBox from '@/components/InputBox/InputBox'
@@ -204,7 +204,7 @@ function RouteComponent() {
           // bottom: '100%' — positioned right above the parent box's top edge (like a tooltip anchoring upward)
           <Box className="pointer-events-none absolute left-0 right-0 z-10" style={{ bottom: '100%' }} px="sm" mb="sm">
             <Box className={widthFull ? 'w-full' : 'max-w-4xl mx-auto'}>
-              <ChatboxWelcomeCard
+              <WorkspAIceWelcomeCard
                 mode={welcomeCardMode}
                 pageName={JK_PAGE_NAMES.CHAT_PAGE}
                 className="pointer-events-auto w-full"

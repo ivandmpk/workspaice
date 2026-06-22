@@ -129,7 +129,7 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
                 alt={name}
                 size={48}
                 radius="xl"
-                className="flex-shrink-0 border border-solid border-chatbox-border-primary"
+                className="flex-shrink-0 border border-solid border-workspaice-border-primary"
               >
                 {avatar?.type === 'storage-key' ? (
                   <ImageInStorage storageKey={avatar.storageKey} className="object-cover object-center w-full h-full" />
@@ -143,9 +143,9 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
                 h={48}
                 align="center"
                 justify="center"
-                className="flex-shrink-0 rounded-full bg-chatbox-background-brand-secondary"
+                className="flex-shrink-0 rounded-full bg-workspaice-background-brand-secondary"
               >
-                <ScalableIcon icon={IconMessageCircle2Filled} size={24} className="text-chatbox-tint-brand" />
+                <ScalableIcon icon={IconMessageCircle2Filled} size={24} className="text-workspaice-tint-brand" />
               </Stack>
             )}
 
@@ -159,16 +159,16 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
                     key={tag}
                     span
                     size="xxs"
-                    c="chatbox-brand"
+                    c="workspaice-brand"
                     px={8}
                     py={2}
-                    className="block rounded-full bg-chatbox-background-brand-secondary"
+                    className="block rounded-full bg-workspaice-background-brand-secondary"
                   >
                     {t(tag)}
                   </Text>
                 ))}
                 {formattedDate && (
-                  <Text size="xxs" c="chatbox-tertiary" className="whitespace-nowrap">
+                  <Text size="xxs" c="workspaice-tertiary" className="whitespace-nowrap">
                     {type === 'remote'
                       ? t('Published on {{date}}', { date: formattedDate })
                       : t('Created on {{date}}', { date: formattedDate })}
@@ -183,10 +183,10 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
           {/* Description */}
           {description && (
             <Stack gap="xxs">
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 {t('Description')}
               </Text>
-              <Text size="sm" c="chatbox-secondary" py={6} className="whitespace-pre-wrap">
+              <Text size="sm" c="workspaice-secondary" py={6} className="whitespace-pre-wrap">
                 {description}
               </Text>
             </Stack>
@@ -195,11 +195,11 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
           {/* Prompt Content */}
           {prompt && (
             <Stack gap="xxs" my="xs">
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 {t('Prompt Content')}
               </Text>
-              <ScrollArea.Autosize mah="40vh" className="rounded-sm border border-solid border-chatbox-border-primary ">
-                <Text size="sm" c="chatbox-primary" p="xs" className="whitespace-pre-wrap">
+              <ScrollArea.Autosize mah="40vh" className="rounded-sm border border-solid border-workspaice-border-primary ">
+                <Text size="sm" c="workspaice-primary" p="xs" className="whitespace-pre-wrap">
                   {prompt}
                 </Text>
               </ScrollArea.Autosize>
@@ -209,7 +209,7 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
           {/* Screenshots */}
           {screenshots && screenshots.length > 0 && (
             <Stack gap="xxs">
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 {t('Screenshots')}
               </Text>
               <Gallery
@@ -230,7 +230,7 @@ export function CopilotDetailModal({ opened, onClose, type, copilot, onUse }: Co
                         key={key}
                         source={screenshot}
                         alt={name}
-                        className="h-[120px] w-[120px] rounded-sm border border-solid border-chatbox-border-primary object-cover"
+                        className="h-[120px] w-[120px] rounded-sm border border-solid border-workspaice-border-primary object-cover"
                       />
                     )
                   })}

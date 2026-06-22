@@ -8,7 +8,7 @@ import { settingsStore } from './settingsStore'
 export function needEditSetting() {
   const settings = settingsStore.getState()
 
-  // 激活了chatbox ai
+  // 激活了workspaice ai
   if (settings.licenseKey) {
     return false
   }

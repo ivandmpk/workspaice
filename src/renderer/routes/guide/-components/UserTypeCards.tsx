@@ -5,7 +5,7 @@
 import { Box, Flex, Stack, Text, UnstyledButton } from '@mantine/core'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import iconChatbox from '@/static/icons/icon-chatbox.svg'
+import iconWorkspAIce from '@/static/icons/icon-workspaice.svg'
 import iconSkip from '@/static/icons/icon-skip.svg'
 import type { UserType } from '../-hooks/useGuideSession'
 
@@ -21,7 +21,7 @@ interface CardConfig {
 }
 
 const cardConfigs: CardConfig[] = [
-  { type: 'novice', icon: iconChatbox, highlighted: true },
+  { type: 'novice', icon: iconWorkspAIce, highlighted: true },
   { type: 'expert', icon: iconSkip, highlighted: false },
 ]
 
@@ -32,7 +32,7 @@ export function UserTypeCards({ onSelect, disabled }: UserTypeCardsProps) {
   const cardTexts = {
     novice: {
       title: t("I'm new to this"),
-      description: t('Use Chatbox AI service'),
+      description: t('Use WorkspAIce AI service'),
     },
     expert: {
       title: t('Skip guide'),
@@ -70,10 +70,10 @@ export function UserTypeCards({ onSelect, disabled }: UserTypeCardsProps) {
                   ? 'linear-gradient(180deg, rgba(34, 139, 230, 0.08) 0%, rgba(34, 139, 230, 0.02) 100%)'
                   : 'linear-gradient(180deg, rgba(134, 142, 150, 0.06) 0%, rgba(134, 142, 150, 0.02) 100%)',
                 border: isSelected
-                  ? '2px solid var(--chatbox-border-brand)'
+                  ? '2px solid var(--workspaice-border-brand)'
                   : highlighted
-                    ? '2px solid var(--chatbox-border-brand)'
-                    : '2px solid var(--chatbox-border-secondary)',
+                    ? '2px solid var(--workspaice-border-brand)'
+                    : '2px solid var(--workspaice-border-secondary)',
               }}
             >
               {/* Recommended badge - positioned at top-right corner */}
@@ -81,7 +81,7 @@ export function UserTypeCards({ onSelect, disabled }: UserTypeCardsProps) {
                 <Box
                   className="absolute top-0 right-0 px-3 py-1 text-xs font-medium text-white"
                   style={{
-                    background: 'var(--chatbox-background-brand-primary)',
+                    background: 'var(--workspaice-background-brand-primary)',
                     borderBottomLeftRadius: '0.5rem',
                   }}
                 >
@@ -108,13 +108,13 @@ export function UserTypeCards({ onSelect, disabled }: UserTypeCardsProps) {
                   fw={600}
                   size="sm"
                   ta="center"
-                  className={highlighted ? 'text-chatbox-tint-brand' : 'text-chatbox-tint-primary'}
+                  className={highlighted ? 'text-workspaice-tint-brand' : 'text-workspaice-tint-primary'}
                 >
                   {texts.title}
                 </Text>
 
                 {/* Description */}
-                <Text size="xs" c="chatbox-secondary" ta="center">
+                <Text size="xs" c="workspaice-secondary" ta="center">
                   {texts.description}
                 </Text>
               </Stack>

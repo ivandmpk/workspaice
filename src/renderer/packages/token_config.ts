@@ -22,7 +22,6 @@
 //             settings.openaiMaxContextTokens = defaults.settings().openaiMaxContextTokens
 //             settings.openaiMaxContextMessageCount = 8
 //             break
-//         case ModelProviderEnum.ChatboxAI:
 //             settings.openaiMaxTokens = 0
 //             settings.openaiMaxContextTokens = 128_000
 //             settings.openaiMaxContextMessageCount = 8

@@ -197,22 +197,22 @@ function GuidePage() {
       <Menu.Target>
         <UnstyledButton
           className={`flex items-center gap-1 rounded-lg px-2 py-1 transition-colors ${
-            canSwitchLanguage ? 'hover:bg-[var(--chatbox-background-tertiary)]' : 'cursor-not-allowed opacity-50'
+            canSwitchLanguage ? 'hover:bg-[var(--workspaice-background-tertiary)]' : 'cursor-not-allowed opacity-50'
           }`}
           disabled={!canSwitchLanguage}
           aria-label={`${t('Switch language')}: ${languageNameMap[currentLanguage]}`}
           title={isSmallScreen ? `${t('Switch language')}: ${languageNameMap[currentLanguage]}` : undefined}
         >
-          <ScalableIcon icon={IconLanguage} size={16} className="text-chatbox-tint-secondary" />
+          <ScalableIcon icon={IconLanguage} size={16} className="text-workspaice-tint-secondary" />
           {!isSmallScreen && (
-            <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
+            <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
               {languageNameMap[currentLanguage]}
             </Text>
           )}
           <ScalableIcon
             icon={IconChevronRight}
             size={14}
-            className="text-chatbox-tint-tertiary rotate-90 flex-shrink-0"
+            className="text-workspaice-tint-tertiary rotate-90 flex-shrink-0"
           />
         </UnstyledButton>
       </Menu.Target>
@@ -224,7 +224,7 @@ function GuidePage() {
             onClick={() => handleLanguageChange(lang)}
             rightSection={
               lang === currentLanguage ? (
-                <ScalableIcon icon={IconCheck} size={14} className="text-chatbox-tint-brand" />
+                <ScalableIcon icon={IconCheck} size={14} className="text-workspaice-tint-brand" />
               ) : null
             }
           >
@@ -236,7 +236,7 @@ function GuidePage() {
   )
 
   return (
-    <Stack h="100%" gap={0} className="bg-chatbox-background-primary">
+    <Stack h="100%" gap={0} className="bg-workspaice-background-primary">
       {/* Header */}
       <Flex h={48} align="center" px="md" className="flex-none title-bar">
         {(!showSidebar || isSmallScreen) && (
@@ -245,7 +245,7 @@ function GuidePage() {
               className="controls"
               variant="subtle"
               size={isSmallScreen ? 24 : 20}
-              color={isSmallScreen ? 'chatbox-secondary' : 'chatbox-tertiary'}
+              color={isSmallScreen ? 'workspaice-secondary' : 'workspaice-tertiary'}
               mr="xs"
               onClick={() => setShowSidebar(!showSidebar)}
             >
@@ -263,7 +263,7 @@ function GuidePage() {
         <Flex align="center" gap="xs" className="controls">
           {languageSwitcher}
           {showDebug && (
-            <Text size="xs" c="chatbox-tertiary">
+            <Text size="xs" c="workspaice-tertiary">
               debug info: {onboardingStep}
             </Text>
           )}
@@ -320,7 +320,7 @@ function GuidePage() {
           {/* Error display */}
           {error && (
             <Box px="md" py="sm">
-              <Text c="chatbox-error" size="sm">
+              <Text c="workspaice-error" size="sm">
                 {error}
               </Text>
             </Box>
@@ -332,8 +332,8 @@ function GuidePage() {
       <Box px="sm" pb="md" pt="sm" className="flex-shrink-0">
         <Stack gap="xs" maw="56rem" mx="auto">
           <Stack
-            className="bg-chatbox-background-secondary rounded-md p-3"
-            style={{ border: '1px solid var(--chatbox-border-primary)' }}
+            className="bg-workspaice-background-secondary rounded-md p-3"
+            style={{ border: '1px solid var(--workspaice-border-primary)' }}
             gap="xs"
           >
             {/* Input Row */}
@@ -345,7 +345,7 @@ function GuidePage() {
                   root: 'flex-1',
                   wrapper: 'flex-1',
                   input:
-                    'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-chatbox-tint-primary',
+                    'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-workspaice-tint-primary',
                 }}
                 size="sm"
                 value={inputValue}
@@ -355,7 +355,7 @@ function GuidePage() {
                   canSendMessage
                     ? t('Type your question here...') || ''
                     : hasValidConfig
-                      ? t('Chatbox is ready. To save resources, please start a new chat to continue.') || ''
+                      ? t('WorkspAIce is ready. To save resources, please start a new chat to continue.') || ''
                       : t('Please complete setup to continue chatting') || ''
                 }
                 disabled={!canSendMessage || isLoading}
@@ -370,7 +370,7 @@ function GuidePage() {
                 disabled={(!inputValue.trim() || !canSendMessage) && !isLoading}
                 size={32}
                 variant="filled"
-                color={isLoading ? 'dark' : 'chatbox-brand'}
+                color={isLoading ? 'dark' : 'workspaice-brand'}
                 radius="xl"
                 onClick={isLoading ? stopGeneration : handleSend}
                 className={`shrink-0 mb-1 ${(!inputValue.trim() || !canSendMessage) && !isLoading ? 'disabled:!opacity-100 !text-white' : ''}`}
@@ -393,24 +393,24 @@ function GuidePage() {
               {/* Model Selector */}
               <Menu position="top-end" shadow="md" transitionProps={{ transition: 'fade-up', duration: 200 }}>
                 <Menu.Target>
-                  <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
-                    <ProviderImageIcon provider="chatbox-ai" size={18} />
-                    <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
-                      Chatbox Guide
+                  <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                    <ProviderImageIcon provider="workspaice-ai" size={18} />
+                    <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
+                      WorkspAIce Guide
                     </Text>
                     <ScalableIcon
                       icon={IconChevronRight}
                       size={14}
-                      className="text-chatbox-tint-tertiary rotate-90 flex-shrink-0"
+                      className="text-workspaice-tint-tertiary rotate-90 flex-shrink-0"
                     />
                   </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Item
-                    leftSection={<ProviderImageIcon provider="chatbox-ai" size={16} />}
-                    rightSection={<ScalableIcon icon={IconCheck} size={14} className="text-chatbox-tint-brand" />}
+                    leftSection={<ProviderImageIcon provider="workspaice-ai" size={16} />}
+                    rightSection={<ScalableIcon icon={IconCheck} size={14} className="text-workspaice-tint-brand" />}
                   >
-                    Chatbox Guide
+                    WorkspAIce Guide
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
@@ -425,12 +425,12 @@ function GuidePage() {
       {status === 'blocked' && (
         <Box className="fixed inset-0 bg-black/50 flex items-center justify-center z-[3000]" onClick={() => reset()}>
           <Box
-            className="bg-chatbox-background-primary rounded-lg p-6 max-w-sm mx-4"
+            className="bg-workspaice-background-primary rounded-lg p-6 max-w-sm mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <Stack gap="md">
               <Title order={4}>{t('Leave Guide?')}</Title>
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 {t("You haven't completed the setup yet. Your progress will be cleared if you leave now.")}
               </Text>
               <Flex gap="sm" justify="flex-end">
@@ -459,12 +459,12 @@ function GuidePage() {
           onClick={() => setPendingLanguage(null)}
         >
           <Box
-            className="bg-chatbox-background-primary rounded-lg p-6 max-w-sm mx-4"
+            className="bg-workspaice-background-primary rounded-lg p-6 max-w-sm mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <Stack gap="md">
               <Title order={4}>Switch Language?</Title>
-              <Text size="sm" c="chatbox-secondary">
+              <Text size="sm" c="workspaice-secondary">
                 Switching language will restart the guide and clear your current progress.
               </Text>
               <Flex gap="sm" justify="flex-end">

@@ -3,7 +3,7 @@ import type { Message } from '@shared/types'
 import { useAtomValue } from 'jotai'
 import { Loader } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import * as atoms from '@/stores/atoms'
 import * as settingActions from '@/stores/settingActions'
 import LinkTargetBlank from '../common/Link'
@@ -39,14 +39,14 @@ function MessageStatus(props: { status: NonNullable<Message['status']>[number] }
             )}
           </span>
         </LoadingBubble>
-        {status.mode === 'local' && remoteConfig.setting_chatboxai_first && (
+        {status.mode === 'local' && remoteConfig.setting_workspaiceai_first && (
           <Typography variant="body2" sx={{ opacity: 0.5 }} className="pb-1">
             <Trans
-              i18nKey="Due to local processing limitations, <Link>Chatbox AI Service</Link> is recommended for enhanced document processing capabilities and better results."
+              i18nKey="Due to local processing limitations, <Link>WorkspAIce AI Service</Link> is recommended for enhanced document processing capabilities and better results."
               components={{
                 Link: (
                   <LinkTargetBlank
-                    href={buildChatboxUrl(
+                    href={buildWorkspAIceUrl(
                       `/redirect_app/advanced_file_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=msg_local_limitation`
                     )}
                   ></LinkTargetBlank>
@@ -71,14 +71,14 @@ function MessageStatus(props: { status: NonNullable<Message['status']>[number] }
             )}
           </span>
         </LoadingBubble>
-        {status.mode === 'local' && remoteConfig.setting_chatboxai_first && (
+        {status.mode === 'local' && remoteConfig.setting_workspaiceai_first && (
           <Typography variant="body2" sx={{ opacity: 0.5 }} className="pb-1">
             <Trans
-              i18nKey="Due to local processing limitations, <Link>Chatbox AI Service</Link> is recommended to enhance webpage parsing capabilities, especially for dynamic pages."
+              i18nKey="Due to local processing limitations, <Link>WorkspAIce AI Service</Link> is recommended to enhance webpage parsing capabilities, especially for dynamic pages."
               components={{
                 Link: (
                   <LinkTargetBlank
-                    href={buildChatboxUrl(
+                    href={buildWorkspAIceUrl(
                       `/redirect_app/advanced_url_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=msg_local_limitation`
                     )}
                   ></LinkTargetBlank>

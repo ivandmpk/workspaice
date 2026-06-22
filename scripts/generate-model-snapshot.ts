@@ -43,8 +43,8 @@ async function main() {
   let totalModels = 0
 
   for (const [modelsDevId, providerEntry] of Object.entries(data)) {
-    const chatboxIds = REVERSE_PROVIDER_MAP[modelsDevId]
-    if (!chatboxIds || chatboxIds.length === 0) continue
+    const workspaiceIds = REVERSE_PROVIDER_MAP[modelsDevId]
+    if (!workspaiceIds || workspaiceIds.length === 0) continue
 
     const provider = providerEntry as { models?: Record<string, ModelsDevModelEntry> }
     if (!provider.models || typeof provider.models !== 'object') continue
@@ -56,8 +56,8 @@ async function main() {
       totalModels++
     }
 
-    for (const chatboxId of chatboxIds) {
-      registry[chatboxId] = providerModels
+    for (const workspaiceId of workspaiceIds) {
+      registry[workspaiceId] = providerModels
     }
   }
 
@@ -82,7 +82,7 @@ export const MODELS_DEV_SNAPSHOT: ModelRegistryData = ${JSON.stringify(registry,
 
   const fileSizeKB = Math.round(fs.statSync(OUTPUT_PATH).size / 1024)
   console.log(`[model-snapshot] Generated snapshot:`)
-  console.log(`  Providers: ${providerCount} (mapped to ${Object.keys(registry).length} Chatbox IDs)`)
+  console.log(`  Providers: ${providerCount} (mapped to ${Object.keys(registry).length} WorkspAIce IDs)`)
   console.log(`  Models: ${totalModels}`)
   console.log(`  File size: ${fileSizeKB} KB`)
   console.log(`  Output: ${OUTPUT_PATH}`)

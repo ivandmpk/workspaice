@@ -283,7 +283,7 @@ src/shared/
 │       ├── gemini.ts
 │       ├── deepseek.ts
 │       ├── azure.ts
-│       ├── chatboxai.ts
+│       ├── workspaiceai.ts
 │       ├── ollama.ts
 │       ├── groq.ts
 │       ├── perplexity.ts
@@ -416,14 +416,14 @@ src/shared/
 - [x] 集成测试通过
 - [x] 类型检查通过
 
-#### US-010: 迁移 ChatboxAI provider ✅
-**Description:** 迁移 ChatboxAI provider，处理 license 相关逻辑。
+#### US-010: 迁移 WorkspAIceAI provider ✅
+**Description:** 迁移 WorkspAIceAI provider，处理 license 相关逻辑。
 
 **Acceptance Criteria:**
-- [x] 创建 `src/shared/providers/definitions/chatboxai.ts`
+- [x] 创建 `src/shared/providers/definitions/workspaiceai.ts`
 - [x] 移动 Model class
 - [x] `createModel` 正确处理 licenseKey, licenseInstances, licenseDetail
-- [x] 删除 `chatboxai-setting-util.ts`
+- [x] 删除 `workspaiceai-setting-util.ts`
 - [x] 所有现有功能正常工作
 - [x] 集成测试通过
 - [x] 类型检查通过

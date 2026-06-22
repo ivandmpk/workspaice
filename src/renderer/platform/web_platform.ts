@@ -115,17 +115,17 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
     try {
       const conf = await this.getConfig()
       window.gtag('config', GAID, {
-        app_name: 'chatbox',
+        app_name: 'workspaice',
         user_id: conf.uuid,
         client_id: conf.uuid,
         app_version: await this.getVersion(),
-        chatbox_platform_type: 'web',
-        chatbox_platform: await this.getPlatform(),
+        workspaice_platform_type: 'web',
+        workspaice_platform: await this.getPlatform(),
         app_platform: await this.getPlatform(),
       })
     } catch (e) {
       window.gtag('config', GAID, {
-        app_name: 'chatbox',
+        app_name: 'workspaice',
       })
       throw e
     }

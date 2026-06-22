@@ -1,7 +1,7 @@
 import type { ImageGeneration, ImageGenerationPage } from '@shared/types'
 
 const PAGE_SIZE = 20
-const DB_NAME = 'chatbox-image-generation'
+const DB_NAME = 'workspaice-image-generation'
 const STORE_NAME = 'records'
 
 export interface ImageGenerationStorage {

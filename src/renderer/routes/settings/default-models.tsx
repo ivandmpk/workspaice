@@ -57,8 +57,8 @@ export function RouteComponent() {
           />
         </ModelSelector>
 
-        <Text c="chatbox-tertiary" size="xs">
-          {t('Chatbox will use this model as the default for new chats.')}
+        <Text c="workspaice-tertiary" size="xs">
+          {t('WorkspAIce will use this model as the default for new chats.')}
         </Text>
       </Stack>
 
@@ -92,8 +92,8 @@ export function RouteComponent() {
           />
         </ModelSelector>
 
-        <Text c="chatbox-tertiary" size="xs">
-          {t('Chatbox will automatically use this model to rename threads.')}
+        <Text c="workspaice-tertiary" size="xs">
+          {t('WorkspAIce will automatically use this model to rename threads.')}
         </Text>
       </Stack>
 
@@ -127,8 +127,8 @@ export function RouteComponent() {
           />
         </ModelSelector>
 
-        <Text c="chatbox-tertiary" size="xs">
-          {t('Chatbox will automatically use this model to construct search term.')}
+        <Text c="workspaice-tertiary" size="xs">
+          {t('WorkspAIce will automatically use this model to construct search term.')}
         </Text>
       </Stack>
       <Stack gap="xs">
@@ -137,7 +137,7 @@ export function RouteComponent() {
         <ModelSelector
           position="bottom-start"
           showAuto={true}
-          autoText={settings.licenseKey ? t('Auto (Use Chatbox AI)')! : t('None')!}
+          autoText={settings.licenseKey ? t('Auto (Use WorkspAIce AI)')! : t('None')!}
           width={320}
           modelFilter={(model) => model.capabilities?.includes('vision') ?? false}
           selectedProviderId={settings.ocrModel?.provider}
@@ -156,14 +156,14 @@ export function RouteComponent() {
           }
         >
           <ModelSelectContent
-            autoText={settings.licenseKey ? t('Auto (Use Chatbox AI)')! : t('None')!}
+            autoText={settings.licenseKey ? t('Auto (Use WorkspAIce AI)')! : t('None')!}
             provider={settings.ocrModel?.provider}
             model={settings.ocrModel?.model}
           />
         </ModelSelector>
 
-        <Text c="chatbox-tertiary" size="xs">
-          {t('Chatbox OCRs images with this model and sends the text to models without image support.')}
+        <Text c="workspaice-tertiary" size="xs">
+          {t('WorkspAIce OCRs images with this model and sends the text to models without image support.')}
         </Text>
       </Stack>
     </Stack>
@@ -203,9 +203,9 @@ const ModelSelectContent = forwardRef<
       py={6}
       component="button"
       align="center"
-      c="chatbox-tertiary"
+      c="workspaice-tertiary"
       w={320}
-      className="border-solid border border-chatbox-border-primary rounded-sm cursor-pointer bg-transparent"
+      className="border-solid border border-workspaice-border-primary rounded-sm cursor-pointer bg-transparent"
       onClick={onClick}
     >
       <Text span flex={1} className=" text-left">

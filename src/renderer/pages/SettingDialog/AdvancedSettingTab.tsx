@@ -188,7 +188,7 @@ function ExportAndImport(props: { onCancel: () => void }) {
     data['__exported_items'] = exportItems
     data['__exported_at'] = date.toISOString()
     const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    platform.exporter.exportTextFile(`chatbox-exported-data-${dateStr}.json`, JSON.stringify(data))
+    platform.exporter.exportTextFile(`workspaice-exported-data-${dateStr}.json`, JSON.stringify(data))
   }
   const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const errTip = t('Import failed, unsupported data format')
@@ -326,7 +326,7 @@ export function AnalyticsSetting() {
       <div>
         <p className="opacity-70">
           {t(
-            'Chatbox respects your privacy and only uploads anonymous error data and events when necessary. You can change your preferences at any time in the settings.'
+            'WorkspAIce respects your privacy and only uploads anonymous error data and events when necessary. You can change your preferences at any time in the settings.'
           )}
         </p>
       </div>

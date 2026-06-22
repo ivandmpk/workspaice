@@ -25,7 +25,7 @@ export const SystemAvatar: FC<SystemAvatarProps> = ({ size = 'md', className, ..
       classNames={{
         placeholder: 'border-0 bg-transparent !text-white flex flex-row items-center justify-center',
       }}
-      bg={'chatbox-warning'}
+      bg={'workspaice-warning'}
       {...avatarProps}
     >
       <ScalableIcon icon={IconSettingsFilled} size={iconSize} className="!text-inherit" />
@@ -51,7 +51,7 @@ export const UserAvatar: FC<UserAvatarProps> = ({ size = 'md', avatarKey, classN
       classNames={{
         placeholder: 'border-0 bg-transparent !text-white flex flex-row items-center justify-center',
       }}
-      bg={avatarKey ? undefined : 'chatbox-tertiary'}
+      bg={avatarKey ? undefined : 'workspaice-tertiary'}
       {...avatarProps}
     >
       {avatarKey ? (
@@ -101,9 +101,9 @@ export const AssistantAvatar: FC<AssistantAvatarProps> = ({
             ? undefined
             : sessionType === 'picture'
               ? 'violet'
-              : 'chatbox-brand'
+              : 'workspaice-brand'
       }
-      color={type === 'chat' ? 'chatbox-primary' : 'white'}
+      color={type === 'chat' ? 'workspaice-primary' : 'white'}
       {...avatarProps}
     >
       {avatarKey ? (

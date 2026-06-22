@@ -1,8 +1,8 @@
-# Chatbox Team Sharing
+# WorkspAIce Team Sharing
 
 English | [中文介绍](./README-CN.md)
 
-Chatbox allows your team members to share the resources of the same OpenAI API account without exposing your API KEY.
+WorkspAIce allows your team members to share the resources of the same OpenAI API account without exposing your API KEY.
 
 The following tutorial will help you quickly set up a shared server. It may involve server login, command-line input, etc. If you are not familiar with these operations, you can ask your technical colleague for help or inquire with ChatGPT. Trust me, it's not difficult.
 
@@ -19,7 +19,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
-## 3. Start the Chatbox Shared Server (HTTP)
+## 3. Start the WorkspAIce Shared Server (HTTP)
 
 -   Replace `<YOUR_OPENAI_KEY>` with your OpenAI API KEY.
 -   Run the following command to start the server.
@@ -28,7 +28,7 @@ sh get-docker.sh
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e KEY=<YOUR_OPENAI_KEY> \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 Example:
@@ -37,10 +37,10 @@ Example:
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e KEY=sk-xxxxxxxxxxxxxxxxxxx \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
-## 4. Start the Chatbox Shared Server (HTTPS, recommended)
+## 4. Start the WorkspAIce Shared Server (HTTPS, recommended)
 
 If you have a domain name, you can use HTTPS to start the server, so that all conversation messages are encrypted as ciphertext during network transmission, which is more secure in terms of privacy.
 
@@ -54,7 +54,7 @@ docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e HOST=<YOUR_DOMAIN> \
 -e KEY=<YOUR_OPENAI_KEY> \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 Example:
@@ -62,9 +62,9 @@ Example:
 ```
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
--e HOST=proxy.chatbox.run \
+-e HOST=proxy.workspaice.run \
 -e KEY=sk-xxxxxxxxxxxxxxxxxx \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 ## 5. Share the Server Address
@@ -72,7 +72,7 @@ bensdocker/chatbox-team
 -   If you run with HTTP, the address is `http://<your_server_IP>:80`;
 -   If you run with HTTPS, the address is `https://<your_domain_name>`;
 
-Share the server address with your team members. They only need to fill in this address in the API Host field in Chatbox settings, without filling in the API KEY, to share the OpenAI API resources.
+Share the server address with your team members. They only need to fill in this address in the API Host field in WorkspAIce settings, without filling in the API KEY, to share the OpenAI API resources.
 
 ![](./demo_http.png)
 

@@ -62,14 +62,14 @@ describe('defaults', () => {
   it('chatSessionSettings() returns provider and modelId', () => {
     const result: SessionSettings = chatSessionSettings()
 
-    expect(result.provider).toBe(ModelProviderEnum.ChatboxAI)
-    expect(result.modelId).toBe('chatboxai-4')
+    expect(result.provider).toBe(ModelProviderEnum.OpenAI)
+    expect(result.modelId).toBe('gpt-4o')
   })
 
   it('pictureSessionSettings() returns provider, modelId, dalleStyle, imageGenerateNum', () => {
     const result: SessionSettings = pictureSessionSettings()
 
-    expect(result.provider).toBe(ModelProviderEnum.ChatboxAI)
+    expect(result.provider).toBe(ModelProviderEnum.OpenAI)
     expect(result.modelId).toBe('DALL-E-3')
     expect(result.dalleStyle).toBe('vivid')
     expect(result.imageGenerateNum).toBe(1)

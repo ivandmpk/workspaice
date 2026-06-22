@@ -171,7 +171,7 @@ export function ArtifactWithButtons(props: {
 export function Artifact(props: { htmlCode: string; reloadSign?: number; className?: string }) {
   const { htmlCode, reloadSign, className } = props
   const ref = useRef<HTMLIFrameElement>(null)
-  const iframeOrigin = 'https://artifact-preview.chatboxai.app/preview'
+  const iframeOrigin = 'https://artifact-preview.workspaiceai.app/preview'
 
   const sendIframeMsg = (type: 'html', code: string) => {
     if (!ref.current) {

@@ -1,7 +1,6 @@
 import { getModel } from '@shared/models'
 import type { ModelInterface } from '@shared/models/types'
 import type { Message, Settings } from '@shared/types'
-import { ModelProviderEnum } from '@shared/types'
 import type { ModelDependencies } from '@shared/types/adapters'
 import { getModelSettings } from '@shared/utils/model_settings'
 import type { ModelMessage } from 'ai'
@@ -9,8 +8,7 @@ import pMap from 'p-map'
 import { createModelDependencies } from '@/adapters'
 
 /**
- * Resolve the OCR model based on user settings and license key.
- * User-configured OCR model takes priority; Chatbox AI is the fallback.
+ * Resolve the OCR model from user settings.
  * Returns null if no OCR model is available (caller decides how to handle).
  */
 export function getOCRModel(
@@ -19,9 +17,7 @@ export function getOCRModel(
   dependencies: ModelDependencies
 ): { model: ModelInterface; providerName: string } | null {
   const hasUserOcrModel = !!(globalSettings.ocrModel?.provider && globalSettings.ocrModel?.model)
-  const hasLicenseKey = !!globalSettings.licenseKey
-
-  if (!hasUserOcrModel && !hasLicenseKey) {
+  if (!hasUserOcrModel) {
     return null
   }
 
@@ -35,12 +31,7 @@ export function getOCRModel(
     }
   }
 
-  // Fallback to Chatbox AI built-in OCR model
-  const modelSettings = getModelSettings(globalSettings, ModelProviderEnum.ChatboxAI, 'chatbox-ocr-1')
-  return {
-    model: getModel(modelSettings, globalSettings, configs, dependencies),
-    providerName: 'Chatbox AI',
-  }
+  return null
 }
 
 /**

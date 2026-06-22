@@ -3,9 +3,9 @@
   <a href="README-CN.md">简体中文</a>
 </p>
 
-这里是 Chatbox 社区版的代码仓库，以 GPLv3 许可证开源。
+这里是 WorkspAIce 社区版的代码仓库，以 GPLv3 许可证开源。
 
-[Chatbox 再次开源！](https://github.com/chatboxai/chatbox/issues/2266)
+[WorkspAIce 再次开源！](https://github.com/workspaiceai/workspaice/issues/2266)
 
 我们定期从专业版仓库同步代码到这个仓库，反之亦然。
 
@@ -25,28 +25,28 @@
   </tr>
   <tr style="text-align: center">
     <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-windows'>
+      <a href='https://workspaiceai.app/?c=download-windows'>
         <img src='./statics/windows.png' style="height:24px; width: 24px" />
         <br />
         <b>Setup.exe</b>
       </a>
     </td>
     <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-mac-intel'>
+      <a href='https://workspaiceai.app/?c=download-mac-intel'>
         <img src='./statics/mac.png' style="height:24px; width: 24px" />
         <br />
         <b>Intel</b>
       </a>
     </td>
     <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-mac-aarch'>
+      <a href='https://workspaiceai.app/?c=download-mac-aarch'>
         <img src='./statics/mac.png' style="height:24px; width: 24px" />
         <br />
         <b style="white-space: nowrap;">Apple Silicon</b>
       </a>
     </td>
     <td align="center" valign="middle">
-      <a href='https://chatboxai.app/?c=download-linux'>
+      <a href='https://workspaiceai.app/?c=download-linux'>
         <img src='./statics/linux.png' style="height:24px; width: 24px" />
         <br />
         <b>AppImage</b>
@@ -57,18 +57,18 @@
 
 ### 下载移动端
 
-<a href='https://apps.apple.com/app/chatbox-ai/id6471368056' style='margin-right: 4px'>
+<a href='https://apps.apple.com/app/workspaice-ai/id6471368056' style='margin-right: 4px'>
 <img src='./statics/app_store.webp' style="height:38px;" />
 </a>
-<a href='https://play.google.com/store/apps/details?id=xyz.chatboxapp.chatbox' style='margin-right: 4px'>
+<a href='https://play.google.com/store/apps/details?id=xyz.workspaiceapp.workspaice' style='margin-right: 4px'>
 <img src='./statics/google_play.png' style="height:38px;" />
 </a>
-<a href='https://chatboxai.app/zh/install?download=android_apk' style='margin-right: 4px; display: inline-flex; justify-content: center'>
+<a href='https://workspaiceai.app/zh/install?download=android_apk' style='margin-right: 4px; display: inline-flex; justify-content: center'>
 <img src='./statics/android.png' style="height:28px; display: inline-block" />
 .APK
 </a>
 
-更多信息请访问: [chatboxai.app](https://chatboxai.app/)
+更多信息请访问: [workspaiceai.app](https://workspaiceai.app/)
 
 ---
 
@@ -76,33 +76,33 @@
 <h1 align="center">
 <img src='./statics/icon.png' width='30'>
 <span>
-    Chatbox
+    WorkspAIce
     <span style="font-size:8px; font-weight: normal;">(Community Edition)</span>
 </span>
 </h1>
 <p align="center">
-    <em>Chatbox 是一个 AI 模型桌面客户端，支持 ChatGPT、Claude、Google Gemini、Ollama 等主流模型，适用于 Windows、Mac、Linux、Web、Android 和 iOS 全平台</em>
+    <em>WorkspAIce 是一个 AI 模型桌面客户端，支持 ChatGPT、Claude、Google Gemini、Ollama 等主流模型，适用于 Windows、Mac、Linux、Web、Android 和 iOS 全平台</em>
 </p>
 
 <p align="center">
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
+<a href="https://github.com/workspaiceai/workspaice/releases" target="_blank">
 <img alt="macOS" src="https://img.shields.io/badge/-macOS-black?style=flat-square&logo=apple&logoColor=white" />
 </a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
+<a href="https://github.com/workspaiceai/workspaice/releases" target="_blank">
 <img alt="Windows" src="https://img.shields.io/badge/-Windows-blue?style=flat-square&logo=windows&logoColor=white" />
 </a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
+<a href="https://github.com/workspaiceai/workspaice/releases" target="_blank">
 <img alt="Linux" src="https://img.shields.io/badge/-Linux-yellow?style=flat-square&logo=linux&logoColor=white" />
 </a>
-<a href="https://github.com/chatboxai/chatbox/releases" target="_blank">
-<img alt="下载量" src="https://img.shields.io/github/downloads/chatboxai/chatbox/total.svg?style=flat" />
+<a href="https://github.com/workspaiceai/workspaice/releases" target="_blank">
+<img alt="下载量" src="https://img.shields.io/github/downloads/workspaiceai/workspaice/total.svg?style=flat" />
 </a>
 <a href="https://twitter.com/benn_huang" target="_blank">
 <img alt="Twitter" src="https://img.shields.io/badge/关注-benn_huang-blue?style=flat&logo=Twitter" />
 </a>
 </p>
 
-<a href="https://www.producthunt.com/posts/chatbox?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-chatbox" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="Chatbox - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>
+<a href="https://www.producthunt.com/posts/workspaice?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-workspaice" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="WorkspAIce - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>
 
 <img src="./statics/demo_desktop_1.jpg" alt="应用截图" style="box-shadow: 2px 2px 10px rgba(0,0,0,0.1); border: 1px solid #ddd; border-radius: 8px; width: 700px" />
 
@@ -195,7 +195,7 @@
 1. 从 Github 克隆仓库
 
 ```bash
-git clone https://github.com/chatboxai/chatbox.git
+git clone https://github.com/workspaiceai/workspaice.git
 ```
 
 2. 安装所需的依赖
@@ -224,8 +224,8 @@ npm run package:all
 
 ## Star History
 
-[![星星历史图表](https://api.star-history.com/svg?repos=chatboxai/chatbox&type=Date)](https://star-history.com/#chatboxai/chatbox&Date)
+[![星星历史图表](https://api.star-history.com/svg?repos=workspaiceai/workspaice&type=Date)](https://star-history.com/#workspaiceai/workspaice&Date)
 
 ## 联系方式
 
-[Twitter](https://x.com/ChatboxAI_HQ) | [电子邮件](mailto:hi@chatboxai.com)
+[Twitter](https://x.com/WorkspAIceAI_HQ) | [电子邮件](mailto:hi@workspaiceai.com)

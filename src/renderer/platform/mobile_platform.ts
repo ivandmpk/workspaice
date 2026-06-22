@@ -11,7 +11,7 @@ import type { SessionMetaStorage } from '@/storage/SessionMetaStorage'
 import { SQLiteImageGenerationStorage } from '@/storage/SQLiteImageGenerationStorage'
 import { SQLiteSessionMetaStorage } from '@/storage/SQLiteSessionMetaStorage'
 import { IndexedDBTaskSessionStorage, type TaskSessionStorage } from '@/storage/TaskSessionStorage'
-import { CHATBOX_BUILD_PLATFORM } from '@/variables'
+import { WORKSPAICE_BUILD_PLATFORM } from '@/variables'
 import { getBrowser, getOS } from '../packages/navigator'
 import type { Platform, PlatformType } from './interfaces'
 import type { KnowledgeBaseController } from './knowledge-base/interface'
@@ -44,11 +44,11 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
   // 处理深度链接
   private handleDeepLink(url: string): void {
     try {
-      // 支持 chatbox:// 和 chatbox-dev:// 两种协议（归一化处理）
-      const normalizedUrl = url.replace(/^chatbox-dev:\/\//, 'chatbox://')
+      // 支持 workspaice:// 和 workspaice-dev:// 两种协议（归一化处理）
+      const normalizedUrl = url.replace(/^workspaice-dev:\/\//, 'workspaice://')
       const parsedUrl = new URL(normalizedUrl)
 
-      // 处理 provider 导入链接: chatbox://provider/import?config=<base64-encoded-config>
+      // 处理 provider 导入链接: workspaice://provider/import?config=<base64-encoded-config>
       if (parsedUrl.hostname === 'provider' && parsedUrl.pathname === '/import') {
         const encodedConfig = parsedUrl.searchParams.get('config') || ''
         const path = `/settings/provider?import=${encodeURIComponent(encodedConfig)}`
@@ -56,7 +56,7 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
         return
       }
 
-      // 处理 auth 回调链接: chatbox://auth/callback?ticket_id=xxx&status=success
+      // 处理 auth 回调链接: workspaice://auth/callback?ticket_id=xxx&status=success
       if (parsedUrl.hostname === 'auth' && parsedUrl.pathname === '/callback') {
         // 不需要，实际跳回到 app 后业务hooks useLogin 会处理后续动作
       }
@@ -88,7 +88,7 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
     return (await App.getInfo()).version
   }
   public async getPlatform(): Promise<string> {
-    return CHATBOX_BUILD_PLATFORM
+    return WORKSPAICE_BUILD_PLATFORM
   }
   public async getArch(): Promise<string> {
     return 'arm64'
@@ -204,17 +204,17 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
     try {
       const conf = await this.getConfig()
       window.gtag('config', GAID, {
-        app_name: 'chatbox',
+        app_name: 'workspaice',
         user_id: conf.uuid,
         client_id: conf.uuid,
         app_version: await this.getVersion(),
-        chatbox_platform_type: 'web',
-        chatbox_platform: await this.getPlatform(),
+        workspaice_platform_type: 'web',
+        workspaice_platform: await this.getPlatform(),
         app_platform: await this.getPlatform(),
       })
     } catch (e) {
       window.gtag('config', GAID, {
-        app_name: 'chatbox',
+        app_name: 'workspaice',
       })
       throw e
     }

@@ -1,6 +1,6 @@
 import platform from '@/platform'
 import { authInfoStore } from '@/stores/authInfoStore'
-import { getChatboxOrigin, getWebAuthToken } from './remote'
+import { getWorkspAIceOrigin, getWebAuthToken } from './remote'
 
 const DEFAULT_LOCALE = 'en'
 const LOCALE_ALIASES: Record<string, string> = {
@@ -24,7 +24,7 @@ const SUPPORTED_LOCALES = new Set([
 ])
 
 function normalizeTargetUrl(url: string) {
-  return new URL(url, getChatboxOrigin())
+  return new URL(url, getWorkspAIceOrigin())
 }
 
 function getLocaleFromTargetUrl(url: URL) {

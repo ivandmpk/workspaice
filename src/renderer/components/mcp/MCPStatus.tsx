@@ -6,7 +6,7 @@ import type { FC } from 'react'
 const MCPStatus: FC<{ status: MCPServerStatus | null }> = ({ status }) => {
   if (status?.error) {
     return (
-      <Tooltip label={status.error} withArrow color="chatbox-error" multiline w={260}>
+      <Tooltip label={status.error} withArrow color="workspaice-error" multiline w={260}>
         <div className="rounded-full size-[6.6px] bg-red-500" />
       </Tooltip>
     )

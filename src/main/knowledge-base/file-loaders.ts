@@ -5,7 +5,7 @@ import {
   KNOWLEDGE_BASE_MAX_PARSED_CONTENT_SIZE,
   KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR,
 } from '../../shared/knowledge-base'
-import { ChatboxAIAPIError } from '../../shared/models/errors'
+import { WorkspAIceAIAPIError } from '../../shared/models/errors'
 import { rerank } from '../../shared/models/rerank'
 import type { DocumentParserConfig } from '../../shared/types/settings'
 import { sentry } from '../adapters/sentry'
@@ -18,8 +18,8 @@ const log = getLogger('knowledge-base:file-loaders')
 
 /**
  * Parse error message to extract user-friendly message
- * Handles JSON error responses from Chatbox AI API
- * Uses i18nKey from ChatboxAIAPIError.codeNameMap for known error codes
+ * Handles JSON error responses from WorkspAIce AI API
+ * Uses i18nKey from WorkspAIceAIAPIError.codeNameMap for known error codes
  */
 function parseErrorMessage(errorMessage: string): string {
   // Try to extract error code from JSON error response
@@ -32,9 +32,9 @@ function parseErrorMessage(errorMessage: string): string {
       const parsed = JSON.parse(jsonStr)
       const errorCode = parsed.error?.code
 
-      // Try to get i18nKey from ChatboxAIAPIError.codeNameMap
-      if (errorCode && ChatboxAIAPIError.codeNameMap[errorCode]) {
-        return ChatboxAIAPIError.codeNameMap[errorCode].i18nKey
+      // Try to get i18nKey from WorkspAIceAIAPIError.codeNameMap
+      if (errorCode && WorkspAIceAIAPIError.codeNameMap[errorCode]) {
+        return WorkspAIceAIAPIError.codeNameMap[errorCode].i18nKey
       }
 
       // Fallback to detail or title
@@ -118,9 +118,9 @@ export async function processFileWithMastra(
     })
 
     if (!allChunks || allChunks.length === 0) {
-      // Cloud parsing (chatbox-ai, mineru) resulted in 0 chunks - mark as done (truly empty file)
+      // Cloud parsing (workspaice-ai, mineru) resulted in 0 chunks - mark as done (truly empty file)
       // Local parsing resulted in 0 chunks - mark as failed so user can retry with server parsing
-      if (parserConfig.type === 'chatbox-ai' || parserConfig.type === 'mineru') {
+      if (parserConfig.type === 'workspaice-ai' || parserConfig.type === 'mineru') {
         await db.execute({
           sql: 'UPDATE kb_file SET chunk_count = 0, status = ? WHERE id = ?',
           args: ['done', fileMeta.fileId],
@@ -322,10 +322,10 @@ async function processPendingFiles() {
       }
 
       // Get effective parser config
-      // When useRemoteParsing is true (user clicked "Retry with server parsing"), force use Chatbox AI parser
+      // When useRemoteParsing is true (user clicked "Retry with server parsing"), force use WorkspAIce AI parser
       // This overrides the KB's configured parser to ensure server parsing is used
       const effectiveParserConfig: DocumentParserConfig = useRemoteParsing
-        ? { type: 'chatbox-ai' }
+        ? { type: 'workspaice-ai' }
         : getEffectiveParserConfig(kbParserConfig)
 
       try {

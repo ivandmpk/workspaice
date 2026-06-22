@@ -1,6 +1,6 @@
 {
-  "name": "xyz.chatboxapp.ce",
-  "productName": "xyz.chatboxapp.ce",
+  "name": "xyz.workspaiceapp.ce",
+  "productName": "xyz.workspaiceapp.ce",
   "version": "0.0.1",
   "engines": {
     "node": ">=22.12.0 <25.0.0",
@@ -15,7 +15,7 @@
     "build:main": "electron-vite build",
     "build:preload": "electron-vite build",
     "build:renderer": "electron-vite build",
-    "build:web": "cross-env CHATBOX_BUILD_PLATFORM=web electron-vite build && pnpm run delete-sourcemaps",
+    "build:web": "cross-env WORKSPAICE_BUILD_PLATFORM=web electron-vite build && pnpm run delete-sourcemaps",
     "delete-sourcemaps": "ts-node ./.erb/scripts/delete-source-maps-runner.js",
     "postinstall": "node .erb/scripts/postinstall.cjs",
     "package": "ts-node ./.erb/scripts/clean.js && pnpm run build && electron-builder build --publish never",
@@ -30,7 +30,7 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "dev": "pnpm start",
     "dev:local": "cross-env USE_LOCAL_API=true pnpm start",
-    "dev:web": "cross-env DEV_WEB_ONLY=true CHATBOX_BUILD_PLATFORM=web pnpm start",
+    "dev:web": "cross-env DEV_WEB_ONLY=true WORKSPAICE_BUILD_PLATFORM=web pnpm start",
     "dev:debug": "cross-env MAIN_ARGS=\"--inspect=5858\" pnpm start",
     "start": "electron-vite dev",
     "start:cdp": "electron-vite dev -- --remote-debugging-port=9333",
@@ -46,7 +46,7 @@
     "test:file-conversation": "vitest run test/integration/file-conversation --testTimeout=120000",
     "test:model-provider": "vitest run test/integration/model-provider --testTimeout=120000",
     "eval:session-rag": "node scripts/session-rag-eval/run-session-rag-eval.mjs",
-    "eval:session-rag:chatbox": "node scripts/session-rag-eval/run-chatbox-flow-eval.mjs",
+    "eval:session-rag:workspaice": "node scripts/session-rag-eval/run-workspaice-flow-eval.mjs",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --write",
     "check": "npx tsc --noEmit",
@@ -54,8 +54,8 @@
     "check:biome": "biome check",
     "check:ci": "biome ci",
     "mobile:sync": "pnpm run mobile:sync:ios && pnpm run mobile:sync:android",
-    "mobile:sync:ios": "cross-env CHATBOX_BUILD_TARGET=mobile_app CHATBOX_BUILD_PLATFORM=ios electron-vite build && pnpm run delete-sourcemaps && npx cap sync ios",
-    "mobile:sync:android": "cross-env CHATBOX_BUILD_TARGET=mobile_app CHATBOX_BUILD_PLATFORM=android electron-vite build && pnpm run delete-sourcemaps && npx cap sync android",
+    "mobile:sync:ios": "cross-env WORKSPAICE_BUILD_TARGET=mobile_app WORKSPAICE_BUILD_PLATFORM=ios electron-vite build && pnpm run delete-sourcemaps && npx cap sync ios",
+    "mobile:sync:android": "cross-env WORKSPAICE_BUILD_TARGET=mobile_app WORKSPAICE_BUILD_PLATFORM=android electron-vite build && pnpm run delete-sourcemaps && npx cap sync android",
     "mobile:ios": "pnpm run mobile:sync:ios && npx cap open ios",
     "mobile:android": "pnpm run mobile:sync:android && npx cap open android",
     "mobile:assets": "npx capacitor-assets generate --ios --android",
@@ -66,7 +66,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chatboxai/chatbox.git"
+    "url": "https://github.com/workspaiceai/workspaice.git"
   },
   "keywords": [],
   "author": {

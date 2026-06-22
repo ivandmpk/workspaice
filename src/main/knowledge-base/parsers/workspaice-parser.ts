@@ -3,15 +3,12 @@ import { parseFileRemotely } from '../remote-file-parser'
 import type { DocumentParser, ParserFileMeta } from './types'
 
 /**
- * Chatbox AI document parser
- * Uses Chatbox AI backend for cloud-based document parsing
- * Requires user to be logged in (has valid license key)
+ * Hosted document parsing is disabled in the local-only build.
  */
-export class ChatboxParser implements DocumentParser {
-  readonly type: DocumentParserType = 'chatbox-ai'
+export class WorkspAIceParser implements DocumentParser {
+  readonly type: DocumentParserType = 'workspaice-ai'
 
   async parse(filePath: string, meta: ParserFileMeta): Promise<string> {
-    // Use the existing remote file parser implementation
     return await parseFileRemotely(filePath, meta.filename, meta.mimeType)
   }
 }

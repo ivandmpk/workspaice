@@ -229,7 +229,7 @@ const InlineCode = memo((props: { children: string; className?: string }) => {
   return (
     <code
       className={clsx(
-        'bg-chatbox-background-secondary border border-solid border-chatbox-border-secondary rounded-sm px-1 py-0.5 mx-1',
+        'bg-workspaice-background-secondary border border-solid border-workspaice-border-secondary rounded-sm px-1 py-0.5 mx-1',
         className
       )}
     >
@@ -507,7 +507,7 @@ const BlockCode = memo(
         <Flex
           justify="space-between"
           className={clsx(
-            'p-xs bg-chatbox-background-secondary rounded-t-md border border-solid border-[var(--chatbox-border-primary)] select-none',
+            'p-xs bg-workspaice-background-secondary rounded-t-md border border-solid border-[var(--workspaice-border-primary)] select-none',
             !needCollapse || !collapsed ? 'sticky top-0 z-10' : ''
           )}
         >
@@ -515,9 +515,9 @@ const BlockCode = memo(
             {generating ? (
               <Loader size={10} />
             ) : (
-              <ScalableIcon size={16} icon={icon} color="var(--chatbox-tint-tertiary)" />
+              <ScalableIcon size={16} icon={icon} color="var(--workspaice-tint-tertiary)" />
             )}
-            <Text span c="chatbox-tertiary" fw="600" className="font-mono">
+            <Text span c="workspaice-tertiary" fw="600" className="font-mono">
               {languageName}
             </Text>
           </Flex>
@@ -527,7 +527,7 @@ const BlockCode = memo(
               <Tooltip label={t('copy')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color={copied ? 'chatbox-success' : 'chatbox-tertiary'}
+                  color={copied ? 'workspaice-success' : 'workspaice-tertiary'}
                   size={20}
                   onClick={onClickCopy}
                 >
@@ -538,7 +538,7 @@ const BlockCode = memo(
 
             {isRenderableCode && (
               <Tooltip label={t('Preview')} withArrow openDelay={1000}>
-                <ActionIcon variant="transparent" color="chatbox-tertiary" size={20} onClick={onClickArtifact}>
+                <ActionIcon variant="transparent" color="workspaice-tertiary" size={20} onClick={onClickArtifact}>
                   <IconPlayerPlayFilled />
                 </ActionIcon>
               </Tooltip>
@@ -548,7 +548,7 @@ const BlockCode = memo(
               <Tooltip label={t('Publish Webpage')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-tertiary"
+                  color="workspaice-tertiary"
                   size={20}
                   onClick={onClickDeploy}
                   disabled={deploying}
@@ -562,7 +562,7 @@ const BlockCode = memo(
               <Tooltip label={collapsed ? t('Expand') : t('Collapse')} withArrow openDelay={1000}>
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-tertiary"
+                  color="workspaice-tertiary"
                   size={20}
                   onClick={onClickCollapse}
                   className={clsx('transition-transform ease-linear', !collapsed ? 'rotate-90' : '')}
@@ -576,7 +576,7 @@ const BlockCode = memo(
 
         <Stack
           className={clsx(
-            'border border-t-0 border-solid border-[var(--chatbox-border-primary)] rounded-b-md',
+            'border border-t-0 border-solid border-[var(--workspaice-border-primary)] rounded-b-md',
             needCollapse && collapsed && generating ? 'h-[10rem] overflow-hidden justify-end' : '',
             needCollapse && collapsed && !generating ? 'h-[10rem] overflow-auto' : ''
           )}

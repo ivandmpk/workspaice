@@ -4,7 +4,7 @@ import {
   AIProviderNoImplementedPaintError,
   ApiError,
   BaseError,
-  ChatboxAIAPIError,
+  WorkspAIceAIAPIError,
   NetworkError,
   OCRError,
 } from './errors'
@@ -80,14 +80,14 @@ describe('OCRError', () => {
   })
 })
 
-describe('ChatboxAIAPIError', () => {
+describe('WorkspAIceAIAPIError', () => {
   it('constructor sets detail and code from detail', () => {
     const detail = {
       name: 'custom_error',
       code: 29999,
       i18nKey: 'custom.i18n.key',
     }
-    const error = new ChatboxAIAPIError('service failed', detail, 'req-123')
+    const error = new WorkspAIceAIAPIError('service failed', detail, 'req-123')
 
     expect(error.message).toBe('service failed')
     expect(error.detail).toEqual(detail)
@@ -95,10 +95,10 @@ describe('ChatboxAIAPIError', () => {
     expect(error.requestId).toBe('req-123')
   })
 
-  it('fromCodeName returns ChatboxAIAPIError for known codename', () => {
-    const error = ChatboxAIAPIError.fromCodeName('quota exceeded', 'token_quota_exhausted', 'req-123')
+  it('fromCodeName returns WorkspAIceAIAPIError for known codename', () => {
+    const error = WorkspAIceAIAPIError.fromCodeName('quota exceeded', 'token_quota_exhausted', 'req-123')
 
-    expect(error).toBeInstanceOf(ChatboxAIAPIError)
+    expect(error).toBeInstanceOf(WorkspAIceAIAPIError)
     expect(error?.message).toBe('quota exceeded')
     expect(error?.code).toBe(10004)
     expect(error?.detail.name).toBe('token_quota_exhausted')
@@ -106,19 +106,19 @@ describe('ChatboxAIAPIError', () => {
   })
 
   it('fromCodeName returns null for unknown codename', () => {
-    const error = ChatboxAIAPIError.fromCodeName('failed', 'not_a_real_codename')
+    const error = WorkspAIceAIAPIError.fromCodeName('failed', 'not_a_real_codename')
 
     expect(error).toBeNull()
   })
 
   it('fromCodeName returns null for empty codename', () => {
-    const error = ChatboxAIAPIError.fromCodeName('failed', '')
+    const error = WorkspAIceAIAPIError.fromCodeName('failed', '')
 
     expect(error).toBeNull()
   })
 
   it('getDetail returns detail for known code', () => {
-    const detail = ChatboxAIAPIError.getDetail(10004)
+    const detail = WorkspAIceAIAPIError.getDetail(10004)
 
     expect(detail).not.toBeNull()
     expect(detail?.name).toBe('token_quota_exhausted')
@@ -127,21 +127,21 @@ describe('ChatboxAIAPIError', () => {
   })
 
   it('getDetail returns null for unknown code', () => {
-    const detail = ChatboxAIAPIError.getDetail(99999)
+    const detail = WorkspAIceAIAPIError.getDetail(99999)
 
     expect(detail).toBeNull()
   })
 
   it('getDetail returns null for 0 or falsy code', () => {
-    expect(ChatboxAIAPIError.getDetail(0)).toBeNull()
-    expect(ChatboxAIAPIError.getDetail(Number.NaN)).toBeNull()
+    expect(WorkspAIceAIAPIError.getDetail(0)).toBeNull()
+    expect(WorkspAIceAIAPIError.getDetail(Number.NaN)).toBeNull()
   })
 })
 
 describe('Error inheritance', () => {
   it('all exported errors are instanceof Error and BaseError', () => {
-    const chatboxDetail = ChatboxAIAPIError.getDetail(10004)
-    expect(chatboxDetail).not.toBeNull()
+    const workspaiceDetail = WorkspAIceAIAPIError.getDetail(10004)
+    expect(workspaiceDetail).not.toBeNull()
 
     const errors = [
       new BaseError('base'),
@@ -150,7 +150,7 @@ describe('Error inheritance', () => {
       new AIProviderNoImplementedPaintError('ProviderA'),
       new AIProviderNoImplementedChatError('ProviderB'),
       new OCRError('ocr-provider', new Error('ocr failed')),
-      new ChatboxAIAPIError('chatbox', chatboxDetail!),
+      new WorkspAIceAIAPIError('workspaice', workspaiceDetail!),
     ]
 
     for (const error of errors) {

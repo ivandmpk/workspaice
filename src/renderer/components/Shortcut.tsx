@@ -190,7 +190,7 @@ export function ShortcutConfig(props: {
     return false
   }
   return (
-    <Box className="border border-solid  py-xs px-md rounded-xs border-chatbox-border-primary">
+    <Box className="border border-solid  py-xs px-md rounded-xs border-workspaice-border-primary">
       <Table>
         <Table.Thead>
           <Table.Tr>
@@ -237,7 +237,7 @@ function ShortcutText(props: { shortcut: string; isConflict?: boolean; className
     return <span className={`px-2 py-0.5 text-xs ${className || ''}`}>{t('None')}</span>
   }
   return (
-    <Flex align="center" component="span" className={`py-0.5 text-xs ${className || ''}`} c="chatbox-error">
+    <Flex align="center" component="span" className={`py-0.5 text-xs ${className || ''}`} c="workspaice-error">
       <Keys keys={shortcut.split('+')} />
       {isConflict && <ScalableIcon icon={IconAlertHexagon} size={16} />}
     </Flex>

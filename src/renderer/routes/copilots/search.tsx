@@ -63,7 +63,7 @@ function CopilotSearch() {
       )}
 
       <Stack gap="md">
-        <Text>{t('Chatbox Featured')}</Text>
+        <Text>{t('WorkspAIce Featured')}</Text>
 
         {isLoading && (
           <div className="py-12 text-center">
@@ -95,7 +95,7 @@ function CopilotSearch() {
           <Flex justify="center" className="pt-sm">
             <Button
               variant="outline"
-              color="chatbox-brand"
+              color="workspaice-brand"
               size="sm"
               onClick={() => fetchNextPage()}
               loading={isFetchingNextPage}

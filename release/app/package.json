@@ -1,12 +1,12 @@
 {
-  "name": "xyz.chatboxapp.ce",
-  "productName": "xyz.chatboxapp.ce",
+  "name": "xyz.workspaiceapp.ce",
+  "productName": "xyz.workspaiceapp.ce",
   "version": "1.21.1",
   "description": "A desktop client for multiple cutting-edge AI models",
   "author": {
     "name": "Mediocre Company",
-    "email": "hi@chatboxai.com",
-    "url": "https://github.com/chatboxai"
+    "email": "hi@workspaiceai.com",
+    "url": "https://github.com/workspaiceai"
   },
   "main": "./dist/main/main.js",
   "scripts": {

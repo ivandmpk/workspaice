@@ -1,11 +1,11 @@
 # Provider Config Import - Manual Test Cases
 
-This document contains test configurations for manually verifying the provider config import functionality in Chatbox.
+This document contains test configurations for manually verifying the provider config import functionality in WorkspAIce.
 
 ## How to Test
 
 1. Copy any of the JSON configurations below
-2. In Chatbox, navigate to Settings → Providers
+2. In WorkspAIce, navigate to Settings → Providers
 3. Click "Import from Clipboard" button
 4. Verify the import results match the expected behavior
 
@@ -183,11 +183,11 @@ eyJpZCI6Im1pbmltYWwtcHJvdmlkZXIiLCJuYW1lIjoiTWluaW1hbCBQcm92aWRlciIsInR5cGUiOiJv
 
 **Deep Link URL:**
 ```
-chatbox://provider/import?config=eyJpZCI6Im1pbmltYWwtcHJvdmlkZXIiLCJuYW1lIjoiTWluaW1hbCBQcm92aWRlciIsInR5cGUiOiJvcGVuYWkiLCJzZXR0aW5ncyI6eyJhcGlIb3N0IjoiaHR0cHM6Ly9hcGkubWluaW1hbC5jb20ifX0=
+workspaice://provider/import?config=eyJpZCI6Im1pbmltYWwtcHJvdmlkZXIiLCJuYW1lIjoiTWluaW1hbCBQcm92aWRlciIsInR5cGUiOiJvcGVuYWkiLCJzZXR0aW5ncyI6eyJhcGlIb3N0IjoiaHR0cHM6Ly9hcGkubWluaW1hbC5jb20ifX0=
 ```
 
 **Expected Result:**
-- ✅ Deep link opens Chatbox
+- ✅ Deep link opens WorkspAIce
 - Import dialog shows with decoded config
 - Same result as manual clipboard import
 
@@ -330,7 +330,7 @@ To create Base64 encoded configs for deep link testing:
 // Encode
 const config = { /* your config object */ };
 const encoded = btoa(JSON.stringify(config));
-console.log(`chatbox://provider/import?config=${encoded}`);
+console.log(`workspaice://provider/import?config=${encoded}`);
 
 // Decode
 const encoded = "your-base64-string";
@@ -342,6 +342,6 @@ console.log(decoded);
 
 - The `isCustom` field is automatically added to custom providers during import
 - Provider IDs must be unique
-- Built-in provider IDs: chatbox-ai, openai, azure, chatglm-6b, claude, gemini, ollama, groq, deepseek, siliconflow, volcengine, mistral-ai, lm-studio, perplexity, xAI
+- Built-in provider IDs: workspaice-ai, openai, azure, chatglm-6b, claude, gemini, ollama, groq, deepseek, siliconflow, volcengine, mistral-ai, lm-studio, perplexity, xAI
 - Model capabilities: vision, reasoning, tool_use
 - Model types: chat, embedding, rerank

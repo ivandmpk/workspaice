@@ -5,7 +5,7 @@ import storage, { StorageKey } from '../../storage'
 // export const configVersionAtom = atomWithStorage<number>(StorageKey.ConfigVersion, 0, storage) // Keep commented out if original was
 
 // 远程配置
-export const remoteConfigAtom = atomWithStorage<{ setting_chatboxai_first?: boolean; current_version?: string }>(
+export const remoteConfigAtom = atomWithStorage<{ setting_workspaiceai_first?: boolean; current_version?: string }>(
   StorageKey.RemoteConfig,
   {},
   storage

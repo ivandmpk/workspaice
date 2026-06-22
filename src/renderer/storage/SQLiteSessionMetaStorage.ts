@@ -7,7 +7,7 @@ import {
 import type { SessionMetaPage, SessionMetaRecord } from '@shared/types'
 import { type SessionMetaStorage, sortSessionRecords } from './SessionMetaStorage'
 
-const DB_NAME = 'chatbox-session-meta'
+const DB_NAME = 'workspaice-session-meta'
 
 function safeJsonParse(value: string | null | undefined): unknown {
   if (!value) return undefined

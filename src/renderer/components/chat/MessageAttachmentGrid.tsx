@@ -193,7 +193,7 @@ export function MessageAttachmentGrid({ files, links, align = 'start' }: Message
       {shouldCollapse && (
         <button
           type="button"
-          className="flex items-center gap-1 mt-1 ml-auto px-2 py-0.5 text-xs text-chatbox-tertiary hover:text-chatbox-secondary bg-transparent border-0 cursor-pointer transition-colors"
+          className="flex items-center gap-1 mt-1 ml-auto px-2 py-0.5 text-xs text-workspaice-tertiary hover:text-workspaice-secondary bg-transparent border-0 cursor-pointer transition-colors"
           onClick={() => setExpanded(!expanded)}
         >
           {expanded ? (

@@ -59,7 +59,7 @@ export const defaultSessionsForEN: Session[] = [
     id: 'e22ab364-4681-4e24-aaba-461ed0fccfd3',
     name: 'Travel Guide (Example)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/travel.png',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/travel.png',
     messages: [
       {
         id: 'a639e972-10b7-4a67-8f3d-bf46e1e94c68',
@@ -82,13 +82,13 @@ export const defaultSessionsForEN: Session[] = [
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:24',
+    copilotId: 'workspaice-featured:24',
   },
   {
     id: '55d92e88-02af-4c3b-a378-aa0a1970abb1',
     name: 'Social Media Influencer (Example)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/twitter.png',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/twitter.png',
     messages: [
       {
         id: 'f8f341f4-9a13-448d-becd-b8d07c31f8dd',
@@ -98,26 +98,26 @@ export const defaultSessionsForEN: Session[] = [
       },
       {
         id: 'e99f80e0-b5a4-4a4d-954e-9ad20c8465e7',
-        content: 'Tweet out to let everyone know: The latest version of Chatbox has been released',
+        content: 'Tweet out to let everyone know: The latest version of WorkspAIce has been released',
         role: 'user' as const,
       },
       {
         id: 'eb6218ad-439d-4e15-847b-0382f844f96e',
         content:
-          '"Exciting news! The latest version of Chatbox has just been released. Get ready to experience amazing features and seamless AI conversations. Upgrade now and unleash your productivity potential! #Chatbox #MessagingApp #Upgrade"',
+          '"Exciting news! The latest version of WorkspAIce has just been released. Get ready to experience amazing features and seamless AI conversations. Upgrade now and unleash your productivity potential! #WorkspAIce #MessagingApp #Upgrade"',
         role: 'assistant' as const,
         model: 'unknown',
         generating: false,
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:33',
+    copilotId: 'workspaice-featured:33',
   },
   {
     id: '35df5a96-b612-406a-985b-3ab4d2c481ff',
     name: 'Software Developer (Example)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/programmer.png',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/programmer.png',
     messages: [
       {
         id: 'a700be6c-cbdd-43a3-b572-49e7a921c059',
@@ -140,13 +140,13 @@ export const defaultSessionsForEN: Session[] = [
       },
     ].map(migrateMessage),
     starred: true,
-    copilotId: 'chatbox-featured:35',
+    copilotId: 'workspaice-featured:35',
   },
   {
     id: '776eac23-7b4a-40da-91cd-f233bb4742ed',
     name: 'Translator (Example)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/translator.jpeg',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/translator.jpeg',
     messages: [
       {
         id: '4f609d56-5e6a-40b7-8e32-7b3ba8a9a990',
@@ -204,7 +204,7 @@ export const defaultSessionsForEN: Session[] = [
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:56',
+    copilotId: 'workspaice-featured:56',
   },
 ]
 
@@ -213,7 +213,7 @@ export const defaultSessionsForCN: Session[] = [
     id: '81cfc426-48b4-4a13-ad42-bfcfc4544299',
     name: '小红书文案生成器 (示例)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/xhs.webp',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/xhs.webp',
     messages: [
       {
         id: '7a0de212-2790-49dd-a47a-b1cf67cfb581',
@@ -222,26 +222,26 @@ export const defaultSessionsForCN: Session[] = [
       },
       {
         id: '49deeb2b-db25-462e-9886-ff94efca70d2',
-        content: 'Chatbox 最新版本发布啦',
+        content: 'WorkspAIce 最新版本发布啦',
         role: 'user' as const,
       },
       {
         id: '014f9bf6-a164-4866-87d9-558db3acbef9',
         content:
-          '小仙女们，Chatbox 又双叒叕更新啦！这次版本新增了好多好多小细节哦，让我们快来看看吧~✨✨✨\n\n首先，Chatbox 在此次更新中为大家加入了许多优化体验！让聊天变得更加愉快、更加流畅。而且还有一些小搭档的出现，帮助你更高效地完成工作🔥🔥🔥\n\n此外，Chatbox 为大家特别准备了一个新的 AI 服务：Chatbox AI，可以直接使用哦，再也不用折腾 API KEY 和技术术语啦💗💗💗💗\n\n最后，记得分享和转发这篇笔记让更多小伙伴们一起使用，分享快乐哦😁😁😁😁\n\n快来下载最新版的 Chatbox，开启与小伙伴们的新生活吧！\n💬 #Chatbox新版本 #AI神器 #人生苦短我用Chatbox#',
+          '小仙女们，WorkspAIce 又双叒叕更新啦！这次版本新增了好多好多小细节哦，让我们快来看看吧~✨✨✨\n\n首先，WorkspAIce 在此次更新中为大家加入了许多优化体验！让聊天变得更加愉快、更加流畅。而且还有一些小搭档的出现，帮助你更高效地完成工作🔥🔥🔥\n\n此外，WorkspAIce 为大家特别准备了一个新的 AI 服务：WorkspAIce AI，可以直接使用哦，再也不用折腾 API KEY 和技术术语啦💗💗💗💗\n\n最后，记得分享和转发这篇笔记让更多小伙伴们一起使用，分享快乐哦😁😁😁😁\n\n快来下载最新版的 WorkspAIce，开启与小伙伴们的新生活吧！\n💬 #WorkspAIce新版本 #AI神器 #人生苦短我用WorkspAIce#',
         role: 'assistant' as const,
         model: 'unknown',
         generating: false,
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:7',
+    copilotId: 'workspaice-featured:7',
   },
   {
     id: '8732ec08-b23c-4b5e-8f65-d63d808f970f',
     name: '夸夸机 (示例)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/9fa8f1eb09e717d110d614d7474cbc591381206547520499117.gif',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/9fa8f1eb09e717d110d614d7474cbc591381206547520499117.gif',
     messages: [
       {
         id: '2045db61-b350-43b1-b3f2-442d68d379aa',
@@ -264,13 +264,13 @@ export const defaultSessionsForCN: Session[] = [
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:23',
+    copilotId: 'workspaice-featured:23',
   },
   {
     id: '3e091ac6-ebfa-42c9-b125-c67ac2d45ee1',
     name: '翻译助手 (示例)',
     type: 'chat',
-    picUrl: 'https://static.chatboxai.app/copilot-avatar/translator.jpeg',
+    picUrl: 'https://static.workspaiceai.app/copilot-avatar/translator.jpeg',
     messages: [
       {
         id: 'ed9b9e74-1715-446e-b3c1-bed565c4878c',
@@ -292,242 +292,242 @@ export const defaultSessionsForCN: Session[] = [
       },
     ].map(migrateMessage),
     starred: false,
-    copilotId: 'chatbox-featured:21',
+    copilotId: 'workspaice-featured:21',
   },
   ...defaultSessionsForEN,
 ]
 
 export const imageCreatorSessionForCN: Session = {
-  id: 'chatbox-chat-demo-image-creator',
+  id: 'workspaice-chat-demo-image-creator',
   name: 'Image Creator (Example)',
   type: 'picture',
   starred: true,
   settings: {
     dalleStyle: 'vivid',
-    provider: ModelProviderEnum.ChatboxAI,
+    provider: ModelProviderEnum.OpenAI,
     modelId: 'DALL-E-3',
   },
   messages: [
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-1',
+      id: 'workspaice-chat-demo-image-creator-message-id-1',
       role: 'system' as const,
-      content: `Hi！我是 Chatbox Image Creator，“无情”的图片制造机。我可以根据你的描述生成精美图片，只要你能想象得到，我就能创造出来——迷人的风景、生动的角色、App 图标、或者抽象的构思……
+      content: `Hi！我是 WorkspAIce Image Creator，“无情”的图片制造机。我可以根据你的描述生成精美图片，只要你能想象得到，我就能创造出来——迷人的风景、生动的角色、App 图标、或者抽象的构思……
 
 (๑•́ ₃ •̀๑) 额…我是一个有点自闭的机器人，所以**请直接告诉我你想要图片的文字描述**，我会集中我所有的像素去实现你的想象。
 
 现在请发挥你的想象力吧！`,
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-2',
+      id: 'workspaice-chat-demo-image-creator-message-id-2',
       role: 'user' as const,
       content: '美人鱼主题的贺卡',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-3',
+      id: 'workspaice-chat-demo-image-creator-message-id-3',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/card1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/card2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/card3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-4',
+      id: 'workspaice-chat-demo-image-creator-message-id-4',
       role: 'user' as const,
       content: '太空版泰坦尼克号的电影海报',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-5',
+      id: 'workspaice-chat-demo-image-creator-message-id-5',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/movie1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/movie2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/movie3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-6',
+      id: 'workspaice-chat-demo-image-creator-message-id-6',
       role: 'user' as const,
       content: '连环画，爱吃苹果的超级英雄与邪恶医生',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-7',
+      id: 'workspaice-chat-demo-image-creator-message-id-7',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/comic1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/comic2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/comic3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-8',
+      id: 'workspaice-chat-demo-image-creator-message-id-8',
       role: 'user' as const,
       content: '聊天 APP 的 Icon 图标',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-9',
+      id: 'workspaice-chat-demo-image-creator-message-id-9',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/app1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/app2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/app3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-10',
+      id: 'workspaice-chat-demo-image-creator-message-id-10',
       role: 'user' as const,
       content: '夜之城的女孩，日本动漫，赛博朋克风格',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-11',
+      id: 'workspaice-chat-demo-image-creator-message-id-11',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/girl1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/girl2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/girl3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-12',
+      id: 'workspaice-chat-demo-image-creator-message-id-12',
       role: 'user' as const,
       content: '一只可爱的卡通猫咪',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-13',
+      id: 'workspaice-chat-demo-image-creator-message-id-13',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/cat1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/cat2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/cat3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat3.png' },
       ],
     },
   ].map(migrateMessage),
 }
 
 export const imageCreatorSessionForEN: Session = {
-  id: 'chatbox-chat-demo-image-creator',
+  id: 'workspaice-chat-demo-image-creator',
   name: 'Image Creator (Example)',
   type: 'picture',
   starred: true,
   settings: {
     dalleStyle: 'vivid',
-    provider: ModelProviderEnum.ChatboxAI,
+    provider: ModelProviderEnum.OpenAI,
     modelId: 'DALL-E-3',
   },
   messages: [
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-1',
+      id: 'workspaice-chat-demo-image-creator-message-id-1',
       role: 'system' as const,
-      content: `Hi! I'm Chatbox Image Creator, your artistic AI companion dedicated to converting your words into striking visuals. If you can dream it, I can create it—from enchanting landscapes, dynamic characters, app icons to the abstract and beyond.
+      content: `Hi! I'm WorkspAIce Image Creator, your artistic AI companion dedicated to converting your words into striking visuals. If you can dream it, I can create it—from enchanting landscapes, dynamic characters, app icons to the abstract and beyond.
 
 I'm a quiet robot, just **simply tell me the description of the image you have in mind**, and I'll focus all my pixels into crafting your vision.
 
 Let's make art!`,
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-2',
+      id: 'workspaice-chat-demo-image-creator-message-id-2',
       role: 'user' as const,
       content: 'A mermaid-themed greeting card.',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-3',
+      id: 'workspaice-chat-demo-image-creator-message-id-3',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/card1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/card2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/card3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/card3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-4',
+      id: 'workspaice-chat-demo-image-creator-message-id-4',
       role: 'user' as const,
       content: 'A movie poster of the Titanic in space.',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-5',
+      id: 'workspaice-chat-demo-image-creator-message-id-5',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/movie1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/movie2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/movie3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/movie3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-6',
+      id: 'workspaice-chat-demo-image-creator-message-id-6',
       role: 'user' as const,
       content: 'Comic strip of a superhero who loves eating apples battling an evil doctor.',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-7',
+      id: 'workspaice-chat-demo-image-creator-message-id-7',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/comic1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/comic2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/comic3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/comic3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-8',
+      id: 'workspaice-chat-demo-image-creator-message-id-8',
       role: 'user' as const,
       content: 'Icon for a chat app',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-9',
+      id: 'workspaice-chat-demo-image-creator-message-id-9',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/app1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/app2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/app3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/app3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-10',
+      id: 'workspaice-chat-demo-image-creator-message-id-10',
       role: 'user' as const,
       content: 'A girl in the city of night, Japanese anime, cyberpunk style.',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-11',
+      id: 'workspaice-chat-demo-image-creator-message-id-11',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/girl1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/girl2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/girl3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/girl3.png' },
       ],
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-12',
+      id: 'workspaice-chat-demo-image-creator-message-id-12',
       role: 'user' as const,
       content: 'A cute cartoon kitty.',
     },
     {
-      id: 'chatbox-chat-demo-image-creator-message-id-13',
+      id: 'workspaice-chat-demo-image-creator-message-id-13',
       role: 'assistant' as const,
       content: '',
       pictures: [
-        { url: 'https://download.chatboxai.app/image-demo/cat1.png' },
-        { url: 'https://download.chatboxai.app/image-demo/cat2.png' },
-        { url: 'https://download.chatboxai.app/image-demo/cat3.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat1.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat2.png' },
+        { url: 'https://download.workspaiceai.app/image-demo/cat3.png' },
       ],
     },
   ].map(migrateMessage),
 }
 
 export const artifactSessionCN: Session = {
-  id: 'chatbox-chat-demo-artifact-1-cn',
+  id: 'workspaice-chat-demo-artifact-1-cn',
   name: '贪吃蛇(Artifact Example)',
   type: 'chat',
-  picUrl: 'https://download.chatboxai.app/image-demo/snake_game.png',
+  picUrl: 'https://download.workspaiceai.app/image-demo/snake_game.png',
   messages: [
     {
       id: '0104fabe-564a-4b99-b9e3-24c34a6805b2',
@@ -555,8 +555,8 @@ export const artifactSessionCN: Session = {
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -578,8 +578,8 @@ export const artifactSessionCN: Session = {
       generating: false,
       wordCount: 1303,
       tokenCount: 2973,
-      aiProvider: 'chatbox-ai',
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai',
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 3165,
     },
@@ -589,10 +589,10 @@ export const artifactSessionCN: Session = {
 }
 
 export const artifactSessionEN: Session = {
-  id: 'chatbox-chat-demo-artifact-1-en',
+  id: 'workspaice-chat-demo-artifact-1-en',
   name: 'Snake Game (Artifact Example)',
   type: 'chat',
-  picUrl: 'https://download.chatboxai.app/image-demo/snake_game.png',
+  picUrl: 'https://download.workspaiceai.app/image-demo/snake_game.png',
   messages: [
     {
       id: '0104fabe-564a-4b99-b9e3-24c34a6805b2',
@@ -620,8 +620,8 @@ export const artifactSessionEN: Session = {
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -643,8 +643,8 @@ export const artifactSessionEN: Session = {
       generating: false,
       wordCount: 1303,
       tokenCount: 2973,
-      aiProvider: 'chatbox-ai',
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai',
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 3165,
     },
@@ -657,7 +657,7 @@ export const mermaidSessionEN: Session = {
   id: 'mermaid-demo-1-en',
   name: 'ChartWhiz',
   type: 'chat',
-  picUrl: 'https://download.chatboxai.app/image-demo/chartwhiz.png',
+  picUrl: 'https://download.workspaiceai.app/image-demo/chartwhiz.png',
   messages: [
     {
       id: '0001fabe-564a-4b99-b9e3-24c34a6805b2',
@@ -723,8 +723,8 @@ If you need more details on any specific part of the TCP protocol or its practic
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -776,8 +776,8 @@ Understanding the normal distribution is crucial for many statistical techniques
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -832,8 +832,8 @@ By focusing on these key areas and progressively building your skills, you can w
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -846,7 +846,7 @@ export const mermaidSessionCN: Session = {
   id: 'mermaid-demo-1-cn',
   name: '做图表',
   type: 'chat',
-  picUrl: 'https://download.chatboxai.app/image-demo/chartwhiz.png',
+  picUrl: 'https://download.workspaiceai.app/image-demo/chartwhiz.png',
   messages: [
     {
       id: '0011fabe-564a-4b99-b9e3-24c34a6805b2',
@@ -912,8 +912,8 @@ sequenceDiagram
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -965,8 +965,8 @@ xychart-beta
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },
@@ -1021,8 +1021,8 @@ mindmap
       generating: false,
       wordCount: 559,
       tokenCount: 1119,
-      aiProvider: 'chatbox-ai' as any,
-      model: 'Chatbox AI 4',
+      aiProvider: 'workspaice-ai' as any,
+      model: 'WorkspAIce AI 4',
       status: [],
       tokensUsed: 1165,
     },

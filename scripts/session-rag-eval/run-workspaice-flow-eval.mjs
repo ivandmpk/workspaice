@@ -7,9 +7,9 @@ import path from 'node:path'
 import process from 'node:process'
 import { _electron } from 'playwright'
 
-const DEFAULT_FIXTURES_REPO = '../../chatbox-session-rag-eval-fixtures'
+const DEFAULT_FIXTURES_REPO = '../../workspaice-session-rag-eval-fixtures'
 const DEFAULT_CASE_ID = 'long-citrine-threshold'
-const DEFAULT_CONFIG_PATH = path.join(os.homedir(), 'Library/Application Support/xyz.chatboxapp.app/config.json')
+const DEFAULT_CONFIG_PATH = path.join(os.homedir(), 'Library/Application Support/xyz.workspaiceapp.app/config.json')
 
 function parseArgs(argv) {
   const args = {
@@ -64,18 +64,18 @@ function getTurns(testCase) {
 }
 
 async function seedUserData(configPath) {
-  const userDataDir = await fs.mkdtemp(path.join(os.tmpdir(), 'chatbox-session-rag-eval-'))
-  const sessionRagDbDir = await fs.mkdtemp(path.join(os.tmpdir(), 'chatbox-session-rag-eval-db-'))
+  const userDataDir = await fs.mkdtemp(path.join(os.tmpdir(), 'workspaice-session-rag-eval-'))
+  const sessionRagDbDir = await fs.mkdtemp(path.join(os.tmpdir(), 'workspaice-session-rag-eval-db-'))
   const config = await readJson(configPath)
   config.settings = config.settings || {}
   config.settings.defaultChatModel = config.settings.defaultChatModel || {
-    provider: 'chatbox-ai',
-    model: config.settings.licenseDetail?.defaultModel || 'chatboxai-4',
+    provider: 'workspaice-ai',
+    model: config.settings.licenseDetail?.defaultModel || 'workspaiceai-4',
   }
   await fs.writeFile(path.join(userDataDir, 'config.json'), JSON.stringify(config, null, 2))
   return {
     userDataDir,
-    sessionRagDbPath: path.join(sessionRagDbDir, 'chatbox_session_rag.db'),
+    sessionRagDbPath: path.join(sessionRagDbDir, 'workspaice_session_rag.db'),
   }
 }
 
@@ -138,14 +138,14 @@ async function assertRendererUsesLocalApi(rendererDir) {
   }
   throw new Error(
     [
-      'Renderer bundle is not built for the local Chatbox API.',
+      'Renderer bundle is not built for the local WorkspAIce API.',
       'Rebuild before running this eval:',
       '  USE_LOCAL_API=true node ./node_modules/electron-vite/bin/electron-vite.js build --mode development',
     ].join('\n')
   )
 }
 
-async function readChatboxStore(page) {
+async function readWorkspAIceStore(page) {
   return page.evaluate(async () => {
     function requestToPromise(request) {
       return new Promise((resolve, reject) => {
@@ -155,7 +155,7 @@ async function readChatboxStore(page) {
     }
 
     const db = await new Promise((resolve, reject) => {
-      const request = indexedDB.open('chatboxstore')
+      const request = indexedDB.open('workspaicestore')
       request.onsuccess = () => resolve(request.result)
       request.onerror = () => reject(request.error)
     })
@@ -257,7 +257,7 @@ async function waitForCaseResult(page, testCase, timeoutMs) {
   let lastSnapshot = null
 
   while (Date.now() < deadline) {
-    const storeValues = await readChatboxStore(page)
+    const storeValues = await readWorkspAIceStore(page)
     const match = extractMessagesForCase(storeValues, testCase.user)
     if (match) {
       const messages = match.messages

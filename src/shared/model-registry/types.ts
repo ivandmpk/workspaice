@@ -62,5 +62,5 @@ export interface ModelMetadata {
 /** Map of modelId -> metadata for a single provider */
 export type ProviderModelRegistry = Record<string, ModelMetadata>
 
-/** Full registry keyed by Chatbox provider ID (ModelProviderEnum values) */
+/** Full registry keyed by WorkspAIce provider ID (ModelProviderEnum values) */
 export type ModelRegistryData = Record<string, ProviderModelRegistry>

@@ -1,6 +1,6 @@
-import { ApiError, BaseError, ChatboxAIAPIError, NetworkError } from '../models/errors'
+import { ApiError, BaseError, WorkspAIceAIAPIError, NetworkError } from '../models/errors'
 import { parseJsonOrEmpty } from '../utils/json_utils'
-import { isChatboxAPI } from './chatboxai_pool'
+import { isWorkspAIceAPI } from './workspaiceai_pool'
 
 interface PlatformInfo {
   type: string
@@ -51,17 +51,17 @@ function getStringProperty(value: unknown, key: string): string | undefined {
   return typeof property === 'string' && property.length > 0 ? property : undefined
 }
 
-function getChatboxErrorPayload(response: string): Record<string, unknown> | undefined {
+function getWorkspAIceErrorPayload(response: string): Record<string, unknown> | undefined {
   const parsed: unknown = parseJsonOrEmpty(response)
   return getRecord(getRecord(parsed)?.error)
 }
 
-function getChatboxErrorCode(response: string): string | undefined {
-  return getStringProperty(getChatboxErrorPayload(response), 'code')
+function getWorkspAIceErrorCode(response: string): string | undefined {
+  return getStringProperty(getWorkspAIceErrorPayload(response), 'code')
 }
 
-function getChatboxRequestId(response: string, headers?: Headers): string | undefined {
-  return headers?.get('x-request-id') || getStringProperty(getChatboxErrorPayload(response), 'request_id')
+function getWorkspAIceRequestId(response: string, headers?: Headers): string | undefined {
+  return headers?.get('x-request-id') || getStringProperty(getWorkspAIceErrorPayload(response), 'request_id')
 }
 
 const httpStatusMessages: Record<number, string> = {
@@ -94,22 +94,22 @@ export function createAfetch(platformInfo: PlatformInfo) {
     init?: RequestInit,
     options: {
       retry?: number
-      parseChatboxRemoteError?: boolean
+      parseWorkspAIceRemoteError?: boolean
     } = {}
   ) {
     let requestError: BaseError | null = null
     const retry = options.retry || 0
     for (let i = 0; i < retry + 1; i++) {
       try {
-        if (isChatboxAPI(url)) {
+        if (isWorkspAIceAPI(url)) {
           init = {
             ...init,
             headers: {
               ...init?.headers,
-              'CHATBOX-PLATFORM': platformInfo.platform,
-              'CHATBOX-PLATFORM-TYPE': platformInfo.type,
-              'CHATBOX-OS': platformInfo.os,
-              'CHATBOX-VERSION': platformInfo.version,
+              'WORKSPAICE-PLATFORM': platformInfo.platform,
+              'WORKSPAICE-PLATFORM-TYPE': platformInfo.type,
+              'WORKSPAICE-OS': platformInfo.os,
+              'WORKSPAICE-VERSION': platformInfo.version,
             },
           }
         }
@@ -120,12 +120,12 @@ export function createAfetch(platformInfo: PlatformInfo) {
             console.error('[afetch] Failed to read error response body:', e)
             return ''
           })
-          const requestId = getChatboxRequestId(response, res.headers)
-          if (options.parseChatboxRemoteError) {
-            const errorCodeName = getChatboxErrorCode(response)
-            const chatboxAIError = ChatboxAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
-            if (chatboxAIError) {
-              throw chatboxAIError
+          const requestId = getWorkspAIceRequestId(response, res.headers)
+          if (options.parseWorkspAIceRemoteError) {
+            const errorCodeName = getWorkspAIceErrorCode(response)
+            const workspaiceAIError = WorkspAIceAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
+            if (workspaiceAIError) {
+              throw workspaiceAIError
             }
           }
           throw new ApiError(
@@ -207,7 +207,7 @@ export function createAuthenticatedAfetch(config: AuthenticatedAfetchConfig) {
     init?: RequestInit,
     options: {
       retry?: number
-      parseChatboxRemoteError?: boolean
+      parseWorkspAIceRemoteError?: boolean
     } = {}
   ) {
     // 获取当前 tokens
@@ -219,14 +219,14 @@ export function createAuthenticatedAfetch(config: AuthenticatedAfetchConfig) {
     // 构建包含 token 的 headers 的辅助函数
     function buildHeaders(accessToken: string) {
       const authHeaders: Record<string, string> = {
-        'x-chatbox-access-token': accessToken,
+        'x-workspaice-access-token': accessToken,
       }
 
-      if (isChatboxAPI(url)) {
-        authHeaders['CHATBOX-PLATFORM'] = platformInfo.platform
-        authHeaders['CHATBOX-PLATFORM-TYPE'] = platformInfo.type
-        authHeaders['CHATBOX-OS'] = platformInfo.os
-        authHeaders['CHATBOX-VERSION'] = platformInfo.version
+      if (isWorkspAIceAPI(url)) {
+        authHeaders['WORKSPAICE-PLATFORM'] = platformInfo.platform
+        authHeaders['WORKSPAICE-PLATFORM-TYPE'] = platformInfo.type
+        authHeaders['WORKSPAICE-OS'] = platformInfo.os
+        authHeaders['WORKSPAICE-VERSION'] = platformInfo.version
       }
 
       return {
@@ -293,12 +293,12 @@ export function createAuthenticatedAfetch(config: AuthenticatedAfetchConfig) {
               console.error('[authenticatedAfetch] Failed to read retry error response body:', e)
               return ''
             })
-            const requestId = getChatboxRequestId(response, retryRes.headers)
-            if (options.parseChatboxRemoteError) {
-              const errorCodeName = getChatboxErrorCode(response)
-              const chatboxAIError = ChatboxAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
-              if (chatboxAIError) {
-                throw chatboxAIError
+            const requestId = getWorkspAIceRequestId(response, retryRes.headers)
+            if (options.parseWorkspAIceRemoteError) {
+              const errorCodeName = getWorkspAIceErrorCode(response)
+              const workspaiceAIError = WorkspAIceAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
+              if (workspaiceAIError) {
+                throw workspaiceAIError
               }
             }
             throw new ApiError(
@@ -318,12 +318,12 @@ export function createAuthenticatedAfetch(config: AuthenticatedAfetchConfig) {
             console.error('[authenticatedAfetch] Failed to read error response body:', e)
             return ''
           })
-          const requestId = getChatboxRequestId(response, res.headers)
-          if (options.parseChatboxRemoteError) {
-            const errorCodeName = getChatboxErrorCode(response)
-            const chatboxAIError = ChatboxAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
-            if (chatboxAIError) {
-              throw chatboxAIError
+          const requestId = getWorkspAIceRequestId(response, res.headers)
+          if (options.parseWorkspAIceRemoteError) {
+            const errorCodeName = getWorkspAIceErrorCode(response)
+            const workspaiceAIError = WorkspAIceAIAPIError.fromCodeName(response, errorCodeName || '', requestId)
+            if (workspaiceAIError) {
+              throw workspaiceAIError
             }
           }
           throw new ApiError(

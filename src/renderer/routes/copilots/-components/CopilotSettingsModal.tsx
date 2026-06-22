@@ -141,7 +141,7 @@ const CopilotSettingsModal = NiceModal.create(
       >
         <Stack
           gap="md"
-          className="max-h-[70vh] overflow-y-auto border border-solid border-chatbox-border-primary rounded-md p-sm"
+          className="max-h-[70vh] overflow-y-auto border border-solid border-workspaice-border-primary rounded-md p-sm"
         >
           {/* Title */}
           <TextInput
@@ -174,7 +174,7 @@ const CopilotSettingsModal = NiceModal.create(
                     alt={formData.name}
                     size={48}
                     radius="xl"
-                    className="flex-shrink-0 border border-solid border-chatbox-border-primary"
+                    className="flex-shrink-0 border border-solid border-workspaice-border-primary"
                   >
                     {formData.avatar?.type === 'storage-key' ? (
                       <ImageInStorage
@@ -191,9 +191,9 @@ const CopilotSettingsModal = NiceModal.create(
                     h={48}
                     align="center"
                     justify="center"
-                    className="rounded-md bg-chatbox-background-brand-secondary"
+                    className="rounded-md bg-workspaice-background-brand-secondary"
                   >
-                    <ScalableIcon icon={IconMessageCircle2Filled} size={28} className="text-chatbox-tint-brand" />
+                    <ScalableIcon icon={IconMessageCircle2Filled} size={28} className="text-workspaice-tint-brand" />
                   </Stack>
                 )}
                 <FileButton onChange={handleIconUpload} accept="image/png,image/jpeg">
@@ -227,7 +227,7 @@ const CopilotSettingsModal = NiceModal.create(
                     src={formData.backgroundImage?.type === 'url' ? formData.backgroundImage.url : ''}
                     size={48}
                     radius="md"
-                    className="flex-shrink-0 border border-solid border-chatbox-border-primary"
+                    className="flex-shrink-0 border border-solid border-workspaice-border-primary"
                   >
                     {formData.backgroundImage?.type === 'storage-key' && (
                       <ImageInStorage
@@ -242,9 +242,9 @@ const CopilotSettingsModal = NiceModal.create(
                     h={48}
                     align="center"
                     justify="center"
-                    className="rounded-md bg-chatbox-background-secondary border border-dashed border-chatbox-border-primary"
+                    className="rounded-md bg-workspaice-background-secondary border border-dashed border-workspaice-border-primary"
                   >
-                    <ScalableIcon icon={IconPhoto} size={20} className="text-chatbox-tint-tertiary" />
+                    <ScalableIcon icon={IconPhoto} size={20} className="text-workspaice-tint-tertiary" />
                   </Stack>
                 )}
                 <FileButton onChange={handleBackgroundUpload} accept="image/png,image/jpeg">

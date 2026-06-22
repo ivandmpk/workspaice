@@ -34,7 +34,7 @@ import BrandWechat from '@/components/icons/BrandWechat'
 import Page from '@/components/layout/Page'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
 import useVersion from '@/hooks/useVersion'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
 import iconPNG from '@/static/icon.png'
 import IMG_WECHAT_QRCODE from '@/static/wechat_qrcode.png'
@@ -55,35 +55,35 @@ function RouteComponent() {
     <Page title={t('About')}>
       <Container size="md" p={0}>
         <Stack gap="xxl" px={isSmallScreen ? 'sm' : 'md'} py={isSmallScreen ? 'xl' : 'md'}>
-          <Flex gap="xxl" p="md" className="rounded-lg bg-chatbox-background-secondary">
+          <Flex gap="xxl" p="md" className="rounded-lg bg-workspaice-background-secondary">
             <Image h={100} w={100} mah={'20vw'} maw={'20vw'} src={iconPNG} />
             <Stack flex={1} gap="xxs">
               <Flex justify="space-between" align="center" wrap="wrap" gap={isSmallScreen ? 'xs' : 'sm'} rowGap="xs">
-                <Title order={5} lh={1.5} lineClamp={1} title={`Chatbox v${version.version}`}>
-                  Chatbox {/\d/.test(version.version) ? `(v${version.version})` : ''}
+                <Title order={5} lh={1.5} lineClamp={1} title={`WorkspAIce v${version.version}`}>
+                  WorkspAIce {/\d/.test(version.version) ? `(v${version.version})` : ''}
                 </Title>
 
                 <UpdateSection language={language} needCheckUpdate={version.needCheckUpdate} />
               </Flex>
               <Text>{t('about-slogan')}</Text>
-              <Text c="chatbox-tertiary">{t('about-introduction')}</Text>
+              <Text c="workspaice-tertiary">{t('about-introduction')}</Text>
 
               <Flex gap="sm">
                 <Anchor
                   size="sm"
-                  href="https://chatboxai.app/privacy"
+                  href="https://workspaiceai.app/privacy"
                   target="_blank"
                   underline="hover"
-                  c="chatbox-tertiary"
+                  c="workspaice-tertiary"
                 >
                   {t('Privacy Policy')}
                 </Anchor>
                 <Anchor
                   size="sm"
-                  href="https://chatboxai.app/terms"
+                  href="https://workspaiceai.app/terms"
                   target="_blank"
                   underline="hover"
-                  c="chatbox-tertiary"
+                  c="workspaice-tertiary"
                 >
                   {t('User Terms')}
                 </Anchor>
@@ -95,14 +95,14 @@ function RouteComponent() {
             <ListItem
               icon={<BrandGithub className="w-full h-full" />}
               title={t('Github')}
-              link="https://github.com/chatboxai/chatbox"
-              value="chatbox"
+              link="https://github.com/workspaiceai/workspaice"
+              value="workspaice"
             />
             {/* <ListItem
               icon={<BrandX className="w-full h-full" />}
               title={t('X(Twitter)')}
-              link="https://x.com/ChatboxAI_HQ"
-              value="@ChatboxAI_HQ"
+              link="https://x.com/WorkspAIceAI_HQ"
+              value="@WorkspAIceAI_HQ"
             /> */}
             <ListItem
               icon={<BrandRedNote className="w-full h-full" />}
@@ -117,7 +117,7 @@ function RouteComponent() {
             <ListItem
               icon={<IconHome className="w-full h-full" />}
               title={t('Official Site')}
-              link={buildChatboxUrl(`/redirect_app/homepage/${language}`)}
+              link={buildWorkspAIceUrl(`/redirect_app/homepage/${language}`)}
             />
             <ListItem
               icon={<IconClipboard className="w-full h-full" />}
@@ -127,23 +127,23 @@ function RouteComponent() {
             <ListItem
               icon={<IconPencil className="w-full h-full" />}
               title={t('Feedback')}
-              link={buildChatboxUrl(`/redirect_app/feedback/${language}`)}
+              link={buildWorkspAIceUrl(`/redirect_app/feedback/${language}`)}
             />
             <ListItem
               icon={<IconFileText className="w-full h-full" />}
               title={t('Changelog')}
-              link={`https://chatboxai.app/${language.split('-')[0] || 'en'}/help-center/changelog`}
+              link={`https://workspaiceai.app/${language.split('-')[0] || 'en'}/help-center/changelog`}
             />
             <ListItem
               icon={<IconMail className="w-full h-full" />}
               title={t('E-mail')}
-              link={`mailto:hi@chatboxai.com`}
-              value="hi@chatboxai.com"
+              link={`mailto:hi@workspaiceai.com`}
+              value="hi@workspaiceai.com"
             />
             <ListItem
               icon={<IconMessage2 className="w-full h-full" />}
               title={t('FAQs')}
-              link={`https://chatboxai.app/${language.split('-')[0] || 'en'}/help-center/chatbox-ai-service-faqs`}
+              link={`https://workspaiceai.app/${language.split('-')[0] || 'en'}/help-center/workspaice-ai-service-faqs`}
             />
           </List>
         </Stack>
@@ -176,10 +176,10 @@ function MobileUpdateHint({ language, needCheckUpdate }: { language: string; nee
       <Button
         size="xs"
         variant="light"
-        color="chatbox-brand"
+        color="workspaice-brand"
         radius="xl"
         className="flex-shrink-0"
-        onClick={() => platform.openLink(buildChatboxUrl(`/redirect_app/check_update/${language}`))}
+        onClick={() => platform.openLink(buildWorkspAIceUrl(`/redirect_app/check_update/${language}`))}
       >
         {t('New version available')}
       </Button>
@@ -192,7 +192,7 @@ function MobileUpdateHint({ language, needCheckUpdate }: { language: string; nee
       variant="default"
       radius="xl"
       className="flex-shrink-0"
-      onClick={() => platform.openLink(buildChatboxUrl(`/redirect_app/check_update/${language}`))}
+      onClick={() => platform.openLink(buildWorkspAIceUrl(`/redirect_app/check_update/${language}`))}
     >
       {t('Check Update')}
     </Button>
@@ -242,12 +242,12 @@ function DesktopUpdateSection() {
     case 'downloading':
       return (
         <Stack gap={4} flex={1} maw={200}>
-          <Text size="xs" c="chatbox-brand" ta="right">
+          <Text size="xs" c="workspaice-brand" ta="right">
             {status === 'downloading'
               ? `${t('Downloading...')} ${progress}%`
               : `${t('New version available')}${updateVersion ? ` v${updateVersion}` : ''}`}
           </Text>
-          {status === 'downloading' && <Progress value={progress} size="xs" color="chatbox-brand" animated />}
+          {status === 'downloading' && <Progress value={progress} size="xs" color="workspaice-brand" animated />}
         </Stack>
       )
 
@@ -256,7 +256,7 @@ function DesktopUpdateSection() {
         <Button
           size="xs"
           variant="filled"
-          color="chatbox-brand"
+          color="workspaice-brand"
           radius="xl"
           className="flex-shrink-0"
           leftSection={<ScalableIcon icon={IconRefresh} size={14} />}
@@ -271,7 +271,7 @@ function DesktopUpdateSection() {
       return (
         <Stack gap={2} align="flex-end" className="flex-shrink-0">
           <Flex gap="xs" align="center">
-            <Text size="xs" c="chatbox-error">
+            <Text size="xs" c="workspaice-error">
               {t('Update failed')}
             </Text>
             <Button size="xs" variant="default" radius="xl" onClick={handleCheck}>
@@ -280,8 +280,8 @@ function DesktopUpdateSection() {
           </Flex>
           <Anchor
             size="xs"
-            c="chatbox-tertiary"
-            onClick={() => platform.openLink(buildChatboxUrl('/redirect_app/homepage/'))}
+            c="workspaice-tertiary"
+            onClick={() => platform.openLink(buildWorkspAIceUrl('/redirect_app/homepage/'))}
           >
             {t('Download from official site')}
           </Anchor>
@@ -290,7 +290,7 @@ function DesktopUpdateSection() {
 
     case 'up-to-date':
       return (
-        <Text size="xs" c="chatbox-tertiary" className="flex-shrink-0">
+        <Text size="xs" c="workspaice-tertiary" className="flex-shrink-0">
           {t('Already up to date')}
         </Text>
       )
@@ -310,7 +310,7 @@ function WechatQRCode() {
   return (
     <Popover position="top" withArrow shadow="md" opened={opened}>
       <Popover.Target>
-        <Text onMouseEnter={open} onMouseLeave={close} c="chatbox-brand" className="cursor-pointer">
+        <Text onMouseEnter={open} onMouseLeave={close} c="workspaice-brand" className="cursor-pointer">
           {t('QR Code')}
         </Text>
       </Popover.Target>
@@ -323,7 +323,7 @@ function WechatQRCode() {
 
 function List(props: { children: ReactElement[] }) {
   return (
-    <Stack gap={0} className="rounded-lg bg-chatbox-background-secondary">
+    <Stack gap={0} className="rounded-lg bg-workspaice-background-secondary">
       {props.children.map((child, index) => (
         <Fragment key={`child-${index}`}>
           {child}
@@ -355,9 +355,9 @@ function ListItem({
       align="center"
       className={link ? 'cursor-pointer' : ''}
       onClick={() => link && platform.openLink(link)}
-      c="chatbox-tertiary"
+      c="workspaice-tertiary"
     >
-      <Box w={20} h={20} className="flex-shrink-0 " c="chatbox-primary">
+      <Box w={20} h={20} className="flex-shrink-0 " c="workspaice-primary">
         {icon}
       </Box>
       <Text flex={1} size="md">
@@ -369,7 +369,7 @@ function ListItem({
       ) : (
         <>
           {value && (
-            <Text size="md" c="chatbox-tertiary">
+            <Text size="md" c="workspaice-tertiary">
               {value}
             </Text>
           )}

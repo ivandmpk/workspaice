@@ -17,7 +17,7 @@ export interface OAuthCredentialManager {
 }
 
 export function createOAuthCredentialManager(
-  chatboxProviderId: string,
+  workspaiceProviderId: string,
   providerSetting: ProviderSettings,
   dependencies: ModelDependencies
 ): OAuthCredentialManager | undefined {
@@ -25,8 +25,8 @@ export function createOAuthCredentialManager(
     return undefined
   }
 
-  const oauthProviderId = toOAuthProviderId(chatboxProviderId)
-  const settingsProviderId = toOAuthSettingsProviderId(chatboxProviderId)
+  const oauthProviderId = toOAuthProviderId(workspaiceProviderId)
+  const settingsProviderId = toOAuthSettingsProviderId(workspaiceProviderId)
   if (!oauthProviderId || !settingsProviderId) {
     return undefined
   }
@@ -46,7 +46,7 @@ export function createOAuthCredentialManager(
 
   const refreshCredential = async (): Promise<OAuthCredentials> => {
     if (!credential) {
-      throw new Error(`OAuth credential missing for provider: ${chatboxProviderId}`)
+      throw new Error(`OAuth credential missing for provider: ${workspaiceProviderId}`)
     }
     if (!dependencies.oauth) {
       return credential
@@ -68,7 +68,7 @@ export function createOAuthCredentialManager(
   return {
     async getCredential() {
       if (!credential) {
-        throw new Error(`OAuth credential missing for provider: ${chatboxProviderId}`)
+        throw new Error(`OAuth credential missing for provider: ${workspaiceProviderId}`)
       }
       if (shouldRefreshCredential(credential)) {
         return refreshCredential()

@@ -63,17 +63,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Chatbox',
+      label: 'WorkspAIce',
       submenu: [
         {
-          label: 'About Chatbox',
+          label: 'About WorkspAIce',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide Chatbox',
+          label: 'Hide WorkspAIce',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -205,13 +205,13 @@ export default class MenuBuilder {
         {
           label: 'Learn More',
           click() {
-            shell.openExternal('https://chatboxai.app')
+            shell.openExternal('https://workspaiceai.app')
           },
         },
         {
           label: 'Github Repo',
           click() {
-            shell.openExternal('https://github.com/chatboxai/chatbox')
+            shell.openExternal('https://github.com/workspaiceai/workspaice')
           },
         },
         // {
@@ -223,7 +223,7 @@ export default class MenuBuilder {
         {
           label: 'Search Issues',
           click() {
-            shell.openExternal('https://github.com/chatboxai/chatbox/issues?q=is%3Aissue')
+            shell.openExternal('https://github.com/workspaiceai/workspaice/issues?q=is%3Aissue')
           },
         },
       ],
@@ -296,13 +296,13 @@ export default class MenuBuilder {
           {
             label: 'Learn More',
             click() {
-              shell.openExternal('https://chatboxai.app')
+              shell.openExternal('https://workspaiceai.app')
             },
           },
           {
             label: 'Github Repo',
             click() {
-              shell.openExternal('https://github.com/chatboxai/chatbox')
+              shell.openExternal('https://github.com/workspaiceai/workspaice')
             },
           },
           // {
@@ -314,7 +314,7 @@ export default class MenuBuilder {
           {
             label: 'Search Issues',
             click() {
-              shell.openExternal('https://github.com/chatboxai/chatbox/issues?q=is%3Aissue')
+              shell.openExternal('https://github.com/workspaiceai/workspaice/issues?q=is%3Aissue')
             },
           },
         ],

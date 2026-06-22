@@ -100,11 +100,11 @@ export class AppUpdater {
     this.isChecking = true
     try {
       const feedUrls = [
-        'https://chatboxai.app/api/auto_upgrade',
-        'https://api.chatboxai.app/api/auto_upgrade',
-        'https://api.ai-chatbox.com/api/auto_upgrade',
-        'https://api.chatboxapp.xyz/api/auto_upgrade',
-        'https://api.chatboxai.com/api/auto_upgrade',
+        'https://workspaiceai.app/api/auto_upgrade',
+        'https://api.workspaiceai.app/api/auto_upgrade',
+        'https://api.ai-workspaice.com/api/auto_upgrade',
+        'https://api.workspaiceapp.xyz/api/auto_upgrade',
+        'https://api.workspaiceai.com/api/auto_upgrade',
       ]
 
       const settings = getSettings()

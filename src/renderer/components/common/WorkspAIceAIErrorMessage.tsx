@@ -1,16 +1,16 @@
 import { Link } from '@mui/material'
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { FC } from 'react'
 import { Trans } from 'react-i18next'
 import LinkTargetBlank from '@/components/common/Link'
 import { navigateToSettings } from '@/modals/Settings'
 import { trackingEvent } from '@/packages/event'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
 import * as settingActions from '@/stores/settingActions'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-interface ChatboxAIErrorMessageProps {
+interface WorkspAIceAIErrorMessageProps {
   errorCode: number
   /** Optional model name for `{{model}}` interpolation in i18n keys. */
   model?: string
@@ -21,19 +21,19 @@ interface ChatboxAIErrorMessageProps {
 const SUPPORTED_WEB_BROWSING_MODELS = 'gemini-2.0-flash(API), perplexity API'
 
 /**
- * Renders a localized message for a known ChatboxAIAPIError code, with action
+ * Renders a localized message for a known WorkspAIceAIAPIError code, with action
  * links (open settings, switch search provider, upgrade plan). Returns `null`
  * for unknown codes so callers can fall back to a generic message.
  */
-export const ChatboxAIErrorMessage: FC<ChatboxAIErrorMessageProps> = ({
+export const WorkspAIceAIErrorMessage: FC<WorkspAIceAIErrorMessageProps> = ({
   errorCode,
   model,
   trackingSource = 'msg_upgrade_required',
 }) => {
   const licensePlanName = useSettingsStore((s) => s.licensePlanName)
-  const isFreePlan = licensePlanName === 'Chatbox AI Free'
+  const isFreePlan = licensePlanName === 'WorkspAIce AI Free'
   const codeName = isFreePlan ? 'token_quota_exhausted_free' : undefined
-  const detail = ChatboxAIAPIError.getDetail(errorCode, codeName)
+  const detail = WorkspAIceAIAPIError.getDetail(errorCode, codeName)
   if (!detail) return null
 
   return (
@@ -71,7 +71,7 @@ export const ChatboxAIErrorMessage: FC<ChatboxAIErrorMessageProps> = ({
             className="cursor-pointer italic"
             onClick={() => {
               platform.openLink(
-                buildChatboxUrl(
+                buildWorkspAIceUrl(
                   `/redirect_app/view_more_plans/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
                 )
               )
@@ -81,17 +81,17 @@ export const ChatboxAIErrorMessage: FC<ChatboxAIErrorMessageProps> = ({
             }}
           />
         ),
-        LinkToHomePage: <LinkTargetBlank href="https://chatboxai.app" />,
+        LinkToHomePage: <LinkTargetBlank href="https://workspaiceai.app" />,
         LinkToAdvancedFileProcessing: (
           <LinkTargetBlank
-            href={buildChatboxUrl(
+            href={buildWorkspAIceUrl(
               `/redirect_app/advanced_file_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
             )}
           />
         ),
         LinkToAdvancedUrlProcessing: (
           <LinkTargetBlank
-            href={buildChatboxUrl(
+            href={buildWorkspAIceUrl(
               `/redirect_app/advanced_url_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
             )}
           />

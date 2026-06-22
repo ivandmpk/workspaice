@@ -1,7 +1,6 @@
 import { BaseError } from '@shared/models/errors'
 import { getModel } from '@shared/providers'
 import type { ImageGeneration, ImageGenerationModel } from '@shared/types'
-import { ModelProviderEnum } from '@shared/types'
 import { createModelDependencies } from '@/adapters'
 import { getLogger } from '@/lib/utils'
 import {
@@ -23,7 +22,6 @@ import {
   updateRecord,
 } from './imageGenerationStore'
 import { queryClient } from './queryClient'
-import { settingsStore } from './settingsStore'
 
 const log = getLogger('image-generation-actions')
 
@@ -31,15 +29,11 @@ const log = getLogger('image-generation-actions')
 let currentAbortController: AbortController | null = null
 
 function getLicenseKey(): string {
-  const licenseKey = settingsStore.getState().licenseKey
-  if (!licenseKey) {
-    throw new Error('License key is required for image generation')
-  }
-  return licenseKey
+  return ''
 }
 
 function shouldUseAsyncPath(provider: string): boolean {
-  return provider === ModelProviderEnum.ChatboxAI
+  return false
 }
 
 function getErrorRecordUpdate(

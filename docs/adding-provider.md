@@ -1,6 +1,6 @@
-# Adding a New Provider to Chatbox
+# Adding a New Provider to WorkspAIce
 
-This guide documents all the steps and files that need to be modified when adding a new AI provider to the Chatbox application.
+This guide documents all the steps and files that need to be modified when adding a new AI provider to the WorkspAIce application.
 
 ## Overview
 

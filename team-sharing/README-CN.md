@@ -1,8 +1,8 @@
-# Chatbox 团队共享功能
+# WorkspAIce 团队共享功能
 
 [English](./README.md) | 中文介绍
 
-Chatbox 可以让你的团队成员共享同一个 OpenAI API 账号的资源，同时不会暴露你的 API KEY。
+WorkspAIce 可以让你的团队成员共享同一个 OpenAI API 账号的资源，同时不会暴露你的 API KEY。
 
 下面的教程将帮助你快速搭建一个共享服务器。
 接下来可能涉及到服务器登录、命令行输入等操作，如果你不熟悉这些操作，可以请你的技术同事帮忙，或者询问 ChatGPT。相信我，这并不困难。
@@ -21,7 +21,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
-## 3. 启动 Chatbox 共享服务器（HTTP）
+## 3. 启动 WorkspAIce 共享服务器（HTTP）
 
 -   将下面 `<YOUR_OPENAI_KEY>` 替换成你的 OpenAI API KEY。
 -   执行下面的命令，启动服务器。
@@ -30,7 +30,7 @@ sh get-docker.sh
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e KEY=<YOUR_OPENAI_KEY> \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 示例：
@@ -39,10 +39,10 @@ bensdocker/chatbox-team
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e KEY=sk-xxxxxxxxxxxxxxxxxxx \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
-## 4. 启动 Chatbox 共享服务器（HTTPS，推荐）
+## 4. 启动 WorkspAIce 共享服务器（HTTPS，推荐）
 
 如果你有一个域名，那么可以使用 HTTPS 来启动服务器，这样所有的对话消息在网络传输时都以密文加密，在隐私上更安全。
 
@@ -56,7 +56,7 @@ docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
 -e HOST=<YOUR_DOMAIN> \
 -e KEY=<YOUR_OPENAI_KEY> \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 示例：
@@ -64,9 +64,9 @@ bensdocker/chatbox-team
 ```shell
 docker run -p 80:80 -p 443:443 \
 -v ./caddy_config:/config -v ./caddy_data:/data \
--e HOST=proxy.chatbox.run \
+-e HOST=proxy.workspaice.run \
 -e KEY=sk-xxxxxxxxxxxxxxxxxx \
-bensdocker/chatbox-team
+bensdocker/workspaice-team
 ```
 
 ## 5. 分享服务器地址
@@ -74,7 +74,7 @@ bensdocker/chatbox-team
 -   如果你启动的是 HTTP，那么地址是 `http://<你的服务器IP>:80`；
 -   如果你启动的是 HTTPS，那么地址是 `https://<你的域名>`。
 
-向你的团队成员分享服务器地址。他们只需要在 Chatbox 设置中的 `API Host` 中填入地址，**不需要填写 API KEY**，就可以共享 OpenAI API 资源了。
+向你的团队成员分享服务器地址。他们只需要在 WorkspAIce 设置中的 `API Host` 中填入地址，**不需要填写 API KEY**，就可以共享 OpenAI API 资源了。
 
 ![](./demo_http.png)
 

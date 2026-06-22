@@ -65,8 +65,8 @@ const TaskSessionItem = memo(function TaskSessionItem({ session, selected, onCli
         isSmallScreen
           ? ''
           : selected
-            ? 'bg-chatbox-background-brand-secondary'
-            : 'hover:bg-chatbox-background-gray-secondary'
+            ? 'bg-workspaice-background-brand-secondary'
+            : 'hover:bg-workspaice-background-gray-secondary'
       )}
       mx="xs"
       px="xs"
@@ -80,7 +80,7 @@ const TaskSessionItem = memo(function TaskSessionItem({ session, selected, onCli
         className={selected ? 'text-[var(--mantine-color-blue-filled)]' : 'text-[var(--mantine-color-dimmed)]'}
       />
       <Flex direction="column" flex={1} gap={0} style={{ overflow: 'hidden' }}>
-        <Text span lineClamp={1} c={selected ? 'chatbox-brand' : 'chatbox-primary'} size="sm">
+        <Text span lineClamp={1} c={selected ? 'workspaice-brand' : 'workspaice-primary'} size="sm">
           {session.name}
         </Text>
         {showDir && (

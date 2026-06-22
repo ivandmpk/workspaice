@@ -1,6 +1,6 @@
 ---
 name: session-rag-eval
-description: Run and debug Chatbox session attachment RAG model evaluation with synthetic and real long-file fixtures.
+description: Run and debug WorkspAIce session attachment RAG model evaluation with synthetic and real long-file fixtures.
 ---
 
 # Session Attachment RAG Eval
@@ -14,7 +14,7 @@ Verify both sides of model behavior:
 - The model calls `query_session_attachment` when the answer depends on an uploaded large file.
 - The model avoids retrieval for clearly unrelated user requests.
 
-Prefer the Chatbox conversation-flow harness for product validation because it exercises the real renderer, config,
+Prefer the WorkspAIce conversation-flow harness for product validation because it exercises the real renderer, config,
 license, local API, file upload, indexing, tool registration, and persisted messages.
 
 ## Fixtures
@@ -22,7 +22,7 @@ license, local API, file upload, indexing, tool registration, and persisted mess
 Default fixture repo:
 
 ```bash
-../../chatbox-session-rag-eval-fixtures
+../../workspaice-session-rag-eval-fixtures
 ```
 
 Fixture types:
@@ -40,14 +40,14 @@ node scripts/generate-fixtures.mjs
 node scripts/fetch-real-fixtures.mjs
 ```
 
-## Chatbox Flow
+## WorkspAIce Flow
 
 Start the local API before running the harness. Then build with `USE_LOCAL_API=true`; the renderer API origin is compiled
 into the bundle.
 
 ```bash
 USE_LOCAL_API=true node ./node_modules/electron-vite/bin/electron-vite.js build --mode development
-pnpm eval:session-rag:chatbox -- --case long-citrine-threshold --keep-user-data
+pnpm eval:session-rag:workspaice -- --case long-citrine-threshold --keep-user-data
 ```
 
 The harness copies the real `config.json` into an isolated temporary userDataDir, injects a temporary default chat model
@@ -67,12 +67,12 @@ if missing, and stores the session RAG sqlite DB at a separate temporary path.
 ## Useful Cases
 
 ```bash
-pnpm eval:session-rag:chatbox -- --case long-citrine-threshold
-pnpm eval:session-rag:chatbox -- --case implicit-citrine-current-policy
-pnpm eval:session-rag:chatbox -- --case real-wiki-apollo-implicit-landing-site
-pnpm eval:session-rag:chatbox -- --case multi-turn-real-wiki-apollo-followup
-pnpm eval:session-rag:chatbox -- --case unrelated-simple-math
-pnpm eval:session-rag:chatbox -- --case real-wiki-unrelated-capital
+pnpm eval:session-rag:workspaice -- --case long-citrine-threshold
+pnpm eval:session-rag:workspaice -- --case implicit-citrine-current-policy
+pnpm eval:session-rag:workspaice -- --case real-wiki-apollo-implicit-landing-site
+pnpm eval:session-rag:workspaice -- --case multi-turn-real-wiki-apollo-followup
+pnpm eval:session-rag:workspaice -- --case unrelated-simple-math
+pnpm eval:session-rag:workspaice -- --case real-wiki-unrelated-capital
 ```
 
 For fast model-behavior iteration without Electron:

@@ -57,7 +57,7 @@ export default function Header(props: { session: Session }) {
         h={48}
         align="center"
         px="md"
-        className={clsx('flex-none title-bar', isSmallScreen ? 'bg-chatbox-background-primary' : '')}
+        className={clsx('flex-none title-bar', isSmallScreen ? 'bg-workspaice-background-primary' : '')}
       >
         {(!showSidebar || isSmallScreen) && (
           <Flex align="center" className={needRoomForMacWindowControls ? 'pl-20' : ''}>
@@ -65,7 +65,7 @@ export default function Header(props: { session: Session }) {
               className="controls"
               variant="subtle"
               size={isSmallScreen ? 24 : 20}
-              color={isSmallScreen ? 'chatbox-secondary' : 'chatbox-tertiary'}
+              color={isSmallScreen ? 'workspaice-secondary' : 'workspaice-tertiary'}
               mr="xs"
               onClick={() => setShowSidebar(!showSidebar)}
             >
@@ -100,7 +100,7 @@ export default function Header(props: { session: Session }) {
             <ActionIcon
               className="controls"
               variant="subtle"
-              color="chatbox-tertiary"
+              color="workspaice-tertiary"
               size={isSmallScreen ? 20 : 16}
               ml={4}
               onClick={editCurrentSession}

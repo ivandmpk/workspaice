@@ -24,10 +24,10 @@ export async function event(name: string, params: any = {}) {
           {
             name: name,
             params: {
-              app_name: 'chatbox',
+              app_name: 'workspaice',
               app_version: app.getVersion(),
-              chatbox_platform_type: 'desktop',
-              chatbox_platform: 'desktop',
+              workspaice_platform_type: 'desktop',
+              workspaice_platform: 'desktop',
               app_platform: process.platform,
               ...params,
             },

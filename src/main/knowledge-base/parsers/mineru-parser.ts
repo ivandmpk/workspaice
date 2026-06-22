@@ -81,7 +81,7 @@ export class MineruParser implements DocumentParser {
   constructor(private apiToken: string) {}
 
   async parse(filePath: string, meta: ParserFileMeta, signal?: AbortSignal): Promise<string> {
-    const dataId = `chatbox-${meta.fileId}-${Date.now()}`
+    const dataId = `workspaice-${meta.fileId}-${Date.now()}`
 
     log.info(`[MINERU] Starting parse for ${meta.filename} (dataId=${dataId})`)
 

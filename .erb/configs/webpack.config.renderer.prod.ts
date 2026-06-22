@@ -39,7 +39,7 @@ const configuration: webpack.Configuration = {
 
   output: {
     path: webpackPaths.distRendererPath,
-    publicPath: process.env.CHATBOX_BUILD_PLATFORM === 'web' ? '/' : './',
+    publicPath: process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? '/' : './',
     filename: 'assets/js/[name].[contenthash].js', // JS文件放在assets/js目录下
     library: {
       type: 'umd',
@@ -136,7 +136,7 @@ const configuration: webpack.Configuration = {
 
     TanStackRouterWebpack({
       target: 'react',
-      autoCodeSplitting: process.env.CHATBOX_BUILD_PLATFORM === 'web' ? true : false,
+      autoCodeSplitting: process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? true : false,
       routesDirectory: './src/renderer/routes',
       generatedRouteTree: './src/renderer/routeTree.gen.ts',
     }),
@@ -154,7 +154,7 @@ const configuration: webpack.Configuration = {
       filename: 'index.html',
       template: path.join(
         webpackPaths.srcRendererPath,
-        process.env.CHATBOX_BUILD_PLATFORM === 'web' ? 'index.web.ejs' : 'index.ejs'
+        process.env.WORKSPAICE_BUILD_PLATFORM === 'web' ? 'index.web.ejs' : 'index.ejs'
       ),
       minify: {
         collapseWhitespace: true,
@@ -184,15 +184,15 @@ const configuration: webpack.Configuration = {
     //   numbersToExpressions: true,
     //   // 保护前端代码不被偷到其他地方部署
     //   // 迁移过程中，暂时关闭保护
-    //   // domainLock: ['localhost', ".chatboxai.app", ".chatboxai.com", ".chatboxapp.xyz", "chatbox-pro.pages.dev"],
-    //   // domainLockRedirectUrl: 'https://chatboxai.app',
+    //   // domainLock: ['localhost', ".workspaiceai.app", ".workspaiceai.com", ".workspaiceapp.xyz", "workspaice-pro.pages.dev"],
+    //   // domainLockRedirectUrl: 'https://workspaiceai.app',
     //   sourceMap: true,
     // }),
     
     process.env.SENTRY_AUTH_TOKEN && sentryWebpackPlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
         org: 'sentry',
-        project: 'chatbox',
+        project: 'workspaice',
         url: 'https://sentry.midway.run/',
         release: {
           name: inferredRelease,

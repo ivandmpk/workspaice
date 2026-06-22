@@ -20,7 +20,7 @@ import { parseTextFileLocally } from './web_platform_utils'
 
 const log = getLogger('desktop-platform')
 
-const store = localforage.createInstance({ name: 'chatboxstore' })
+const store = localforage.createInstance({ name: 'workspaicestore' })
 
 export default class DesktopPlatform implements Platform {
   public type: PlatformType = 'desktop'

@@ -10,7 +10,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { openLinkWithAuth } from '@/packages/openLinkWithAuth'
-import { buildChatboxUrl, type UserLicense } from '@/packages/remote'
+import { buildWorkspAIceUrl, type UserLicense } from '@/packages/remote'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useClaimPolling } from '../-hooks/useClaimPolling'
 
@@ -19,7 +19,7 @@ interface ClaimWaitingCardProps {
 }
 
 function buildClaimUrl(language: string) {
-  return buildChatboxUrl(
+  return buildWorkspAIceUrl(
     `/redirect_app/claim_free_plan/${language}/?utm_source=app&utm_content=guide_session_free_trial`
   )
 }
@@ -50,7 +50,7 @@ export function ClaimWaitingCard({ onClaimDetected }: ClaimWaitingCardProps) {
   if (timedOut) {
     return (
       <Stack gap="xs" mt="md">
-        <Text size="sm" c="chatbox-text-secondary">
+        <Text size="sm" c="workspaice-text-secondary">
           {t("Looks like it's taking a while. You can open Settings to log in again, or close and reopen the app.")}
         </Text>
         <Group gap="md">
@@ -66,8 +66,8 @@ export function ClaimWaitingCard({ onClaimDetected }: ClaimWaitingCardProps) {
     <Stack gap="sm" mt="md">
       <Flex align="center" gap="xs">
         <Loader size="xs" type="dots" />
-        <Text size="sm" c="chatbox-text-secondary">
-          {t("We're waiting for you to finish on chatboxai.app...")}
+        <Text size="sm" c="workspaice-text-secondary">
+          {t("We're waiting for you to finish on workspaiceai.app...")}
         </Text>
       </Flex>
       <Group gap="md">

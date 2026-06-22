@@ -1,6 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react'
 import { Tooltip, Typography } from '@mui/material'
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { SessionAttachmentIndexingStage } from '@shared/types'
 import { AlertCircle, CheckCircle, Eye, Link, Link2, Loader2, RotateCw, Trash2 } from 'lucide-react'
 import type { MouseEvent } from 'react'
@@ -20,7 +20,7 @@ import { ImageInStorage } from '../Image'
 function getTranslatedErrorMessage(errorCode: string | undefined, t: (key: string) => string): string | undefined {
   if (!errorCode) return undefined
   if (isSessionAttachmentRagAuthError(errorCode)) {
-    return t('This large file needs Chatbox AI to finish indexing. Sign in to Chatbox AI, then retry this file.')
+    return t('This large file needs WorkspAIce AI to finish indexing. Sign in to WorkspAIce AI, then retry this file.')
   }
   if (isSessionAttachmentRagIndexingError(errorCode)) {
     return t(
@@ -38,7 +38,7 @@ function getTranslatedErrorMessage(errorCode: string | undefined, t: (key: strin
   if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR) {
     return t('Large file Q&A requires a model with tool use support. Switch to a compatible model or remove this file.')
   }
-  const errorDetail = ChatboxAIAPIError.codeNameMap[errorCode]
+  const errorDetail = WorkspAIceAIAPIError.codeNameMap[errorCode]
   if (errorDetail) {
     // 使用 i18nKey 进行翻译，去掉其中的 HTML 标签以便在 Tooltip 中显示纯文本
     const translated = t(errorDetail.i18nKey)
@@ -355,20 +355,20 @@ export function MessageAttachment(props: {
         className={`flex items-center gap-2 px-2 py-1.5 min-w-0 overflow-hidden
             relative
             rounded-md
-            bg-chatbox-background-secondary
-            ${isClickable ? 'cursor-pointer hover:bg-chatbox-background-secondary-hover transition-colors' : ''}`}
+            bg-workspaice-background-secondary
+            ${isClickable ? 'cursor-pointer hover:bg-workspaice-background-secondary-hover transition-colors' : ''}`}
         onClick={handleClick}
       >
-        <div className="flex-none w-7 h-7 rounded-md bg-chatbox-background-primary flex items-center justify-center">
+        <div className="flex-none w-7 h-7 rounded-md bg-workspaice-background-primary flex items-center justify-center">
           {filename && <FileIcon filename={filename} className="w-4 h-4" />}
-          {url && !filename && <Link2 className="w-4 h-4 text-chatbox-secondary" strokeWidth={1.5} />}
+          {url && !filename && <Link2 className="w-4 h-4 text-workspaice-secondary" strokeWidth={1.5} />}
         </div>
         <div className="min-w-0 flex-1 overflow-hidden">
           <Typography className="text-xs leading-tight truncate" noWrap>
             {label}
           </Typography>
           {subtitle && (
-            <Typography className="text-chatbox-tertiary" noWrap sx={{ fontSize: '10px', lineHeight: 1.4 }}>
+            <Typography className="text-workspaice-tertiary" noWrap sx={{ fontSize: '10px', lineHeight: 1.4 }}>
               {subtitle}
             </Typography>
           )}
@@ -378,7 +378,7 @@ export function MessageAttachment(props: {
           effectiveIndexStatus !== 'ready' &&
           effectiveIndexStatus !== 'failed' &&
           progressValue !== undefined && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-chatbox-background-tertiary overflow-hidden">
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-workspaice-background-tertiary overflow-hidden">
               <div className="h-full bg-blue-500 transition-all" style={{ width: `${progressValue}%` }} />
             </div>
           )}
@@ -399,7 +399,7 @@ export function MessageAttachment(props: {
         )}
         {showStatus && effectiveAvailability !== 'blocked' && effectiveIndexStatus === 'failed' && onRetry && (
           <MiniButton
-            className="flex-none p-0.5 rounded text-chatbox-tertiary hover:text-chatbox-secondary"
+            className="flex-none p-0.5 rounded text-workspaice-tertiary hover:text-workspaice-secondary"
             onClick={(e) => {
               e.stopPropagation()
               onRetry()
@@ -414,7 +414,7 @@ export function MessageAttachment(props: {
         )}
         {isClickable && (
           <Eye
-            className="flex-none w-3.5 h-3.5 text-chatbox-tertiary opacity-0 group-hover/attachment:opacity-100 transition-opacity"
+            className="flex-none w-3.5 h-3.5 text-workspaice-tertiary opacity-0 group-hover/attachment:opacity-100 transition-opacity"
             strokeWidth={1.5}
           />
         )}

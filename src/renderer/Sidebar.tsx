@@ -34,7 +34,7 @@ import { settingsStore, useLanguage } from './stores/settingsStore'
 import { taskSessionStore } from './stores/taskSessionStore'
 import { useUIStore } from './stores/uiStore'
 import { installUpdate, useUpdateStore } from './stores/updateStore'
-import { CHATBOX_BUILD_PLATFORM, CHATBOX_BUILD_TARGET } from './variables'
+import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET } from './variables'
 
 export default function Sidebar() {
   const { t } = useTranslation()
@@ -147,7 +147,7 @@ export default function Sidebar() {
       PaperProps={
         language === 'ar' ? { sx: { direction: 'rtl', overflowY: 'initial' } } : { sx: { overflowY: 'initial' } }
       }
-      disableSwipeToOpen={CHATBOX_BUILD_PLATFORM !== 'ios'} // 只在iOS设备上启用SwipeToOpen
+      disableSwipeToOpen={WORKSPAICE_BUILD_PLATFORM !== 'ios'} // 只在iOS设备上启用SwipeToOpen
     >
       <Stack
         h="100%"
@@ -161,11 +161,11 @@ export default function Sidebar() {
           <Flex align="center" gap="sm">
             <Flex align="center" gap="sm" onClick={() => navigate({ to: '/about' })} style={{ cursor: 'pointer' }}>
               <Image src={icon} w={20} h={20} />
-              <Text span c="chatbox-secondary" size="xl" lh={1.2} fw="700">
-                Chatbox
+              <Text span c="workspaice-secondary" size="xl" lh={1.2} fw="700">
+                WorkspAIce
               </Text>
               {/\d/.test(versionHook.version) && (
-                <Text span c="chatbox-tertiary" size="sm">
+                <Text span c="workspaice-tertiary" size="sm">
                   {versionHook.version}
                 </Text>
               )}
@@ -174,7 +174,7 @@ export default function Sidebar() {
           </Flex>
 
           <Tooltip label={t('Collapse')} openDelay={1000} withArrow>
-            <ActionIcon variant="subtle" color="chatbox-tertiary" size={20} onClick={() => setShowSidebar(false)}>
+            <ActionIcon variant="subtle" color="workspaice-tertiary" size={20} onClick={() => setShowSidebar(false)}>
               <IconLayoutSidebarLeftCollapse />
             </ActionIcon>
           </Tooltip>
@@ -251,7 +251,7 @@ export default function Sidebar() {
           {isSmallScreen ? (
             <Flex gap="md" align="center">
               <NavLink
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 className="rounded"
                 label={t('My Copilots')}
                 leftSection={<ScalableIcon icon={IconMessageChatbot} size={20} />}
@@ -268,7 +268,7 @@ export default function Sidebar() {
               {!versionHook.isExceeded && (
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-secondary"
+                  color="workspaice-secondary"
                   size={24}
                   onClick={() => {
                     navigate({ to: '/guide' })
@@ -280,7 +280,7 @@ export default function Sidebar() {
               )}
               <ActionIcon
                 variant="transparent"
-                color="chatbox-secondary"
+                color="workspaice-secondary"
                 size={24}
                 onClick={() => {
                   navigateToSettings()
@@ -295,7 +295,7 @@ export default function Sidebar() {
           ) : (
             <>
               <NavLink
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 className="rounded"
                 label={t('My Copilots')}
                 leftSection={<ScalableIcon icon={IconMessageChatbot} size={20} />}
@@ -311,7 +311,7 @@ export default function Sidebar() {
                 p="xs"
               />
               <NavLink
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 className="rounded"
                 label={t('Settings')}
                 leftSection={<ScalableIcon icon={IconSettingsFilled} size={20} />}
@@ -321,7 +321,7 @@ export default function Sidebar() {
               />
               {!versionHook.isExceeded && (
                 <NavLink
-                  c="chatbox-secondary"
+                  c="workspaice-secondary"
                   className="rounded"
                   label={t('Help')}
                   leftSection={<ScalableIcon icon={IconHelpCircle} size={20} />}
@@ -332,7 +332,7 @@ export default function Sidebar() {
               )}
               {FORCE_ENABLE_DEV_PAGES && (
                 <NavLink
-                  c="chatbox-secondary"
+                  c="workspaice-secondary"
                   className="rounded"
                   label="Dev Tools"
                   leftSection={<ScalableIcon icon={IconCode} size={20} />}
@@ -349,7 +349,7 @@ export default function Sidebar() {
           <Box
             onMouseDown={handleResizeStart}
             className={clsx(
-              `sidebar-resizer absolute top-0 bottom-0 w-1 cursor-col-resize z-[1] bg-chatbox-border-primary opacity-0 hover:opacity-70 transition-opacity duration-200`,
+              `sidebar-resizer absolute top-0 bottom-0 w-1 cursor-col-resize z-[1] bg-workspaice-border-primary opacity-0 hover:opacity-70 transition-opacity duration-200`,
               language === 'ar' ? '-left-1' : '-right-1'
             )}
           />
@@ -379,7 +379,7 @@ export default function Sidebar() {
  * Not shown on mobile (mobile uses dot indicator on About link).
  */
 function SidebarUpdateBanner() {
-  const isMobile = CHATBOX_BUILD_TARGET === 'mobile_app'
+  const isMobile = WORKSPAICE_BUILD_TARGET === 'mobile_app'
   if (isMobile) return null
   return <SidebarUpdateBannerInner />
 }
@@ -398,11 +398,11 @@ function SidebarUpdateBannerInner() {
         gap="xs"
         px="sm"
         py={6}
-        className="rounded-md cursor-pointer bg-chatbox-background-brand-secondary"
+        className="rounded-md cursor-pointer bg-workspaice-background-brand-secondary"
         onClick={installUpdate}
       >
-        <ScalableIcon icon={IconDownload} size={16} className="text-chatbox-brand flex-shrink-0" />
-        <Text size="sm" c="chatbox-brand" lineClamp={1} flex={1}>
+        <ScalableIcon icon={IconDownload} size={16} className="text-workspaice-brand flex-shrink-0" />
+        <Text size="sm" c="workspaice-brand" lineClamp={1} flex={1}>
           {`${t('Update ready to install')}${updateVersion ? ` (v${updateVersion})` : ''}`}
         </Text>
       </Flex>
@@ -417,7 +417,7 @@ function SidebarUpdateBannerInner() {
  */
 function useShowUpdateDot(versionHook: ReturnType<typeof useVersion>) {
   const updateStatus = useUpdateStore((s) => s.status)
-  const isMobile = CHATBOX_BUILD_TARGET === 'mobile_app'
+  const isMobile = WORKSPAICE_BUILD_TARGET === 'mobile_app'
   return isMobile ? versionHook.needCheckUpdate : updateStatus === 'downloaded'
 }
 
@@ -433,12 +433,12 @@ function AboutNavLink({
 
   return (
     <NavLink
-      c="chatbox-tertiary"
+      c="workspaice-tertiary"
       className="rounded"
       label={
         <Flex align="center" gap={6}>
           <span>{`${t('About')} ${/\d/.test(versionHook.version) ? `(${versionHook.version})` : ''}`}</span>
-          {showDot && <Box w={8} h={8} miw={8} bg="chatbox-brand" style={{ borderRadius: '50%' }} />}
+          {showDot && <Box w={8} h={8} miw={8} bg="workspaice-brand" style={{ borderRadius: '50%' }} />}
         </Flex>
       }
       leftSection={<ScalableIcon icon={IconInfoCircle} size={20} />}
@@ -467,7 +467,7 @@ function SmallScreenAboutIcon({
     <Box className="relative">
       <ActionIcon
         variant="transparent"
-        color="chatbox-secondary"
+        color="workspaice-secondary"
         size={24}
         onClick={() => {
           navigate({ to: '/about' })
@@ -477,7 +477,7 @@ function SmallScreenAboutIcon({
         <ScalableIcon icon={IconInfoCircle} size={20} />
       </ActionIcon>
       {showDot && (
-        <Box w={8} h={8} bg="chatbox-brand" className="absolute -top-0.5 -right-0.5" style={{ borderRadius: '50%' }} />
+        <Box w={8} h={8} bg="workspaice-brand" className="absolute -top-0.5 -right-0.5" style={{ borderRadius: '50%' }} />
       )}
     </Box>
   )

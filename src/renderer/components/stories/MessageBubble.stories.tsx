@@ -98,14 +98,14 @@ export const CurrentUserMessage: StoryObj = {
   render: () => (
     <MessageWrapper
       label="Current User Message Style"
-      description="Uses bg-chatbox-background-secondary with rounded-lg"
+      description="Uses bg-workspaice-background-secondary with rounded-lg"
     >
       <Flex gap="sm" px="md" py="xs" className="w-full">
         <Box className="mt-1 flex-shrink-0">
           <UserAvatar />
         </Box>
         <Stack gap={4} className="flex-1 min-w-0">
-          <Box className="inline-block bg-chatbox-background-secondary px-4 py-2 rounded-lg max-w-full">
+          <Box className="inline-block bg-workspaice-background-secondary px-4 py-2 rounded-lg max-w-full">
             <Text size="sm">
               Can you explain the difference between React Server Components and traditional client-side rendering? I'd
               like to understand when to use each approach.
@@ -136,7 +136,7 @@ export const CurrentAssistantMessage: StoryObj = {
             <strong>Client Components</strong> run in the browser and are needed for interactivity — event handlers,
             state management, and browser APIs.
           </Text>
-          <Text size="xs" c="chatbox-tertiary" mt="xs">
+          <Text size="xs" c="workspaice-tertiary" mt="xs">
             model: gpt-4o, tokens used: 156
           </Text>
           <ActionBar />
@@ -157,11 +157,11 @@ export const OptimizedUserMessage: StoryObj = {
         <Box
           className="inline-block px-4 py-3 rounded-2xl rounded-tr-sm max-w-[85%]"
           style={{
-            backgroundColor: 'var(--chatbox-background-brand-secondary)',
-            border: '1px solid var(--chatbox-border-brand)',
+            backgroundColor: 'var(--workspaice-background-brand-secondary)',
+            border: '1px solid var(--workspaice-border-brand)',
           }}
         >
-          <Text size="sm" c="chatbox-primary">
+          <Text size="sm" c="workspaice-primary">
             Can you explain the difference between React Server Components and traditional client-side rendering?
           </Text>
         </Box>
@@ -185,7 +185,7 @@ export const OptimizedAssistantMessage: StoryObj = {
           <Box
             className="px-4 py-3 rounded-2xl rounded-tl-sm"
             style={{
-              backgroundColor: 'var(--chatbox-background-secondary)',
+              backgroundColor: 'var(--workspaice-background-secondary)',
             }}
           >
             <Text size="sm">React Server Components (RSC) and client-side rendering serve different purposes:</Text>
@@ -200,19 +200,19 @@ export const OptimizedAssistantMessage: StoryObj = {
 
           <Flex align="center" justify="space-between">
             <Flex gap={4} align="center">
-              <Text size="xs" c="chatbox-tertiary" ff="monospace">
+              <Text size="xs" c="workspaice-tertiary" ff="monospace">
                 gpt-4o
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 ·
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 156 tokens
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 ·
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 1.2s
               </Text>
             </Flex>
@@ -236,7 +236,7 @@ export const CompactLayout: StoryObj = {
           <Avatar size={24} color="blue" radius="xl">
             <IconUser size={14} />
           </Avatar>
-          <Box className="bg-chatbox-background-secondary px-3 py-1.5 rounded-lg">
+          <Box className="bg-workspaice-background-secondary px-3 py-1.5 rounded-lg">
             <Text size="xs">What is the capital of France?</Text>
           </Box>
         </Flex>
@@ -246,7 +246,7 @@ export const CompactLayout: StoryObj = {
           </Avatar>
           <Stack gap={2} className="flex-1">
             <Text size="xs">The capital of France is Paris.</Text>
-            <Text size="10px" c="chatbox-tertiary" ff="monospace">
+            <Text size="10px" c="workspaice-tertiary" ff="monospace">
               gpt-4o · 8 tokens · 0.3s
             </Text>
           </Stack>
@@ -255,7 +255,7 @@ export const CompactLayout: StoryObj = {
           <Avatar size={24} color="blue" radius="xl">
             <IconUser size={14} />
           </Avatar>
-          <Box className="bg-chatbox-background-secondary px-3 py-1.5 rounded-lg">
+          <Box className="bg-workspaice-background-secondary px-3 py-1.5 rounded-lg">
             <Text size="xs">And what's its population?</Text>
           </Box>
         </Flex>
@@ -267,7 +267,7 @@ export const CompactLayout: StoryObj = {
             <Text size="xs">
               Paris has about 2.1 million residents in the city proper, and roughly 12 million in the metropolitan area.
             </Text>
-            <Text size="10px" c="chatbox-tertiary" ff="monospace">
+            <Text size="10px" c="workspaice-tertiary" ff="monospace">
               gpt-4o · 28 tokens · 0.5s
             </Text>
           </Stack>
@@ -290,7 +290,7 @@ export const MessageStates: StoryObj = {
           <AssistantAvatar />
           <Box
             className="px-4 py-3 rounded-2xl rounded-tl-sm"
-            style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+            style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
           >
             <Flex gap="xs" align="center">
               <Box
@@ -298,7 +298,7 @@ export const MessageStates: StoryObj = {
                 h={6}
                 style={{
                   borderRadius: '50%',
-                  backgroundColor: 'var(--chatbox-tint-tertiary)',
+                  backgroundColor: 'var(--workspaice-tint-tertiary)',
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               />
@@ -307,7 +307,7 @@ export const MessageStates: StoryObj = {
                 h={6}
                 style={{
                   borderRadius: '50%',
-                  backgroundColor: 'var(--chatbox-tint-tertiary)',
+                  backgroundColor: 'var(--workspaice-tint-tertiary)',
                   animation: 'pulse 1.5s ease-in-out 0.3s infinite',
                 }}
               />
@@ -316,7 +316,7 @@ export const MessageStates: StoryObj = {
                 h={6}
                 style={{
                   borderRadius: '50%',
-                  backgroundColor: 'var(--chatbox-tint-tertiary)',
+                  backgroundColor: 'var(--workspaice-tint-tertiary)',
                   animation: 'pulse 1.5s ease-in-out 0.6s infinite',
                 }}
               />
@@ -331,18 +331,18 @@ export const MessageStates: StoryObj = {
           <Box
             className="px-4 py-3 rounded-2xl rounded-tl-sm"
             style={{
-              backgroundColor: 'var(--chatbox-background-error-secondary)',
-              border: '1px solid var(--chatbox-border-error)',
+              backgroundColor: 'var(--workspaice-background-error-secondary)',
+              border: '1px solid var(--workspaice-border-error)',
             }}
           >
-            <Text size="sm" c="chatbox-error">
+            <Text size="sm" c="workspaice-error">
               Failed to generate response. Please check your API key and try again.
             </Text>
             <Flex mt="xs" gap="xs">
               <ActionIcon variant="light" size="sm" color="red">
                 <IconReload size={14} />
               </ActionIcon>
-              <Text size="xs" c="chatbox-tertiary" className="self-center">
+              <Text size="xs" c="workspaice-tertiary" className="self-center">
                 Retry
               </Text>
             </Flex>
@@ -356,7 +356,7 @@ export const MessageStates: StoryObj = {
           <Stack gap="xs" className="flex-1">
             <Box
               className="px-4 py-3 rounded-2xl rounded-tl-sm"
-              style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+              style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
             >
               <Text size="sm" lineClamp={3}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et

@@ -2,7 +2,7 @@ import type { WriteFileOptions, WriteFileResult } from '@capacitor/filesystem'
 import { Toast } from '@capacitor/toast'
 import i18n from '@/i18n'
 import { getLogger } from '@/lib/utils'
-import { CHATBOX_BUILD_PLATFORM } from '@/variables'
+import { WORKSPAICE_BUILD_PLATFORM } from '@/variables'
 import { AndroidFilterWriter, type FilterWriter, IOSFilterWriter } from './filter_writer'
 import type { Exporter } from './interfaces'
 
@@ -12,7 +12,7 @@ export default class MobileExporter implements Exporter {
   private writer: FilterWriter
 
   constructor() {
-    const platform = CHATBOX_BUILD_PLATFORM
+    const platform = WORKSPAICE_BUILD_PLATFORM
     this.writer = platform === 'ios' ? new IOSFilterWriter() : new AndroidFilterWriter()
   }
 

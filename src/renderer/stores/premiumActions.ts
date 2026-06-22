@@ -188,8 +188,8 @@ export async function activate(
       trackJkClickEvent(JK_EVENTS.KEY_VERIFY_FAILED, {
         pageName,
         content: result.error || 'activation_failed',
-        contentType: 'Chatbox AI',
-        props: { content_add_info: { content: 'Chatbox AI' } },
+        contentType: 'WorkspAIce AI',
+        props: { content_add_info: { content: 'WorkspAIce AI' } },
       })
     }
     return result
@@ -213,8 +213,8 @@ export async function activate(
       trackJkClickEvent(JK_EVENTS.KEY_VERIFY_FAILED, {
         pageName,
         content: error,
-        contentType: 'Chatbox AI',
-        props: { content_add_info: { content: 'Chatbox AI' } },
+        contentType: 'WorkspAIce AI',
+        props: { content_add_info: { content: 'WorkspAIce AI' } },
       })
     }
     return {
@@ -239,8 +239,8 @@ export async function activate(
     trackJkClickEvent(JK_EVENTS.KEY_VERIFY_SUCCESS, {
       pageName,
       content: licenseKey,
-      contentType: 'Chatbox AI',
-      props: { content_add_info: { content: 'Chatbox AI' } },
+      contentType: 'WorkspAIce AI',
+      props: { content_add_info: { content: 'WorkspAIce AI' } },
     })
   }
   log.info(`✅ Activated license key: ${licenseKey.slice(0, 8)}****`)

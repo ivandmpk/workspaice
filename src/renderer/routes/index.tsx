@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { JK_PAGE_NAMES } from '@/analytics/jk-events'
-import { ChatboxWelcomeCard } from '@/components/common/ChatboxWelcomeCard'
+import { WorkspAIceWelcomeCard } from '@/components/common/WorkspAIceWelcomeCard'
 import { MessageLayoutSelector } from '@/components/common/MessageLayoutPreview'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
 import { ImageInStorage } from '@/components/Image'
@@ -245,16 +245,16 @@ function Index() {
               w={isSmallScreen ? '100%' : '80%'}
               maw={386}
               p="xl"
-              className="border border-solid border-chatbox-border-primary rounded-lg relative"
+              className="border border-solid border-workspaice-border-primary rounded-lg relative"
             >
               <div className="absolute top-0 right-0">
                 <ActionIcon
                   variant="transparent"
-                  color="chatbox-tertiary"
+                  color="workspaice-tertiary"
                   m={10}
                   onClick={() => setSettings({ messageLayout: 'left' })}
                 >
-                  <ScalableIcon icon={IconX} size={20} className="text-chatbox-tint-tertiary" />
+                  <ScalableIcon icon={IconX} size={20} className="text-workspaice-tint-tertiary" />
                 </ActionIcon>
               </div>
               <Text size="md" fw="600">
@@ -268,9 +268,9 @@ function Index() {
                   onValueChange={(val) => setTempMessageLayout(val)}
                 />
 
-                <Text size="xs" c="chatbox-secondary">
+                <Text size="xs" c="workspaice-secondary">
                   {t('You can change this setting later in Settings → ')}
-                  <a className="cursor-pointer !text-chatbox-tint-brand" onClick={() => navigateToSettings('chat')}>
+                  <a className="cursor-pointer !text-workspaice-tint-brand" onClick={() => navigateToSettings('chat')}>
                     {t('Conversation Settings')}
                   </a>
                 </Text>
@@ -290,7 +290,7 @@ function Index() {
 
         {welcomeCardMode !== 'none' && (
           <Box px="sm">
-            <ChatboxWelcomeCard
+            <WorkspAIceWelcomeCard
               mode={welcomeCardMode}
               pageName={JK_PAGE_NAMES.CHAT_PAGE}
               className={clsx('mb-md', widthFull ? 'w-full' : 'w-full max-w-4xl mx-auto')}
@@ -317,7 +317,7 @@ function Index() {
                   <ActionIcon
                     size={32}
                     radius={16}
-                    c="chatbox-tertiary"
+                    c="workspaice-tertiary"
                     bg="#F1F3F5"
                     onClick={() => setSession((old) => ({ ...old, copilotId: undefined }))}
                   >
@@ -325,7 +325,7 @@ function Index() {
                   </ActionIcon>
                 </Flex>
 
-                <Text c="chatbox-secondary" className="line-clamp-5">
+                <Text c="workspaice-secondary" className="line-clamp-5">
                   {session.messages[0]?.contentParts?.map((part) => (part.type === 'text' ? part.text : '')).join('') ||
                     ''}
                 </Text>
@@ -391,7 +391,7 @@ const CopilotPicker = ({ selectedId, onSelect }: { selectedId?: string; onSelect
     <Box px="md">
       <Stack gap="xs" className={widthFull ? 'w-full' : 'w-full max-w-4xl mx-auto'}>
         <Flex align="center" justify="space-between">
-          <Text size="xxs" c="chatbox-tertiary">
+          <Text size="xxs" c="workspaice-tertiary">
             {t('My Copilots').toUpperCase()}
           </Text>
 
@@ -399,7 +399,7 @@ const CopilotPicker = ({ selectedId, onSelect }: { selectedId?: string; onSelect
             <Flex align="center" gap="sm">
               <ActionIcon
                 variant="transparent"
-                color="chatbox-tertiary"
+                color="workspaice-tertiary"
                 // onClick={() => setPage((p) => Math.max(p - 1, 0))}
                 onClick={() => {
                   if (viewportRef.current) {
@@ -415,7 +415,7 @@ const CopilotPicker = ({ selectedId, onSelect }: { selectedId?: string; onSelect
               </ActionIcon>
               <ActionIcon
                 variant="transparent"
-                color="chatbox-tertiary"
+                color="workspaice-tertiary"
                 // onClick={() => setPage((p) => p + 1)}
                 onClick={() => {
                   if (viewportRef.current) {
@@ -443,10 +443,10 @@ const CopilotPicker = ({ selectedId, onSelect }: { selectedId?: string; onSelect
           className="copilot-picker-scroll-area"
         >
           {scrollPosition.x > 8 && !isSmallScreen && (
-            <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-chatbox-background-primary to-transparent"></div>
+            <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-workspaice-background-primary to-transparent"></div>
           )}
           {!isSmallScreen && (
-            <div className="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-chatbox-background-primary to-transparent"></div>
+            <div className="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-workspaice-background-primary to-transparent"></div>
           )}
           <Flex wrap="nowrap" gap="xs">
             <Space w="xs" />
@@ -508,8 +508,8 @@ const CopilotItem = ({
       gap={isSmallScreen ? 'xxs' : 'xs'}
       py="xs"
       px={isSmallScreen ? 'xs' : 'md'}
-      bd={selected ? 'none' : '1px solid var(--chatbox-border-primary)'}
-      bg={selected ? 'var(--chatbox-background-brand-secondary)' : 'transparent'}
+      bd={selected ? 'none' : '1px solid var(--workspaice-border-primary)'}
+      bg={selected ? 'var(--workspaice-background-brand-secondary)' : 'transparent'}
       className={clsx(
         'max-w-[75vw] sm:max-w-[50vw] cursor-pointer shrink-0 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)]',
         isSmallScreen ? 'rounded-full' : 'rounded-md'
@@ -523,7 +523,7 @@ const CopilotItem = ({
             alt={name}
             size={isSmallScreen ? 20 : 24}
             radius="xl"
-            className="flex-shrink-0 border border-solid border-chatbox-border-primary"
+            className="flex-shrink-0 border border-solid border-workspaice-border-primary"
           >
             {avatar?.type === 'storage-key' ? (
               <ImageInStorage storageKey={avatar.storageKey} className="object-cover object-center w-full h-full" />
@@ -537,12 +537,12 @@ const CopilotItem = ({
             h={isSmallScreen ? 20 : 24}
             align="center"
             justify="center"
-            className="flex-shrink-0 rounded-full bg-chatbox-background-brand-secondary"
+            className="flex-shrink-0 rounded-full bg-workspaice-background-brand-secondary"
           >
-            <ScalableIcon icon={IconMessageCircle2Filled} size={24} className="text-chatbox-tint-brand" />
+            <ScalableIcon icon={IconMessageCircle2Filled} size={24} className="text-workspaice-tint-brand" />
           </Stack>
         ))}
-      <Text fw="600" c={selected ? 'chatbox-brand' : 'chatbox-primary'} lineClamp={1}>
+      <Text fw="600" c={selected ? 'workspaice-brand' : 'workspaice-primary'} lineClamp={1}>
         {name}
       </Text>
     </Flex>

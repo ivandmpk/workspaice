@@ -22,7 +22,7 @@ const ServerRegistrySpotlight: FC<{
             description: t('Configure MCP server manually')!,
             onClick: () => props.triggerAddServer(),
             leftSection: (
-              <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-chatbox-tint-brand" />
+              <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-workspaice-tint-brand" />
             ),
           },
           {
@@ -30,7 +30,7 @@ const ServerRegistrySpotlight: FC<{
             label: t('Import from JSON in clipboard')!,
             description: t('Import MCP servers from JSON in your clipboard')!,
             onClick: () => props.triggerImportJson(),
-            leftSection: <ScalableIcon icon={IconJson} size={24} className="text-chatbox-tint-brand" />,
+            leftSection: <ScalableIcon icon={IconJson} size={24} className="text-workspaice-tint-brand" />,
           },
         ],
       },

@@ -67,7 +67,7 @@ function FeaturedCopilots() {
         <Flex justify="center" className="pt-sm">
           <Button
             variant="outline"
-            color="chatbox-brand"
+            color="workspaice-brand"
             size="sm"
             onClick={() => fetchNextPage()}
             loading={isFetchingNextPage}
@@ -96,8 +96,8 @@ function TagChip({
         px-sm py-xxs rounded-full text-xs font-normal transition-colors cursor-pointer select-none
         ${
           selected
-            ? 'border border-chatbox-tint-brand text-chatbox-tint-brand bg-transparent'
-            : 'border border-transparent bg-chatbox-background-gray-secondary text-chatbox-tint-secondary'
+            ? 'border border-workspaice-tint-brand text-workspaice-tint-brand bg-transparent'
+            : 'border border-transparent bg-workspaice-background-gray-secondary text-workspaice-tint-secondary'
         }
       `}
     >

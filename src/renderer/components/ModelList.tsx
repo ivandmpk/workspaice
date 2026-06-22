@@ -73,7 +73,7 @@ export function ModelList({
       <Stack
         gap={0}
         px="xxs"
-        className={`border-solid border rounded-sm min-h-[100px] max-h-[80vh] overflow-y-auto border-chatbox-border-primary`}
+        className={`border-solid border rounded-sm min-h-[100px] max-h-[80vh] overflow-y-auto border-workspaice-border-primary`}
       >
         {filteredModels.length > 0 ? (
           filteredModels.map((model) => (
@@ -83,7 +83,7 @@ export function ModelList({
               align="center"
               py="sm"
               px="xs"
-              className="border-solid border-0 border-b last:border-b-0 border-chatbox-border-primary"
+              className="border-solid border-0 border-b last:border-b-0 border-workspaice-border-primary"
             >
               <Stack gap={4} flex="1 1 0" miw={0}>
                 <Flex gap="xs" align="center" miw={0}>
@@ -98,12 +98,12 @@ export function ModelList({
                       whiteSpace: 'nowrap',
                     }}
                     title={model.nickname || model.modelId}
-                    c={model.labels?.includes('recommended') ? 'chatbox-brand' : undefined}
+                    c={model.labels?.includes('recommended') ? 'workspaice-brand' : undefined}
                   >
                     {model.nickname || model.modelId}
                   </Text>
                   {model.labels?.includes('pro') && (
-                    <Badge color="chatbox-brand" size="xs" variant="light">
+                    <Badge color="workspaice-brand" size="xs" variant="light">
                       Pro
                     </Badge>
                   )}
@@ -120,21 +120,21 @@ export function ModelList({
 
                     {model.capabilities?.includes('reasoning') && (
                       <Tooltip label={t('Reasoning')} events={{ hover: true, focus: true, touch: true }}>
-                        <Text span c="chatbox-warning" className="flex items-center" style={{ opacity: 0.7 }}>
+                        <Text span c="workspaice-warning" className="flex items-center" style={{ opacity: 0.7 }}>
                           <ScalableIcon icon={IconBulb} size={14} />
                         </Text>
                       </Tooltip>
                     )}
                     {model.capabilities?.includes('vision') && (
                       <Tooltip label={t('Vision')} events={{ hover: true, focus: true, touch: true }}>
-                        <Text span c="chatbox-brand" className="flex items-center" style={{ opacity: 0.7 }}>
+                        <Text span c="workspaice-brand" className="flex items-center" style={{ opacity: 0.7 }}>
                           <ScalableIcon icon={IconEye} size={14} />
                         </Text>
                       </Tooltip>
                     )}
                     {model.capabilities?.includes('tool_use') && (
                       <Tooltip label={t('Tool Use')} events={{ hover: true, focus: true, touch: true }}>
-                        <Text span c="chatbox-success" className="flex items-center" style={{ opacity: 0.7 }}>
+                        <Text span c="workspaice-success" className="flex items-center" style={{ opacity: 0.7 }}>
                           <ScalableIcon icon={IconTool} size={14} />
                         </Text>
                       </Tooltip>
@@ -175,7 +175,7 @@ export function ModelList({
                   {onEditModel && (
                     <Button
                       variant="transparent"
-                      c="chatbox-tertiary"
+                      c="workspaice-tertiary"
                       p={0}
                       h="auto"
                       size="xs"
@@ -189,7 +189,7 @@ export function ModelList({
                   {onDeleteModel && (
                     <Button
                       variant="transparent"
-                      c="chatbox-error"
+                      c="workspaice-error"
                       p={0}
                       h="auto"
                       size="compact-xs"
@@ -212,11 +212,11 @@ export function ModelList({
                         bd={0}
                         onClick={() => onRemoveModel(model.modelId)}
                       >
-                        <ScalableIcon icon={IconCircleMinus} size={20} className="text-chatbox-tint-error" />
+                        <ScalableIcon icon={IconCircleMinus} size={20} className="text-workspaice-tint-error" />
                       </Button>
                     ) : (
                       <Button variant="transparent" p={0} h="auto" size="xs" bd={0} onClick={() => onAddModel(model)}>
-                        <ScalableIcon icon={IconCirclePlus} size={20} className="text-chatbox-tint-success" />
+                        <ScalableIcon icon={IconCirclePlus} size={20} className="text-workspaice-tint-success" />
                       </Button>
                     ))}
                 </Flex>
@@ -225,7 +225,7 @@ export function ModelList({
           ))
         ) : (
           <Flex align="center" justify="center" py="lg" px="xs">
-            <Text component="span" size="sm" c="chatbox-tertiary">
+            <Text component="span" size="sm" c="workspaice-tertiary">
               {searchQuery.trim() ? t('No models found matching your search') : t('No models available')}
             </Text>
           </Flex>

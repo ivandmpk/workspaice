@@ -50,8 +50,8 @@ Main Process                           Renderer Process
 为应对 CDN 或 DNS 故障，`tryUpdate()` 会依次尝试 5 个 feed URL：
 
 ```
-chatboxai.app → api.chatboxai.app → api.ai-chatbox.com
-→ api.chatboxapp.xyz → api.chatboxai.com
+workspaiceai.app → api.workspaiceai.app → api.ai-workspaice.com
+→ api.workspaiceapp.xyz → api.workspaiceai.com
 ```
 
 - 每次尝试通过 `autoUpdater.setFeedURL()` 切换源
@@ -222,7 +222,7 @@ pnpm test -- --run src/renderer/stores/updateStore.test.ts
 
    ```bash
    # macOS
-   tail -f ~/Library/Logs/xyz.chatboxapp.app/main.log | grep auto_updater
+   tail -f ~/Library/Logs/xyz.workspaiceapp.app/main.log | grep auto_updater
    ```
 
    正常情况下第一个 URL 成功即返回；如果失败会看到 `attempt failed: <url>` 日志。
@@ -270,8 +270,8 @@ UPDATE_CHANNEL=latest pnpm exec electron-builder build --publish never
 ```
 
 打包完成后 `release/build/` 中会生成：
-- `Chatbox-1.1.0-arm64-mac.zip` + `.blockmap`
-- `Chatbox-1.1.0-arm64.dmg` + `.blockmap`
+- `WorkspAIce-1.1.0-arm64-mac.zip` + `.blockmap`
+- `WorkspAIce-1.1.0-arm64.dmg` + `.blockmap`
 - `latest-mac.yml`（自动生成的元数据文件）
 
 **Step 3: 启动本地更新服务器**
@@ -293,10 +293,10 @@ curl http://localhost:8080/latest-mac.yml
 ```yaml
 version: 1.1.0
 files:
-  - url: Chatbox-1.1.0-arm64-mac.zip
+  - url: WorkspAIce-1.1.0-arm64-mac.zip
     sha512: ...
     size: ...
-path: Chatbox-1.1.0-arm64-mac.zip
+path: WorkspAIce-1.1.0-arm64-mac.zip
 sha512: ...
 releaseDate: '2026-04-04T...'
 ```

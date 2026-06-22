@@ -33,10 +33,10 @@ function writeMigrationDebugFile(debugPath: string, state: MigrationDebugState) 
 
 function migrateLegacyKnowledgeBaseDatabase() {
   const userDataPath = app.getPath('userData')
-  const legacyDbPath = path.join(userDataPath, 'databases', 'chatbox_kb.db')
-  const targetDbPath = path.join(userDataPath, 'chatbox-databases', 'chatbox_kb.db')
+  const legacyDbPath = path.join(userDataPath, 'databases', 'workspaice_kb.db')
+  const targetDbPath = path.join(userDataPath, 'workspaice-databases', 'workspaice_kb.db')
   const targetDir = path.dirname(targetDbPath)
-  const debugPath = path.join(targetDir, 'chatbox_kb_migration_debug.txt')
+  const debugPath = path.join(targetDir, 'workspaice_kb_migration_debug.txt')
 
   if (fs.existsSync(targetDbPath) || !fs.existsSync(legacyDbPath)) {
     return

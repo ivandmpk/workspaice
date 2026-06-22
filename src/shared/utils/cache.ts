@@ -75,7 +75,7 @@ class CrossPlatformStorage {
   }
 }
 
-export const store = new CrossPlatformStorage('chatboxcache')
+export const store = new CrossPlatformStorage('workspaicecache')
 
 async function cacheWithStorage<T>(
   key: string,

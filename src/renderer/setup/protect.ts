@@ -1,9 +1,9 @@
 // 处理前端代码被剽窃的情况
 
 import platform from '../platform'
-import { CHATBOX_BUILD_TARGET } from '../variables'
+import { WORKSPAICE_BUILD_TARGET } from '../variables'
 
-switch (CHATBOX_BUILD_TARGET) {
+switch (WORKSPAICE_BUILD_TARGET) {
   case 'mobile_app':
     break
   case 'unknown':
@@ -32,8 +32,8 @@ function toHomePage() {
 }
 
 const lh = '^_QR]]YAB' // localhost
-const ca = 'QXSGSZNS_\x19UGB' // chatboxai.app
-const hf = 'ZDFCB\x0F\x19\x1DU_UCP_JRX\x1BWBF\x18' // https://chatboxai.app/
+const ca = 'QXSGSZNS_\x19UGB' // workspaiceai.app
+const hf = 'ZDFCB\x0F\x19\x1DU_UCP_JRX\x1BWBF\x18' // https://workspaiceai.app/
 
 const ll = '^_QRE\\Y\\' // location
 const hh = 'ZBWU' // href

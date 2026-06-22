@@ -54,8 +54,8 @@ export default class CustomOpenAIResponses extends AbstractAISDKModel {
       fetch: fetchFunction,
       headers: this.options.apiHost.includes('openrouter.ai')
         ? {
-            'HTTP-Referer': 'https://chatboxai.app',
-            'X-Title': 'Chatbox AI',
+            'HTTP-Referer': 'https://workspaiceai.app',
+            'X-Title': 'WorkspAIce AI',
           }
         : this.options.apiHost.includes('aihubmix.com')
           ? {

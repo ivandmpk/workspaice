@@ -20,7 +20,7 @@ const {
   const licenseActivation = { method: 'manual' as 'login' | 'manual' | undefined }
   const authTokens = { hasTokens: true }
   const sessionRagCapability = { enabled: true }
-  const parser = { type: 'local' as 'local' | 'chatbox-ai' | 'none' | 'mineru' }
+  const parser = { type: 'local' as 'local' | 'workspaice-ai' | 'none' | 'mineru' }
 
   return {
     blobStore: blobs,
@@ -31,7 +31,7 @@ const {
     parserState: parser,
     mockParseFileLocally: vi.fn(),
     mockGetSessionRagConfig: vi.fn(async () => ({
-      models: { embedding: 'chatbox-ai:text-embedding-3-small', rerank: 'chatbox-ai:rerank' },
+      models: { embedding: 'workspaice-ai:text-embedding-3-small', rerank: 'workspaice-ai:rerank' },
       capabilities: {
         session_attachment_embedding: sessionRagCapability.enabled,
         session_attachment_rerank: false,
@@ -137,7 +137,7 @@ import {
   prepareFileAttachment,
   SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING,
   SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH,
-  SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR,
+  SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR,
 } from './sessionHelpers'
 
 function createFile(name: string, content = 'binary-content'): File {
@@ -166,7 +166,7 @@ describe('preprocessFile local parser fallback', () => {
     mockGetItem.mockClear()
   })
 
-  it('falls back to Chatbox AI when local parsing throws and a license is active', async () => {
+  it('falls back to WorkspAIce AI when local parsing throws and a license is active', async () => {
     const file = createFile('report.pdf')
     blobStore.set('remote-key', 'remote parsed content')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
@@ -181,7 +181,7 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.storageKey).toBe(`file:/tmp/${file.name}-${file.size}-${file.lastModified}`)
   })
 
-  it('falls back to Chatbox AI when local parsing returns empty content and a license is active', async () => {
+  it('falls back to WorkspAIce AI when local parsing returns empty content and a license is active', async () => {
     const file = createFile('empty.pdf')
     blobStore.set('local-key', '   \n\t')
     blobStore.set('remote-key', 'remote recovered content')
@@ -196,7 +196,7 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.content).toBe('remote recovered content')
   })
 
-  it('falls back to Chatbox AI for text files when local parsing fails', async () => {
+  it('falls back to WorkspAIce AI for text files when local parsing fails', async () => {
     const file = createFile('readme.txt', 'text content')
     blobStore.set('remote-key', 'remote text content')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
@@ -298,7 +298,7 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.tokenCountMap?.default).toBe(parsedContent.length)
   })
 
-  it('keeps over-threshold attachments inline without a Chatbox license', async () => {
+  it('keeps over-threshold attachments inline without a WorkspAIce license', async () => {
     const file = createFile('byok-large.pdf')
     const parsedContent = 'a'.repeat(256 * 1024 + 1)
     licenseState.key = undefined
@@ -353,16 +353,16 @@ describe('preprocessFile local parser fallback', () => {
   })
 
   it('recognizes raw session RAG auth failures from existing failed attachments', () => {
-    expect(isSessionAttachmentRagAuthError(SESSION_ATTACHMENT_RAG_REQUIRES_CHATBOX_AI_ERROR)).toBe(true)
-    expect(isSessionAttachmentRagAuthError('provider chatbox-ai not set')).toBe(true)
-    expect(isSessionAttachmentRagAuthError('Missing token for rerank provider: chatbox-ai')).toBe(true)
+    expect(isSessionAttachmentRagAuthError(SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR)).toBe(true)
+    expect(isSessionAttachmentRagAuthError('provider workspaice-ai not set')).toBe(true)
+    expect(isSessionAttachmentRagAuthError('Missing token for rerank provider: workspaice-ai')).toBe(true)
     expect(isSessionAttachmentRagAuthError('local_parser_failed')).toBe(false)
   })
 
   it('recognizes raw session RAG indexing failures from existing failed attachments', () => {
     expect(
       isSessionAttachmentRagIndexingError(
-        'ConnectionFailed("Unable to open connection to local database /Users/me/databases/chatbox_session_rag_vectors.db: 14")'
+        'ConnectionFailed("Unable to open connection to local database /Users/me/databases/workspaice_session_rag_vectors.db: 14")'
       )
     ).toBe(true)
     expect(isSessionAttachmentRagIndexingError('local_parser_failed')).toBe(false)

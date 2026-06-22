@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import { app } from 'electron'
 import { KNOWLEDGE_BASE_MAX_FILE_SIZE } from '../../shared/knowledge-base'
-import { getChatboxAPIOrigin } from '../../shared/request/chatboxai_pool'
+import { getWorkspAIceAPIOrigin } from '../../shared/request/workspaiceai_pool'
 import { createAfetch } from '../../shared/request/request'
 import { store } from '../store-node'
 import { getLogger } from '../util'
@@ -24,14 +24,14 @@ function getAfetch() {
   return createAfetch(getPlatformInfo())
 }
 
-// Get Chatbox API headers
-function getChatboxHeaders() {
+// Get WorkspAIce API headers
+function getWorkspAIceHeaders() {
   const info = getPlatformInfo()
   return {
-    'CHATBOX-PLATFORM': info.platform,
-    'CHATBOX-PLATFORM-TYPE': info.type,
-    'CHATBOX-OS': info.os,
-    'CHATBOX-VERSION': info.version,
+    'WORKSPAICE-PLATFORM': info.platform,
+    'WORKSPAICE-PLATFORM-TYPE': info.type,
+    'WORKSPAICE-OS': info.os,
+    'WORKSPAICE-VERSION': info.version,
   }
 }
 
@@ -55,17 +55,17 @@ async function generateUploadUrl(licenseKey: string, filename: string): Promise<
 
   const afetch = getAfetch()
   const res = await afetch(
-    `${getChatboxAPIOrigin()}/api/files/generate-upload-url`,
+    `${getWorkspAIceAPIOrigin()}/api/files/generate-upload-url`,
     {
       method: 'POST',
       headers: {
         Authorization: licenseKey,
         'Content-Type': 'application/json',
-        ...getChatboxHeaders(),
+        ...getWorkspAIceHeaders(),
       },
       body: JSON.stringify({ licenseKey, filename }),
     },
-    { parseChatboxRemoteError: true }
+    { parseWorkspAIceRemoteError: true }
   )
   const json: Response = await res.json()
   return json.data
@@ -109,13 +109,13 @@ async function createAndParseFile(
 
   const afetch = getAfetch()
   const res = await afetch(
-    `${getChatboxAPIOrigin()}/api/files/create`,
+    `${getWorkspAIceAPIOrigin()}/api/files/create`,
     {
       method: 'POST',
       headers: {
         Authorization: licenseKey,
         'Content-Type': 'application/json',
-        ...getChatboxHeaders(),
+        ...getWorkspAIceHeaders(),
       },
       body: JSON.stringify({
         licenseKey,
@@ -124,14 +124,14 @@ async function createAndParseFile(
         returnContent: true,
       }),
     },
-    { parseChatboxRemoteError: true }
+    { parseWorkspAIceRemoteError: true }
   )
   const json: Response = await res.json()
   return json.data
 }
 
 /**
- * Parse file remotely using Chatbox AI backend
+ * Parse file remotely using WorkspAIce AI backend
  * This is the main entry point for remote file parsing
  *
  * @param filePath - Local file path

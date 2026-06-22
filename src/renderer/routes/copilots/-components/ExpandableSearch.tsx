@@ -69,7 +69,7 @@ export function ExpandableSearch({ onSearch }: ExpandableSearchProps) {
                   <Flex gap={2}>
                     <ActionIcon
                       variant="subtle"
-                      color="chatbox-tertiary"
+                      color="workspaice-tertiary"
                       size="sm"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={handleClear}
@@ -78,7 +78,7 @@ export function ExpandableSearch({ onSearch }: ExpandableSearchProps) {
                     </ActionIcon>
                     <ActionIcon
                       variant="subtle"
-                      color="chatbox-tertiary"
+                      color="workspaice-tertiary"
                       size="sm"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={handleSearch}
@@ -89,7 +89,7 @@ export function ExpandableSearch({ onSearch }: ExpandableSearchProps) {
                 ) : (
                   <ActionIcon
                     variant="subtle"
-                    color="chatbox-tertiary"
+                    color="workspaice-tertiary"
                     size="sm"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={handleSearch}
@@ -108,7 +108,7 @@ export function ExpandableSearch({ onSearch }: ExpandableSearchProps) {
         {(styles) => (
           <ActionIcon
             variant="subtle"
-            color="chatbox-tertiary"
+            color="workspaice-tertiary"
             size="lg"
             onClick={() => setIsOpen(true)}
             style={styles}

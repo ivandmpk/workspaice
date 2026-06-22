@@ -52,8 +52,8 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
         p-xs
         gap-xs
         rounded-md
-        border border-solid border-chatbox-border-primary
-        bg-chatbox-background-primary
+        border border-solid border-workspaice-border-primary
+        bg-workspaice-background-primary
         cursor-pointer
       "
       >
@@ -65,7 +65,7 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
               alt={name}
               size={36}
               radius="md"
-              className="flex-shrink-0 border border-solid border-chatbox-border-primary"
+              className="flex-shrink-0 border border-solid border-workspaice-border-primary"
             >
               {avatar?.type === 'storage-key' ? (
                 <ImageInStorage storageKey={avatar.storageKey} className="object-cover object-center w-full h-full" />
@@ -82,9 +82,9 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
               h={36}
               align="center"
               justify="center"
-              className="flex-shrink-0 rounded-md bg-chatbox-background-brand-secondary"
+              className="flex-shrink-0 rounded-md bg-workspaice-background-brand-secondary"
             >
-              <ScalableIcon icon={IconMessageCircle2Filled} size={20} className="text-chatbox-tint-brand" />
+              <ScalableIcon icon={IconMessageCircle2Filled} size={20} className="text-workspaice-tint-brand" />
             </Stack>
           )}
 
@@ -92,7 +92,7 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
             highlight={highlightTerm}
             fw={600}
             size="sm"
-            c="chatbox-secondary"
+            c="workspaice-secondary"
             lineClamp={2}
             className="flex-1 leading-snug"
           >
@@ -161,8 +161,8 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
                 <ActionIcon
                   variant="transparent"
                   size={28}
-                  color={type === 'local' && copilot.starred ? 'chatbox-brand' : 'chatbox-tertiary'}
-                  className="hover:bg-chatbox-background-gray-secondary rounded-full"
+                  color={type === 'local' && copilot.starred ? 'workspaice-brand' : 'workspaice-tertiary'}
+                  className="hover:bg-workspaice-background-gray-secondary rounded-full"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {type === 'local' && copilot.starred ? (
@@ -180,7 +180,7 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
         <Highlight
           highlight={highlightTerm}
           size="xs"
-          c="chatbox-secondary"
+          c="workspaice-secondary"
           lineClamp={2}
           className="flex-shrink-0 leading-snug"
         >
@@ -196,10 +196,10 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
                 key={tag}
                 span
                 size="xs"
-                c="chatbox-brand"
+                c="workspaice-brand"
                 px={6}
                 py={2}
-                className=" block rounded-full bg-chatbox-background-brand-secondary"
+                className=" block rounded-full bg-workspaice-background-brand-secondary"
               >
                 {t(tag)}
               </Text>
@@ -208,7 +208,7 @@ export function CopilotItem({ copilot, type = 'local', highlightTerm = '' }: Cop
 
           {/* Publish Date */}
           {formattedDate && (
-            <Text size="xs" c="chatbox-tertiary" className="whitespace-nowrap ml-2">
+            <Text size="xs" c="workspaice-tertiary" className="whitespace-nowrap ml-2">
               {type === 'local'
                 ? t('Created on {{date}}', { date: formattedDate })
                 : t('Published on {{date}}', { date: formattedDate })}

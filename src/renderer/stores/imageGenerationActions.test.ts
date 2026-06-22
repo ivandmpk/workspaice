@@ -109,7 +109,7 @@ describe('imageGenerationActions reference image payload', () => {
       prompt: 'make a variation',
       referenceImages: ['https://example.com/reference.png', 'storage-key-1'],
       model: {
-        provider: 'chatbox-ai',
+        provider: 'workspaice-ai',
         modelId: 'gpt-image-1',
       },
       imageGenerateNum: 1,
@@ -128,7 +128,7 @@ describe('imageGenerationActions reference image payload', () => {
     expect(trackEventMock).toHaveBeenCalledWith('generate_image', expect.objectContaining({ has_reference: true }))
   })
 
-  it('stores structured error codes from Chatbox AI image generation failures', async () => {
+  it('stores structured error codes from WorkspAIce AI image generation failures', async () => {
     const { BaseError } = await import('@shared/models/errors')
     class StructuredImageGenerationError extends BaseError {
       public code = 20004
@@ -141,7 +141,7 @@ describe('imageGenerationActions reference image payload', () => {
       prompt: 'make an image',
       referenceImages: [],
       model: {
-        provider: 'chatbox-ai',
+        provider: 'workspaice-ai',
         modelId: 'gpt-image-1',
       },
       imageGenerateNum: 1,
@@ -180,7 +180,7 @@ describe('imageGenerationActions reference image payload', () => {
       prompt: 'make an image',
       referenceImages: [],
       model: {
-        provider: 'chatbox-ai',
+        provider: 'workspaice-ai',
         modelId: 'gpt-image-1',
       },
       imageGenerateNum: 1,

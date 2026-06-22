@@ -429,8 +429,8 @@ async function migrate_9_to_10(dataStore: MigrateStore): Promise<boolean> {
       chatglmApiKey,
       chatglmModel,
 
-      // chatbox-ai
-      chatboxAIModel,
+      // workspaice-ai
+      workspaiceAIModel,
 
       // claude
       claudeApiKey,
@@ -640,7 +640,6 @@ async function migrate_9_to_10(dataStore: MigrateStore): Promise<boolean> {
         const oldSessionSettings = (session.settings || {}) as any
         const sessionProvider: ModelProvider = oldSessionSettings.aiProvider ?? oldSettings.aiProvider
         const modelKey = {
-          [ModelProviderEnum.ChatboxAI]: 'chatboxAIModel',
           [ModelProviderEnum.OpenAI]: 'model',
           [ModelProviderEnum.Claude]: 'claudeModel',
           [ModelProviderEnum.Gemini]: 'geminiModel',
@@ -666,11 +665,9 @@ async function migrate_9_to_10(dataStore: MigrateStore): Promise<boolean> {
                 topP: oldSessionSettings.topP ?? oldSettings.topP,
               }
             : {
-                provider: [ModelProviderEnum.ChatboxAI, ModelProviderEnum.OpenAI, ModelProviderEnum.Azure].includes(
-                  oldSettings.aiProvider
-                )
+                provider: [ModelProviderEnum.OpenAI, ModelProviderEnum.Azure].includes(oldSettings.aiProvider)
                   ? oldSettings.aiProvider
-                  : ModelProviderEnum.ChatboxAI,
+                  : ModelProviderEnum.OpenAI,
                 modelId: 'DALL-E-3',
                 imageGenerateNum: oldSessionSettings.imageGenerateNum ?? 3,
                 dalleStyle: oldSessionSettings.dalleStyle ?? 'vivid',
@@ -784,7 +781,7 @@ async function migrate_13_to_14(dataStore: MigrateStore) {
           generatedImages,
           createdAt: assistantMsg.timestamp || Date.now(),
           model: {
-            provider: session.settings?.provider || ModelProviderEnum.ChatboxAI,
+            provider: session.settings?.provider || ModelProviderEnum.OpenAI,
             modelId: session.settings?.modelId || 'DALL-E-3',
           },
           dalleStyle: session.settings?.dalleStyle,

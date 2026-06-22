@@ -19,7 +19,7 @@ const log = getLogger('settings-store')
 /**
  * Returns platform-specific default document parser configuration.
  * - Desktop: 'local' (has full Node.js environment for local parsing)
- * - Mobile/Web: 'none' (only basic text file support by default, user can enable chatbox-ai)
+ * - Mobile/Web: 'none' (only basic text file support by default, user can enable workspaice-ai)
  */
 export function getPlatformDefaultDocumentParser(): DocumentParserConfig {
   return platform.type === 'desktop' ? { type: 'local' } : { type: 'none' }

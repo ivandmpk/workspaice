@@ -1,6 +1,6 @@
 # Error Handling Improvements
 
-This document describes the error handling improvements made to Chatbox to address the issue where some users experienced "something went wrong!" errors with "cannot read properties of undefined" that were not being reported to Sentry.
+This document describes the error handling improvements made to WorkspAIce to address the issue where some users experienced "something went wrong!" errors with "cannot read properties of undefined" that were not being reported to Sentry.
 
 ## Changes Made
 

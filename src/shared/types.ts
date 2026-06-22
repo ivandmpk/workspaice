@@ -106,7 +106,7 @@ export interface Toast {
 }
 
 export interface RemoteConfig {
-  setting_chatboxai_first: boolean
+  setting_workspaiceai_first: boolean
   current_version: string
   product_ids: number[]
   knowledge_base_models?: {
@@ -163,7 +163,7 @@ export interface SessionAttachmentRagMaintenanceResult {
   orphanDeletedIds: number[]
 }
 
-export type ChatboxAIModel = 'chatboxai-3.5' | 'chatboxai-4' | string
+export type WorkspAIceAIModel = 'workspaiceai-3.5' | 'workspaiceai-4' | string
 
 export function copyMessage(source: Message): Message {
   return {
@@ -311,7 +311,7 @@ export function copyThreads(source?: SessionThread[], idMapping?: Map<string, st
 }
 
 // RAG related types
-export type KnowledgeBaseProviderMode = 'chatbox-ai' | 'custom'
+export type KnowledgeBaseProviderMode = 'workspaice-ai' | 'custom'
 
 export interface KnowledgeBase {
   id: number

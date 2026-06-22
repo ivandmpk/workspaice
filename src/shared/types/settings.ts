@@ -11,13 +11,13 @@ export { ModelProviderType } from './provider'
  * Document parser service type
  * - none: No parsing service, only supports basic text files (mobile/web default)
  * - local: Local parsing using built-in libraries (desktop default)
- * - chatbox-ai: Chatbox cloud parsing service (requires login, consumes compute points)
+ * - workspaice-ai: WorkspAIce cloud parsing service (requires login, consumes compute points)
  * - mineru: Third-party MinerU parsing service (desktop only)
  */
-export type DocumentParserType = 'none' | 'local' | 'chatbox-ai' | 'mineru'
+export type DocumentParserType = 'none' | 'local' | 'workspaice-ai' | 'mineru'
 
 export const DocumentParserConfigSchema = z.object({
-  type: z.enum(['none', 'local', 'chatbox-ai', 'mineru']),
+  type: z.enum(['none', 'local', 'workspaice-ai', 'mineru']),
   mineru: z
     .object({
       apiToken: z.string(),
@@ -157,11 +157,11 @@ const UnifiedTokenUsageDetailSchema = z.object({
   expires_at: z.string().nullish(),
 })
 
-const ChatboxAILicenseDetailSchema = z.object({
-  type: z.enum(['chatboxai-3.5', 'chatboxai-4']).optional(),
+const WorkspAIceAILicenseDetailSchema = z.object({
+  type: z.enum(['workspaiceai-3.5', 'workspaiceai-4']).optional(),
   name: z.string(),
   status: z.string().optional(),
-  defaultModel: z.enum(['chatboxai-3.5', 'chatboxai-4']).optional(),
+  defaultModel: z.enum(['workspaiceai-3.5', 'workspaiceai-4']).optional(),
   remaining_quota_35: z.number(),
   remaining_quota_4: z.number(),
   remaining_quota_image: z.number(),
@@ -331,17 +331,17 @@ export const SettingsSchema = GlobalSessionSettingsSchema.extend({
     .optional()
     .catch(undefined),
 
-  // chatboxai
+  // workspaiceai
   licenseKey: z.string().optional(),
   licenseInstances: z.record(z.string(), z.string()).optional().catch(undefined),
-  licenseDetail: ChatboxAILicenseDetailSchema.optional().catch(undefined),
+  licenseDetail: WorkspAIceAILicenseDetailSchema.optional().catch(undefined),
   licensePlanName: z.string().optional(),
   licenseActivationMethod: z.enum(['login', 'manual']).optional(),
   hasExpiredLicense: z.boolean().default(false),
   lastSelectedLicenseByUser: z.record(z.string(), z.string()).optional().catch(undefined),
   // 在 licensekeyview UI中显示/记忆的key，以免用户使用 login 方式后老 key 被清除，他也不记得
   memorizedManualLicenseKey: z.string().optional(),
-  chatboxAIDesktopPromptDismissed: z.boolean().default(false),
+  workspaiceAIDesktopPromptDismissed: z.boolean().default(false),
 
   // chat settings
   showWordCount: z.boolean().optional().catch(undefined),
@@ -431,7 +431,7 @@ export type OpenAIParams = z.infer<typeof OpenAIParamsSchema>
 export type GoogleParams = z.infer<typeof GoogleParamsSchema>
 export type ProviderOptions = z.infer<typeof ProviderOptionsSchema>
 export type GlobalSessionSettings = z.infer<typeof GlobalSessionSettingsSchema>
-export type ChatboxAILicenseDetail = z.infer<typeof ChatboxAILicenseDetailSchema>
+export type WorkspAIceAILicenseDetail = z.infer<typeof WorkspAIceAILicenseDetailSchema>
 export type UnifiedTokenUsageDetail = z.infer<typeof UnifiedTokenUsageDetailSchema>
 export type ShortcutSendValue = z.infer<typeof ShortcutSendValueSchema>
 export type ShortcutToggleWindowValue = z.infer<typeof ShortcutToggleWindowValueSchema>

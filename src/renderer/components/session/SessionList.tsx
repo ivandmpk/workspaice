@@ -108,14 +108,14 @@ export default function SessionList(props: Props) {
   return (
     <>
       <Flex align="center" py="xs" px="md" gap={'xs'}>
-        <Text c="chatbox-tertiary" flex={1}>
+        <Text c="workspaice-tertiary" flex={1}>
           {t('Chat')}
         </Text>
 
         <Tooltip label={t('Search')} openDelay={1000} withArrow>
           <ActionIcon
             variant="subtle"
-            color="chatbox-tertiary"
+            color="workspaice-tertiary"
             size={20}
             onClick={() => setOpenSearchDialog(true, true)}
           >
@@ -126,7 +126,7 @@ export default function SessionList(props: Props) {
         <Tooltip label={t('Clear Conversation List')} openDelay={1000} withArrow>
           <ActionIcon
             variant="subtle"
-            color="chatbox-tertiary"
+            color="workspaice-tertiary"
             size={20}
             onClick={() => NiceModal.show('clear-session-list')}
           >

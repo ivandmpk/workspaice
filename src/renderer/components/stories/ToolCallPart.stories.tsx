@@ -128,8 +128,8 @@ export const CurrentDesign: StoryObj = {
             <Group justify="space-between" className="w-full">
               <Group gap="xs">
                 <Text fw={600}>Web Search</Text>
-                <IconTool size={16} color="var(--chatbox-tint-success)" />
-                <IconLoader size={16} className="animate-spin" color="var(--chatbox-tint-brand)" />
+                <IconTool size={16} color="var(--workspaice-tint-success)" />
+                <IconLoader size={16} className="animate-spin" color="var(--workspaice-tint-brand)" />
               </Group>
               <Space miw="xl" />
               <IconChevronRight size={16} className={clsx('transition-transform', expanded ? 'rotate-90' : '')} />
@@ -141,8 +141,8 @@ export const CurrentDesign: StoryObj = {
             <Group justify="space-between" className="w-full">
               <Group gap="xs">
                 <Text fw={600}>Query Knowledge Base</Text>
-                <IconTool size={16} color="var(--chatbox-tint-success)" />
-                <IconCircleCheckFilled size={16} color="var(--chatbox-tint-success)" />
+                <IconTool size={16} color="var(--workspaice-tint-success)" />
+                <IconCircleCheckFilled size={16} color="var(--workspaice-tint-success)" />
               </Group>
               <Space miw="xl" />
               <IconChevronRight size={16} className={clsx('transition-transform', expanded ? 'rotate-90' : '')} />
@@ -154,8 +154,8 @@ export const CurrentDesign: StoryObj = {
             <Group justify="space-between" className="w-full">
               <Group gap="xs">
                 <Text fw={600}>Terminal</Text>
-                <IconTool size={16} color="var(--chatbox-tint-success)" />
-                <IconCircleXFilled size={16} color="var(--chatbox-tint-error)" />
+                <IconTool size={16} color="var(--workspaice-tint-success)" />
+                <IconCircleXFilled size={16} color="var(--workspaice-tint-error)" />
               </Group>
               <Space miw="xl" />
               <IconChevronRight size={16} />
@@ -167,8 +167,8 @@ export const CurrentDesign: StoryObj = {
             <Group justify="space-between" className="w-full">
               <Group gap="xs">
                 <Text fw={600}>Code Search</Text>
-                <IconTool size={16} color="var(--chatbox-tint-success)" />
-                <IconCircleCheckFilled size={16} color="var(--chatbox-tint-success)" />
+                <IconTool size={16} color="var(--workspaice-tint-success)" />
+                <IconCircleCheckFilled size={16} color="var(--workspaice-tint-success)" />
               </Group>
               <Space miw="xl" />
               <IconChevronRight size={16} className="rotate-90 transition-transform" />
@@ -176,16 +176,16 @@ export const CurrentDesign: StoryObj = {
           </Paper>
           <Paper withBorder radius="md" p="sm">
             <Stack gap="xs">
-              <Group gap="xs" c="chatbox-tertiary">
+              <Group gap="xs" c="workspaice-tertiary">
                 <IconCode size={16} />
-                <Text fw={600} size="xs" c="chatbox-tertiary" m="0">
+                <Text fw={600} size="xs" c="workspaice-tertiary" m="0">
                   Arguments
                 </Text>
               </Group>
               <Code block>{JSON.stringify({ query: 'how to implement RAG', max_results: 5 }, null, 2)}</Code>
-              <Group gap="xs" c="chatbox-tertiary" mt="xs">
+              <Group gap="xs" c="workspaice-tertiary" mt="xs">
                 <IconArrowRight size={16} />
-                <Text fw={600} size="xs" c="chatbox-tertiary" m="0">
+                <Text fw={600} size="xs" c="workspaice-tertiary" m="0">
                   Result
                 </Text>
               </Group>
@@ -229,15 +229,15 @@ export const OptionA_InlinePill: StoryObj = {
               py={4}
               style={{
                 borderRadius: 'var(--mantine-radius-xl)',
-                backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                backgroundColor: 'var(--workspaice-background-gray-secondary)',
                 display: 'inline-flex',
               }}
             >
-              <IconWorld size={14} color="var(--chatbox-tint-brand)" />
+              <IconWorld size={14} color="var(--workspaice-tint-brand)" />
               <Text size="xs" fw={500}>
                 Web Search
               </Text>
-              <IconLoader size={12} className="animate-spin" color="var(--chatbox-tint-brand)" />
+              <IconLoader size={12} className="animate-spin" color="var(--workspaice-tint-brand)" />
             </Group>
           </UnstyledButton>
 
@@ -249,18 +249,18 @@ export const OptionA_InlinePill: StoryObj = {
               py={4}
               style={{
                 borderRadius: 'var(--mantine-radius-xl)',
-                backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                backgroundColor: 'var(--workspaice-background-gray-secondary)',
                 display: 'inline-flex',
               }}
             >
-              <IconDatabase size={14} color="var(--chatbox-tint-success)" />
+              <IconDatabase size={14} color="var(--workspaice-tint-success)" />
               <Text size="xs" fw={500}>
                 Knowledge Base
               </Text>
-              <IconCheck size={12} color="var(--chatbox-tint-success)" />
+              <IconCheck size={12} color="var(--workspaice-tint-success)" />
               <IconChevronDown
                 size={12}
-                color="var(--chatbox-tertiary)"
+                color="var(--workspaice-tertiary)"
                 className={clsx('transition-transform', expanded === 'kb' ? 'rotate-180' : '')}
               />
             </Group>
@@ -271,12 +271,12 @@ export const OptionA_InlinePill: StoryObj = {
               p="xs"
               ml={4}
               style={{
-                backgroundColor: 'var(--chatbox-background-gray-secondary)',
-                borderLeft: '2px solid var(--chatbox-tint-success)',
+                backgroundColor: 'var(--workspaice-background-gray-secondary)',
+                borderLeft: '2px solid var(--workspaice-tint-success)',
               }}
             >
               <Group gap={4} mb={4}>
-                <Text size="xs" c="chatbox-tertiary" fw={500}>
+                <Text size="xs" c="workspaice-tertiary" fw={500}>
                   query:
                 </Text>
                 <Text size="xs" fs="italic">
@@ -284,7 +284,7 @@ export const OptionA_InlinePill: StoryObj = {
                 </Text>
               </Group>
               <Group gap={4}>
-                <Text size="xs" c="chatbox-tertiary" fw={500}>
+                <Text size="xs" c="workspaice-tertiary" fw={500}>
                   results:
                 </Text>
                 <Text size="xs">3 matches found</Text>
@@ -300,15 +300,15 @@ export const OptionA_InlinePill: StoryObj = {
               py={4}
               style={{
                 borderRadius: 'var(--mantine-radius-xl)',
-                backgroundColor: 'color-mix(in srgb, var(--chatbox-tint-error) 8%, transparent)',
+                backgroundColor: 'color-mix(in srgb, var(--workspaice-tint-error) 8%, transparent)',
                 display: 'inline-flex',
               }}
             >
-              <IconTerminal size={14} color="var(--chatbox-tint-error)" />
-              <Text size="xs" fw={500} c="chatbox-error">
+              <IconTerminal size={14} color="var(--workspaice-tint-error)" />
+              <Text size="xs" fw={500} c="workspaice-error">
                 Terminal
               </Text>
-              <IconCircleXFilled size={12} color="var(--chatbox-tint-error)" />
+              <IconCircleXFilled size={12} color="var(--workspaice-tint-error)" />
             </Group>
           </UnstyledButton>
 
@@ -326,18 +326,18 @@ export const OptionA_InlinePill: StoryObj = {
                   py={4}
                   style={{
                     borderRadius: 'var(--mantine-radius-xl)',
-                    backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                    backgroundColor: 'var(--workspaice-background-gray-secondary)',
                     display: 'inline-flex',
                   }}
                 >
                   {React.createElement([IconWorld, IconDatabase, IconFileSearch][i], {
                     size: 14,
-                    color: 'var(--chatbox-tint-success)',
+                    color: 'var(--workspaice-tint-success)',
                   })}
                   <Text size="xs" fw={500}>
                     {name}
                   </Text>
-                  <IconCheck size={12} color="var(--chatbox-tint-success)" />
+                  <IconCheck size={12} color="var(--workspaice-tint-success)" />
                 </Group>
               ))}
             </Group>
@@ -379,7 +379,7 @@ export const OptionB_StructuredCard: StoryObj = {
                   searching...
                 </Badge>
               </Group>
-              <IconChevronRight size={14} color="var(--chatbox-tertiary)" />
+              <IconChevronRight size={14} color="var(--workspaice-tertiary)" />
             </Group>
             <Progress size={2} value={65} animated color="blue" />
           </Paper>
@@ -398,7 +398,7 @@ export const OptionB_StructuredCard: StoryObj = {
                   3 results
                 </Badge>
               </Group>
-              <IconChevronRight size={14} color="var(--chatbox-tertiary)" />
+              <IconChevronRight size={14} color="var(--workspaice-tertiary)" />
             </Group>
           </Paper>
 
@@ -419,7 +419,7 @@ export const OptionB_StructuredCard: StoryObj = {
                 </Group>
                 <IconChevronRight
                   size={14}
-                  color="var(--chatbox-tertiary)"
+                  color="var(--workspaice-tertiary)"
                   className={clsx('transition-transform', expanded ? 'rotate-90' : '')}
                 />
               </Group>
@@ -428,7 +428,7 @@ export const OptionB_StructuredCard: StoryObj = {
               <Box px="sm" pb="sm" style={{ borderTop: '1px solid var(--paper-border-color)' }}>
                 <Stack gap={6} mt="xs">
                   <Group gap={6}>
-                    <Text size="xs" c="chatbox-tertiary" fw={500} w={60}>
+                    <Text size="xs" c="workspaice-tertiary" fw={500} w={60}>
                       Query
                     </Text>
                     <Text size="xs" fs="italic">
@@ -436,25 +436,25 @@ export const OptionB_StructuredCard: StoryObj = {
                     </Text>
                   </Group>
                   <Group gap={6} align="flex-start">
-                    <Text size="xs" c="chatbox-tertiary" fw={500} w={60}>
+                    <Text size="xs" c="workspaice-tertiary" fw={500} w={60}>
                       Results
                     </Text>
                     <Stack gap={4}>
                       <Group gap={4}>
-                        <IconCode size={12} color="var(--chatbox-tertiary)" />
+                        <IconCode size={12} color="var(--workspaice-tertiary)" />
                         <Text size="xs" ff="monospace">
                           rag.ts
                         </Text>
-                        <Text size="xs" c="chatbox-tertiary">
+                        <Text size="xs" c="workspaice-tertiary">
                           score: 0.95
                         </Text>
                       </Group>
                       <Group gap={4}>
-                        <IconCode size={12} color="var(--chatbox-tertiary)" />
+                        <IconCode size={12} color="var(--workspaice-tertiary)" />
                         <Text size="xs" ff="monospace">
                           embed.ts
                         </Text>
-                        <Text size="xs" c="chatbox-tertiary">
+                        <Text size="xs" c="workspaice-tertiary">
                           score: 0.87
                         </Text>
                       </Group>
@@ -470,7 +470,7 @@ export const OptionB_StructuredCard: StoryObj = {
             withBorder
             radius="md"
             p={0}
-            style={{ overflow: 'hidden', borderColor: 'var(--chatbox-border-error)' }}
+            style={{ overflow: 'hidden', borderColor: 'var(--workspaice-border-error)' }}
           >
             <Group px="sm" py={8} justify="space-between" className="cursor-pointer">
               <Group gap="xs">
@@ -484,7 +484,7 @@ export const OptionB_StructuredCard: StoryObj = {
                   failed
                 </Badge>
               </Group>
-              <IconChevronRight size={14} color="var(--chatbox-tertiary)" />
+              <IconChevronRight size={14} color="var(--workspaice-tertiary)" />
             </Group>
           </Paper>
         </Stack>
@@ -510,7 +510,7 @@ export const OptionC_Timeline: StoryObj = {
               <Text size="sm" fw={600}>
                 Web Search
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 "latest React patterns"
               </Text>
             </Group>
@@ -538,7 +538,7 @@ export const OptionC_Timeline: StoryObj = {
             </Group>
           }
         >
-          <Text size="xs" c="chatbox-tertiary" mt={4}>
+          <Text size="xs" c="workspaice-tertiary" mt={4}>
             Matched: components.md, hooks.md, patterns.md
           </Text>
         </Timeline.Item>
@@ -550,12 +550,12 @@ export const OptionC_Timeline: StoryObj = {
               <Text size="sm" fw={600}>
                 Code Search
               </Text>
-              <IconLoader size={14} className="animate-spin" color="var(--chatbox-tint-brand)" />
+              <IconLoader size={14} className="animate-spin" color="var(--workspaice-tint-brand)" />
             </Group>
           }
           color="blue"
         >
-          <Text size="xs" c="chatbox-tertiary" mt={4}>
+          <Text size="xs" c="workspaice-tertiary" mt={4}>
             Searching codebase...
           </Text>
         </Timeline.Item>
@@ -563,13 +563,13 @@ export const OptionC_Timeline: StoryObj = {
         <Timeline.Item
           bullet={<IconTerminal size={12} />}
           title={
-            <Text size="sm" fw={600} c="chatbox-tertiary">
+            <Text size="sm" fw={600} c="workspaice-tertiary">
               Terminal
             </Text>
           }
           color="gray"
         >
-          <Text size="xs" c="chatbox-tertiary" mt={4}>
+          <Text size="xs" c="workspaice-tertiary" mt={4}>
             Pending
           </Text>
         </Timeline.Item>
@@ -598,11 +598,11 @@ export const OptionD_MinimalInline: StoryObj = {
                 h={4}
                 style={{
                   borderRadius: '50%',
-                  backgroundColor: 'var(--chatbox-tint-brand)',
+                  backgroundColor: 'var(--workspaice-tint-brand)',
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               />
-              <Text size="sm" c="chatbox-tertiary">
+              <Text size="sm" c="workspaice-tertiary">
                 Searching the web...
               </Text>
             </Group>
@@ -611,16 +611,16 @@ export const OptionD_MinimalInline: StoryObj = {
           {/* Success collapsed */}
           <UnstyledButton onClick={() => setExpanded(expanded === 'web' ? null : 'web')}>
             <Group gap={6}>
-              <IconCheck size={14} color="var(--chatbox-tint-success)" />
+              <IconCheck size={14} color="var(--workspaice-tint-success)" />
               <Text
                 size="sm"
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 td="underline"
                 style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
               >
                 Searched the web
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 · 5 results
               </Text>
             </Group>
@@ -632,7 +632,7 @@ export const OptionD_MinimalInline: StoryObj = {
                 'RSC Deep Dive – vercel.com',
                 'Server vs Client – nextjs.org',
               ].map((r, i) => (
-                <Text key={i} size="xs" c="chatbox-tertiary">
+                <Text key={i} size="xs" c="workspaice-tertiary">
                   {i + 1}. {r}
                 </Text>
               ))}
@@ -642,16 +642,16 @@ export const OptionD_MinimalInline: StoryObj = {
           {/* Success expanded */}
           <UnstyledButton onClick={() => setExpanded(expanded === 'code' ? null : 'code')}>
             <Group gap={6}>
-              <IconCheck size={14} color="var(--chatbox-tint-success)" />
+              <IconCheck size={14} color="var(--workspaice-tint-success)" />
               <Text
                 size="sm"
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 td="underline"
                 style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
               >
                 Searched codebase
               </Text>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 · 2 matches
               </Text>
             </Group>
@@ -659,18 +659,18 @@ export const OptionD_MinimalInline: StoryObj = {
           <Collapse in={expanded === 'code'}>
             <Stack gap={4} ml={20}>
               <Group gap={6}>
-                <Text size="xs" ff="monospace" c="chatbox-secondary">
+                <Text size="xs" ff="monospace" c="workspaice-secondary">
                   src/rag.ts
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   relevance: 0.95
                 </Text>
               </Group>
               <Group gap={6}>
-                <Text size="xs" ff="monospace" c="chatbox-secondary">
+                <Text size="xs" ff="monospace" c="workspaice-secondary">
                   src/embed.ts
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   relevance: 0.87
                 </Text>
               </Group>
@@ -679,14 +679,14 @@ export const OptionD_MinimalInline: StoryObj = {
 
           {/* Error */}
           <Group gap={6}>
-            <IconCircleXFilled size={14} color="var(--chatbox-tint-error)" />
-            <Text size="sm" c="chatbox-error">
+            <IconCircleXFilled size={14} color="var(--workspaice-tint-error)" />
+            <Text size="sm" c="workspaice-error">
               Terminal command failed
             </Text>
             <Tooltip label="Exit code 1: permission denied" withArrow>
               <Text
                 size="xs"
-                c="chatbox-tertiary"
+                c="workspaice-tertiary"
                 td="underline"
                 style={{ textDecorationStyle: 'dotted', cursor: 'help' }}
               >
@@ -739,8 +739,8 @@ export const WebSearchComparison: StoryObj = {
               <Group justify="space-between" className="w-full">
                 <Group gap="xs">
                   <Text fw={600}>Web Search</Text>
-                  <IconTool size={16} color="var(--chatbox-tint-success)" />
-                  <IconCircleCheckFilled size={16} color="var(--chatbox-tint-success)" />
+                  <IconTool size={16} color="var(--workspaice-tint-success)" />
+                  <IconCircleCheckFilled size={16} color="var(--workspaice-tint-success)" />
                 </Group>
                 <Space miw="xl" />
                 <IconChevronRight size={16} />
@@ -748,11 +748,11 @@ export const WebSearchComparison: StoryObj = {
             </Paper>
             <Group gap="xs" wrap="nowrap" className="overflow-x-auto" pb="xs">
               {searchResults.map((r, i) => (
-                <Paper key={i} radius="md" p={8} bg="var(--chatbox-background-gray-secondary)" maw={200}>
+                <Paper key={i} radius="md" p={8} bg="var(--workspaice-background-gray-secondary)" maw={200}>
                   <Text size="sm" truncate="end">
                     <b>{i + 1}.</b> {r.title}
                   </Text>
-                  <Text size="xs" truncate="end" c="chatbox-tertiary" mt={4}>
+                  <Text size="xs" truncate="end" c="workspaice-tertiary" mt={4}>
                     {r.link}
                   </Text>
                 </Paper>
@@ -774,14 +774,14 @@ export const WebSearchComparison: StoryObj = {
                 <Text size="sm" fw={600}>
                   Web Search
                 </Text>
-                <Text size="xs" c="chatbox-tertiary" fs="italic">
+                <Text size="xs" c="workspaice-tertiary" fs="italic">
                   "React Server Components"
                 </Text>
                 <Badge size="xs" variant="light" color="teal">
                   {searchResults.length} results
                 </Badge>
               </Group>
-              <IconChevronRight size={14} className="rotate-90 transition-transform" color="var(--chatbox-tertiary)" />
+              <IconChevronRight size={14} className="rotate-90 transition-transform" color="var(--workspaice-tertiary)" />
             </Group>
             <Box px="sm" pb="sm" style={{ borderTop: '1px solid var(--paper-border-color)' }}>
               <Stack gap={6} mt="xs">
@@ -793,18 +793,18 @@ export const WebSearchComparison: StoryObj = {
                     py={6}
                     style={{
                       borderRadius: 'var(--mantine-radius-sm)',
-                      backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                      backgroundColor: 'var(--workspaice-background-gray-secondary)',
                     }}
                     wrap="nowrap"
                   >
-                    <Text size="xs" c="chatbox-tertiary" fw={700} w={16} ta="center" style={{ flexShrink: 0 }}>
+                    <Text size="xs" c="workspaice-tertiary" fw={700} w={16} ta="center" style={{ flexShrink: 0 }}>
                       {i + 1}
                     </Text>
                     <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
                       <Text size="xs" fw={600} truncate="end">
                         {r.title}
                       </Text>
-                      <Text size="xs" c="chatbox-tertiary" truncate="end">
+                      <Text size="xs" c="workspaice-tertiary" truncate="end">
                         {r.snippet}
                       </Text>
                     </Stack>
@@ -839,8 +839,8 @@ export const AllStatesOverview: StoryObj = {
               <Paper withBorder radius="md" px="xs">
                 <Group gap="xs">
                   <Text fw={600}>Web Search</Text>
-                  <IconTool size={16} color="var(--chatbox-tint-success)" />
-                  <IconLoader size={16} className="animate-spin" color="var(--chatbox-tint-brand)" />
+                  <IconTool size={16} color="var(--workspaice-tint-success)" />
+                  <IconLoader size={16} className="animate-spin" color="var(--workspaice-tint-brand)" />
                 </Group>
               </Paper>
             </Stack>
@@ -855,15 +855,15 @@ export const AllStatesOverview: StoryObj = {
                 py={4}
                 style={{
                   borderRadius: 'var(--mantine-radius-xl)',
-                  backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                  backgroundColor: 'var(--workspaice-background-gray-secondary)',
                   display: 'inline-flex',
                 }}
               >
-                <IconWorld size={14} color="var(--chatbox-tint-brand)" />
+                <IconWorld size={14} color="var(--workspaice-tint-brand)" />
                 <Text size="xs" fw={500}>
                   Web Search
                 </Text>
-                <IconLoader size={12} className="animate-spin" color="var(--chatbox-tint-brand)" />
+                <IconLoader size={12} className="animate-spin" color="var(--workspaice-tint-brand)" />
               </Group>
             </Stack>
             {/* Card */}
@@ -902,11 +902,11 @@ export const AllStatesOverview: StoryObj = {
                   h={4}
                   style={{
                     borderRadius: '50%',
-                    backgroundColor: 'var(--chatbox-tint-brand)',
+                    backgroundColor: 'var(--workspaice-tint-brand)',
                     animation: 'pulse 1.5s ease-in-out infinite',
                   }}
                 />
-                <Text size="sm" c="chatbox-tertiary">
+                <Text size="sm" c="workspaice-tertiary">
                   Searching the web...
                 </Text>
               </Group>
@@ -923,8 +923,8 @@ export const AllStatesOverview: StoryObj = {
               <Paper withBorder radius="md" px="xs">
                 <Group gap="xs">
                   <Text fw={600}>Web Search</Text>
-                  <IconTool size={16} color="var(--chatbox-tint-success)" />
-                  <IconCircleCheckFilled size={16} color="var(--chatbox-tint-success)" />
+                  <IconTool size={16} color="var(--workspaice-tint-success)" />
+                  <IconCircleCheckFilled size={16} color="var(--workspaice-tint-success)" />
                 </Group>
               </Paper>
             </Stack>
@@ -938,15 +938,15 @@ export const AllStatesOverview: StoryObj = {
                 py={4}
                 style={{
                   borderRadius: 'var(--mantine-radius-xl)',
-                  backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                  backgroundColor: 'var(--workspaice-background-gray-secondary)',
                   display: 'inline-flex',
                 }}
               >
-                <IconWorld size={14} color="var(--chatbox-tint-success)" />
+                <IconWorld size={14} color="var(--workspaice-tint-success)" />
                 <Text size="xs" fw={500}>
                   Web Search
                 </Text>
-                <IconCheck size={12} color="var(--chatbox-tint-success)" />
+                <IconCheck size={12} color="var(--workspaice-tint-success)" />
               </Group>
             </Stack>
             <Stack gap={4} style={{ flex: '1 1 300px' }}>
@@ -972,16 +972,16 @@ export const AllStatesOverview: StoryObj = {
                 MINIMAL
               </Text>
               <Group gap={6}>
-                <IconCheck size={14} color="var(--chatbox-tint-success)" />
+                <IconCheck size={14} color="var(--workspaice-tint-success)" />
                 <Text
                   size="sm"
-                  c="chatbox-secondary"
+                  c="workspaice-secondary"
                   td="underline"
                   style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
                 >
                   Searched the web
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   · 5 results
                 </Text>
               </Group>
@@ -998,8 +998,8 @@ export const AllStatesOverview: StoryObj = {
               <Paper withBorder radius="md" px="xs">
                 <Group gap="xs">
                   <Text fw={600}>Terminal</Text>
-                  <IconTool size={16} color="var(--chatbox-tint-success)" />
-                  <IconCircleXFilled size={16} color="var(--chatbox-tint-error)" />
+                  <IconTool size={16} color="var(--workspaice-tint-success)" />
+                  <IconCircleXFilled size={16} color="var(--workspaice-tint-error)" />
                 </Group>
               </Paper>
             </Stack>
@@ -1013,15 +1013,15 @@ export const AllStatesOverview: StoryObj = {
                 py={4}
                 style={{
                   borderRadius: 'var(--mantine-radius-xl)',
-                  backgroundColor: 'color-mix(in srgb, var(--chatbox-tint-error) 8%, transparent)',
+                  backgroundColor: 'color-mix(in srgb, var(--workspaice-tint-error) 8%, transparent)',
                   display: 'inline-flex',
                 }}
               >
-                <IconTerminal size={14} color="var(--chatbox-tint-error)" />
-                <Text size="xs" fw={500} c="chatbox-error">
+                <IconTerminal size={14} color="var(--workspaice-tint-error)" />
+                <Text size="xs" fw={500} c="workspaice-error">
                   Terminal
                 </Text>
-                <IconCircleXFilled size={12} color="var(--chatbox-tint-error)" />
+                <IconCircleXFilled size={12} color="var(--workspaice-tint-error)" />
               </Group>
             </Stack>
             <Stack gap={4} style={{ flex: '1 1 300px' }}>
@@ -1032,7 +1032,7 @@ export const AllStatesOverview: StoryObj = {
                 withBorder
                 radius="md"
                 p={0}
-                style={{ overflow: 'hidden', borderColor: 'var(--chatbox-border-error)' }}
+                style={{ overflow: 'hidden', borderColor: 'var(--workspaice-border-error)' }}
               >
                 <Group px="sm" py={8} gap="xs">
                   <ThemeIcon size="sm" variant="light" color="red" radius="xl">
@@ -1052,8 +1052,8 @@ export const AllStatesOverview: StoryObj = {
                 MINIMAL
               </Text>
               <Group gap={6}>
-                <IconCircleXFilled size={14} color="var(--chatbox-tint-error)" />
-                <Text size="sm" c="chatbox-error">
+                <IconCircleXFilled size={14} color="var(--workspaice-tint-error)" />
+                <Text size="sm" c="workspaice-error">
                   Terminal command failed
                 </Text>
               </Group>
@@ -1092,17 +1092,17 @@ export const CurrentThinking: StoryObj = {
             <Box onClick={() => setActiveExpanded(!activeExpanded)} className="cursor-pointer">
               <Group px="xs" justify="space-between" className="w-full">
                 <Group gap="xs" className="animate-pulse">
-                  <IconBulb size={16} color="var(--chatbox-tint-warning)" />
+                  <IconBulb size={16} color="var(--workspaice-tint-warning)" />
                   <Text fw={600} size="sm">
                     Thinking
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary">
+                  <Text size="xs" c="workspaice-tertiary">
                     (3.2s)
                   </Text>
                 </Group>
                 <Space miw="xl" />
                 <Group gap="xs">
-                  <ActionIcon variant="subtle" c="chatbox-gray" size="sm">
+                  <ActionIcon variant="subtle" c="workspaice-gray" size="sm">
                     <IconCopy size={16} />
                   </ActionIcon>
                   <IconChevronRight
@@ -1126,17 +1126,17 @@ export const CurrentThinking: StoryObj = {
             <Box onClick={() => setThinkingExpanded(!thinkingExpanded)} className="cursor-pointer">
               <Group px="xs" justify="space-between" className="w-full">
                 <Group gap="xs">
-                  <IconBulb size={16} color="var(--chatbox-tint-warning)" />
+                  <IconBulb size={16} color="var(--workspaice-tint-warning)" />
                   <Text fw={600} size="sm">
                     Deeply thought
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary">
+                  <Text size="xs" c="workspaice-tertiary">
                     (12.4s)
                   </Text>
                 </Group>
                 <Space miw="xl" />
                 <Group gap="xs">
-                  <ActionIcon variant="subtle" c="chatbox-gray" size="sm">
+                  <ActionIcon variant="subtle" c="workspaice-gray" size="sm">
                     <IconCopy size={16} />
                   </ActionIcon>
                   <IconChevronRight
@@ -1180,7 +1180,7 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
             style={{
               overflow: 'hidden',
               backgroundColor:
-                'color-mix(in srgb, var(--chatbox-tint-warning) 6%, var(--chatbox-background-secondary))',
+                'color-mix(in srgb, var(--workspaice-tint-warning) 6%, var(--workspaice-background-secondary))',
               borderLeft: '3px solid',
               borderImage: 'linear-gradient(180deg, #f59e0b, #f97316) 1',
             }}
@@ -1192,7 +1192,7 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
                   <Text size="sm" fw={600}>
                     Thinking
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary" ff="monospace">
+                  <Text size="xs" c="workspaice-tertiary" ff="monospace">
                     3.2s
                   </Text>
                 </Group>
@@ -1202,7 +1202,7 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
                   </ActionIcon>
                   <IconChevronRight
                     size={14}
-                    color="var(--chatbox-tertiary)"
+                    color="var(--workspaice-tertiary)"
                     className={clsx('transition-transform', activeExpanded ? 'rotate-90' : '')}
                   />
                 </Group>
@@ -1212,9 +1212,9 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
               <Box
                 px="sm"
                 pb="sm"
-                style={{ borderTop: '1px solid color-mix(in srgb, var(--chatbox-tint-warning) 15%, transparent)' }}
+                style={{ borderTop: '1px solid color-mix(in srgb, var(--workspaice-tint-warning) 15%, transparent)' }}
               >
-                <Text size="sm" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} c="chatbox-secondary" mt="xs">
+                <Text size="sm" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} c="workspaice-secondary" mt="xs">
                   {SAMPLE_REASONING}
                 </Text>
               </Box>
@@ -1228,7 +1228,7 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
             style={{
               overflow: 'hidden',
               backgroundColor:
-                'color-mix(in srgb, var(--chatbox-tint-warning) 4%, var(--chatbox-background-secondary))',
+                'color-mix(in srgb, var(--workspaice-tint-warning) 4%, var(--workspaice-background-secondary))',
               borderLeft: '3px solid',
               borderImage: 'linear-gradient(180deg, #f59e0b, #f97316) 1',
             }}
@@ -1247,7 +1247,7 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
                   </ActionIcon>
                   <IconChevronRight
                     size={14}
-                    color="var(--chatbox-tertiary)"
+                    color="var(--workspaice-tertiary)"
                     className={clsx('transition-transform', expanded ? 'rotate-90' : '')}
                   />
                 </Group>
@@ -1257,9 +1257,9 @@ export const ThinkingOptionA_GradientBar: StoryObj = {
               <Box
                 px="sm"
                 pb="sm"
-                style={{ borderTop: '1px solid color-mix(in srgb, var(--chatbox-tint-warning) 15%, transparent)' }}
+                style={{ borderTop: '1px solid color-mix(in srgb, var(--workspaice-tint-warning) 15%, transparent)' }}
               >
-                <Text size="sm" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} c="chatbox-secondary" mt="xs">
+                <Text size="sm" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} c="workspaice-secondary" mt="xs">
                   {SAMPLE_REASONING}
                 </Text>
               </Box>
@@ -1300,7 +1300,7 @@ export const ThinkingOptionB_Pill: StoryObj = {
               <Text size="xs" fw={500}>
                 Thinking
               </Text>
-              <Text size="xs" c="chatbox-tertiary" ff="monospace">
+              <Text size="xs" c="workspaice-tertiary" ff="monospace">
                 3.2s
               </Text>
               <IconLoader size={11} className="animate-spin" color="#f59e0b" />
@@ -1315,7 +1315,7 @@ export const ThinkingOptionB_Pill: StoryObj = {
               py={4}
               style={{
                 borderRadius: 'var(--mantine-radius-xl)',
-                backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                backgroundColor: 'var(--workspaice-background-gray-secondary)',
                 display: 'inline-flex',
               }}
             >
@@ -1325,14 +1325,14 @@ export const ThinkingOptionB_Pill: StoryObj = {
               </Text>
               <IconChevronDown
                 size={12}
-                color="var(--chatbox-tertiary)"
+                color="var(--workspaice-tertiary)"
                 className={clsx('transition-transform', expanded === 'short' ? 'rotate-180' : '')}
               />
             </Group>
           </UnstyledButton>
           <Collapse in={expanded === 'short'}>
             <Box ml={4} pl="sm" style={{ borderLeft: '2px solid #f59e0b' }}>
-              <Text size="sm" c="chatbox-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+              <Text size="sm" c="workspaice-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
                 The user wants to know about React Server Components. This is a straightforward comparison question.
               </Text>
               <Group gap={4} mt={4}>
@@ -1351,7 +1351,7 @@ export const ThinkingOptionB_Pill: StoryObj = {
               py={4}
               style={{
                 borderRadius: 'var(--mantine-radius-xl)',
-                backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                backgroundColor: 'var(--workspaice-background-gray-secondary)',
                 display: 'inline-flex',
               }}
             >
@@ -1361,14 +1361,14 @@ export const ThinkingOptionB_Pill: StoryObj = {
               </Text>
               <IconChevronDown
                 size={12}
-                color="var(--chatbox-tertiary)"
+                color="var(--workspaice-tertiary)"
                 className={clsx('transition-transform', expanded === 'done' ? 'rotate-180' : '')}
               />
             </Group>
           </UnstyledButton>
           <Collapse in={expanded === 'done'}>
             <Box ml={4} pl="sm" style={{ borderLeft: '2px solid #f59e0b' }}>
-              <Text size="sm" c="chatbox-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+              <Text size="sm" c="workspaice-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
                 {SAMPLE_REASONING}
               </Text>
               <Group gap={4} mt={4}>
@@ -1423,7 +1423,7 @@ export const ThinkingOptionC_BrainCard: StoryObj = {
                   </ActionIcon>
                   <IconChevronRight
                     size={14}
-                    color="var(--chatbox-tertiary)"
+                    color="var(--workspaice-tertiary)"
                     className={clsx('transition-transform', activeExpanded ? 'rotate-90' : '')}
                   />
                 </Group>
@@ -1450,7 +1450,7 @@ export const ThinkingOptionC_BrainCard: StoryObj = {
                 <ActionIcon variant="subtle" size="xs" color="gray">
                   <IconCopy size={12} />
                 </ActionIcon>
-                <IconChevronRight size={14} color="var(--chatbox-tertiary)" />
+                <IconChevronRight size={14} color="var(--workspaice-tertiary)" />
               </Group>
             </Group>
           </Paper>
@@ -1476,7 +1476,7 @@ export const ThinkingOptionC_BrainCard: StoryObj = {
                   </ActionIcon>
                   <IconChevronRight
                     size={14}
-                    color="var(--chatbox-tertiary)"
+                    color="var(--workspaice-tertiary)"
                     className={clsx('transition-transform', expanded ? 'rotate-90' : '')}
                   />
                 </Group>
@@ -1484,7 +1484,7 @@ export const ThinkingOptionC_BrainCard: StoryObj = {
             </UnstyledButton>
             <Collapse in={expanded}>
               <Box px="sm" pb="sm" style={{ borderTop: '1px solid var(--paper-border-color)' }}>
-                <Text size="sm" c="chatbox-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} mt="xs">
+                <Text size="sm" c="workspaice-secondary" style={{ whiteSpace: 'pre-line', lineHeight: 1.6 }} mt="xs">
                   {SAMPLE_REASONING}
                 </Text>
               </Box>
@@ -1519,10 +1519,10 @@ export const ThinkingOptionD_MinimalInline: StoryObj = {
                 animation: 'pulse 1.5s ease-in-out infinite',
               }}
             />
-            <Text size="sm" c="chatbox-tertiary" fs="italic">
+            <Text size="sm" c="workspaice-tertiary" fs="italic">
               Thinking...
             </Text>
-            <Text size="xs" c="chatbox-tertiary" ff="monospace">
+            <Text size="xs" c="workspaice-tertiary" ff="monospace">
               3.2s
             </Text>
           </Group>
@@ -1533,7 +1533,7 @@ export const ThinkingOptionD_MinimalInline: StoryObj = {
               <IconBulb size={14} color="#f59e0b" />
               <Text
                 size="sm"
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 td="underline"
                 style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
               >
@@ -1542,7 +1542,7 @@ export const ThinkingOptionD_MinimalInline: StoryObj = {
             </Group>
           </UnstyledButton>
           <Collapse in={expanded === 'short'}>
-            <Text size="sm" c="chatbox-tertiary" ml={20} style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+            <Text size="sm" c="workspaice-tertiary" ml={20} style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
               The user wants to know about RSC. Straightforward comparison.
             </Text>
           </Collapse>
@@ -1553,7 +1553,7 @@ export const ThinkingOptionD_MinimalInline: StoryObj = {
               <IconBulb size={14} color="#f59e0b" />
               <Text
                 size="sm"
-                c="chatbox-secondary"
+                c="workspaice-secondary"
                 td="underline"
                 style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
               >
@@ -1565,7 +1565,7 @@ export const ThinkingOptionD_MinimalInline: StoryObj = {
             </Group>
           </UnstyledButton>
           <Collapse in={expanded === 'done'}>
-            <Text size="sm" c="chatbox-tertiary" ml={20} style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+            <Text size="sm" c="workspaice-tertiary" ml={20} style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
               {SAMPLE_REASONING}
             </Text>
           </Collapse>
@@ -1590,15 +1590,15 @@ export const ThinkingStatesOverview: StoryObj = {
               </Text>
               <Paper withBorder radius="md">
                 <Group px="xs" gap="xs" className="animate-pulse">
-                  <IconBulb size={16} color="var(--chatbox-tint-warning)" />
+                  <IconBulb size={16} color="var(--workspaice-tint-warning)" />
                   <Text fw={600} size="sm">
                     Thinking
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary">
+                  <Text size="xs" c="workspaice-tertiary">
                     (3.2s)
                   </Text>
                   <Space style={{ flex: 1 }} />
-                  <ActionIcon variant="subtle" c="chatbox-gray" size="sm">
+                  <ActionIcon variant="subtle" c="workspaice-gray" size="sm">
                     <IconCopy size={16} />
                   </ActionIcon>
                   <IconChevronRight size={16} />
@@ -1616,7 +1616,7 @@ export const ThinkingStatesOverview: StoryObj = {
                 py={8}
                 style={{
                   backgroundColor:
-                    'color-mix(in srgb, var(--chatbox-tint-warning) 6%, var(--chatbox-background-secondary))',
+                    'color-mix(in srgb, var(--workspaice-tint-warning) 6%, var(--workspaice-background-secondary))',
                   borderLeft: '3px solid',
                   borderImage: 'linear-gradient(180deg, #f59e0b, #f97316) 1',
                 }}
@@ -1626,7 +1626,7 @@ export const ThinkingStatesOverview: StoryObj = {
                   <Text size="sm" fw={600}>
                     Thinking
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary" ff="monospace">
+                  <Text size="xs" c="workspaice-tertiary" ff="monospace">
                     3.2s
                   </Text>
                 </Group>
@@ -1653,7 +1653,7 @@ export const ThinkingStatesOverview: StoryObj = {
                   <Text size="xs" fw={500}>
                     Thinking
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary" ff="monospace">
+                  <Text size="xs" c="workspaice-tertiary" ff="monospace">
                     3.2s
                   </Text>
                   <IconLoader size={11} className="animate-spin" color="#f59e0b" />
@@ -1700,10 +1700,10 @@ export const ThinkingStatesOverview: StoryObj = {
                     animation: 'pulse 1.5s ease-in-out infinite',
                   }}
                 />
-                <Text size="sm" c="chatbox-tertiary" fs="italic">
+                <Text size="sm" c="workspaice-tertiary" fs="italic">
                   Thinking...
                 </Text>
-                <Text size="xs" c="chatbox-tertiary" ff="monospace">
+                <Text size="xs" c="workspaice-tertiary" ff="monospace">
                   3.2s
                 </Text>
               </Group>
@@ -1719,15 +1719,15 @@ export const ThinkingStatesOverview: StoryObj = {
               </Text>
               <Paper withBorder radius="md">
                 <Group px="xs" gap="xs">
-                  <IconBulb size={16} color="var(--chatbox-tint-warning)" />
+                  <IconBulb size={16} color="var(--workspaice-tint-warning)" />
                   <Text fw={600} size="sm">
                     Deeply thought
                   </Text>
-                  <Text size="xs" c="chatbox-tertiary">
+                  <Text size="xs" c="workspaice-tertiary">
                     (12.4s)
                   </Text>
                   <Space style={{ flex: 1 }} />
-                  <ActionIcon variant="subtle" c="chatbox-gray" size="sm">
+                  <ActionIcon variant="subtle" c="workspaice-gray" size="sm">
                     <IconCopy size={16} />
                   </ActionIcon>
                   <IconChevronRight size={16} />
@@ -1745,7 +1745,7 @@ export const ThinkingStatesOverview: StoryObj = {
                 py={8}
                 style={{
                   backgroundColor:
-                    'color-mix(in srgb, var(--chatbox-tint-warning) 4%, var(--chatbox-background-secondary))',
+                    'color-mix(in srgb, var(--workspaice-tint-warning) 4%, var(--workspaice-background-secondary))',
                   borderLeft: '3px solid',
                   borderImage: 'linear-gradient(180deg, #f59e0b, #f97316) 1',
                 }}
@@ -1770,7 +1770,7 @@ export const ThinkingStatesOverview: StoryObj = {
                   py={4}
                   style={{
                     borderRadius: 'var(--mantine-radius-xl)',
-                    backgroundColor: 'var(--chatbox-background-gray-secondary)',
+                    backgroundColor: 'var(--workspaice-background-gray-secondary)',
                     display: 'inline-flex',
                   }}
                 >
@@ -1778,7 +1778,7 @@ export const ThinkingStatesOverview: StoryObj = {
                   <Text size="xs" fw={500}>
                     Thought for 12.4s
                   </Text>
-                  <IconChevronDown size={12} color="var(--chatbox-tertiary)" />
+                  <IconChevronDown size={12} color="var(--workspaice-tertiary)" />
                 </Group>
               </Box>
             </Stack>
@@ -1810,7 +1810,7 @@ export const ThinkingStatesOverview: StoryObj = {
                 <IconBulb size={14} color="#f59e0b" />
                 <Text
                   size="sm"
-                  c="chatbox-secondary"
+                  c="workspaice-secondary"
                   td="underline"
                   style={{ textDecorationStyle: 'dotted', textUnderlineOffset: 3 }}
                 >

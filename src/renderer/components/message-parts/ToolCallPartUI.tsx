@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Code, Collapse, Group, Paper, Stack, Text, UnstyledButton } from '@mantine/core'
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import { type Message, type MessageReasoningPart, type MessageToolCallPart } from '@shared/types'
 import {
   IconBulb,
@@ -23,7 +23,7 @@ import clsx from 'clsx'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ChatboxAIErrorMessage } from '@/components/common/ChatboxAIErrorMessage'
+import { WorkspAIceAIErrorMessage } from '@/components/common/WorkspAIceAIErrorMessage'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
 import { formatElapsedTime, useThinkingTimer } from '@/hooks/useThinkingTimer'
 import { getToolName } from '@/packages/tools'
@@ -45,15 +45,15 @@ const ToolCallErrorDetails: FC<{ part: MessageToolCallPart }> = ({ part }) => {
   // Only render the rich i18n message if the code is one we know about — unknown
   // codes (e.g. NetworkError, generic ApiError) would render as null and silently
   // hide the underlying error text.
-  if (errorCode && ChatboxAIAPIError.getDetail(errorCode)) {
+  if (errorCode && WorkspAIceAIAPIError.getDetail(errorCode)) {
     return (
-      <Text size="sm" c="chatbox-error" component="div">
-        <ChatboxAIErrorMessage errorCode={errorCode} trackingSource="msg_tool_error" />
+      <Text size="sm" c="workspaice-error" component="div">
+        <WorkspAIceAIErrorMessage errorCode={errorCode} trackingSource="msg_tool_error" />
       </Text>
     )
   }
   return (
-    <Text size="sm" c="chatbox-error">
+    <Text size="sm" c="workspaice-error">
       {errorText || t('Tool call failed')}
     </Text>
   )
@@ -105,14 +105,14 @@ const ToolCallPill: FC<{
   const isError = part.state === 'error'
 
   const bgColor = isError
-    ? 'color-mix(in srgb, var(--chatbox-tint-error) 8%, transparent)'
-    : 'var(--chatbox-background-gray-secondary)'
+    ? 'color-mix(in srgb, var(--workspaice-tint-error) 8%, transparent)'
+    : 'var(--workspaice-background-gray-secondary)'
 
   const iconColor = isLoading
-    ? 'var(--chatbox-tint-brand)'
+    ? 'var(--workspaice-tint-brand)'
     : isError
-      ? 'var(--chatbox-tint-error)'
-      : 'var(--chatbox-tint-success)'
+      ? 'var(--workspaice-tint-error)'
+      : 'var(--workspaice-tint-success)'
 
   return (
     <UnstyledButton onClick={onClick}>
@@ -127,18 +127,18 @@ const ToolCallPill: FC<{
         }}
       >
         <Icon size={13} color={iconColor} style={{ flexShrink: 0 }} />
-        <Text size="xs" fw={500} c={isError ? 'chatbox-error' : undefined} lh={1}>
+        <Text size="xs" fw={500} c={isError ? 'workspaice-error' : undefined} lh={1}>
           {getToolName(part.toolName)}
         </Text>
         {isLoading ? (
-          <IconLoader size={11} className="animate-spin" color="var(--chatbox-tint-brand)" style={{ flexShrink: 0 }} />
+          <IconLoader size={11} className="animate-spin" color="var(--workspaice-tint-brand)" style={{ flexShrink: 0 }} />
         ) : isError ? (
-          <IconCircleXFilled size={11} color="var(--chatbox-tint-error)" style={{ flexShrink: 0 }} />
+          <IconCircleXFilled size={11} color="var(--workspaice-tint-error)" style={{ flexShrink: 0 }} />
         ) : (
           <>
-            <IconCheck size={11} color="var(--chatbox-tint-success)" style={{ flexShrink: 0 }} />
+            <IconCheck size={11} color="var(--workspaice-tint-success)" style={{ flexShrink: 0 }} />
             {summary && (
-              <Text size="xs" c="chatbox-tertiary" lh={1}>
+              <Text size="xs" c="workspaice-tertiary" lh={1}>
                 · {summary}
               </Text>
             )}
@@ -147,7 +147,7 @@ const ToolCallPill: FC<{
         {!isLoading && (
           <IconChevronDown
             size={11}
-            color="var(--chatbox-tertiary)"
+            color="var(--workspaice-tertiary)"
             style={{ flexShrink: 0 }}
             className={clsx('transition-transform', expanded ? 'rotate-180' : '')}
           />
@@ -201,7 +201,7 @@ const SearchResultCard: FC<{ index: number; result: SearchResultItem }> = ({ ind
     <Paper
       radius="md"
       p={8}
-      bg="var(--chatbox-background-gray-secondary)"
+      bg="var(--workspaice-background-gray-secondary)"
       w={164}
       className="shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
       title={result.title}
@@ -214,7 +214,7 @@ const SearchResultCard: FC<{ index: number; result: SearchResultItem }> = ({ ind
           {result.title}
         </Text>
       </Group>
-      <Text size="10px" truncate="end" c="chatbox-tertiary" m={0} mt={4} lh={1.25}>
+      <Text size="10px" truncate="end" c="workspaice-tertiary" m={0} mt={4} lh={1.25}>
         {result.link}
       </Text>
     </Paper>
@@ -259,11 +259,11 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
   const [expanded, setExpanded] = useAutoExpandOnError(hasError)
   const errorPart = hasError ? parts.find((p) => p.state === 'error') : undefined
   const bgColor = isFailState
-    ? 'var(--chatbox-background-gray-secondary)'
+    ? 'var(--workspaice-background-gray-secondary)'
     : expanded
-      ? 'var(--chatbox-background-brand-secondary)'
-      : 'var(--chatbox-background-gray-secondary)'
-  const border = isFailState ? 'none' : expanded ? '1px solid var(--chatbox-border-brand)' : 'none'
+      ? 'var(--workspaice-background-brand-secondary)'
+      : 'var(--workspaice-background-gray-secondary)'
+  const border = isFailState ? 'none' : expanded ? '1px solid var(--workspaice-border-brand)' : 'none'
 
   return (
     <Stack gap={4} mb={4}>
@@ -283,34 +283,34 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
             display: 'inline-flex',
           }}
         >
-          <IconWorld size={16} color="var(--chatbox-tint-success)" style={{ flexShrink: 0 }} />
-          <Text size="sm" fw={600} c="chatbox-secondary" lh={1}>
+          <IconWorld size={16} color="var(--workspaice-tint-success)" style={{ flexShrink: 0 }} />
+          <Text size="sm" fw={600} c="workspaice-secondary" lh={1}>
             {getToolName('web_search')}
           </Text>
           {hasLoading ? (
             <IconLoader
               size={16}
               className="animate-spin"
-              color="var(--chatbox-tint-brand)"
+              color="var(--workspaice-tint-brand)"
               style={{ flexShrink: 0 }}
             />
           ) : isFailState ? (
             <>
               {summary && (
-                <Text size="xs" c="chatbox-tertiary" lh={1}>
+                <Text size="xs" c="workspaice-tertiary" lh={1}>
                   {summary}
                 </Text>
               )}
-              <IconX size={16} color="var(--chatbox-tint-error)" style={{ flexShrink: 0 }} />
+              <IconX size={16} color="var(--workspaice-tint-error)" style={{ flexShrink: 0 }} />
             </>
           ) : (
             <>
               {summary && (
-                <Text size="xs" c="chatbox-tertiary" lh={1}>
+                <Text size="xs" c="workspaice-tertiary" lh={1}>
                   {summary}
                 </Text>
               )}
-              {allDone && <IconCheck size={16} color="var(--chatbox-tint-success)" style={{ flexShrink: 0 }} />}
+              {allDone && <IconCheck size={16} color="var(--workspaice-tint-success)" style={{ flexShrink: 0 }} />}
             </>
           )}
         </Group>
@@ -318,7 +318,7 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
       {expanded && queries.length > 0 && (
         <Group gap={4} ml={4}>
           {queries.map((query, index) => (
-            <Text key={`${index}-${query}`} size="xs" c="chatbox-tertiary" fs="italic" lh={1.4}>
+            <Text key={`${index}-${query}`} size="xs" c="workspaice-tertiary" fs="italic" lh={1.4}>
               "{query}"{index < queries.length - 1 && ','}
             </Text>
           ))}
@@ -335,7 +335,7 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
         <Box
           ml={4}
           pl="sm"
-          style={{ borderLeft: '1px solid var(--chatbox-tint-error)' }}
+          style={{ borderLeft: '1px solid var(--workspaice-tint-error)' }}
         >
           <ToolCallErrorDetails part={errorPart} />
         </Box>
@@ -356,14 +356,14 @@ const ParseLinkUI: FC<{ part: MessageToolCallPart }> = ({ part }) => {
   const url = (result?.url as string) || ((part.args as Record<string, unknown>)?.url as string) || ''
 
   const bgColor = isError
-    ? 'color-mix(in srgb, var(--chatbox-tint-error) 8%, transparent)'
+    ? 'color-mix(in srgb, var(--workspaice-tint-error) 8%, transparent)'
     : expanded
-      ? 'var(--chatbox-background-brand-secondary)'
-      : 'var(--chatbox-background-gray-secondary)'
+      ? 'var(--workspaice-background-brand-secondary)'
+      : 'var(--workspaice-background-gray-secondary)'
   const border = isError
-    ? '1px solid var(--chatbox-border-error)'
+    ? '1px solid var(--workspaice-border-error)'
     : expanded
-      ? '1px solid var(--chatbox-border-brand)'
+      ? '1px solid var(--workspaice-border-brand)'
       : 'none'
 
   return (
@@ -380,27 +380,27 @@ const ParseLinkUI: FC<{ part: MessageToolCallPart }> = ({ part }) => {
             display: 'inline-flex',
           }}
         >
-          <IconExternalLink size={16} color="var(--chatbox-tint-success)" style={{ flexShrink: 0 }} />
-          <Text size="sm" fw={600} c={isError ? 'chatbox-error' : 'chatbox-secondary'} lh={1}>
+          <IconExternalLink size={16} color="var(--workspaice-tint-success)" style={{ flexShrink: 0 }} />
+          <Text size="sm" fw={600} c={isError ? 'workspaice-error' : 'workspaice-secondary'} lh={1}>
             {getToolName(part.toolName)}
           </Text>
           {isLoading ? (
             <IconLoader
               size={16}
               className="animate-spin"
-              color="var(--chatbox-tint-brand)"
+              color="var(--workspaice-tint-brand)"
               style={{ flexShrink: 0 }}
             />
           ) : isError ? (
-            <IconCircleXFilled size={16} color="var(--chatbox-tint-error)" style={{ flexShrink: 0 }} />
+            <IconCircleXFilled size={16} color="var(--workspaice-tint-error)" style={{ flexShrink: 0 }} />
           ) : (
             <>
               {title && (
-                <Text size="xs" c="chatbox-tertiary" lh={1} truncate="end" maw={300}>
+                <Text size="xs" c="workspaice-tertiary" lh={1} truncate="end" maw={300}>
                   {title}
                 </Text>
               )}
-              <IconCheck size={16} color="var(--chatbox-tint-success)" style={{ flexShrink: 0 }} />
+              <IconCheck size={16} color="var(--workspaice-tint-success)" style={{ flexShrink: 0 }} />
             </>
           )}
         </Group>
@@ -410,21 +410,21 @@ const ParseLinkUI: FC<{ part: MessageToolCallPart }> = ({ part }) => {
           mt={4}
           pl="sm"
           style={{
-            borderLeft: `1px solid ${isError ? 'var(--chatbox-tint-error)' : 'var(--chatbox-tint-placeholder)'}`,
+            borderLeft: `1px solid ${isError ? 'var(--workspaice-tint-error)' : 'var(--workspaice-tint-placeholder)'}`,
             maxHeight: 400,
             overflowY: 'auto',
             marginLeft: 7,
           }}
         >
           {url && (
-            <Text size="xs" c="chatbox-tertiary" mb={4}>
+            <Text size="xs" c="workspaice-tertiary" mb={4}>
               {url}
             </Text>
           )}
           {isError ? (
             <ToolCallErrorDetails part={part} />
           ) : (
-            <Text size="sm" c="chatbox-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+            <Text size="sm" c="workspaice-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
               {content}
             </Text>
           )}
@@ -449,19 +449,19 @@ const GeneralToolCallUI: FC<{ part: MessageToolCallPart }> = ({ part }) => {
           ml={4}
           pl="sm"
           style={{
-            borderLeft: `2px solid ${isError ? 'var(--chatbox-tint-error)' : 'var(--chatbox-tint-success)'}`,
+            borderLeft: `2px solid ${isError ? 'var(--workspaice-tint-error)' : 'var(--workspaice-tint-success)'}`,
           }}
         >
           <Stack gap="xs">
             <Box>
-              <Text size="xs" c="chatbox-tertiary" fw={500} mb={2}>
+              <Text size="xs" c="workspaice-tertiary" fw={500} mb={2}>
                 {t('Arguments')}
               </Text>
               <Code block>{JSON.stringify(part.args, null, 2)}</Code>
             </Box>
             {isError ? (
               <Box>
-                <Text size="xs" c="chatbox-tertiary" fw={500} mb={2}>
+                <Text size="xs" c="workspaice-tertiary" fw={500} mb={2}>
                   {t('Error')}
                 </Text>
                 <ToolCallErrorDetails part={part} />
@@ -469,7 +469,7 @@ const GeneralToolCallUI: FC<{ part: MessageToolCallPart }> = ({ part }) => {
             ) : (
               !!part.result && (
                 <Box>
-                  <Text size="xs" c="chatbox-tertiary" fw={500} mb={2}>
+                  <Text size="xs" c="workspaice-tertiary" fw={500} mb={2}>
                     {t('Result')}
                   </Text>
                   <Code block>{JSON.stringify(part.result, null, 2)}</Code>
@@ -537,7 +537,7 @@ export const ReasoningContentUI: FC<{
     <ActionIcon
       variant="subtle"
       size="xs"
-      c="chatbox-gray"
+      c="workspaice-gray"
       onClick={(e) => {
         e.stopPropagation()
         onCopyReasoningContent(reasoningContent)(e)
@@ -554,13 +554,13 @@ export const ReasoningContentUI: FC<{
         mt={4}
         pl="sm"
         style={{
-          borderLeft: '1px solid var(--chatbox-tint-placeholder)',
+          borderLeft: '1px solid var(--workspaice-tint-placeholder)',
           maxHeight: 400,
           overflowY: 'auto',
           marginLeft: 7,
         }}
       >
-        <Text size="sm" c="chatbox-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+        <Text size="sm" c="workspaice-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
           {reasoningContent}
         </Text>
       </Box>
@@ -577,11 +577,11 @@ export const ReasoningContentUI: FC<{
               h={6}
               style={{
                 borderRadius: '50%',
-                backgroundColor: 'var(--chatbox-tint-brand)',
+                backgroundColor: 'var(--workspaice-tint-brand)',
                 animation: 'pulse 1.5s ease-in-out infinite',
               }}
             />
-            <Text size="sm" c="chatbox-tertiary" fs="italic">
+            <Text size="sm" c="workspaice-tertiary" fs="italic">
               {t('Thinking')}
               {shouldShowTimer && displayTime > 0 ? ` · ${formatElapsedTime(displayTime)}` : '...'}
             </Text>
@@ -597,8 +597,8 @@ export const ReasoningContentUI: FC<{
     <Box mb="xs">
       <Box role="button" onClick={toggleExpanded}>
         <Group gap={6}>
-          <ScalableIcon icon={IconBulb} size={14} color="var(--chatbox-tint-warning)" />
-          <Text size="sm" fw={600} c="chatbox-secondary" td="underline">
+          <ScalableIcon icon={IconBulb} size={14} color="var(--workspaice-tint-warning)" />
+          <Text size="sm" fw={600} c="workspaice-secondary" td="underline">
             {shouldShowTimer && displayTime > 0
               ? t('Thought for {{time}}', { time: formatElapsedTime(displayTime) })
               : t('Deeply thought')}
@@ -611,9 +611,9 @@ export const ReasoningContentUI: FC<{
           ml={4}
           mt={4}
           pl="sm"
-          style={{ borderLeft: '2px solid var(--chatbox-tint-warning)', maxHeight: 400, overflowY: 'auto' }}
+          style={{ borderLeft: '2px solid var(--workspaice-tint-warning)', maxHeight: 400, overflowY: 'auto' }}
         >
-          <Text size="sm" c="chatbox-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
+          <Text size="sm" c="workspaice-tertiary" style={{ whiteSpace: 'pre-line', lineHeight: 1.5 }}>
             {reasoningContent}
           </Text>
         </Box>

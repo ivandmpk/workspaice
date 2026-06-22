@@ -59,7 +59,7 @@ const SkillCard: FC<{
             {skill.name}
           </Text>
           {translatedName && (
-            <Text size="xs" c="chatbox-tertiary" lineClamp={1} mt={2}>
+            <Text size="xs" c="workspaice-tertiary" lineClamp={1} mt={2}>
               {translatedName}
             </Text>
           )}
@@ -77,7 +77,7 @@ const SkillCard: FC<{
               <ActionIcon
                 variant="transparent"
                 size="sm"
-                color="chatbox-tertiary"
+                color="workspaice-tertiary"
                 onClick={(event) => {
                   event.stopPropagation()
                   event.preventDefault()
@@ -99,7 +99,7 @@ const SkillCard: FC<{
         openDelay={400}
         events={{ hover: true, focus: true, touch: true }}
       >
-        <Text size="xs" mt={8} c="chatbox-tertiary" lineClamp={2} className="cursor-help leading-relaxed">
+        <Text size="xs" mt={8} c="workspaice-tertiary" lineClamp={2} className="cursor-help leading-relaxed">
           {skill.description}
         </Text>
       </Tooltip>
@@ -107,7 +107,7 @@ const SkillCard: FC<{
       {(skill.bodyTokenEstimate != null || skill.source?.repo) && (
         <Flex mt={8} gap={6} wrap="wrap">
           {skill.bodyTokenEstimate != null && (
-            <Badge size="xs" variant="light" color="chatbox-brand" radius="sm">
+            <Badge size="xs" variant="light" color="workspaice-brand" radius="sm">
               ~{skill.bodyTokenEstimate.toLocaleString()} tokens
             </Badge>
           )}
@@ -151,16 +151,16 @@ const EmptyState: FC<{ onAddClick: () => void; onOpenFolder: () => void }> = ({ 
   const { t } = useTranslation()
 
   return (
-    <Paper radius="md" p="xl" className="border border-dashed border-chatbox-border-primary">
+    <Paper radius="md" p="xl" className="border border-dashed border-workspaice-border-primary">
       <Flex direction="column" align="center" gap={12} py="md">
-        <Box className="rounded-full p-3 bg-chatbox-background-gray-secondary">
-          <ScalableIcon icon={IconWand} size={24} className="text-chatbox-tint-tertiary" />
+        <Box className="rounded-full p-3 bg-workspaice-background-gray-secondary">
+          <ScalableIcon icon={IconWand} size={24} className="text-workspaice-tint-tertiary" />
         </Box>
         <Box className="text-center">
           <Text size="sm" fw={500}>
             {t('No custom skills yet')}
           </Text>
-          <Text size="xs" c="chatbox-tertiary" mt={4}>
+          <Text size="xs" c="workspaice-tertiary" mt={4}>
             {t('Add skills from the marketplace or install from a GitHub repository.')}
           </Text>
         </Box>
@@ -359,9 +359,9 @@ export const SkillsSection: FC = () => {
       </Flex>
 
       {showGithubInput && (
-        <Paper radius="md" withBorder p="sm" mb="lg" className="bg-chatbox-background-gray-secondary/30">
+        <Paper radius="md" withBorder p="sm" mb="lg" className="bg-workspaice-background-gray-secondary/30">
           <Flex align="center" gap={8} mb={8}>
-            <ScalableIcon icon={IconBrandGithub} size={16} className="text-chatbox-tint-tertiary" />
+            <ScalableIcon icon={IconBrandGithub} size={16} className="text-workspaice-tint-tertiary" />
             <Text size="xs" fw={500}>
               {t('Install from GitHub Repository')}
             </Text>

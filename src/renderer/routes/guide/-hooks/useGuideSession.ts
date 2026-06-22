@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { trackJkClickEvent } from '@/analytics/jk'
 import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { cancelConfetti, confetti } from '@/components/Confetti'
-import { buildChatboxUrl } from '@/packages/remote'
+import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
 import { authInfoStore, useAuthInfoStore } from '@/stores/authInfoStore'
 import { onboardingStore, useOnboardingStore } from '@/stores/onboardingStore'
@@ -166,7 +166,7 @@ export function useGuideSession(): UseGuideSessionReturn {
     if (enterCompleted) {
       // User already has valid config, show completion message
       const configCompleteMsg = String(t(
-        "You've already completed the setup and can use Chatbox normally.\n\nIf you have any questions about Chatbox AI, feel free to ask me here."
+        "You've already completed the setup and can use WorkspAIce normally.\n\nIf you have any questions about WorkspAIce AI, feel free to ask me here."
       ))
       setMessages([
         {
@@ -191,14 +191,14 @@ export function useGuideSession(): UseGuideSessionReturn {
       }
       // Show initial greeting with cards using fast streaming
       const isChinese = language.startsWith('zh')
-      const guideUrl = buildChatboxUrl('/redirect_app/guide')
-      const helpCenterUrl = buildChatboxUrl('/redirect_app/help_center')
+      const guideUrl = buildWorkspAIceUrl('/redirect_app/guide')
+      const helpCenterUrl = buildWorkspAIceUrl('/redirect_app/help_center')
 
       const greeting = isChinese
         ? [
             t(`## 👋 Hey! I'm Boxy, your setup guide assistant.
 
-Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models including ChatGPT, Claude, DeepSeek, and more.
+WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream models including ChatGPT, Claude, DeepSeek, and more.
 
 ### ✨ Key Features
 - 🔐 **Local First** — Your data stays on your device, ensuring privacy and security
@@ -213,9 +213,9 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
 - 🆘 [Help Center](`),
             helpCenterUrl,
             t(`) — FAQs
-- 📮 Contact us: hi@chatboxai.com
+- 📮 Contact us: hi@workspaiceai.com
 
-💡 Follow Chatbox on [Xiaohongshu](https://www.xiaohongshu.com/user/profile/67b581b6000000000e01d11f) for the latest updates and tips
+💡 Follow WorkspAIce on [Xiaohongshu](https://www.xiaohongshu.com/user/profile/67b581b6000000000e01d11f) for the latest updates and tips
 
 ---
 
@@ -224,7 +224,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
         : [
             t(`## 👋 Hey! I'm Boxy, your setup guide assistant.
 
-Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models including ChatGPT, Claude, DeepSeek, and more.
+WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream models including ChatGPT, Claude, DeepSeek, and more.
 
 ### ✨ Key Features
 - 🔐 **Local First** — Your data stays on your device, ensuring privacy and security
@@ -238,7 +238,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
 - 🆘 [Help Center](`),
             helpCenterUrl,
             t(`) — FAQs
-- 📮 Contact us: hi@chatboxai.com
+- 📮 Contact us: hi@workspaiceai.com
 
 ---
 
@@ -429,7 +429,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
       const responseContent =
         type === 'novice'
           ? t(
-              'Great! Chatbox AI is our all-in-one service designed for new users - it works out of the box with no complex setup required.\n\nClick the login button below, then enter your email and verification code in the popup to sign in.'
+              'Great! WorkspAIce AI is our all-in-one service designed for new users - it works out of the box with no complex setup required.\n\nClick the login button below, then enter your email and verification code in the popup to sign in.'
             )
           : t(
               "Excellent! You're all set to explore on your own.\n\nClick the **Settings** icon in the sidebar, then go to **Model Providers** to configure your API key. If you need help later, just click the Help button in the bottom left corner. Enjoy!"
@@ -485,7 +485,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
 
     await streamFixedMessage(
       t(
-        "Awesome, you're all set! You can now start using Chatbox.\n\nClick **New Chat** below to start chatting, or **View License Details** to check your subscription info. If you have more questions, feel free to click the Help button in the bottom left corner anytime. Enjoy!"
+        "Awesome, you're all set! You can now start using WorkspAIce.\n\nClick **New Chat** below to start chatting, or **View License Details** to check your subscription info. If you have more questions, feel free to click the Help button in the bottom left corner anytime. Enjoy!"
       ),
       [
         createNewChatButtonToolPart(`new-chat-btn-${baseTimestamp}`),
@@ -546,7 +546,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
     } else {
       await streamFixedMessage(
         t(
-          "You're logged in! Claim your **free plan** below to unlock Chatbox AI features. If you have any questions, feel free to click the Help button in the bottom left corner anytime."
+          "You're logged in! Claim your **free plan** below to unlock WorkspAIce AI features. If you have any questions, feel free to click the Help button in the bottom left corner anytime."
         ),
         [
           {
@@ -569,7 +569,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
     if (claimWaitingShownRef.current) return
     claimWaitingShownRef.current = true
 
-    await streamFixedMessage(t("We're waiting for you to finish on chatboxai.app..."), [
+    await streamFixedMessage(t("We're waiting for you to finish on workspaiceai.app..."), [
       {
         type: 'tool-show_claim_waiting',
         toolCallId: `claim-waiting-${Date.now()}`,
@@ -613,7 +613,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
       setOnboardingStep('completed')
       appendFixedMessage(
         t(
-          "You've already completed the setup and can use Chatbox normally.\n\nIf you have any questions about Chatbox AI, feel free to ask me here."
+          "You've already completed the setup and can use WorkspAIce normally.\n\nIf you have any questions about WorkspAIce AI, feel free to ask me here."
         ),
         [
           createNewChatButtonToolPart(`new-chat-btn-${Date.now()}`, {
@@ -818,7 +818,7 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
 
     // Add the success message
     const successText = t(
-      "Awesome, you're all set! You can now start using Chatbox.\n\nClick **New Chat** below to start chatting, or **View License Details** to check your subscription info. If you have any questions, feel free to click the Help button in the bottom left corner anytime. Enjoy!"
+      "Awesome, you're all set! You can now start using WorkspAIce.\n\nClick **New Chat** below to start chatting, or **View License Details** to check your subscription info. If you have any questions, feel free to click the Help button in the bottom left corner anytime. Enjoy!"
     )
     const successMessage: GuideUIMessage = {
       id: generateMessageId(),
@@ -869,8 +869,8 @@ Chatbox is an **all-in-one AI chat client** that supports 30+ mainstream models 
     fakeMessages.push({
       id: generateMessageId(),
       role: 'assistant',
-      content: t('Welcome to Chatbox!'),
-      parts: [{ type: 'text', text: t('Welcome to Chatbox!') }],
+      content: t('Welcome to WorkspAIce!'),
+      parts: [{ type: 'text', text: t('Welcome to WorkspAIce!') }],
     })
 
     // Add maxRounds - 1 user messages, so next send triggers limit message

@@ -105,14 +105,14 @@ export default function LazyNumberInput({
       rightSection={
         <>
           {typeof inputRawValue === 'string' || inputRawValue === undefined ? null : (
-            <CloseButton size="xs" c="chatbox-secondary" onClick={handleClear} />
+            <CloseButton size="xs" c="workspaice-secondary" onClick={handleClear} />
           )}
           {hideControls ? null : (
             <Stack gap={0} className="border-0 border-l border-solid border-[var(--input-bd)] pr-px">
-              <ActionIcon variant="transparent" size={16} onClick={handleIncrement} c="chatbox-secondary">
+              <ActionIcon variant="transparent" size={16} onClick={handleIncrement} c="workspaice-secondary">
                 <IconChevronUp />
               </ActionIcon>
-              <ActionIcon variant="transparent" size={16} onClick={handleDecrement} c="chatbox-secondary">
+              <ActionIcon variant="transparent" size={16} onClick={handleDecrement} c="workspaice-secondary">
                 <IconChevronDown />
               </ActionIcon>
             </Stack>

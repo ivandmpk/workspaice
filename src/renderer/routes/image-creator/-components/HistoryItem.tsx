@@ -56,14 +56,14 @@ export function HistoryItem({ record, isActive, isMobile, modelDisplayName, onCl
         style={{ borderWidth: 1, borderStyle: 'solid' }}
         className={`w-full aspect-square rounded-lg overflow-hidden transition-colors duration-150 ${
           isActive
-            ? 'border-[var(--chatbox-tint-brand)]'
-            : 'border-[var(--chatbox-border-primary)] hover:border-[var(--chatbox-border-secondary)]'
+            ? 'border-[var(--workspaice-tint-brand)]'
+            : 'border-[var(--workspaice-border-primary)] hover:border-[var(--workspaice-border-secondary)]'
         }`}
       >
         {firstImage ? (
           <HistoryThumbnail storageKey={firstImage} />
         ) : (
-          <Flex align="center" justify="center" h="100%" className="bg-[var(--chatbox-background-secondary)]">
+          <Flex align="center" justify="center" h="100%" className="bg-[var(--workspaice-background-secondary)]">
             <IconPhoto size={24} className="opacity-20" />
           </Flex>
         )}
@@ -150,7 +150,7 @@ function HistoryThumbnail({ storageKey }: HistoryThumbnailProps) {
 
   if (isError) {
     return (
-      <Flex align="center" justify="center" h="100%" className="bg-[var(--chatbox-background-tertiary)]">
+      <Flex align="center" justify="center" h="100%" className="bg-[var(--workspaice-background-tertiary)]">
         <IconPhotoOff size={20} className="opacity-30" />
       </Flex>
     )

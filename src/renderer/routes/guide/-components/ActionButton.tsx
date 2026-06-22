@@ -12,8 +12,7 @@ import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
 import { navigateToSettings } from '@/modals/Settings'
 import { openLinkWithAuth } from '@/packages/openLinkWithAuth'
-import { buildChatboxUrl, getUserProfile, listLicensesByUser, type UserLicense } from '@/packages/remote'
-import { EmailCodeLoginModal } from '@/routes/settings/provider/chatbox-ai/-components/EmailCodeLoginModal'
+import { buildWorkspAIceUrl, getUserProfile, listLicensesByUser, type UserLicense } from '@/packages/remote'
 import { authInfoStore } from '@/stores/authInfoStore'
 import * as premiumActions from '@/stores/premiumActions'
 import { settingsStore, useLanguage } from '@/stores/settingsStore'
@@ -37,7 +36,6 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
   const [activatingLicense, setActivatingLicense] = useState(false)
   // Remember success state to keep showing success UI even after new messages are added
   const [hasSucceeded, setHasSucceeded] = useState(false)
-  const [loginModalOpened, setLoginModalOpened] = useState(false)
 
   const activateLicense = useCallback(
     async (licenseKey: string) => {
@@ -123,7 +121,7 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
         <Button
           onClick={() => {
             trackLoginButtonClick()
-            setLoginModalOpened(true)
+            navigateToSettings('/provider')
           }}
           disabled={hasSucceeded}
           variant="light"
@@ -131,7 +129,7 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
           fullWidth
           h={42}
         >
-          {hasSucceeded ? t('Login Successful') : t('Login to Chatbox AI')}
+          {hasSucceeded ? t('Setup Complete') : t('Configure Provider')}
         </Button>
       </Stack>
 
@@ -146,7 +144,7 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
         withCloseButton={false}
       >
         <Stack gap="md">
-          <Text size="sm" c="chatbox-secondary">
+          <Text size="sm" c="workspaice-secondary">
             {t('You have multiple licenses. Please select one to use:')}
           </Text>
 
@@ -159,7 +157,7 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
                   label={
                     <Stack gap={2}>
                       <Text fw={500}>{license.product_name}</Text>
-                      <Text size="xs" c="chatbox-tertiary" className="font-mono">
+                      <Text size="xs" c="workspaice-tertiary" className="font-mono">
                         {license.key.substring(0, 8)}
                         {'*'.repeat(12)}
                       </Text>
@@ -175,13 +173,6 @@ export function LoginButton({ onLoginSuccess }: LoginButtonProps) {
           </Button>
         </Stack>
       </Modal>
-
-      <EmailCodeLoginModal
-        opened={loginModalOpened}
-        onClose={() => setLoginModalOpened(false)}
-        language={language}
-        onLoginSuccess={handleLoginSuccessInternal}
-      />
     </>
   )
 }
@@ -269,7 +260,7 @@ export function ViewLicenseButton() {
 
   return (
     <Flex mt="xs" style={guideActionButtonWidthStyle}>
-      <Button variant="light" fullWidth h={42} onClick={() => navigateToSettings('chatbox-ai')}>
+      <Button variant="light" fullWidth h={42} onClick={() => navigateToSettings('workspaice-ai')}>
         <ScalableIcon icon={IconId} className="mr-2" />
         {t('View License Details')}
       </Button>
@@ -299,7 +290,7 @@ export function FreeTrialLink({ onAfterClick }: FreeTrialLinkProps = {}) {
     })
     try {
       await openLinkWithAuth(
-        buildChatboxUrl(
+        buildWorkspAIceUrl(
           `/redirect_app/claim_free_plan/${language}/?utm_source=app&utm_content=guide_session_free_trial`
         )
       )

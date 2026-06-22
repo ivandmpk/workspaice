@@ -49,7 +49,7 @@ function Copilots() {
       <section>
         <Flex align="center" gap="md" justify="space-between" mb="md">
           <Flex align="center" gap="md">
-            <Title order={5} c="chatbox-primary" className="font-normal">
+            <Title order={5} c="workspaice-primary" className="font-normal">
               {t('My Created & Added Copilots')}
             </Title>
             <Button
@@ -67,13 +67,13 @@ function Copilots() {
             <Flex
               align="center"
               gap={4}
-              className="cursor-pointer text-chatbox-tint-secondary hover:text-chatbox-tint-primary transition-colors"
+              className="cursor-pointer text-workspaice-tint-secondary hover:text-workspaice-tint-primary transition-colors"
               onClick={() => navigate({ to: '/copilots/my' })}
             >
-              <Text c="chatbox-secondary" size="xs" className="whitespace-nowrap">
+              <Text c="workspaice-secondary" size="xs" className="whitespace-nowrap">
                 {t('See All')}
               </Text>
-              <ScalableIcon icon={IconChevronRight} size={12} className="text-chatbox-tint-secondary" />
+              <ScalableIcon icon={IconChevronRight} size={12} className="text-workspaice-tint-secondary" />
             </Flex>
           )}
         </Flex>
@@ -93,24 +93,24 @@ function Copilots() {
         )}
       </section>
 
-      {/* Chatbox Featured Section */}
+      {/* WorkspAIce Featured Section */}
       {remoteCopilots.length > 0 && (
         <section>
           <Flex align="center" gap="md" justify="space-between" mb="md">
-            <Title order={5} c="chatbox-primary" className="font-normal">
-              {t('Chatbox Featured')}
+            <Title order={5} c="workspaice-primary" className="font-normal">
+              {t('WorkspAIce Featured')}
             </Title>
             {showRemoteCopilotsSeeAll && (
               <Flex
                 align="center"
                 gap={4}
-                className="cursor-pointer text-chatbox-tint-secondary hover:text-chatbox-tint-primary transition-colors"
+                className="cursor-pointer text-workspaice-tint-secondary hover:text-workspaice-tint-primary transition-colors"
                 onClick={() => navigate({ to: '/copilots/featured' })}
               >
-                <Text c="chatbox-secondary" size="xs" className="whitespace-nowrap">
+                <Text c="workspaice-secondary" size="xs" className="whitespace-nowrap">
                   {t('See All')}
                 </Text>
-                <ScalableIcon icon={IconChevronRight} size={12} className="text-chatbox-tint-secondary" />
+                <ScalableIcon icon={IconChevronRight} size={12} className="text-workspaice-tint-secondary" />
               </Flex>
             )}
           </Flex>
@@ -125,7 +125,7 @@ function Copilots() {
 
       {/* Settings Section */}
       <section>
-        <Title order={4} mb="md" className="text-chatbox-tint-primary">
+        <Title order={4} mb="md" className="text-workspaice-tint-primary">
           {t('Settings')}
         </Title>
         <Switch

@@ -4,12 +4,12 @@
  * Tests AI models' ability to read files via tools (read_file, search_file_content)
  *
  * Usage:
- * 1. Set CHATBOX_LICENSE_KEY environment variable
+ * 1. Set WORKSPAICE_LICENSE_KEY environment variable
  * 2. npm run test:file-conversation
  *
  * Environment variables:
- * - CHATBOX_TEST_MODELS: comma-separated model list, e.g. "gpt-4o-mini,gpt-4o"
- * - CHATBOX_TEST_TIMEOUT: test timeout in ms (default: 120000)
+ * - WORKSPAICE_TEST_MODELS: comma-separated model list, e.g. "gpt-4o-mini,gpt-4o"
+ * - WORKSPAICE_TEST_TIMEOUT: test timeout in ms (default: 120000)
  */
 
 import * as fs from 'node:fs'
@@ -18,26 +18,26 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { getTestPlatform, resetTestPlatform } from './setup'
 import { runConversationTest as runTest, type TestFile, type TestResult } from './test-harness'
 
-const LICENSE_KEY = process.env.CHATBOX_LICENSE_KEY || ''
+const LICENSE_KEY = process.env.WORKSPAICE_LICENSE_KEY || ''
 const TEST_OUTPUT_DIR = path.join(__dirname, '../../../test/output/file-conversation')
 const TEST_CASES_DIR = path.join(__dirname, '../../../test/cases/file-conversation')
-const TEST_TIMEOUT = Number(process.env.CHATBOX_TEST_TIMEOUT) || 120000
+const TEST_TIMEOUT = Number(process.env.WORKSPAICE_TEST_TIMEOUT) || 120000
 
 const shouldSkip = !LICENSE_KEY
 
 const DEFAULT_TEST_MODELS = [
-  { provider: 'chatbox-ai', modelId: 'chatboxai-3.5', name: 'ChatboxAI 3.5' },
-  { provider: 'chatbox-ai', modelId: 'chatboxai-4', name: 'ChatboxAI 4' },
-  { provider: 'chatbox-ai', modelId: 'gpt-4o-mini', name: 'GPT-4o Mini (ChatboxAI)' },
-  { provider: 'chatbox-ai', modelId: 'gpt-4o', name: 'GPT-4o (ChatboxAI)' },
-  { provider: 'chatbox-ai', modelId: 'gpt-5-mini', name: 'GPT-5 Mini (ChatboxAI)' },
-  { provider: 'chatbox-ai', modelId: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet (ChatboxAI)' },
-  { provider: 'chatbox-ai', modelId: 'claude-3-5-haiku', name: 'Claude 3.5 Haiku (ChatboxAI)' },
-  { provider: 'chatbox-ai', modelId: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (ChatboxAI)' },
+  { provider: 'workspaice-ai', modelId: 'workspaiceai-3.5', name: 'WorkspAIceAI 3.5' },
+  { provider: 'workspaice-ai', modelId: 'workspaiceai-4', name: 'WorkspAIceAI 4' },
+  { provider: 'workspaice-ai', modelId: 'gpt-4o-mini', name: 'GPT-4o Mini (WorkspAIceAI)' },
+  { provider: 'workspaice-ai', modelId: 'gpt-4o', name: 'GPT-4o (WorkspAIceAI)' },
+  { provider: 'workspaice-ai', modelId: 'gpt-5-mini', name: 'GPT-5 Mini (WorkspAIceAI)' },
+  { provider: 'workspaice-ai', modelId: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet (WorkspAIceAI)' },
+  { provider: 'workspaice-ai', modelId: 'claude-3-5-haiku', name: 'Claude 3.5 Haiku (WorkspAIceAI)' },
+  { provider: 'workspaice-ai', modelId: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (WorkspAIceAI)' },
 ]
 
 function getTestModels() {
-  const envModels = process.env.CHATBOX_TEST_MODELS
+  const envModels = process.env.WORKSPAICE_TEST_MODELS
   if (!envModels) {
     return DEFAULT_TEST_MODELS
   }
@@ -481,7 +481,7 @@ describe('File Conversation Integration Tests', () => {
 
   beforeAll(() => {
     if (shouldSkip) {
-      console.warn('⚠️  CHATBOX_LICENSE_KEY not set, skipping integration tests')
+      console.warn('⚠️  WORKSPAICE_LICENSE_KEY not set, skipping integration tests')
       return
     }
 

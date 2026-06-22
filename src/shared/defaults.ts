@@ -38,8 +38,6 @@ export function settings(): Settings {
     // claudeApiHost: 'https://api.anthropic.com',
     // claudeModel: 'claude-3-5-sonnet-20241022',
 
-    // chatboxAIModel: 'chatboxai-3.5',
-
     // geminiAPIKey: '',
     // geminiAPIHost: 'https://generativelanguage.googleapis.com',
     // geminiModel: 'gemini-1.5-pro-latest',
@@ -87,9 +85,6 @@ export function settings(): Settings {
 
     allowReportingAndTracking: true,
 
-    hasExpiredLicense: false,
-    chatboxAIDesktopPromptDismissed: false,
-
     enableMarkdownRendering: true,
     enableLaTeXRendering: true,
     enableMermaidRendering: true,
@@ -104,7 +99,7 @@ export function settings(): Settings {
     compactionThreshold: 0.6,
 
     autoLaunch: false,
-    autoUpdate: true,
+    autoUpdate: false,
     betaUpdate: false,
 
     shortcuts: {
@@ -164,15 +159,15 @@ export function getDefaultPrompt() {
 
 export function chatSessionSettings(): SessionSettings {
   return {
-    provider: ModelProviderEnum.ChatboxAI,
-    modelId: 'chatboxai-4',
+    provider: ModelProviderEnum.OpenAI,
+    modelId: 'gpt-4o',
     maxContextMessageCount: Number.MAX_SAFE_INTEGER,
   }
 }
 
 export function pictureSessionSettings(): SessionSettings {
   return {
-    provider: ModelProviderEnum.ChatboxAI,
+    provider: ModelProviderEnum.OpenAI,
     modelId: 'DALL-E-3',
     imageGenerateNum: 1,
     dalleStyle: 'vivid',

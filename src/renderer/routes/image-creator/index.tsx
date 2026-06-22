@@ -27,7 +27,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { JK_PAGE_NAMES } from '@/analytics/jk-events'
-import { ChatboxWelcomeCard } from '@/components/common/ChatboxWelcomeCard'
+import { WorkspAIceWelcomeCard } from '@/components/common/WorkspAIceWelcomeCard'
 import { ImageModelSelect } from '@/components/ImageModelSelect'
 import Page from '@/components/layout/Page'
 import { type ImageModelGroup, useImageModelGroups } from '@/hooks/useImageModelGroups'
@@ -113,22 +113,22 @@ function InputToolbar({
         {isSmallScreen ? (
           <UnstyledButton
             onClick={onModelDrawerOpen}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
           >
-            <IconSparkles size={16} className="text-[var(--chatbox-tint-secondary)]" />
-            <Text size="sm" className="text-[var(--chatbox-tint-secondary)] max-w-[120px] truncate">
+            <IconSparkles size={16} className="text-[var(--workspaice-tint-secondary)]" />
+            <Text size="sm" className="text-[var(--workspaice-tint-secondary)] max-w-[120px] truncate">
               {modelDisplayName}
             </Text>
-            <IconChevronRight size={14} className="text-[var(--chatbox-tint-tertiary)] rotate-90" />
+            <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
           </UnstyledButton>
         ) : (
           <ImageModelSelect modelGroups={modelGroups} onSelect={onModelSelect}>
-            <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
-              <IconSparkles size={16} className="text-[var(--chatbox-tint-secondary)]" />
-              <Text size="sm" className="text-[var(--chatbox-tint-secondary)] max-w-[120px] truncate">
+            <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+              <IconSparkles size={16} className="text-[var(--workspaice-tint-secondary)]" />
+              <Text size="sm" className="text-[var(--workspaice-tint-secondary)] max-w-[120px] truncate">
                 {modelDisplayName}
               </Text>
-              <IconChevronRight size={14} className="text-[var(--chatbox-tint-tertiary)] rotate-90" />
+              <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
             </UnstyledButton>
           </ImageModelSelect>
         )}
@@ -137,23 +137,23 @@ function InputToolbar({
         {isSmallScreen ? (
           <UnstyledButton
             onClick={onRatioDrawerOpen}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
           >
-            <IconAspectRatio size={16} className="text-[var(--chatbox-tint-secondary)]" />
-            <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
+            <IconAspectRatio size={16} className="text-[var(--workspaice-tint-secondary)]" />
+            <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
               {selectedRatio}
             </Text>
-            <IconChevronRight size={14} className="text-[var(--chatbox-tint-tertiary)] rotate-90" />
+            <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
           </UnstyledButton>
         ) : (
           <Menu position="top" withinPortal shadow="md" radius="lg">
             <Menu.Target>
-              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors">
-                <IconAspectRatio size={16} className="text-[var(--chatbox-tint-secondary)]" />
-                <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
+              <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                <IconAspectRatio size={16} className="text-[var(--workspaice-tint-secondary)]" />
+                <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
                   {selectedRatio}
                 </Text>
-                <IconChevronRight size={14} className="text-[var(--chatbox-tint-tertiary)] rotate-90" />
+                <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
               </UnstyledButton>
             </Menu.Target>
             <Menu.Dropdown className="!rounded-2xl" style={{ minWidth: 100 }}>
@@ -171,10 +171,10 @@ function InputToolbar({
         {/* Reference Image Button */}
         <UnstyledButton
           onClick={onAddReference}
-          className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--chatbox-background-tertiary)] transition-colors"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
         >
-          <IconPhoto size={16} className="text-[var(--chatbox-tint-secondary)]" />
-          <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
+          <IconPhoto size={16} className="text-[var(--workspaice-tint-secondary)]" />
+          <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
             {t('Upload')}
           </Text>
         </UnstyledButton>
@@ -230,7 +230,7 @@ function ImageCreatorPage() {
   const tempUploadKeysRef = useRef<Set<string>>(new Set())
   const [showHistory, setShowHistory] = useState(true)
   const [showMobileHistory, setShowMobileHistory] = useState(false)
-  const [selectedProvider, setSelectedProvider] = useState<string>(ModelProviderEnum.ChatboxAI)
+  const [selectedProvider, setSelectedProvider] = useState<string>(ModelProviderEnum.OpenAI)
   const [selectedModel, setSelectedModel] = useState<string>('')
   const [selectedRatio, setSelectedRatio] = useState<string>('auto')
   const [showModelDrawer, setShowModelDrawer] = useState(false)
@@ -359,11 +359,6 @@ function ImageCreatorPage() {
       return
     }
 
-    if (selectedProvider === ModelProviderEnum.ChatboxAI && !settingsStore.getState().licenseKey) {
-      toastActions.add(t('Please log in to Chatbox AI first'))
-      return
-    }
-
     try {
       // Collect all unique source record IDs from reference images (DAG support)
       const parentIds = [
@@ -396,11 +391,6 @@ function ImageCreatorPage() {
       if (isCurrentlyGenerating) return
       if (!selectedModel) {
         toastActions.add(t('Please select a model'))
-        return
-      }
-
-      if (selectedProvider === ModelProviderEnum.ChatboxAI && !settingsStore.getState().licenseKey) {
-        toastActions.add(t('Please log in to Chatbox AI first'))
         return
       }
 
@@ -486,9 +476,6 @@ function ImageCreatorPage() {
       const providerModel = providerModels.find((item) => item.modelId === model.modelId)
       const modelName = imageModel?.displayName || providerModel?.nickname || model.modelId || 'Image'
 
-      if (model.provider === ModelProviderEnum.ChatboxAI) {
-        return modelName
-      }
       const providerName = group?.label || provider?.name || model.provider
       return `${providerName} - ${modelName}`
     },
@@ -507,10 +494,6 @@ function ImageCreatorPage() {
     (model: ImageGenerationModel) => {
       const legacyName = HISTORY_IMAGE_MODEL_DISPLAY_NAMES[model.modelId]
       if (!legacyName) return getImageModelDisplayName(model)
-
-      if (model.provider === ModelProviderEnum.ChatboxAI) {
-        return legacyName
-      }
 
       const group = imageModelGroups.find((item) => item.providerId === model.provider)
       const provider = providers.find((item) => item.id === model.provider)
@@ -534,10 +517,10 @@ function ImageCreatorPage() {
   ) : (
     <UnstyledButton
       onClick={() => setShowHistory(!showHistory)}
-      className={`controls flex items-center gap-1.5 px-3 py-1.5 rounded-sm ${showHistory ? 'bg-[var(--chatbox-background-tertiary)]' : 'bg-[var(--chatbox-background-secondary)]'}`}
+      className={`controls flex items-center gap-1.5 px-3 py-1.5 rounded-sm ${showHistory ? 'bg-[var(--workspaice-background-tertiary)]' : 'bg-[var(--workspaice-background-secondary)]'}`}
     >
-      <IconHistory size={18} className="text-[var(--chatbox-tint-secondary)]" />
-      <Text size="sm" className="text-[var(--chatbox-tint-secondary)]">
+      <IconHistory size={18} className="text-[var(--workspaice-tint-secondary)]" />
+      <Text size="sm" className="text-[var(--workspaice-tint-secondary)]">
         {t('History')}
       </Text>
     </UnstyledButton>
@@ -599,7 +582,7 @@ function ImageCreatorPage() {
           <Box py="md" px="sm">
             <Stack gap="sm" maw={800} mx="auto">
               {!currentRecord && welcomeCardMode !== 'none' && (
-                <ChatboxWelcomeCard mode={welcomeCardMode} pageName={JK_PAGE_NAMES.IMAGE_PAGE} />
+                <WorkspAIceWelcomeCard mode={welcomeCardMode} pageName={JK_PAGE_NAMES.IMAGE_PAGE} />
               )}
 
               <ReferenceImagesPreview
@@ -618,8 +601,8 @@ function ImageCreatorPage() {
               />
 
               <Box
-                className="rounded-md bg-[var(--chatbox-background-secondary)] px-3 py-2"
-                style={{ border: '1px solid var(--chatbox-border-primary)' }}
+                className="rounded-md bg-[var(--workspaice-background-secondary)] px-3 py-2"
+                style={{ border: '1px solid var(--workspaice-border-primary)' }}
               >
                 <Stack gap="xs">
                   {/* Input Row */}
@@ -657,7 +640,7 @@ function ImageCreatorPage() {
                     <ActionIcon
                       size={32}
                       variant="filled"
-                      color={isCurrentlyGenerating ? 'dark' : 'chatbox-brand'}
+                      color={isCurrentlyGenerating ? 'dark' : 'workspaice-brand'}
                       radius="xl"
                       onClick={isCurrentlyGenerating ? cancelGeneration : handleSubmit}
                       disabled={(!prompt.trim() || !selectedModel) && !isCurrentlyGenerating}

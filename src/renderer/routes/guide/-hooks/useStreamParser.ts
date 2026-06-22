@@ -232,7 +232,7 @@ async function handleActivateLicense(
   if (!licenseKey) return
 
   const failureMessage = t(
-    'Failed to activate the license key. You can try activating manually in **Settings**, or log in to the [Chatbox AI website](https://chatboxai.app) to view your license details.'
+    'Failed to activate the license key. You can try activating manually in **Settings**, or log in to the [WorkspAIce AI website](https://workspaiceai.app) to view your license details.'
   )
 
   try {

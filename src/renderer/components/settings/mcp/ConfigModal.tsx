@@ -33,11 +33,11 @@ const TestingResult: FC<{ result: ConnectionTestingResult }> = ({ result }) => {
   if (result.error) {
     return (
       <Paper withBorder p="md" mt="md">
-        <Text size="sm" c="chatbox-error" className="whitespace-pre-line overflow-x-auto">
+        <Text size="sm" c="workspaice-error" className="whitespace-pre-line overflow-x-auto">
           {result.error.message}
         </Text>
         {result.error.message.includes('ENOENT') && result.config.transport.type === 'stdio' && (
-          <Text size="sm" c="chatbox-primary" mt="sm">
+          <Text size="sm" c="workspaice-primary" mt="sm">
             {t('Make sure you have the following command installed:')} <Kbd>{result.config.transport.command}</Kbd>
           </Text>
         )}
@@ -166,7 +166,7 @@ const ConfigForm: FC<{
         )}
         <Group justify="space-between">
           {props.mode === 'edit' ? (
-            <Anchor c="chatbox-error" onClick={() => props.onDelete(props.config.id)}>
+            <Anchor c="workspaice-error" onClick={() => props.onDelete(props.config.id)}>
               {t('Delete')}
             </Anchor>
           ) : (

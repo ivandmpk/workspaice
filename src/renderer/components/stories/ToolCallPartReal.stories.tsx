@@ -180,7 +180,7 @@ export const MultiplePills: StoryObj = {
           toolName: 'read_file',
           state: 'result',
           args: { path: 'package.json' },
-          result: { content: '{ "name": "chatbox" }' },
+          result: { content: '{ "name": "workspaice" }' },
         })}
       />
       <ToolCallPartUI

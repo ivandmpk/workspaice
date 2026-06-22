@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { BingSearch } from '@/packages/web-search/bing'
 import { BingNewsSearch } from '@/packages/web-search/bing-news'
 import { BochaSearch } from '@/packages/web-search/bocha'
-import { ChatboxSearch } from '@/packages/web-search/chatbox-search'
+import { WorkspAIceSearch } from '@/packages/web-search/workspaice-search'
 import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import { QueritSearch } from '@/packages/web-search/querit'
 import { TavilySearch } from '@/packages/web-search/tavily'
@@ -26,7 +26,7 @@ describe('parse_link capability consistency', () => {
   // Map of provider id (matching the union type used in extension settings)
   // to a freshly constructed instance with stub credentials.
   const providers: { id: string; instance: { supportsParseLink: boolean } }[] = [
-    { id: 'build-in', instance: new ChatboxSearch('stub-license') },
+    { id: 'build-in', instance: new WorkspAIceSearch('stub-license') },
     { id: 'bing', instance: new BingSearch() },
     { id: 'bing-news', instance: new BingNewsSearch() },
     { id: 'tavily', instance: new TavilySearch('stub-api-key') },

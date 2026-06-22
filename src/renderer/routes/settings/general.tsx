@@ -172,9 +172,9 @@ export function RouteComponent() {
       <Stack gap="md">
         <Stack gap="xxs">
           <Title order={5}>{t('Error Reporting')}</Title>
-          <Text c="chatbox-tertiary">
+          <Text c="workspaice-tertiary">
             {t(
-              'Chatbox respects your privacy and only uploads anonymous error data and events when necessary. You can change your preferences at any time in the settings.'
+              'WorkspAIce respects your privacy and only uploads anonymous error data and events when necessary. You can change your preferences at any time in the settings.'
             )}
           </Text>
         </Stack>
@@ -256,7 +256,7 @@ const DataRecoverySection = () => {
     <Stack gap="md">
       <Stack gap="xxs">
         <Title order={5}>{t('Data Recovery')}</Title>
-        <Text c="chatbox-tertiary">
+        <Text c="workspaice-tertiary">
           {t('If conversations are missing from the list, use this feature to scan and recover them from storage')}
         </Text>
       </Stack>
@@ -420,7 +420,7 @@ const ImportExportDataSection = () => {
         yield '}'
       }
 
-      await platform.exporter.exportStreamingJson(`chatbox-exported-data-${dateStr}.json`, streamingDataGenerator)
+      await platform.exporter.exportStreamingJson(`workspaice-exported-data-${dateStr}.json`, streamingDataGenerator)
     } catch (error) {
       console.error('Export failed:', error)
     } finally {
@@ -534,7 +534,7 @@ const ImportExportDataSection = () => {
           {t('Data Backup')}
         </Title>
         {showStorageInfo && (
-          <Text size="xs" c="chatbox-tertiary">
+          <Text size="xs" c="workspaice-tertiary">
             {storageInfo}
           </Text>
         )}
@@ -569,7 +569,7 @@ const ImportExportDataSection = () => {
       <Stack gap="lg">
         <Stack gap="xxs">
           <Title order={5}>{t('Data Restore')}</Title>
-          <Text c="chatbox-tertiary">
+          <Text c="workspaice-tertiary">
             {t('Upon import, changes will take effect immediately and existing data will be overwritten')}
           </Text>
         </Stack>
@@ -621,7 +621,7 @@ const ExportLogsSection = () => {
 
       const date = new Date()
       const dateStr = dayjs(date).format('YYYY-M-D_H-m')
-      await platform.exporter.exportTextFile(`chatbox-logs-${dateStr}.txt`, logs)
+      await platform.exporter.exportTextFile(`workspaice-logs-${dateStr}.txt`, logs)
       setExportResult({ success: true })
     } catch (error) {
       console.error('Failed to export logs:', error)
@@ -644,7 +644,7 @@ const ExportLogsSection = () => {
     <Stack gap="md">
       <Stack gap="xxs">
         <Title order={5}>{t('Diagnostic Logs')}</Title>
-        <Text c="chatbox-tertiary">
+        <Text c="workspaice-tertiary">
           {t(
             'Export application logs for troubleshooting. These logs may be requested by support to help diagnose issues.'
           )}

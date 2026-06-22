@@ -2,7 +2,7 @@ import { CapacitorHttp } from '@capacitor/core'
 import type { SearchResult } from '@shared/types'
 import { type FetchOptions, ofetch } from 'ofetch'
 import platform from '@/platform'
-import { CHATBOX_BUILD_PLATFORM } from '@/variables'
+import { WORKSPAICE_BUILD_PLATFORM } from '@/variables'
 
 const IOS_USER_AGENT =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1'
@@ -28,7 +28,7 @@ function formatHeaders(headers: HeadersInit | undefined): Record<string, string>
 }
 
 function getMobileUserAgent() {
-  switch (CHATBOX_BUILD_PLATFORM) {
+  switch (WORKSPAICE_BUILD_PLATFORM) {
     case 'ios':
       return IOS_USER_AGENT
     case 'android':

@@ -106,8 +106,8 @@ class SQLiteStorage {
   private async initialize(): Promise<void> {
     try {
       // reload的时候会报connection already open错误，所以先关闭
-      this.sqlite.closeConnection('chatbox.db', false)
-      this.database = await this.sqlite.createConnection('chatbox.db', false, 'no-encryption', 1, false)
+      this.sqlite.closeConnection('workspaice.db', false)
+      this.database = await this.sqlite.createConnection('workspaice.db', false, 'no-encryption', 1, false)
 
       // 创建表
       const createTable = `
@@ -274,7 +274,7 @@ export class MobileSQLiteStorage implements Storage {
 }
 
 export class IndexedDBStorage implements Storage {
-  private store = localforage.createInstance({ name: 'chatboxstore' })
+  private store = localforage.createInstance({ name: 'workspaicestore' })
 
   public getStorageType(): string {
     return 'INDEXEDDB'

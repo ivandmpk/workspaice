@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/react'
 import { AIProviderNoImplementedPaintError, ApiError, BaseError, NetworkError, OCRError } from '@shared/models/errors'
 import type { Message, ModelProvider, Session, SessionSettings, SessionType, Settings } from '@shared/types'
-import { ModelProviderEnum } from '@shared/types'
 import { identity, pickBy } from 'lodash'
 import { getModelDisplayName } from '@/packages/model-setting-utils'
 import { trackEvent } from '@/utils/track'
@@ -9,15 +8,14 @@ import { uiStore } from '../uiStore'
 
 /**
  * Get session-level web browsing setting
- * Returns user's explicit setting if set, otherwise returns default based on provider
+ * Returns user's explicit setting if set, otherwise returns the local-only default.
  */
 export function getSessionWebBrowsing(sessionId: string, provider: string | undefined): boolean {
   const sessionValue = uiStore.getState().sessionWebBrowsingMap[sessionId]
   if (sessionValue !== undefined) {
     return sessionValue
   }
-  // Default: true for ChatboxAI, false for others
-  return provider === ModelProviderEnum.ChatboxAI
+  return false
 }
 
 /**

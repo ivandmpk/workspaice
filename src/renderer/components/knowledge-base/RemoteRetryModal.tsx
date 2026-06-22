@@ -3,7 +3,7 @@ import {
   KNOWLEDGE_BASE_MAX_PARSED_CONTENT_SIZE_LABEL,
   KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR,
 } from '@shared/knowledge-base'
-import { ChatboxAIAPIError } from '@shared/models/errors'
+import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { KnowledgeBaseFile } from '@shared/types'
 import { formatFileSize } from '@shared/utils'
 import { IconAlertTriangle, IconFile, IconInfoCircle, IconRefresh } from '@tabler/icons-react'
@@ -17,7 +17,7 @@ import platform from '@/platform'
 
 /**
  * Parse error message to extract user-friendly message
- * Handles JSON error responses and uses i18nKey from ChatboxAIAPIError.codeNameMap
+ * Handles JSON error responses and uses i18nKey from WorkspAIceAIAPIError.codeNameMap
  */
 function parseErrorMessage(errorMessage: string, t: TFunction): string {
   if (errorMessage === KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR) {
@@ -34,9 +34,9 @@ function parseErrorMessage(errorMessage: string, t: TFunction): string {
       const parsed = JSON.parse(jsonStr)
       const errorCode = parsed.error?.code
 
-      // Try to get i18nKey from ChatboxAIAPIError.codeNameMap
-      if (errorCode && ChatboxAIAPIError.codeNameMap[errorCode]) {
-        return t(ChatboxAIAPIError.codeNameMap[errorCode].i18nKey)
+      // Try to get i18nKey from WorkspAIceAIAPIError.codeNameMap
+      if (errorCode && WorkspAIceAIAPIError.codeNameMap[errorCode]) {
+        return t(WorkspAIceAIAPIError.codeNameMap[errorCode].i18nKey)
       }
 
       // Fallback to detail or title

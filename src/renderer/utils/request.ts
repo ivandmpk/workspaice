@@ -43,8 +43,8 @@ function buildHeaders(options: RequestOptions, url: string): Headers {
   headers.set('Content-Type', 'application/json')
 
   if (options.useProxy && !isLocalHost(url) && platform.type !== 'mobile') {
-    headers.set('CHATBOX-TARGET-URI', url)
-    headers.set('CHATBOX-PLATFORM', platform.type)
+    headers.set('WORKSPAICE-TARGET-URI', url)
+    headers.set('WORKSPAICE-PLATFORM', platform.type)
   }
 
   return headers
@@ -57,8 +57,8 @@ async function doRequest(url: string, options: RequestOptions): Promise<Response
 
   if (useProxy && !isLocalHost(url) && platform.type !== 'mobile') {
     const version = await platform.getVersion()
-    headers.set('CHATBOX-VERSION', version || 'unknown')
-    requestUrl = 'https://cors-proxy.chatboxai.app/proxy-api/completions'
+    headers.set('WORKSPAICE-VERSION', version || 'unknown')
+    requestUrl = 'https://cors-proxy.workspaiceai.app/proxy-api/completions'
   }
 
   const makeRequest = async () => {

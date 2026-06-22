@@ -71,15 +71,15 @@ export function transformFullResponse(response: ModelsDevResponse): ModelRegistr
   for (const [modelsDevId, providerEntry] of Object.entries(response)) {
     if (!providerEntry?.models) continue
 
-    // Check if this models.dev provider maps to any Chatbox providers
-    const chatboxIds = REVERSE_PROVIDER_MAP[modelsDevId]
-    if (!chatboxIds || chatboxIds.length === 0) continue
+    // Check if this models.dev provider maps to any WorkspAIce providers
+    const workspaiceIds = REVERSE_PROVIDER_MAP[modelsDevId]
+    if (!workspaiceIds || workspaiceIds.length === 0) continue
 
     const providerModels = transformProviderModels(providerEntry.models)
 
-    // Assign to all Chatbox provider IDs that map to this models.dev provider
-    for (const chatboxId of chatboxIds) {
-      registry[chatboxId] = providerModels
+    // Assign to all WorkspAIce provider IDs that map to this models.dev provider
+    for (const workspaiceId of workspaiceIds) {
+      registry[workspaiceId] = providerModels
     }
   }
 

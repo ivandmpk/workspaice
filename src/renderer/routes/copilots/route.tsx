@@ -27,7 +27,7 @@ export function RouteComponent() {
 
   // Determine current page title
   const getSubPageTitle = () => {
-    if (isFeatured) return t('Chatbox Featured')
+    if (isFeatured) return t('WorkspAIce Featured')
     if (isMy) return t('My Created & Added Copilots')
     if (isSearch) return t('Search')
     return null
@@ -66,8 +66,8 @@ export function RouteComponent() {
         <Text
           size="lg"
           fw={subPageTitle ? 400 : 600}
-          className={subPageTitle ? 'controls cursor-pointer hover:text-chatbox-tint-primary transition-colors' : ''}
-          c={subPageTitle ? 'chatbox-secondary' : 'chatbox-primary'}
+          className={subPageTitle ? 'controls cursor-pointer hover:text-workspaice-tint-primary transition-colors' : ''}
+          c={subPageTitle ? 'workspaice-secondary' : 'workspaice-primary'}
           onClick={subPageTitle ? handleRootClick : undefined}
         >
           {t('My Copilots')}
@@ -75,7 +75,7 @@ export function RouteComponent() {
 
         {subPageTitle && (
           <>
-            <ScalableIcon icon={IconChevronRight} size={20} className="text-chatbox-tint-tertiary" />
+            <ScalableIcon icon={IconChevronRight} size={20} className="text-workspaice-tint-tertiary" />
             <Text size="lg" fw={600}>
               {subPageTitle}
             </Text>
@@ -102,7 +102,7 @@ export function RouteComponent() {
             className="controls"
             variant="subtle"
             size={28}
-            color="chatbox-secondary"
+            color="workspaice-secondary"
             mr="sm"
             onClick={() => router.history.back()}
           >

@@ -1,7 +1,7 @@
 import { isTextFilePath } from '../../../shared/file-extensions'
 import type { DocumentParserConfig, DocumentParserType } from '../../../shared/types/settings'
 import { getLogger } from '../../util'
-import { ChatboxParser } from './chatbox-parser'
+import { WorkspAIceParser } from './workspaice-parser'
 import { LocalParser } from './local-parser'
 import { MineruParser } from './mineru-parser'
 import type { DocumentParser, ParserFileMeta, ParserResult } from './types'
@@ -20,8 +20,8 @@ export function createParser(config: DocumentParserConfig, kbId?: number): Docum
   switch (config.type) {
     case 'local':
       return new LocalParser(kbId)
-    case 'chatbox-ai':
-      return new ChatboxParser()
+    case 'workspaice-ai':
+      return new WorkspAIceParser()
     case 'mineru':
       if (!config.mineru?.apiToken) {
         throw new Error('MinerU API token is required')
@@ -88,8 +88,8 @@ export function getParserDisplayName(type: DocumentParserType): string {
   switch (type) {
     case 'local':
       return 'Local'
-    case 'chatbox-ai':
-      return 'Chatbox AI'
+    case 'workspaice-ai':
+      return 'WorkspAIce AI'
     case 'mineru':
       return 'MinerU'
     default:

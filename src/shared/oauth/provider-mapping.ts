@@ -10,14 +10,14 @@ const OAUTH_PROVIDER_MAP: Record<string, string | undefined> = {
   'github-copilot': 'github-copilot',
 }
 
-export function toOAuthProviderId(chatboxProviderId: string): string | undefined {
-  return OAUTH_PROVIDER_MAP[chatboxProviderId]
+export function toOAuthProviderId(workspaiceProviderId: string): string | undefined {
+  return OAUTH_PROVIDER_MAP[workspaiceProviderId]
 }
 
 // Kept separate from toOAuthProviderId because some providers may share credential storage
 // without sharing their runtime OAuth provider implementation in the future.
-export function toOAuthSettingsProviderId(chatboxProviderId: string): string | undefined {
-  return OAUTH_PROVIDER_MAP[chatboxProviderId]
+export function toOAuthSettingsProviderId(workspaiceProviderId: string): string | undefined {
+  return OAUTH_PROVIDER_MAP[workspaiceProviderId]
 }
 
 export function mergeSharedOAuthProviderSettings(

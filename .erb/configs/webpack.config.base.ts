@@ -77,12 +77,12 @@ const configuration: webpack.Configuration = {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      CHATBOX_BUILD_TARGET: 'unknown',
-      CHATBOX_BUILD_PLATFORM: 'unknown',
+      WORKSPAICE_BUILD_TARGET: 'unknown',
+      WORKSPAICE_BUILD_PLATFORM: 'unknown',
       USE_LOCAL_API: '',
       USE_BETA_API: '',
-      USE_LOCAL_CHATBOX: '',
-      USE_BETA_CHATBOX: '',
+      USE_LOCAL_WORKSPAICE: '',
+      USE_BETA_WORKSPAICE: '',
     }),
   ],
 }

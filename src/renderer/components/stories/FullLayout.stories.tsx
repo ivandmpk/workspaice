@@ -81,7 +81,7 @@ export default meta
 const SessionItem = ({ name, selected, starred }: { name: string; selected: boolean; starred?: boolean }) => (
   <Flex
     align="center"
-    className={`cursor-pointer rounded-md ${selected ? 'bg-chatbox-background-brand-secondary' : 'hover:bg-chatbox-background-gray-secondary'}`}
+    className={`cursor-pointer rounded-md ${selected ? 'bg-workspaice-background-brand-secondary' : 'hover:bg-workspaice-background-gray-secondary'}`}
     mx="xs"
     px="xs"
     py={8}
@@ -90,10 +90,10 @@ const SessionItem = ({ name, selected, starred }: { name: string; selected: bool
     <Avatar size={28} color={selected ? 'blue' : 'gray'} radius="md" variant="light">
       <IconRobot size={14} />
     </Avatar>
-    <Text size="sm" flex={1} lineClamp={1} c={selected ? 'chatbox-brand' : 'chatbox-primary'}>
+    <Text size="sm" flex={1} lineClamp={1} c={selected ? 'workspaice-brand' : 'workspaice-primary'}>
       {name}
     </Text>
-    {starred && <IconStarFilled size={12} color="var(--chatbox-tint-brand)" />}
+    {starred && <IconStarFilled size={12} color="var(--workspaice-tint-brand)" />}
   </Flex>
 )
 
@@ -110,15 +110,15 @@ const ActionBar = () => (
 export const CurrentLayout: StoryObj = {
   name: 'Current Full Layout',
   render: () => (
-    <Flex style={{ height: '100vh', width: '100%', backgroundColor: 'var(--chatbox-background-primary)' }}>
+    <Flex style={{ height: '100vh', width: '100%', backgroundColor: 'var(--workspaice-background-primary)' }}>
       {/* Sidebar */}
-      <Box w={280} className="flex-shrink-0" style={{ borderRight: '1px solid var(--chatbox-border-primary)' }}>
+      <Box w={280} className="flex-shrink-0" style={{ borderRight: '1px solid var(--workspaice-border-primary)' }}>
         <Stack h="100%" gap={0}>
           <Flex align="center" justify="space-between" px="md" py="sm">
             <Flex align="center" gap="sm">
-              <Box w={20} h={20} style={{ backgroundColor: 'var(--chatbox-tint-brand)', borderRadius: 4 }} />
+              <Box w={20} h={20} style={{ backgroundColor: 'var(--workspaice-tint-brand)', borderRadius: 4 }} />
               <Text fw={700} size="lg">
-                Chatbox
+                WorkspAIce
               </Text>
             </Flex>
             <ActionIcon variant="subtle" color="gray" size={20}>
@@ -190,7 +190,7 @@ export const CurrentLayout: StoryObj = {
               <Avatar size={36} color="blue" radius="xl">
                 <IconUser size={18} />
               </Avatar>
-              <Box className="bg-chatbox-background-secondary px-4 py-2 rounded-lg">
+              <Box className="bg-workspaice-background-secondary px-4 py-2 rounded-lg">
                 <Text size="sm">Can you explain RSC vs traditional client rendering?</Text>
               </Box>
             </Flex>
@@ -204,7 +204,7 @@ export const CurrentLayout: StoryObj = {
                   React Server Components (RSC) run on the server, while traditional components run in the browser. RSC
                   can access server resources directly and reduce bundle size.
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   model: gpt-4o, tokens used: 156
                 </Text>
                 <ActionBar />
@@ -215,7 +215,7 @@ export const CurrentLayout: StoryObj = {
               <Avatar size={36} color="blue" radius="xl">
                 <IconUser size={18} />
               </Avatar>
-              <Box className="bg-chatbox-background-secondary px-4 py-2 rounded-lg">
+              <Box className="bg-workspaice-background-secondary px-4 py-2 rounded-lg">
                 <Text size="sm">What about data fetching patterns?</Text>
               </Box>
             </Flex>
@@ -229,7 +229,7 @@ export const CurrentLayout: StoryObj = {
                   With RSC, you can fetch data directly in the component using async/await. No need for useEffect or
                   complex data fetching libraries. The data is fetched on the server and streamed to the client as HTML.
                 </Text>
-                <Text size="xs" c="chatbox-tertiary">
+                <Text size="xs" c="workspaice-tertiary">
                   model: gpt-4o, tokens used: 89
                 </Text>
                 <ActionBar />
@@ -244,8 +244,8 @@ export const CurrentLayout: StoryObj = {
             <Stack
               className="rounded-md px-3 py-2 min-h-[92px]"
               style={{
-                backgroundColor: 'var(--chatbox-background-secondary)',
-                border: '1px solid var(--chatbox-border-primary)',
+                backgroundColor: 'var(--workspaice-background-secondary)',
+                border: '1px solid var(--workspaice-border-primary)',
               }}
               gap="xs"
             >
@@ -273,10 +273,10 @@ export const CurrentLayout: StoryObj = {
                   <ToolBtn icon={IconAdjustmentsHorizontal} />
                 </Flex>
                 <Flex align="center" gap={0}>
-                  <Text size="xs" c="chatbox-tertiary" px="sm">
+                  <Text size="xs" c="workspaice-tertiary" px="sm">
                     ↑ 1,234 (15%)
                   </Text>
-                  <Text size="sm" c="chatbox-secondary">
+                  <Text size="sm" c="workspaice-secondary">
                     GPT-4o
                   </Text>
                 </Flex>
@@ -298,14 +298,14 @@ export const OptimizedLayout: StoryObj = {
         gridTemplateColumns: '280px 1fr',
         height: '100vh',
         width: '100%',
-        backgroundColor: 'var(--chatbox-background-primary)',
+        backgroundColor: 'var(--workspaice-background-primary)',
       }}
     >
       {/* Sidebar — CSS Grid column */}
-      <Box style={{ borderRight: '1px solid var(--chatbox-border-primary)', display: 'flex', flexDirection: 'column' }}>
+      <Box style={{ borderRight: '1px solid var(--workspaice-border-primary)', display: 'flex', flexDirection: 'column' }}>
         <Flex align="center" justify="space-between" px="md" py="sm">
           <Text fw={700} size="lg">
-            Chatbox
+            WorkspAIce
           </Text>
           <Flex gap={4}>
             <ActionIcon variant="subtle" color="gray" size={24} radius="md">
@@ -324,19 +324,19 @@ export const OptimizedLayout: StoryObj = {
         </Box>
 
         <ScrollArea flex={1}>
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} tt="uppercase">
             ⭐ Pinned
           </Text>
           <SessionItem name="React Server Components" selected={true} starred />
           <SessionItem name="API Rate Limiting" selected={false} starred />
 
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
             Today
           </Text>
           <SessionItem name="Python Data Pipeline" selected={false} />
           <SessionItem name="CSS Grid Debugging" selected={false} />
 
-          <Text size="10px" fw={600} c="chatbox-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
+          <Text size="10px" fw={600} c="workspaice-tertiary" px="sm" py={4} mt="xs" tt="uppercase">
             Yesterday
           </Text>
           <SessionItem name="Database Schema" selected={false} />
@@ -369,7 +369,7 @@ export const OptimizedLayout: StoryObj = {
         <Flex h={48} align="center" px="md" className="flex-shrink-0">
           <Stack gap={0} flex={1} className="min-w-0">
             <Flex align="center" gap={4}>
-              <Text size="xs" c="chatbox-tertiary">
+              <Text size="xs" c="workspaice-tertiary">
                 Chat /
               </Text>
               <Text size="sm" fw={500} lineClamp={1}>
@@ -394,7 +394,7 @@ export const OptimizedLayout: StoryObj = {
             </ActionIcon>
           </Flex>
         </Flex>
-        <Box h={2} style={{ background: 'linear-gradient(to right, var(--chatbox-tint-brand), transparent)' }} />
+        <Box h={2} style={{ background: 'linear-gradient(to right, var(--workspaice-tint-brand), transparent)' }} />
 
         {/* Messages */}
         <ScrollArea flex={1} px="md" py="md">
@@ -404,8 +404,8 @@ export const OptimizedLayout: StoryObj = {
               <Box
                 className="px-4 py-3 rounded-2xl rounded-tr-sm max-w-[85%]"
                 style={{
-                  backgroundColor: 'var(--chatbox-background-brand-secondary)',
-                  border: '1px solid var(--chatbox-border-brand)',
+                  backgroundColor: 'var(--workspaice-background-brand-secondary)',
+                  border: '1px solid var(--workspaice-border-brand)',
                 }}
               >
                 <Text size="sm">Can you explain RSC vs traditional client rendering?</Text>
@@ -420,7 +420,7 @@ export const OptimizedLayout: StoryObj = {
               <Stack gap="xs" flex={1}>
                 <Box
                   className="px-4 py-3 rounded-2xl rounded-tl-sm"
-                  style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+                  style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
                 >
                   <Text size="sm">
                     RSC run on the server and can access databases directly. They send only rendered HTML, reducing
@@ -429,19 +429,19 @@ export const OptimizedLayout: StoryObj = {
                 </Box>
                 <Flex align="center" justify="space-between">
                   <Flex gap={4}>
-                    <Text size="10px" c="chatbox-tertiary" ff="monospace">
+                    <Text size="10px" c="workspaice-tertiary" ff="monospace">
                       gpt-4o
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       ·
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       156 tokens
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       ·
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       1.2s
                     </Text>
                   </Flex>
@@ -455,8 +455,8 @@ export const OptimizedLayout: StoryObj = {
               <Box
                 className="px-4 py-3 rounded-2xl rounded-tr-sm max-w-[85%]"
                 style={{
-                  backgroundColor: 'var(--chatbox-background-brand-secondary)',
-                  border: '1px solid var(--chatbox-border-brand)',
+                  backgroundColor: 'var(--workspaice-background-brand-secondary)',
+                  border: '1px solid var(--workspaice-border-brand)',
                 }}
               >
                 <Text size="sm">What about data fetching patterns?</Text>
@@ -471,7 +471,7 @@ export const OptimizedLayout: StoryObj = {
               <Stack gap="xs" flex={1}>
                 <Box
                   className="px-4 py-3 rounded-2xl rounded-tl-sm"
-                  style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+                  style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
                 >
                   <Text size="sm">
                     With RSC, fetch data directly using async/await — no useEffect needed. Data is fetched on the server
@@ -480,13 +480,13 @@ export const OptimizedLayout: StoryObj = {
                 </Box>
                 <Flex align="center" justify="space-between">
                   <Flex gap={4}>
-                    <Text size="10px" c="chatbox-tertiary" ff="monospace">
+                    <Text size="10px" c="workspaice-tertiary" ff="monospace">
                       gpt-4o
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       ·
                     </Text>
-                    <Text size="10px" c="chatbox-tertiary">
+                    <Text size="10px" c="workspaice-tertiary">
                       89 tokens
                     </Text>
                   </Flex>
@@ -501,14 +501,14 @@ export const OptimizedLayout: StoryObj = {
         <Box px="md" pb="sm">
           <Box
             className="max-w-3xl mx-auto rounded-xl overflow-hidden"
-            style={{ border: '1px solid var(--chatbox-border-primary)' }}
+            style={{ border: '1px solid var(--workspaice-border-primary)' }}
           >
             <Flex
               align="center"
               justify="space-between"
               px="sm"
               py={6}
-              style={{ backgroundColor: 'var(--chatbox-background-secondary)' }}
+              style={{ backgroundColor: 'var(--workspaice-background-secondary)' }}
             >
               <Flex align="center" gap="xs">
                 <Badge variant="light" color="blue" size="sm" radius="sm">
@@ -518,12 +518,12 @@ export const OptimizedLayout: StoryObj = {
                   Web Search
                 </Badge>
               </Flex>
-              <Text size="xs" c="chatbox-tertiary" ff="monospace">
+              <Text size="xs" c="workspaice-tertiary" ff="monospace">
                 1,234 / 128K
               </Text>
             </Flex>
-            <Box h={2} style={{ backgroundColor: 'var(--chatbox-background-tertiary)' }}>
-              <Box h={2} w="15%" style={{ backgroundColor: 'var(--chatbox-tint-success)' }} />
+            <Box h={2} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
+              <Box h={2} w="15%" style={{ backgroundColor: 'var(--workspaice-tint-success)' }} />
             </Box>
             <Box px="sm" py="xs">
               <Textarea
@@ -542,7 +542,7 @@ export const OptimizedLayout: StoryObj = {
               justify="space-between"
               px="sm"
               py={6}
-              style={{ borderTop: '1px solid var(--chatbox-border-primary)' }}
+              style={{ borderTop: '1px solid var(--workspaice-border-primary)' }}
             >
               <Flex gap={2}>
                 <ActionIcon variant="subtle" color="gray" size={28} radius="md">
@@ -573,10 +573,10 @@ function NavItem({ icon: Icon, label }: { icon: React.ElementType; label: string
       gap="sm"
       px="sm"
       py={6}
-      className="rounded cursor-pointer hover:bg-chatbox-background-gray-secondary"
+      className="rounded cursor-pointer hover:bg-workspaice-background-gray-secondary"
     >
-      <Icon size={18} color="var(--chatbox-tint-secondary)" />
-      <Text size="sm" c="chatbox-secondary">
+      <Icon size={18} color="var(--workspaice-tint-secondary)" />
+      <Text size="sm" c="workspaice-secondary">
         {label}
       </Text>
     </Flex>

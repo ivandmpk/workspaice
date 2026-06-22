@@ -57,7 +57,7 @@ const changelog = `
 2. Default max context messages changed to unlimited
 3. AI SDK upgraded from v5 to v6
 4. Image generation refactored into a standalone tool page
-5. Chatbox AI settings moved from provider level to top-level settings for easier access
+5. WorkspAIce AI settings moved from provider level to top-level settings for easier access
 6. Brand new conversational onboarding experience
 
 ## v1.18.4 - 2026.01.16
@@ -66,7 +66,7 @@ const changelog = `
 ## v1.18.3 - 2026.01.13
 1. Added model icon display in model selector
 2. Added search functionality for conversation list
-3. Auto-enable web search when using Chatbox AI
+3. Auto-enable web search when using WorkspAIce AI
 4. Knowledge base file parsing now supports backend parsing as fallback
 5. Auto-focus message input when window gains focus
 6. Improved mobile UI experience in multiple areas
@@ -141,7 +141,7 @@ const changelog = `
 3. Added conversation compression feature that can compress conversation context through summarization to reduce token consumption in subsequent conversations
 4. Adjusted input box action buttons: merged image, file, and link buttons on desktop; moved create new topic to secondary menu on mobile
 5. Models now support displaying and setting contextWindow, maxOutput and other properties
-6. ChatboxAI image generation now supports uploading reference images
+6. WorkspAIceAI image generation now supports uploading reference images
 7. Fixed issue where knowledge base embedding didn't support model IDs with colon characters
 8. Added Gemini provider model gemini-2.5-flash-image-preview with image generation support
 9. Fixed text overflow issue with extremely long words
@@ -275,12 +275,12 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 1. Fixed Latex rendering issue
 2. Fixed left sidebar top drag issue
-3. Fixed ChatboxAI error message display
+3. Fixed WorkspAIceAI error message display
 4. Added initialization process log display
 
 ### v1.12.0 - 2025.04.24
 
-1. Chatbox AI supports Gemini multimodal output
+1. WorkspAIce AI supports Gemini multimodal output
 2. Fixed issue where the web browsing switch was not synchronized when regenerating messages
 3. Improved desktop UI, removing native titlebar
 4. Optimized mobile storage performance
@@ -419,11 +419,11 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v1.8.0 - 2024.12.22
 
-1. Introduced Web Browsing capability. Chatbox AI Models and Gemini 2.0 flash(API) can now be enabled to access real-time internet information, providing responses with cited sources
+1. Introduced Web Browsing capability. WorkspAIce AI Models and Gemini 2.0 flash(API) can now be enabled to access real-time internet information, providing responses with cited sources
 2. Added first-token latency display for message generation, toggleable in settings
-3. Enhanced image preprocessing capabilities. You can now send images in more formats (e.g., svg, gif) - Chatbox automatically converts them to model-compatible formats and adjusts dimensions to meet model requirements
+3. Enhanced image preprocessing capabilities. You can now send images in more formats (e.g., svg, gif) - WorkspAIce automatically converts them to model-compatible formats and adjusts dimensions to meet model requirements
 4. Double-click thread title to quickly access the thread list
-5. Improved compatibility for custom model provider configurations - Chatbox now automatically corrects and handles common configuration errors
+5. Improved compatibility for custom model provider configurations - WorkspAIce now automatically corrects and handles common configuration errors
 6. Increased maximum temperature range to 2.0
 7. Added confirmation for all delete actions 
 8. Updated model list, removing deprecated models
@@ -451,8 +451,8 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v1.6.0 - 2024.11.03
 
-1. Now you can send web links. Chatbox will automatically fetch webpage content and include it in the chat context. Works with all models.
-2. Now you can send text files to any models. Chatbox will parse file content locally and include it in the chat context.
+1. Now you can send web links. WorkspAIce will automatically fetch webpage content and include it in the chat context. Works with all models.
+2. Now you can send text files to any models. WorkspAIce will parse file content locally and include it in the chat context.
 3. Added collapsible code blocks. Long code blocks in chat history are automatically collapsed (can be disabled in settings).
 4. Redesigned image preview window.
 5. Redesigned SVG image preview and save functionality.
@@ -494,7 +494,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v1.4.1 - 2024.09.04
 
-1. Chatbox AI service users can now choose from a wider range of models
+1. WorkspAIce AI service users can now choose from a wider range of models
 2. Added Arabic language support (العربية)
 3. Improved LaTeX styling
 4. Fixed a rare issue that could cause data loss
@@ -546,7 +546,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v1.3.11 - 2024.05.26
 
-1. Chatbox AI 3.5 now supports sending images.
+1. WorkspAIce AI 3.5 now supports sending images.
 2. Enhanced the interaction experience of the partner list.
 3. Improved code block color scheme in night mode.
 
@@ -583,7 +583,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 **Miscellaneous:**
 - After switching between historical topics, the message list now automatically scrolls to the bottom.
-- Enabled access to local Ollama services within the Chatbox web version.
+- Enabled access to local Ollama services within the WorkspAIce web version.
 
 
 ### v1.3.5
@@ -634,7 +634,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 1. You can now use the ⬆️⬇️ arrow keys in the input field to select and quickly enter previous messages.
 2. Fixed the spell check feature, which can now be turned off in settings.
-3. Text copied from Chatbox will be copied to the clipboard as plain text without background color — a longstanding minor bug that has finally been resolved.
+3. Text copied from WorkspAIce will be copied to the clipboard as plain text without background color — a longstanding minor bug that has finally been resolved.
 
 ### v1.2.2
 
@@ -654,7 +654,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v1.2.0
 
-- Added an image generation feature (Image Creator); you can now generate images within Chatbox, powered by the Dall-E-3 model.
+- Added an image generation feature (Image Creator); you can now generate images within WorkspAIce, powered by the Dall-E-3 model.
 - Improved some usability issues.
 
 ### v1.1.4
@@ -765,7 +765,7 @@ Thanks to @xiaoxiaowesley, @chaoliu719, @Jesse205, @trrahul for their contributi
 
 ### v0.5.0
 
-- Built-in AI service "Chatbox AI" - ready to use out of the box with fast, hassle-free setup.
+- Built-in AI service "WorkspAIce AI" - ready to use out of the box with fast, hassle-free setup.
 - Fixed the issue where the night theme would not work after restarting
 - Fix the issue of being unable to switch sessions while generating answers
 - Fixed lag issues when editing messages

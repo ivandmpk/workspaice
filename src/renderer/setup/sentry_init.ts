@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react'
-import { CHATBOX_BUILD_PLATFORM, CHATBOX_BUILD_TARGET, NODE_ENV } from '@/variables'
+import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET, NODE_ENV } from '@/variables'
 import { initSettingsStore } from '@/stores/settingsStore'
 import platform from '../platform'
 
@@ -23,8 +23,8 @@ void (async () => {
         tags: {
           platform: platform.type,
           app_version: version,
-          build_target: CHATBOX_BUILD_TARGET,
-          build_platform: CHATBOX_BUILD_PLATFORM,
+          build_target: WORKSPAICE_BUILD_TARGET,
+          build_platform: WORKSPAICE_BUILD_PLATFORM,
         },
       },
       beforeSend(event) {
