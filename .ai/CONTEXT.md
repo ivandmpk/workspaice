@@ -146,6 +146,7 @@ This file is living memory for AI agents working on this repository. Read it bef
 - Hosted provider settings routes and component subtree were deleted.
 - Verification note: `git diff --check` passes and old-name text/path searches pass. `pnpm check` is currently blocked because the local shell uses Node v26 and `node_modules` is missing; repo requires Node `>=22.12.0 <25.0.0`.
 - Added `.ai/AGENT_RULES.md` with mandatory rules for context updates, dev-branch workflow, commits, no pushes unless asked, local-first product constraints, and ambiguity handling.
+- Simplified `README.md` to describe WorkspAIce as a GPLv3 fork of the original Chatbox app, document the local-first macOS/Windows direction, remove upstream marketing/download/service content, and keep relevant setup/development details.
 
 ## Open Product Questions
 
