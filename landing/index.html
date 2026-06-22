@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#F5F5F5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#303841" media="(prefers-color-scheme: dark)" />
+
+  <title>WorkspAIce — Your AI, your machine, your rules</title>
+  <meta name="description" content="A local-first desktop AI workspace for macOS and Windows. Fast, private, multi-provider. No accounts, no telemetry, no subscriptions. Bring your own API keys or run models locally with Ollama and LM Studio." />
+  <meta name="keywords" content="local AI, desktop AI client, Ollama, LM Studio, OpenAI, Anthropic, privacy, GPLv3, Chatbox fork" />
+  <meta name="author" content="WorkspAIce" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="WorkspAIce — Your AI, your machine, your rules" />
+  <meta property="og:description" content="A local-first desktop AI workspace. No accounts, no telemetry, no subscriptions." />
+  <meta property="og:image" content="assets/icon.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WorkspAIce — Your AI, your machine, your rules" />
+  <meta name="twitter:description" content="A local-first desktop AI workspace. No accounts, no telemetry, no subscriptions." />
+  <meta name="twitter:image" content="assets/icon.png" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
+
+  <link rel="preload" href="assets/icon.png" as="image" />
+  <link rel="stylesheet" href="style.css" />
+
+  <script>
+    // Apply theme before paint to avoid flash
+    (function () {
+      try {
+        var saved = localStorage.getItem('workspaice-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        // localStorage unavailable; default to light
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="WorkspAIce home">
+        <img class="brand-mark" src="assets/icon.png" alt="" width="40" height="40" />
+        <span class="brand-name">WorkspAIce</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#why">Why</a>
+        <a href="#providers">Providers</a>
+        <a href="#credits">Credits</a>
+        <a class="nav-github" href="https://github.com/ivandmpk/workspaice" rel="noopener noreferrer" aria-label="WorkspAIce on GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.97-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.19 1.78 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.08 0 4.41-2.7 5.38-5.26 5.67.41.36.78 1.05.78 2.12 0 1.53-.01 2.77-.01 3.14 0 .31.21.68.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z"/>
+          </svg>
+          <span>Star</span>
+        </a>
+
+        <button class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m14.14 14.14-1.41-1.41M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <div class="hero-mark" aria-hidden="true">
+          <img src="assets/icon.png" alt="" width="128" height="128" />
+        </div>
+
+        <h1 id="hero-title" class="hero-title">
+          WorkspAIce
+        </h1>
+        <p class="hero-tagline">Your AI, your machine, your rules.</p>
+        <p class="hero-sub">
+          A local-first desktop AI workspace — fast, private, multi-provider.<br />
+          No accounts, no telemetry, no subscriptions. Just download and use.
+        </p>
+
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="https://github.com/ivandmpk/workspaice/releases/tag/1.0.0-beta" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/>
+            </svg>
+            <span>Download v1.0.0-beta</span>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/ivandmpk/workspaice" rel="noopener noreferrer">
+            <span>View on GitHub</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H9m8 0v8"/>
+            </svg>
+          </a>
+        </div>
+
+        <ul class="hero-platforms" aria-label="Available platforms">
+          <li>macOS</li>
+          <li aria-hidden="true">·</li>
+          <li>Windows</li>
+          <li aria-hidden="true">·</li>
+          <li>Apple Silicon &amp; Intel</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section id="why" class="section" aria-labelledby="why-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="why-title" class="section-title">Why WorkspAIce</h2>
+          <p class="section-lead">A desktop AI client that respects your machine and your decisions.</p>
+        </header>
+
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="card-icon card-icon--teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 11 12 3l9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2v-9Z"/>
+              </svg>
+            </div>
+            <h3 class="card-title">Local-first</h3>
+            <p class="card-body">
+              Your conversations stay on your machine. No telemetry, no analytics, no hosted remote config. The app is yours.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon card-icon--orange" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 10V8a6 6 0 0 1 12 0v2m-13 0h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>
+              </svg>
+            </div>
+            <h3 class="card-title">No accounts, no gates</h3>
+            <p class="card-body">
+              No sign-up, no subscription, no premium tier. Download, install, run. Every feature is available from the first launch.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon card-icon--teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="card-title">Multi-provider, your keys</h3>
+            <p class="card-body">
+              Ollama and LM Studio for local models, plus OpenAI, Anthropic, Gemini, OpenRouter, DeepSeek, SiliconFlow and any OpenAI-compatible endpoint. You choose the keys.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVIDERS -->
+    <section id="providers" class="section section-alt" aria-labelledby="providers-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="providers-title" class="section-title">Run it your way</h2>
+          <p class="section-lead">Pick a local model or bring your own API key. WorkspAIce stays out of the way.</p>
+        </header>
+
+        <div class="providers">
+          <span class="provider-tag provider-tag--local">Local</span>
+          <ul class="provider-list" aria-label="Local providers">
+            <li>Ollama</li>
+            <li>LM Studio</li>
+            <li>Any OpenAI-compatible endpoint</li>
+          </ul>
+        </div>
+
+        <div class="providers">
+          <span class="provider-tag provider-tag--cloud">Cloud</span>
+          <ul class="provider-list" aria-label="Cloud providers">
+            <li>OpenAI</li>
+            <li>Anthropic</li>
+            <li>Gemini</li>
+            <li>OpenRouter</li>
+            <li>DeepSeek</li>
+            <li>SiliconFlow</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDITS -->
+    <section id="credits" class="section section-credits" aria-labelledby="credits-title">
+      <div class="container credits-inner">
+        <p class="credits-eyebrow">Built on the shoulders of giants</p>
+        <h2 id="credits-title" class="credits-title">
+          Forked with <span aria-hidden="true" class="heart">♥</span> from
+          <a class="credits-link" href="https://chatboxai.app/en" rel="noopener noreferrer">Chatbox</a>
+        </h2>
+        <p class="credits-body">
+          WorkspAIce stands on the foundation built by the
+          <a href="https://github.com/Bin-Huang/chatbox" rel="noopener noreferrer">Chatbox team</a> —
+          a sleek, open-source desktop AI client. We&rsquo;re deeply grateful for their work, which made this project possible.
+        </p>
+        <p class="credits-meta">
+          Released under <strong>GPLv3</strong> · Free and open source, today and tomorrow.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img class="footer-mark" src="assets/icon.png" alt="" width="28" height="28" />
+        <span>WorkspAIce</span>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer">
+        <a href="https://github.com/ivandmpk/workspaice" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/ivandmpk/workspaice/releases" rel="noopener noreferrer">Releases</a>
+        <a href="https://github.com/ivandmpk/workspaice/blob/dev/LICENSE" rel="noopener noreferrer">License</a>
+      </nav>
+
+      <p class="footer-meta">
+        &copy; <span id="year"></span> WorkspAIce · Your AI, your machine, your rules.
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

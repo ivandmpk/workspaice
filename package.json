@@ -298,9 +298,16 @@
     "@mastra/rag": "^1.0.8",
     "@modelcontextprotocol/sdk": "^1.15.1",
     "@mozilla/readability": "^0.5.0",
+    "@opentelemetry/context-async-hooks": "^2.5.0",
+    "@opentelemetry/resources": "^2.5.0",
+    "@opentelemetry/sdk-metrics": "^2.5.0",
+    "@opentelemetry/sdk-trace-base": "^2.5.0",
+    "@opentelemetry/sdk-trace-node": "^2.5.0",
     "auto-launch": "^5.0.6",
+    "brace-expansion": "^1.1.12",
     "chardet": "^2.1.0",
     "cohere-ai": "^7.17.1",
+    "content-disposition": "^1.0.1",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^5.3.4",
@@ -313,8 +320,13 @@
     "lodash": "^4.17.21",
     "ofetch": "^1.0.1",
     "officeparser": "5.0.0",
+    "path-to-regexp": "^8.3.0",
+    "protobufjs": "^7.5.4",
     "sanitize-filename": "^1.6.3",
-    "uuid": "^9.0.0"
+    "tar": "^4.4.19",
+    "type-is": "^2.0.1",
+    "uuid": "^9.0.0",
+    "yauzl": "^3.2.0"
   },
   "browserslist": [],
   "electronmon": {
@@ -326,33 +338,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "biome format --write --no-errors-on-unmatched"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "core-js",
-      "core-js-pure",
-      "electron",
-      "esbuild",
-      "msw",
-      "protobufjs",
-      "sharp",
-      "zipfile"
-    ],
-    "overrides": {
-      "@tanstack/router-generator": "1.120.15",
-      "@tanstack/router-plugin": "1.120.15",
-      "@mastra/libsql": "0.13.2",
-      "@mastra/rag": "1.0.8",
-      "handlebars": ">=4.7.9",
-      "convict": ">=6.2.5",
-      "fast-xml-parser": ">=5.5.7"
-    },
-    "patchedDependencies": {
-      "libsql@0.5.22": "patches/libsql@0.5.22.patch",
-      "mdast-util-gfm-autolink-literal@2.0.1": "patches/mdast-util-gfm-autolink-literal@2.0.1.patch",
-      "@ai-sdk/deepseek@2.0.17": "patches/@ai-sdk__deepseek@2.0.17.patch"
-    }
   },
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

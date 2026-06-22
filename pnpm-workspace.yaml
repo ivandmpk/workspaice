@@ -6,3 +6,32 @@ packages:
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - "@ruguoapp/*"
+
+# NOTE: pnpm >=10.x no longer reads the `pnpm` field in package.json.
+# These settings (onlyBuiltDependencies, overrides, patchedDependencies)
+# must live here in pnpm-workspace.yaml to take effect.
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - core-js
+  - core-js-pure
+  - electron
+  - esbuild
+  - msw
+  - protobufjs
+  - sharp
+  - zipfile
+
+overrides:
+  "@tanstack/router-generator": "1.120.15"
+  "@tanstack/router-plugin": "1.120.15"
+  "@mastra/libsql": "0.13.2"
+  "@mastra/rag": "1.0.8"
+  handlebars: ">=4.7.9"
+  convict: ">=6.2.5"
+  fast-xml-parser: ">=5.5.7"
+
+patchedDependencies:
+  "libsql@0.5.22": "patches/libsql@0.5.22.patch"
+  "mdast-util-gfm-autolink-literal@2.0.1": "patches/mdast-util-gfm-autolink-literal@2.0.1.patch"
+  "@ai-sdk/deepseek@2.0.17": "patches/@ai-sdk__deepseek@2.0.17.patch"
+  "app-builder-lib@26.8.1": "patches/app-builder-lib@26.8.1.patch"
