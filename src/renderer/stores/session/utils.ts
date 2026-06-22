@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { AIProviderNoImplementedPaintError, ApiError, BaseError, NetworkError, OCRError } from '@shared/models/errors'
 import type { Message, ModelProvider, Session, SessionSettings, SessionType, Settings } from '@shared/types'
 import { identity, pickBy } from 'lodash'

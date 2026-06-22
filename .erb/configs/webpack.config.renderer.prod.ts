@@ -2,7 +2,6 @@
  * Build config for electron renderer process
  */
 
-import { sentryWebpackPlugin } from '@sentry/webpack-plugin'
 import { TanStackRouterWebpack } from '@tanstack/router-plugin/webpack'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -12,21 +11,11 @@ import TerserPlugin from 'terser-webpack-plugin'
 import webpack from 'webpack'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import { merge } from 'webpack-merge'
-import packageJson from '../../release/app/package.json'
 import checkNodeEnv from '../scripts/check-node-env'
+import webpackPaths from '../webpack.paths'
 import baseConfig from './webpack.config.base'
-import webpackPaths from './webpack.paths'
 
 checkNodeEnv('production')
-
-const inferredRelease = process.env.SENTRY_RELEASE || packageJson.version
-const inferredDist = process.env.SENTRY_DIST || undefined
-
-// Ensure downstream tooling sees consistent release/dist values
-process.env.SENTRY_RELEASE = inferredRelease
-if (inferredDist) {
-  process.env.SENTRY_DIST = inferredDist
-}
 
 const configuration: webpack.Configuration = {
   devtool: 'source-map',
@@ -188,17 +177,6 @@ const configuration: webpack.Configuration = {
     //   // domainLockRedirectUrl: 'https://workspaiceai.app',
     //   sourceMap: true,
     // }),
-    
-    process.env.SENTRY_AUTH_TOKEN && sentryWebpackPlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'sentry',
-        project: 'workspaice',
-        url: 'https://sentry.midway.run/',
-        release: {
-          name: inferredRelease,
-          ...(inferredDist ? { dist: inferredDist } : {}),
-        },
-      }),
   ],
 }
 

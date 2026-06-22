@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { store as keypairStore } from './keypairs'
 import { WORKSPAICE_BUILD_PLATFORM } from '../variables'
 import NiceModal from '@ebay/nice-modal-react'

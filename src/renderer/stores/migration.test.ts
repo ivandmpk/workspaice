@@ -322,7 +322,7 @@ vi.mock('@/platform/web_platform', () => ({
   default: vi.fn(),
 }))
 
-vi.mock('@sentry/react', () => ({
+vi.mock('@/adapters/sentry_shim', () => ({
   getCurrentScope: () => ({
     setTag: vi.fn(),
   }),

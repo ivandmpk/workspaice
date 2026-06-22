@@ -27,19 +27,12 @@ import './setup/load_polyfill'
 // 全局错误处理
 import './setup/global_error_handler'
 
-// 引入保护代码
-import './setup/protect'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { initSessionAttachmentRagMaintenance } from './setup/session_attachment_rag_maintenance'
 import { initLastUsedModelStore } from './stores/lastUsedModelStore'
 import { initOnboardingStore } from './stores/onboardingStore'
 import { initRecentDirectoriesStore } from './stores/recentDirectoriesStore'
 import { initSettingsStore } from './stores/settingsStore'
-
-// 开发环境下引入错误测试工具
-// if (process.env.NODE_ENV === 'development') {
-//   import('./utils/error-testing')
-// }
 
 // Token estimation system initialization (runs in all environments)
 import('./setup/token_estimation_init')

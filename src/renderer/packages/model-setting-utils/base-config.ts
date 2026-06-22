@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { getProviderDefinition } from '../../../shared/providers'
 import type {
   ModelProvider,

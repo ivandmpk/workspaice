@@ -110,30 +110,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
     return localforage.keys()
   }
 
-  public async initTracking() {
-    const GAID = 'G-B365F44W6E'
-    try {
-      const conf = await this.getConfig()
-      window.gtag('config', GAID, {
-        app_name: 'workspaice',
-        user_id: conf.uuid,
-        client_id: conf.uuid,
-        app_version: await this.getVersion(),
-        workspaice_platform_type: 'web',
-        workspaice_platform: await this.getPlatform(),
-        app_platform: await this.getPlatform(),
-      })
-    } catch (e) {
-      window.gtag('config', GAID, {
-        app_name: 'workspaice',
-      })
-      throw e
-    }
-  }
-  public trackingEvent(name: string, params: { [key: string]: string }) {
-    window.gtag('event', name, params)
-  }
-
   public async shouldShowAboutDialogWhenStartUp(): Promise<boolean> {
     return false
   }

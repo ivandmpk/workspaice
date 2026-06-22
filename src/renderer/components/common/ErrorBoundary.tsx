@@ -1,5 +1,5 @@
-import * as Sentry from '@sentry/react'
 import React from 'react'
+import * as Sentry from '@/adapters/sentry_shim'
 import { getLogger } from '../../lib/utils'
 import { router } from '../../router'
 
@@ -12,13 +12,7 @@ interface ErrorBoundaryProps {
 }
 
 /**
- * ErrorBoundary component using Sentry's built-in ErrorBoundary
- * Automatically reports errors to Sentry with proper context
- *
- * Implementation:
- * - ErrorBoundary errors are tagged with 'errorBoundary'
- * - These errors are 100% reported to Sentry (see sentry_init.ts)
- * - Other errors are subject to 10% sampling
+ * ErrorBoundary component that catches render errors and shows a fallback UI.
  */
 export function ErrorBoundary({ children, fallback: CustomFallback, name = 'ErrorBoundary' }: ErrorBoundaryProps) {
   return (
@@ -74,7 +68,7 @@ function DefaultErrorFallback({ error, retry }: DefaultErrorFallbackProps) {
         <div className="text-red-500 text-6xl mb-4">⚠️</div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Something went wrong!</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          The application encountered an unexpected error. This error has been automatically reported.
+          The application encountered an unexpected error. Please try again.
         </p>
 
         <div className="space-y-3">
@@ -127,17 +121,3 @@ function DefaultErrorFallback({ error, retry }: DefaultErrorFallbackProps) {
     </div>
   )
 }
-
-// Sentry Error Boundary (alternative approach using Sentry's built-in ErrorBoundary)
-export const SentryErrorBoundary = Sentry.withErrorBoundary(
-  ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  {
-    fallback: ({ error, resetError }) => (
-      <DefaultErrorFallback error={error instanceof Error ? error : new Error(String(error))} retry={resetError} />
-    ),
-    beforeCapture: (scope) => {
-      scope.setTag('errorBoundary', 'sentry')
-      scope.setLevel('error')
-    },
-  }
-)

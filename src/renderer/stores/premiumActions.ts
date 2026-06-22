@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import omit from 'lodash/omit'
 import { FetchError } from 'ofetch'
 import { useEffect } from 'react'

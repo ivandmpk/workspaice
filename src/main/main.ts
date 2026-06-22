@@ -22,7 +22,6 @@ import path from 'path'
 // @ts-expect-error - source-map-support doesn't have type definitions
 import * as sourceMapSupport from 'source-map-support'
 import type { ShortcutSetting } from 'src/shared/types'
-import * as analystic from './analystic-node'
 import { AppUpdater } from './app-updater'
 import * as autoLauncher from './autoLauncher'
 import { handleDeepLink } from './deeplinks'
@@ -687,13 +686,6 @@ ipcMain.handle('ensureProxy', (event, json) => {
 ipcMain.handle('relaunch', () => {
   app.relaunch()
   app.quit()
-})
-
-ipcMain.handle('analysticTrackingEvent', (event, dataJson) => {
-  const data = JSON.parse(dataJson)
-  analystic.event(data.name, data.params).catch((e) => {
-    log.error('analystic_tracking_event', e)
-  })
 })
 
 ipcMain.handle('getConfig', (event) => {

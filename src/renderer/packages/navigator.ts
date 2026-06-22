@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react'
+import * as Sentry from '@/adapters/sentry_shim'
 import copyToClipboardFallback from 'copy-to-clipboard'
 
 export function copyToClipboard(text: string) {
