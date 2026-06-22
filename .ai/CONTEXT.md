@@ -151,6 +151,11 @@ This file is living memory for AI agents working on this repository. Read it bef
 - Started the desktop dev app with Node 22. Main/preload/renderer booted at `http://localhost:1212/`; PID/log during this session: `32121`, `/var/folders/_8/9kbq_whj0cz1g_ybdxbvppp00000gn/T/opencode/workspaice-dev.log`.
 - Fixed dev startup blockers from hosted-service cleanup: `useProviders.ts` syntax error, missing `icon-workspaice.svg`, stale hosted guide copy, local-only remote/license stubs, remote dialog types, image-model groups, knowledge-base remote config access, and image-generation settings import.
 - Verification note: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" pnpm exec tsc --noEmit` passes. Latest dev log shows app initialization and Vite HMR reload noise, not the previous renderer compile blockers.
+- Removed remaining visible cloud-service settings from screenshots: built-in WorkspAIce MCP server provisioning, WorkspAIce AI web search, WorkspAIce search upsells, and error-reporting toggles.
+- MCP is now custom-server only in the settings UI/menu/bootstrap path; stale `enabledBuiltinServers` config is ignored by runtime paths.
+- Web search now defaults to Bing. Supported settings providers are Bing, Tavily, BoCha, and Querit; Tavily remains the only parse-link provider. The deleted WorkspAIce cloud search provider is no longer selectable or loaded.
+- Error/event reporting is disabled by default and upload paths are no-op: renderer/main Sentry adapters, Sentry init, Plausible/JK analytics init, generic event tracking, and global error reporting now avoid remote reporting.
+- Verification note: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" pnpm exec tsc --noEmit`, related Vitest files, and `git diff --check` pass after the cloud-service settings cleanup.
 
 ## Open Product Questions
 

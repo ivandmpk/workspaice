@@ -83,7 +83,7 @@ export function settings(): Settings {
 
     defaultPrompt: getDefaultPrompt(),
 
-    allowReportingAndTracking: true,
+    allowReportingAndTracking: false,
     hasExpiredLicense: false,
     workspaiceAIDesktopPromptDismissed: true,
 
@@ -122,7 +122,7 @@ export function settings(): Settings {
     },
     extension: {
       webSearch: {
-        provider: 'build-in',
+        provider: 'bing',
         tavilyApiKey: '',
         bochaApiKey: '',
         queritApiKey: '',

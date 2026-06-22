@@ -17,8 +17,8 @@ describe('defaults', () => {
     expect(result.showTokenUsed).toBe(true)
   })
 
-  it('settings() returns allowReportingAndTracking as true', () => {
-    expect(settings().allowReportingAndTracking).toBe(true)
+  it('settings() returns allowReportingAndTracking as false', () => {
+    expect(settings().allowReportingAndTracking).toBe(false)
   })
 
   it('settings() returns enableMarkdownRendering as true', () => {

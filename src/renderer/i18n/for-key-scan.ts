@@ -75,7 +75,7 @@ function _errorI18nKeys(t: (key: string) => string) {
     'No search results found. Please use another <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton> or try again later.'
   )
   t(
-    'You have selected WorkspAIce AI as the search provider, but a license key has not been entered yet. Please <OpenSettingButton>click here to open Settings</OpenSettingButton> and enter your license key, or choose a different <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton>.'
+    'The selected search provider is not available in this local-only build. Please choose a different <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton>.'
   )
   t(
     'You have selected Tavily as the search provider, but an API key has not been entered yet. Please <OpenExtensionSettingButton>click here to open Settings</OpenExtensionSettingButton> and enter your API key, or choose a different search provider.'

@@ -224,7 +224,7 @@ export class WorkspAIceAIAPIError extends BaseError {
       name: 'workspaice_search_license_key_required',
       code: 20024,
       i18nKey:
-        'You have selected WorkspAIce AI as the search provider, but a license key has not been entered yet. Please <OpenSettingButton>click here to open Settings</OpenSettingButton> and enter your license key, or choose a different <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton>.',
+        'The selected search provider is not available in this local-only build. Please choose a different <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton>.',
     },
     tavily_api_key_required: {
       name: 'tavily_api_key_required',

@@ -9,8 +9,6 @@ import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import { BochaSearch } from '@/packages/web-search/bocha'
 import { QUERIT_SEARCH_URL } from '@/packages/web-search/querit'
 import platform from '@/platform'
-import { trackJkClickEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export const Route = createFileRoute('/settings/web-search')({
@@ -21,7 +19,7 @@ export function RouteComponent() {
   const { t } = useTranslation()
   const setSettings = useSettingsStore((state) => state.setSettings)
   const extension = useSettingsStore((state) => state.extension)
-  const licenseKey = useSettingsStore((state) => state.licenseKey)
+  const searchProvider = extension.webSearch.provider
 
   const [checkingQuerit, setCheckingQuerit] = useState(false)
   const [queritAvailable, setQueritAvailable] = useState<boolean>()
@@ -100,13 +98,12 @@ export function RouteComponent() {
       <AdaptiveSelect
         comboboxProps={{ withinPortal: true, withArrow: true }}
         data={[
-          { value: 'build-in', label: 'WorkspAIce AI' },
           { value: 'bing', label: 'Bing Search (Free)' },
           { value: 'tavily', label: 'Tavily' },
           { value: 'bocha', label: 'BoCha' },
           { value: 'querit', label: 'Querit' },
         ]}
-        value={extension.webSearch.provider}
+        value={searchProvider}
         onChange={(e) =>
           e &&
           setSettings({
@@ -114,7 +111,7 @@ export function RouteComponent() {
               ...extension,
               webSearch: {
                 ...extension.webSearch,
-                provider: e as 'build-in' | 'bing' | 'tavily' | 'bocha' | 'querit',
+                provider: e as 'bing' | 'tavily' | 'bocha' | 'querit',
               },
             },
           })
@@ -127,7 +124,7 @@ export function RouteComponent() {
           {t('Provided tools')}
         </Text>
         {(() => {
-          const supportsParseLink = PROVIDERS_WITH_PARSE_LINK.has(extension.webSearch.provider)
+          const supportsParseLink = PROVIDERS_WITH_PARSE_LINK.has(searchProvider)
           const tools: { label: string; supported: boolean }[] = [
             { label: t('Web Search'), supported: true },
             { label: t('Read Webpage'), supported: supportsParseLink },
@@ -146,12 +143,7 @@ export function RouteComponent() {
           ))
         })()}
       </Stack>
-      {extension.webSearch.provider === 'build-in' && (
-        <Text size="xs" c="workspaice-gray">
-          {t('WorkspAIce Search is a paid feature with advanced capabilities and better performance.')}
-        </Text>
-      )}
-      {extension.webSearch.provider === 'bing' && (
+      {searchProvider === 'bing' && (
         <Text size="xs" c="workspaice-gray">
           {t(
             'Bing Search is provided for free use, but it may have limitations and is subject to change by Microsoft.'
@@ -159,7 +151,7 @@ export function RouteComponent() {
         </Text>
       )}
       {/* Tavily API Key */}
-      {extension.webSearch.provider === 'tavily' && (
+      {searchProvider === 'tavily' && (
         <Stack gap="xs">
           <Text fw="600">{t('Tavily API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -215,7 +207,7 @@ export function RouteComponent() {
         </Stack>
       )}
       {/* BoCha API Key */}
-      {extension.webSearch.provider === 'bocha' && (
+      {searchProvider === 'bocha' && (
         <Stack gap="xs">
           <Text fw="600">{t('BoCha API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -271,7 +263,7 @@ export function RouteComponent() {
         </Stack>
       )}
       {/* Querit API Key */}
-      {extension.webSearch.provider === 'querit' && (
+      {searchProvider === 'querit' && (
         <Stack gap="xs">
           <Text fw="600">{t('Querit API Key')}</Text>
           <Flex align="center" gap="xs">
@@ -409,39 +401,6 @@ export function RouteComponent() {
             </Stack>
           </Stack>
         </Stack>
-      )}
-      {extension.webSearch.provider !== 'build-in' && !licenseKey && (
-        <Tooltip
-          label={t(
-            'Note: If you have never had a license before, you can claim it after logging in on the official website. Quota refreshed daily.'
-          )}
-          withArrow
-          multiline
-          maw={280}
-          position="bottom-start"
-          styles={{
-            tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              backdropFilter: 'blur(4px)',
-            },
-          }}
-        >
-          <Text
-            size="xs"
-            className="cursor-pointer"
-            onClick={() => {
-              trackJkClickEvent(JK_EVENTS.FREE_LICENSE_CLAIM_CLICK, {
-                pageName: JK_PAGE_NAMES.SETTING_PAGE,
-                content: 'settings_websearch',
-              })
-              platform.openLink('https://workspaiceai.app/login')
-            }}
-          >
-            {t('You can ')}
-            <span className="text-blue-500 underline decoration-dotted">{t('try WorkspAIce AI')}</span>
-            {t(' for free now!')}
-          </Text>
-        </Tooltip>
       )}
     </Stack>
   )

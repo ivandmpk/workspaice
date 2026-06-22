@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 import { trackJkClickEvent } from '@/analytics/jk'
 import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { getLogger } from '@/lib/utils'
-import { mcpController } from '@/packages/mcp/controller'
 import * as remote from '../packages/remote'
 import platform from '../platform'
 import { authInfoStore } from './authInfoStore'
@@ -30,14 +29,7 @@ export function reconcileLoginLicenseState() {
     licenseActivationMethod: undefined,
     licenseInstances: omit(state.licenseInstances, licenseKey),
     hasExpiredLicense: false,
-    mcp: {
-      ...state.mcp,
-      enabledBuiltinServers: [],
-    },
   }))
-  settings.mcp.enabledBuiltinServers.forEach((serverId) => {
-    mcpController.stopServer(serverId).catch(console.error)
-  })
   remote.invalidateSessionRagConfigCache()
   log.info('Cleared stale login license state because auth tokens are missing')
   return true
@@ -129,15 +121,7 @@ export async function deactivate(clearLoginState = true) {
     licensePlanName: undefined,
     licenseActivationMethod: undefined,
     licenseInstances: omit(settings.licenseInstances, settings.licenseKey || ''),
-    mcp: {
-      ...settings.mcp,
-      enabledBuiltinServers: [],
-    },
   }))
-  // 停止所有内置MCP服务器
-  settings.mcp.enabledBuiltinServers.forEach((serverId) => {
-    mcpController.stopServer(serverId).catch(console.error)
-  })
   // 更新服务器状态（取消激活 license）
   const licenseKey = settings.licenseKey || ''
   const licenseInstances = settings.licenseInstances || {}
