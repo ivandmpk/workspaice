@@ -156,6 +156,8 @@ This file is living memory for AI agents working on this repository. Read it bef
 - Web search now defaults to Bing. Supported settings providers are Bing, Tavily, BoCha, and Querit; Tavily remains the only parse-link provider. The deleted WorkspAIce cloud search provider is no longer selectable or loaded.
 - Error/event reporting is disabled by default and upload paths are no-op: renderer/main Sentry adapters, Sentry init, Plausible/JK analytics init, generic event tracking, and global error reporting now avoid remote reporting.
 - Verification note: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" pnpm exec tsc --noEmit`, related Vitest files, and `git diff --check` pass after the cloud-service settings cleanup.
+- Browser-tested the running app with Playwright MCP at `http://localhost:1212/`. Verified MCP settings show only custom MCP servers, Web Search defaults to Bing with no WorkspAIce AI option, and General settings has no error-reporting toggle.
+- Playwright found failed remote asset loads from persisted seeded sessions using `static.workspaiceai.app` and `download.workspaiceai.app`. Added an image/avatar runtime guard so those bundled hosted asset URLs are treated as absent and are not requested, including for existing local storage.
 
 ## Open Product Questions
 

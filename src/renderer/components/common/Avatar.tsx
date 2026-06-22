@@ -3,7 +3,7 @@ import { IconMessageCircle, IconPhoto, IconSettingsFilled, IconUser } from '@tab
 import clsx from 'clsx'
 import type { FC } from 'react'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { ImageInStorage } from '../Image'
+import { ImageInStorage, isBlockedRemoteAssetUrl } from '../Image'
 import Robot from '../icons/Robot'
 import { ScalableIcon } from './ScalableIcon'
 
@@ -84,18 +84,19 @@ export const AssistantAvatar: FC<AssistantAvatarProps> = ({
   const realSize = typeof size === 'number' ? size : { xs: 18, sm: 20, md: 28, lg: 32, xl: 36 }[size]
   const iconSize = Math.ceil(realSize / 2) + 2
   const defaultAssistantAvatarKey = useSettingsStore((s) => s.defaultAssistantAvatarKey)
+  const safePicUrl = isBlockedRemoteAssetUrl(picUrl) ? undefined : picUrl
   return (
     <Avatar
       size={realSize}
-      radius={avatarKey || picUrl || type !== 'chat' ? realSize / 2 : 0}
+      radius={avatarKey || safePicUrl || type !== 'chat' ? realSize / 2 : 0}
       bd={0}
       className={clsx('overflow-hidden', avatarProps.onClick ? 'cursor-pointer' : '', className)}
       classNames={{
         placeholder: 'border-0 bg-transparent flex flex-row items-center justify-center text-inherit',
       }}
-      src={!avatarKey ? picUrl : undefined}
+      src={!avatarKey ? safePicUrl : undefined}
       bg={
-        avatarKey || picUrl || defaultAssistantAvatarKey
+        avatarKey || safePicUrl || defaultAssistantAvatarKey
           ? undefined
           : type === 'chat'
             ? undefined
@@ -108,7 +109,7 @@ export const AssistantAvatar: FC<AssistantAvatarProps> = ({
     >
       {avatarKey ? (
         <ImageInStorage storageKey={avatarKey} className="object-cover object-center w-full h-full" />
-      ) : !picUrl ? (
+      ) : !safePicUrl ? (
         defaultAssistantAvatarKey ? (
           <ImageInStorage storageKey={defaultAssistantAvatarKey} className="object-cover object-center w-full h-full" />
         ) : sessionType === 'picture' ? (
