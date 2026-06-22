@@ -229,6 +229,7 @@
     "p-map": "^7.0.3",
     "p-timeout": "^6.1.4",
     "photoswipe": "^5.4.4",
+    "png2icons": "^2.0.1",
     "postcss": "^8.5.3",
     "postcss-loader": "^7.3.3",
     "postcss-preset-mantine": "^1.17.0",

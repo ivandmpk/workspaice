@@ -36,11 +36,13 @@ Electron Builder 配置(`electron-builder.yml`)关键项:
 
 | 文件 | 说明 |
 |------|------|
-| `icon.svg` | 应用图标矢量母版 |
-| `icon-raw.png` (1024) | 应用图标原始位图母版(生成 icon.png/icns/ico 的来源) |
-| `iconTemplateRaw.png` (512) | 托盘图标母版 —— 见 `main.ts:238-240` 注释里的 `gm convert` 生成命令 |
-| `iconTemplateRawPreview.png` (512) | 托盘图标母版预览 |
+| `icon.svg` | 应用图标矢量母版(hand-authored "W" + "AI" 标识) |
+| `icon-raw.png` (1024) | 应用图标原始位图母版(从 `design-materials/icon-main.png` 生成,作为 `icon.png`/`icns`/`ico` 的来源) |
+| `iconTemplateRaw.png` (1024) | 托盘图标母版 —— 见 `main.ts:238-240` 注释里的 `gm convert` 生成命令 |
+| `iconTemplateRawPreview.png` (1024) | 托盘图标母版预览 |
 
+> 实际源文件位于仓库根目录 `design-materials/icon-main.png`(1254×1254 RGB,WorkspAIce W + AI mark)。
+> 重新生成全部图标:`PATH="/opt/homebrew/opt/node@22/bin:$PATH" node scripts/regen-app-icons.mjs`(可选 `--source <path>` 指定其他母版)。
 > 这些 grep 不到引用,但删了会丢失"重新导出图标"的能力。**保留**(除非确定弃用)。
 
 ### 🗑 冗余 / 完全不需要(已删除)
