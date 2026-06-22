@@ -16,9 +16,16 @@
     "@mastra/rag": "^1.0.8",
     "@modelcontextprotocol/sdk": "^1.15.1",
     "@mozilla/readability": "^0.5.0",
+    "@opentelemetry/context-async-hooks": "^2.5.0",
+    "@opentelemetry/resources": "^2.5.0",
+    "@opentelemetry/sdk-metrics": "^2.5.0",
+    "@opentelemetry/sdk-trace-base": "^2.5.0",
+    "@opentelemetry/sdk-trace-node": "^2.5.0",
     "auto-launch": "^5.0.6",
+    "brace-expansion": "^1.1.12",
     "chardet": "^2.1.0",
     "cohere-ai": "^7.17.1",
+    "content-disposition": "^1.0.1",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^5.3.4",
@@ -31,7 +38,12 @@
     "lodash": "^4.17.21",
     "ofetch": "^1.0.1",
     "officeparser": "5.0.0",
+    "path-to-regexp": "^8.3.0",
+    "protobufjs": "^7.5.4",
     "sanitize-filename": "^1.6.3",
-    "uuid": "^9.0.0"
+    "tar": "^4.4.19",
+    "type-is": "^2.0.1",
+    "uuid": "^9.0.0",
+    "yauzl": "^3.2.0"
   }
 }
