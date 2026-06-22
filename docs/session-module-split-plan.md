@@ -92,7 +92,6 @@ moveCurrentThreadToConversations
 | Import | Used By |
 |--------|---------|
 | `@dnd-kit/sortable` (arrayMove) | reorderSessions |
-| `@sentry/react` | submitNewUserMessage, generate, _generateName |
 | `@shared/defaults` | refreshContextAndCreateNewThread, compressAndCreateThread |
 | `@shared/models` (getModel) | submitNewUserMessage, generate, _generateName |
 | `jotai` (getDefaultStore) | switchCurrentSession, switchToNext |

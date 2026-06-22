@@ -62,10 +62,10 @@ function _errorI18nKeys(t: (key: string) => string) {
     'The {{model}} API itself does not support sending files. Due to the complexity of file parsing locally, WorkspAIce only processes text-based files (including code).'
   )
   t(
-    'An error occurred while processing your request. Please try again later. If this error continues, please send an email to hi@workspaiceai.com for support.'
+    'An error occurred while processing your request. Please try again later. If this error continues, please check the logs or report the issue on GitHub.'
   )
   t(
-    'An unknown error occurred. Please try again later. If this error continues, please send an email to hi@workspaiceai.com for support.'
+    'An unknown error occurred. Please try again later. If this error continues, please check the logs or report the issue on GitHub.'
   )
   t(
     'The {{model}} API itself does not support web browsing. Supported models: <OpenMorePlanButton>WorkspAIce AI models</OpenMorePlanButton>, {{supported_web_browsing_models}}'

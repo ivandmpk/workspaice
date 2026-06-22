@@ -417,13 +417,10 @@ src/shared/
 - [x] 类型检查通过
 
 #### US-010: 迁移 WorkspAIceAI provider ✅
-**Description:** 迁移 WorkspAIceAI provider，处理 license 相关逻辑。
+**Description:** WorkspAIceAI provider 迁移（已在本地优先版本中移除相关 licensed 逻辑）。
 
 **Acceptance Criteria:**
-- [x] 创建 `src/shared/providers/definitions/workspaiceai.ts`
-- [x] 移动 Model class
-- [x] `createModel` 正确处理 licenseKey, licenseInstances, licenseDetail
-- [x] 删除 `workspaiceai-setting-util.ts`
+- [x] 移除 WorkspAIceAI provider 的 license 依赖
 - [x] 所有现有功能正常工作
 - [x] 集成测试通过
 - [x] 类型检查通过
