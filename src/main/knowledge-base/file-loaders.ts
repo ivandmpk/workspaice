@@ -118,9 +118,9 @@ export async function processFileWithMastra(
     })
 
     if (!allChunks || allChunks.length === 0) {
-      // Cloud parsing (workspaice-ai, mineru) resulted in 0 chunks - mark as done (truly empty file)
+      // Cloud parsing (mineru) resulted in 0 chunks - mark as done (truly empty file)
       // Local parsing resulted in 0 chunks - mark as failed so user can retry with server parsing
-      if (parserConfig.type === 'workspaice-ai' || parserConfig.type === 'mineru') {
+      if (parserConfig.type === 'mineru') {
         await db.execute({
           sql: 'UPDATE kb_file SET chunk_count = 0, status = ? WHERE id = ?',
           args: ['done', fileMeta.fileId],
@@ -322,11 +322,8 @@ async function processPendingFiles() {
       }
 
       // Get effective parser config
-      // When useRemoteParsing is true (user clicked "Retry with server parsing"), force use WorkspAIce AI parser
-      // This overrides the KB's configured parser to ensure server parsing is used
-      const effectiveParserConfig: DocumentParserConfig = useRemoteParsing
-        ? { type: 'workspaice-ai' }
-        : getEffectiveParserConfig(kbParserConfig)
+      // useRemoteParsing flag is ignored (hosted parsing removed)
+      const effectiveParserConfig: DocumentParserConfig = getEffectiveParserConfig(kbParserConfig)
 
       try {
         log.debug(

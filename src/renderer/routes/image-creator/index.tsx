@@ -26,8 +26,6 @@ import {
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { JK_PAGE_NAMES } from '@/analytics/jk-events'
-import { WorkspAIceWelcomeCard } from '@/components/common/WorkspAIceWelcomeCard'
 import { ImageModelSelect } from '@/components/ImageModelSelect'
 import Page from '@/components/layout/Page'
 import { type ImageModelGroup, useImageModelGroups } from '@/hooks/useImageModelGroups'
@@ -36,7 +34,6 @@ import { useIsSmallScreen } from '@/hooks/useScreenChange'
 import { getLogger } from '@/lib/utils'
 import storage from '@/storage'
 import { StorageKeyGenerator } from '@/storage/StoreStorage'
-import { useAuthInfoStore } from '@/stores/authInfoStore'
 import { cancelGeneration, createAndGenerate, resumeGeneration, retryGeneration } from '@/stores/imageGenerationActions'
 import {
   deleteRecord,
@@ -48,9 +45,7 @@ import {
   useImageGenerationRecord,
 } from '@/stores/imageGenerationStore'
 import { queryClient } from '@/stores/queryClient'
-import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
 import * as toastActions from '@/stores/toastActions'
-import { getHomeWelcomeCardMode } from '@/utils/homeWelcomeCard'
 import {
   getRatioOptionsForModel,
   HISTORY_IMAGE_MODEL_DISPLAY_NAMES,
@@ -213,14 +208,6 @@ function ImageCreatorPage() {
   const isSmallScreen = useIsSmallScreen()
   const { providers } = useProviders()
   const imageModelGroups = useImageModelGroups()
-  const hasLicense = useSettingsStore((s) => Boolean(s.licenseKey))
-  const hasExpiredLicense = useSettingsStore((s) => s.hasExpiredLicense)
-  const isLoggedIn = useAuthInfoStore((s) => Boolean(s.accessToken && s.refreshToken))
-  const welcomeCardMode = useMemo(
-    () => getHomeWelcomeCardMode({ providerCount: providers.length, isLoggedIn, hasLicense, hasExpiredLicense }),
-    [providers.length, isLoggedIn, hasLicense, hasExpiredLicense]
-  )
-
   const [prompt, setPrompt] = useState('')
   const [referenceImages, setReferenceImages] = useState<
     { storageKey: string; sourceRecordId?: string; isTempUpload?: boolean }[]
@@ -581,10 +568,6 @@ function ImageCreatorPage() {
           {/* Input Area */}
           <Box py="md" px="sm">
             <Stack gap="sm" maw={800} mx="auto">
-              {!currentRecord && welcomeCardMode !== 'none' && (
-                <WorkspAIceWelcomeCard mode={welcomeCardMode} pageName={JK_PAGE_NAMES.IMAGE_PAGE} />
-              )}
-
               <ReferenceImagesPreview
                 images={referenceImages}
                 onRemove={handleRemoveReferenceImage}

@@ -111,8 +111,8 @@ export const KnowledgeBaseWorkspAIceAIInfo: React.FC<KnowledgeBaseWorkspAIceAIIn
 }
 
 interface KnowledgeBaseProviderModeSelectProps {
-  value: 'workspaice-ai' | 'custom'
-  onChange: (value: 'workspaice-ai' | 'custom') => void
+  value: 'local' | 'custom'
+  onChange: (value: 'local' | 'custom') => void
   isWorkspAIceAIDisabled?: boolean
 }
 
@@ -127,10 +127,10 @@ export const KnowledgeBaseProviderModeSelect: React.FC<KnowledgeBaseProviderMode
     <Radio.Group
       label={t('Model Provider')}
       value={value}
-      onChange={(value) => onChange(value as 'workspaice-ai' | 'custom')}
+      onChange={(value) => onChange(value as 'local' | 'custom')}
     >
       <Group mt="xs">
-        <Radio value="workspaice-ai" label="WorkspAIce AI" disabled={isWorkspAIceAIDisabled} />
+        <Radio value='local' label="WorkspAIce AI" disabled={isWorkspAIceAIDisabled} />
         <Radio value="custom" label={t('Custom')} />
       </Group>
     </Radio.Group>
@@ -223,7 +223,7 @@ const PARSER_OPTIONS: { value: DocumentParserType; label: string; description: s
       'Uses built-in document parsing feature, supports common file types. Free usage, no compute points will be consumed.',
   },
   {
-    value: 'workspaice-ai',
+    value: 'local',
     label: 'WorkspAIce AI',
     description:
       'Cloud-based document parsing service, supports PDF, Office files, EPUB and many other file types. Consumes compute points.',

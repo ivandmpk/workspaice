@@ -14,10 +14,10 @@ export { ModelProviderType } from './provider'
  * - workspaice-ai: WorkspAIce cloud parsing service (requires login, consumes compute points)
  * - mineru: Third-party MinerU parsing service (desktop only)
  */
-export type DocumentParserType = 'none' | 'local' | 'workspaice-ai' | 'mineru'
+export type DocumentParserType = 'none' | 'local' | 'mineru'
 
 export const DocumentParserConfigSchema = z.object({
-  type: z.enum(['none', 'local', 'workspaice-ai', 'mineru']),
+  type: z.enum(['none', 'local', 'mineru']),
   mineru: z
     .object({
       apiToken: z.string(),

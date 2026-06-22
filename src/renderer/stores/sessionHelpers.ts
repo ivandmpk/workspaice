@@ -22,7 +22,6 @@ import { estimateTokens } from '@/packages/token'
 import platform from '@/platform'
 import storage from '@/storage'
 import { StorageKey, StorageKeyGenerator } from '@/storage/StoreStorage'
-import { authInfoStore } from '@/stores/authInfoStore'
 import { getMetaStorage } from '@/stores/chatStore'
 import { migrateSession, sortSessions } from '@/utils/session-utils'
 import * as defaults from '../../shared/defaults'
@@ -121,14 +120,6 @@ function getEffectiveDocumentParserConfig(): DocumentParserConfig {
   return globalConfig ?? getPlatformDefaultDocumentParser()
 }
 
-function hasParsedText(content: string): boolean {
-  return content.trim().length > 0
-}
-
-function canFallbackToWorkspAIceAI(): boolean {
-  return Boolean(settingActions.getLicenseKey())
-}
-
 export function isSessionAttachmentRagAuthError(errorCode: string | undefined): boolean {
   if (!errorCode) {
     return false
@@ -154,7 +145,7 @@ function hasUsableSessionAttachmentRagLicense(): boolean {
     return false
   }
   if (settings.licenseActivationMethod === 'login') {
-    return !!authInfoStore.getState().getTokens()
+    return false
   }
   return true
 }
@@ -178,13 +169,8 @@ async function canUseSessionAttachmentRag(): Promise<boolean> {
     return false
   }
 
-  const value = !!(await remote.getSessionRagConfig({ licenseKey: licenseKey || undefined }).catch(() => undefined))
-    ?.capabilities?.session_attachment_embedding
-  log.debug(
-    `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability fetched: embedding=${value}, hasLicense=${Boolean(licenseKey)}, platform=${platform.type}`
-  )
-  sessionRagCapabilityCache = { key: capabilityCacheKey, value }
-  return value
+  sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
+  return false
 }
 
 /**
@@ -211,61 +197,12 @@ async function parseFileWithLocalParser(
   return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'local' }
 }
 
-async function fallbackToWorkspAIceAIParser(
-  file: File,
-  uniqKey: string,
-  reason: 'local_parser_failed' | 'empty_content'
-): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  log.warn(`Falling back to WorkspAIce AI parser for "${file.name}" due to ${reason}`)
-
-  try {
-    return await parseFileWithWorkspAIceAI(file, uniqKey)
-  } catch (error) {
-    log.error(`WorkspAIce AI fallback parsing failed for "${file.name}":`, error)
-    throw new Error('workspaice_ai_parser_failed')
-  }
-}
-
 async function parseFileWithLocalFallback(
   file: File,
   uniqKey: string
 ): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  try {
-    const result = await parseFileWithLocalParser(file, uniqKey)
-    if (!hasParsedText(result.content) && canFallbackToWorkspAIceAI()) {
-      return await fallbackToWorkspAIceAIParser(file, uniqKey, 'empty_content')
-    }
-    return result
-  } catch (error) {
-    log.error(`Local parsing failed for "${file.name}":`, error)
-
-    if (canFallbackToWorkspAIceAI()) {
-      return await fallbackToWorkspAIceAIParser(file, uniqKey, 'local_parser_failed')
-    }
-
-    throw new Error('local_parser_failed')
-  }
-}
-
-/**
- * Parse file using WorkspAIce AI cloud service
- */
-async function parseFileWithWorkspAIceAI(
-  file: File,
-  uniqKey: string
-): Promise<{ content: string; storageKey: string; tokenCountMap: Record<string, number>; parserType: string }> {
-  const licenseKey = settingActions.getLicenseKey()
-  const uploadedKey = await remote.uploadAndCreateUserFile(licenseKey || '', file)
-
-  // Get uploaded file content
-  const content = (await storage.getBlob(uploadedKey).catch(() => '')) || ''
-
-  // Store content to unique key
-  if (content) {
-    await storage.setBlob(uniqKey, content)
-  }
-
-  return { content, storageKey: uniqKey, tokenCountMap: {}, parserType: 'workspaice-ai' }
+  const result = await parseFileWithLocalParser(file, uniqKey)
+  return result
 }
 
 /**
@@ -385,16 +322,6 @@ export async function prepareFileAttachment(
 
         case 'local': {
           result = await parseFileWithLocalFallback(file, uniqKey)
-          break
-        }
-
-        case 'workspaice-ai': {
-          try {
-            result = await parseFileWithWorkspAIceAI(file, uniqKey)
-          } catch (error) {
-            log.error(`WorkspAIce AI parsing failed for "${file.name}":`, error)
-            throw new Error('workspaice_ai_parser_failed')
-          }
           break
         }
 

@@ -14,16 +14,13 @@ const ALL_PARSER_OPTIONS: {
 }[] = [
   { value: 'none', label: 'Text Only', mobileWebOnly: true }, // Basic text file support only (mobile/web only)
   { value: 'local', label: 'Local', desktopOnly: true }, // Only available on desktop
-  { value: 'workspaice-ai', label: 'WorkspAIce AI' },
   { value: 'mineru', label: 'MinerU', desktopOnly: true }, // Only available on desktop (requires IPC)
 ]
 
 const PARSER_DESCRIPTIONS: Record<DocumentParserType, string> = {
-  none: 'Only supports basic text files (.txt, .md, .json, code files, etc.). For PDF and Office files, please switch to WorkspAIce AI.',
+  none: 'Basic text file support only (.txt, .md, .json, code files, etc.)',
   local:
-    'Uses built-in document parsing feature, supports common file types. Free usage, no compute points will be consumed.',
-  'workspaice-ai':
-    'Cloud-based document parsing service, supports PDF, Office files, EPUB and many other file types. Consumes compute points.',
+    'Uses built-in document parsing feature, supports common file types.',
   mineru: 'Third-party cloud parsing service, supports PDF and most Office files. Requires API token.',
 }
 

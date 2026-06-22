@@ -81,24 +81,6 @@ export type ImageSource =
       storageKey: string
     }
 
-export interface CopilotDetail {
-  id: string
-  name: string
-  prompt: string
-  picUrl?: string // Deprecated
-  avatar?: ImageSource
-  backgroundImage?: ImageSource
-  description?: string
-  tags?: string[]
-  screenshots?: ImageSource[]
-  createdAt?: number
-  updatedAt?: number
-  usedCount?: number
-  /** If this copilot is copied from a remote copilot, sourceId stores the original copilot's id */
-  sourceId?: string
-  starred?: boolean
-}
-
 export interface Toast {
   id: string
   content: string
@@ -308,7 +290,7 @@ export function copyThreads(source?: SessionThread[], idMapping?: Map<string, st
 }
 
 // RAG related types
-export type KnowledgeBaseProviderMode = 'workspaice-ai' | 'custom'
+export type KnowledgeBaseProviderMode = 'custom'
 
 export interface KnowledgeBase {
   id: number

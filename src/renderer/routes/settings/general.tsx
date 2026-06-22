@@ -268,7 +268,6 @@ const ImportExportDataSection = () => {
   const [exportItems, setExportItems] = useState<ExportDataItem[]>([
     ExportDataItem.Setting,
     ExportDataItem.Conversations,
-    ExportDataItem.Copilot,
   ])
 
   const isLoading = isExporting || isImporting
@@ -305,8 +304,6 @@ const ImportExportDataSection = () => {
             if (key === StorageKey.Settings && exportItems.includes(ExportDataItem.Setting)) {
               shouldExport = true
             } else if (key.startsWith('session:') && exportItems.includes(ExportDataItem.Conversations)) {
-              shouldExport = true
-            } else if (key === StorageKey.MyCopilots && exportItems.includes(ExportDataItem.Copilot)) {
               shouldExport = true
             } else if (key === StorageKey.ChatSessionsList) {
               // Skip: session meta is now exported from DB below
@@ -506,7 +503,6 @@ const ImportExportDataSection = () => {
           { label: t('Settings'), value: ExportDataItem.Setting },
           { label: t('API KEY & License'), value: ExportDataItem.Key },
           { label: t('Chat History'), value: ExportDataItem.Conversations },
-          { label: t('My Copilots'), value: ExportDataItem.Copilot },
         ].map(({ label, value }) => (
           <Checkbox
             key={value}
@@ -562,7 +558,6 @@ enum ExportDataItem {
   Setting = 'setting',
   Key = 'key',
   Conversations = 'conversations',
-  Copilot = 'copilot',
 }
 
 const ExportLogsSection = () => {

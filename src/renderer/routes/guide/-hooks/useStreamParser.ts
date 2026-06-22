@@ -6,7 +6,6 @@
 import type { TFunction } from 'i18next'
 import { confetti } from '@/components/Confetti'
 import { onboardingStore } from '@/stores/onboardingStore'
-import { activate as activateLicense } from '@/stores/premiumActions'
 import type {
   GuideMessagePart,
   GuideTextPart,
@@ -180,7 +179,7 @@ export async function parseStreamResponse(
 
             // Handle activate_license tool
             if (toolPart.toolName === 'activate_license') {
-              await handleActivateLicense(toolPart, { markGuideCompleted, appendErrorToMessage, t })
+              await markGuideCompleted()
             }
 
             // Update message with tool part
@@ -209,41 +208,4 @@ export async function parseStreamResponse(
     }
     return prev
   })
-}
-
-/**
- * Handle activate_license tool execution.
- *
- * On success, delegates to the shared markGuideCompleted handler — same path as OAuth login success —
- * so both paths render an identical "you're all set" message + buttons + confetti. On failure,
- * appends an inline error to the in-flight assistant message.
- */
-async function handleActivateLicense(
-  toolPart: GuideToolPart,
-  callbacks: {
-    markGuideCompleted: () => Promise<void>
-    appendErrorToMessage: (msg: string) => void
-    t: TFunction
-  }
-): Promise<void> {
-  const { markGuideCompleted, appendErrorToMessage, t } = callbacks
-
-  const licenseKey = (toolPart.args as { license_key?: string })?.license_key
-  if (!licenseKey) return
-
-  const failureMessage = t(
-    'Failed to activate the license key. You can try activating manually in **Settings**, or log in to the [WorkspAIce AI website](https://workspaiceai.app) to view your license details.'
-  )
-
-  try {
-    const result = await activateLicense(licenseKey, 'manual')
-    if (result.valid) {
-      await markGuideCompleted()
-    } else {
-      appendErrorToMessage(failureMessage)
-    }
-  } catch (err) {
-    console.error('License activation error:', err)
-    appendErrorToMessage(failureMessage)
-  }
 }

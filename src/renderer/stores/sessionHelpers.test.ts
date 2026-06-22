@@ -8,8 +8,6 @@ const {
   sessionRagCapabilityState,
   parserState,
   mockParseFileLocally,
-  mockGetSessionRagConfig,
-  mockUploadAndCreateUserFile,
   mockSetBlob,
   mockGetBlob,
   mockSetItem,
@@ -30,14 +28,6 @@ const {
     sessionRagCapabilityState: sessionRagCapability,
     parserState: parser,
     mockParseFileLocally: vi.fn(),
-    mockGetSessionRagConfig: vi.fn(async () => ({
-      models: { embedding: 'workspaice-ai:text-embedding-3-small', rerank: 'workspaice-ai:rerank' },
-      capabilities: {
-        session_attachment_embedding: sessionRagCapability.enabled,
-        session_attachment_rerank: false,
-      },
-    })),
-    mockUploadAndCreateUserFile: vi.fn(),
     mockSetBlob: vi.fn(async (key: string, value: string) => {
       blobs.set(key, value)
     }),
@@ -61,11 +51,6 @@ vi.mock('@/storage', () => ({
     getItem: mockGetItem,
     setItem: mockSetItem,
   },
-}))
-
-vi.mock('@/packages/remote', () => ({
-  getSessionRagConfig: mockGetSessionRagConfig,
-  uploadAndCreateUserFile: mockUploadAndCreateUserFile,
 }))
 
 vi.mock('./settingActions', () => ({
@@ -158,65 +143,53 @@ describe('preprocessFile local parser fallback', () => {
     sessionRagCapabilityState.enabled = true
     parserState.type = 'local'
     mockParseFileLocally.mockReset()
-    mockGetSessionRagConfig.mockClear()
-    mockUploadAndCreateUserFile.mockReset()
     mockSetBlob.mockClear()
     mockGetBlob.mockClear()
     mockSetItem.mockClear()
     mockGetItem.mockClear()
   })
 
-  it('falls back to WorkspAIce AI when local parsing throws and a license is active', async () => {
+  it('returns local_parser_failed when local parsing throws', async () => {
     const file = createFile('report.pdf')
-    blobStore.set('remote-key', 'remote parsed content')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
-    mockUploadAndCreateUserFile.mockResolvedValueOnce('remote-key')
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
     expect(mockParseFileLocally).toHaveBeenCalledWith(file)
-    expect(mockUploadAndCreateUserFile).toHaveBeenCalledWith('licensed-key', file)
-    expect(result.error).toBeUndefined()
-    expect(result.content).toBe('remote parsed content')
-    expect(result.storageKey).toBe(`file:/tmp/${file.name}-${file.size}-${file.lastModified}`)
+    expect(result.content).toBe('')
+    expect(result.storageKey).toBe('')
+    expect(result.error).toBe('local_parser_failed')
   })
 
-  it('falls back to WorkspAIce AI when local parsing returns empty content and a license is active', async () => {
+  it('returns empty content when local parsing returns whitespace-only content', async () => {
     const file = createFile('empty.pdf')
     blobStore.set('local-key', '   \n\t')
-    blobStore.set('remote-key', 'remote recovered content')
     mockParseFileLocally.mockResolvedValueOnce({ isSupported: true, key: 'local-key' })
-    mockUploadAndCreateUserFile.mockResolvedValueOnce('remote-key')
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockParseFileLocally).toHaveBeenCalledWith(file)
-    expect(mockUploadAndCreateUserFile).toHaveBeenCalledWith('licensed-key', file)
     expect(result.error).toBeUndefined()
-    expect(result.content).toBe('remote recovered content')
+    expect(result.content).toBe('   \n\t')
   })
 
-  it('falls back to WorkspAIce AI for text files when local parsing fails', async () => {
+  it('returns local_parser_failed for text files when local parsing fails', async () => {
     const file = createFile('readme.txt', 'text content')
-    blobStore.set('remote-key', 'remote text content')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
-    mockUploadAndCreateUserFile.mockResolvedValueOnce('remote-key')
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockUploadAndCreateUserFile).toHaveBeenCalledWith('licensed-key', file)
-    expect(result.error).toBeUndefined()
-    expect(result.content).toBe('remote text content')
+    expect(result.content).toBe('')
+    expect(result.storageKey).toBe('')
+    expect(result.error).toBe('local_parser_failed')
   })
 
-  it('keeps local_parser_failed when local parsing throws without a license', async () => {
+  it('returns local_parser_failed when local parsing throws without a license', async () => {
     const file = createFile('no-license.pdf')
     licenseState.key = undefined
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockUploadAndCreateUserFile).not.toHaveBeenCalled()
     expect(result.content).toBe('')
     expect(result.storageKey).toBe('')
     expect(result.error).toBe('local_parser_failed')
@@ -230,14 +203,13 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
     expect(result.tokenCountMap?.default).toBe(parsedContent.length)
   })
 
-  it('uses session retrieval for over-threshold attachments when session RAG embedding is available', async () => {
+  it('keeps over-threshold attachments inline for PDF files', async () => {
     const file = createFile('licensed-large.pdf')
     const parsedContent = 'a'.repeat(256 * 1024 + 1)
     blobStore.set('local-key', parsedContent)
@@ -245,12 +217,10 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).toHaveBeenCalledWith({ licenseKey: 'licensed-key' })
     expect(result.error).toBeUndefined()
-    expect(result.ragMode).toBe('session-retrieval')
+    expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
-    expect(result.tokenCountMap?.default).toBeUndefined()
-    expect(result.tokenCountMap?.default_preview).toBeDefined()
+    expect(result.tokenCountMap?.default).toBe(parsedContent.length)
   })
 
   it('keeps over-threshold CSV attachments inline instead of session retrieval', async () => {
@@ -261,7 +231,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
@@ -276,7 +245,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
@@ -291,7 +259,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
@@ -308,7 +275,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
@@ -326,7 +292,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')
@@ -345,7 +310,6 @@ describe('preprocessFile local parser fallback', () => {
 
     const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
 
-    expect(mockGetSessionRagConfig).not.toHaveBeenCalled()
     expect(result.error).toBeUndefined()
     expect(result.ragMode).toBe('inline')
     expect(result.sessionAttachmentAvailability).toBe('allowed')

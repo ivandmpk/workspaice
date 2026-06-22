@@ -59,7 +59,7 @@ export function registerKnowledgeBaseHandlers() {
         rerankModel: string
         visionModel?: string
         documentParser?: { type: string; mineru?: { apiToken: string } }
-        providerMode?: 'workspaice-ai' | 'custom'
+        providerMode?: 'custom'
       }
     ) => {
       try {

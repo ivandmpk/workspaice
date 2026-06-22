@@ -8,7 +8,6 @@ export enum StorageKey {
   ChatSessions = 'chat-sessions',
   Configs = 'configs',
   Settings = 'settings',
-  MyCopilots = 'myCopilots',
   ConfigVersion = 'configVersion',
   RemoteConfig = 'remoteConfig',
   ChatSessionsList = 'chat-sessions-list',

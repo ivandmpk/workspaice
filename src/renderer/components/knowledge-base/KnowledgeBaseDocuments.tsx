@@ -119,7 +119,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
   const failedFiles = useMemo(() => allFiles.filter((file) => file.status === 'failed'), [allFiles])
 
   // Parser types that should NOT show the "use WorkspAIce AI" suggestion when they fail
-  const PARSER_NO_SUGGESTION_LIST: string[] = ['mineru', 'workspaice-ai']
+  const PARSER_NO_SUGGESTION_LIST: string[] = ['mineru', 'local']
 
   // Check if we should show the WorkspAIce AI suggestion for failed files
   // Show suggestion only if there are failed files that are NOT in the exception list
@@ -610,7 +610,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
           switch (parserType) {
             case 'mineru':
               return t('MinerU parse failed')
-            case 'workspaice-ai':
+            case 'local':
               return t('WorkspAIce AI parse failed')
             default:
               return t('Local parse failed')
@@ -621,7 +621,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
               limit: KNOWLEDGE_BASE_MAX_PARSED_CONTENT_SIZE_LABEL,
             })
           : error || t('Processing failed')
-        const isRemoteParser = parserType === 'mineru' || parserType === 'workspaice-ai'
+        const isRemoteParser = parserType === 'mineru' || parserType === 'local'
         return (
           <Flex gap={4} align="center">
             <Tooltip label={errorLabel} multiline w={300} withArrow position="top" transitionProps={{ duration: 200 }}>
@@ -937,7 +937,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                                     </Text>
                                     {doc.parser_type && (
                                       <Pill size="xs" c="dimmed">
-                                        {doc.parser_type === 'workspaice-ai'
+                                        {doc.parser_type === 'local'
                                           ? 'WorkspAIce AI'
                                           : doc.parser_type === 'mineru'
                                             ? 'MinerU'

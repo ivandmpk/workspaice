@@ -10,9 +10,7 @@ import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { cancelConfetti, confetti } from '@/components/Confetti'
 import { buildWorkspAIceUrl } from '@/packages/remote'
 import platform from '@/platform'
-import { authInfoStore, useAuthInfoStore } from '@/stores/authInfoStore'
 import { onboardingStore, useOnboardingStore } from '@/stores/onboardingStore'
-import * as premiumActions from '@/stores/premiumActions'
 import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
 import { GUIDE_CONFIG } from '../-utils/config'
 import { type GuideMessage, sendGuideMessage } from '../-utils/guideApi'
@@ -78,9 +76,6 @@ export function useGuideSession(): UseGuideSessionReturn {
   const onboardingCompleted = useOnboardingStore((s) => s.completed)
   const language = useSettingsStore((s) => s.language)
   const languageInited = useSettingsStore((s) => s.languageInited)
-  const accessToken = useAuthInfoStore((s) => s.accessToken)
-  const refreshToken = useAuthInfoStore((s) => s.refreshToken)
-  const isLoggedIn = Boolean(accessToken && refreshToken)
 
   const isLanguageReady = useMemo(
     () => isGuideLanguageReady(languageInited, language, i18n.language),
@@ -159,7 +154,7 @@ export function useGuideSession(): UseGuideSessionReturn {
       !forceSelectionOnce &&
       shouldGuideEnterCompleted({
         onboardingCompleted,
-        isLoggedIn,
+        isLoggedIn: false,
         hasValidConfig: configValid,
       })
 
@@ -314,7 +309,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
         cancelled = true
       }
     }
-  }, [isLanguageReady, t, resetKey, onboardingCompleted, isLoggedIn, forceSelectionOnce])
+  }, [isLanguageReady, t, resetKey, onboardingCompleted, forceSelectionOnce])
 
   /**
    * Append a fixed message to the conversation (instant, no streaming)
@@ -540,26 +535,8 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
     setHasValidConfig(true)
     onboardingStore.getState().markCompleted()
 
-    const hasLicense = Boolean(settingsStore.getState().licenseKey)
-    if (hasLicense) {
-      await renderCelebration()
-    } else {
-      await streamFixedMessage(
-        t(
-          "You're logged in! Claim your **free plan** below to unlock WorkspAIce AI features. If you have any questions, feel free to click the Help button in the bottom left corner anytime."
-        ),
-        [
-          {
-            type: 'tool-show_free_trial_link',
-            toolCallId: `free-trial-link-${Date.now()}`,
-            toolName: 'show_free_trial_link',
-            state: 'result',
-            result: { displayed: true },
-          },
-        ]
-      )
-    }
-  }, [streamFixedMessage, t, renderCelebration])
+    await renderCelebration()
+  }, [renderCelebration])
 
   /**
    * Triggered by FreeTrialLink after the claim page successfully opens. Streams the awaiting card
@@ -586,14 +563,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
    * the license is real, the user can re-validate via Settings later.
    */
   const onClaimDetected = useCallback(
-    async (license: import('@/packages/remote').UserLicense) => {
-      try {
-        if (license.key) {
-          await premiumActions.activate(license.key, 'login')
-        }
-      } catch (err) {
-        console.error('[guide] auto-activate after free-plan claim failed:', err)
-      }
+    async (_license: import('@/packages/remote').UserLicense) => {
       await renderCelebration()
     },
     [renderCelebration]
@@ -698,7 +668,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
         const { uuid: deviceId } = await platform.getConfig()
         const response = await sendGuideMessage(apiMessages, deviceId, {
           onboardingStep,
-          isLoggedIn,
+          isLoggedIn: false,
           signal: abortControllerRef.current.signal,
         })
 
@@ -785,8 +755,6 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
    * Debug: Reset guide and force entering selection step once.
    */
   const debugResetGuide = useCallback(() => {
-    // Also reset auth/config to simulate a real new-user state.
-    authInfoStore.getState().clearTokens()
     settingsStore.getState().setSettings((draft) => {
       draft.licenseKey = ''
       draft.licenseDetail = undefined

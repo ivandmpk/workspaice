@@ -19,7 +19,6 @@ import {
   ProviderSettingsButton,
   ViewLicenseButton,
 } from './ActionButton'
-import { ClaimWaitingCard } from './ClaimWaitingCard'
 import { SuggestedQuestions } from './SuggestedQuestions'
 import { UserTypeCards } from './UserTypeCards'
 
@@ -84,8 +83,7 @@ function ToolPartRenderer({
       return <FreeTrialLink onAfterClick={onClaimStart} />
 
     case 'show_claim_waiting':
-      if (!onClaimDetected) return null
-      return <ClaimWaitingCard onClaimDetected={onClaimDetected} />
+      return null
 
     case 'mark_completed':
     case 'activate_license':

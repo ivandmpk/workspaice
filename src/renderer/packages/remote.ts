@@ -2,11 +2,7 @@ import type {
   SearchResult,
   WorkspAIceAILicenseDetail,
   Config,
-  CopilotDetail,
-  ModelProvider,
   ProviderModelInfo,
-  RemoteConfig,
-  SessionRagConfig,
   Settings,
 } from '../../shared/types'
 
@@ -28,57 +24,14 @@ export function buildWorkspAIceUrl(path: string) {
   return path
 }
 
+export interface UserLicense {
+  id: string
+  name?: string
+  key?: string
+}
+
 export async function checkNeedUpdate(_version: string, _os: string, _config: Config, _settings: Settings) {
   return false
-}
-
-export async function listCopilotTags(_lang: string): Promise<string[]> {
-  return []
-}
-
-export async function listCopilotsByCursor(
-  _lang: string,
-  _filters?: {
-    limit?: number
-    cursor?: string
-    tag?: string
-    search?: string
-  }
-): Promise<{ data: CopilotDetail[]; next_cursor: string | null }> {
-  return { data: [], next_cursor: null }
-}
-
-export async function recordCopilotUsage(_params: {
-  id: string
-  action: 'create_session' | 'create_thread' | 'create_message' | 'use_copilot'
-}) {}
-
-export async function recordCopilotShare(_detail: CopilotDetail) {}
-
-export async function getPremiumPrice() {
-  return { price: 0, discount: 0, discountLabel: '' }
-}
-
-export async function getRemoteConfig<T extends keyof RemoteConfig>(_config: T): Promise<RemoteConfig[T] | undefined> {
-  return undefined
-}
-
-export async function getSessionRagConfig(_params?: { licenseKey?: string }): Promise<SessionRagConfig | undefined> {
-  return undefined
-}
-
-export function invalidateSessionRagConfigCache(_licenseKey?: string) {}
-
-export interface DialogConfig {
-  enabled: boolean
-  title?: string
-  content?: string
-  markdown?: string
-  buttons?: Array<{ label: string; url: string }>
-}
-
-export async function getDialogConfig(_params: { uuid: string; language: string; version: string }): Promise<null> {
-  return null
 }
 
 export async function getLicenseDetail(_params: { licenseKey: string }): Promise<WorkspAIceAILicenseDetail | undefined> {
@@ -112,10 +65,6 @@ export async function createUserFile<T extends boolean>(_params: {
   throw hostedServiceError()
 }
 
-export async function uploadAndCreateUserFile(_licenseKey: string, _file: File): Promise<never> {
-  throw hostedServiceError()
-}
-
 export async function parseUserLinkPro(_params: {
   licenseKey: string
   url: string
@@ -144,59 +93,11 @@ export async function validateLicense(_params: { licenseKey: string; instanceId:
   return { valid: false, error: 'local_only' }
 }
 
-export type RemoteModelInfo = ProviderModelInfo
-
-export async function getModelManifest(_params: {
-  aiProvider: ModelProvider
-  licenseKey?: string
-  language?: string
-}): Promise<{ models: ProviderModelInfo[]; imageModels: ProviderModelInfo[] }> {
-  return { models: [], imageModels: [] }
-}
-
-export async function reportContent(_params: { id: string; type: string; details: string }) {}
-
 export async function getProviderModelsInfo(_params: { modelIds: string[] }): Promise<ProviderModelInfo[]> {
   return []
 }
 
-export async function requestLoginTicketId(): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function sendEmailLoginCode(_params: { email: string; lang?: string }): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function loginOrSignupWithEmailCode(_params: { email: string; code: string }): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function getWebAuthToken(): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function checkLoginStatus(_ticketId: string): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function refreshAccessToken(_params: { refreshToken: string }): Promise<never> {
-  throw hostedServiceError()
-}
-
-export async function getUserProfile(): Promise<never> {
-  throw hostedServiceError()
-}
-
-export interface UserLicense {
-  id: string
-  name?: string
-  key?: string
-}
-
-export async function listLicensesByUser(): Promise<UserLicense[]> {
-  return []
-}
+export async function reportContent(_params: { id: string; type: string; details: string }) {}
 
 export interface ImageCompletionRequest {
   model: string
