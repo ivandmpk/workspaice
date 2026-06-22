@@ -43,8 +43,6 @@ import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { trackJkClickEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { useKnowledgeBaseFiles, useKnowledgeBaseFilesActions, useKnowledgeBaseFilesCount } from '@/hooks/knowledge-base'
 import { useChunksPreview } from '@/hooks/useChunksPreview'
 import { toastError } from '@/packages/toast'
@@ -52,7 +50,6 @@ import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { trackEvent } from '@/utils/track'
 import ChunksPreviewModal from './ChunksPreviewModal'
-import { RemoteRetryModal } from './RemoteRetryModal'
 
 interface KnowledgeBaseDocumentsProps {
   knowledgeBase: KnowledgeBase | null
@@ -69,7 +66,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
   const [showScrollIndicator, setShowScrollIndicator] = useState(true)
   const [isDragOver, setIsDragOver] = useState(false)
   const [showUploadArea, setShowUploadArea] = useState(false)
-  const [showRemoteRetryModal, setShowRemoteRetryModal] = useState(false)
   const [sizeRejectedFiles, setSizeRejectedFiles] = useState<RejectedFile[]>([])
 
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -114,24 +110,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
 
     return () => clearInterval(pollInterval)
   }, [knowledgeBase?.id, allFiles, refetch, refetchCount])
-
-  // Failed files for remote retry feature
-  const failedFiles = useMemo(() => allFiles.filter((file) => file.status === 'failed'), [allFiles])
-
-  // Parser types that should NOT show the "use WorkspAIce AI" suggestion when they fail
-  const PARSER_NO_SUGGESTION_LIST: string[] = ['mineru', 'local']
-
-  // Check if we should show the WorkspAIce AI suggestion for failed files
-  // Show suggestion only if there are failed files that are NOT in the exception list
-  const shouldShowWorkspAIceAISuggestion = useMemo(() => {
-    if (failedFiles.length === 0) return false
-    // Check if any failed file used a parser that should show the suggestion
-    return failedFiles.some(
-      (file) =>
-        file.error !== KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR &&
-        !PARSER_NO_SUGGESTION_LIST.includes(file.parser_type || 'local')
-    )
-  }, [failedFiles])
 
   // MIME type correction for Windows compatibility
   const correctMimeType = useCallback((file: File): FileMeta => {
@@ -840,52 +818,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
               </Box>
             )}
 
-            {/* Failed files banner - show WorkspAIce AI suggestion only for local parser failures */}
-            {shouldShowWorkspAIceAISuggestion && (
-              <Alert variant="light" color="yellow" p="sm">
-                <Flex gap="xs" align="center" justify="space-between">
-                  <Flex gap="xs" align="center" style={{ flex: 1 }}>
-                    <Text size="sm">{t('{{count}} file(s) failed to parse', { count: failedFiles.length })}</Text>
-                  </Flex>
-                  <Stack gap={4} align="flex-end" className="flex-shrink-0">
-                    <Button size="xs" variant="light" onClick={() => setShowRemoteRetryModal(true)}>
-                      {t('Use server parsing')}
-                    </Button>
-                    <Tooltip
-                      label={t(
-                        'If you have never had a license before, you can claim it after logging in on the official website.'
-                      )}
-                      withArrow
-                      multiline
-                      maw={240}
-                      position="bottom-end"
-                      styles={{
-                        tooltip: {
-                          backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                          backdropFilter: 'blur(4px)',
-                        },
-                      }}
-                    >
-                      <Text
-                        size="xs"
-                        c="dimmed"
-                        className="cursor-pointer hover:text-blue-500 transition-colors"
-                        onClick={() => {
-                          trackJkClickEvent(JK_EVENTS.FREE_LICENSE_CLAIM_CLICK, {
-                            pageName: JK_PAGE_NAMES.SETTING_PAGE,
-                            content: 'kb_error',
-                          })
-                          platform.openLink('https://workspaiceai.app/login')
-                        }}
-                      >
-                        {t('Free trial available')} →
-                      </Text>
-                    </Tooltip>
-                  </Stack>
-                </Flex>
-              </Alert>
-            )}
-
             {/* Scrollable Document List with Scroll Indicator */}
             {allFiles.length > 0 && (
               <Box style={{ position: 'relative' }}>
@@ -1088,16 +1020,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         knowledgeBaseId={knowledgeBase?.id}
       />
 
-      {/* Remote Retry Modal */}
-      <RemoteRetryModal
-        opened={showRemoteRetryModal}
-        onClose={() => setShowRemoteRetryModal(false)}
-        failedFiles={failedFiles}
-        onSuccess={() => {
-          refetch()
-          refetchCount()
-        }}
-      />
     </Stack>
   )
 }

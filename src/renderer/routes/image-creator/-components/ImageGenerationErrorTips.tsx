@@ -3,13 +3,8 @@ import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { ImageGeneration } from '@shared/types'
 import { IconCheck, IconCopy, IconRefresh, IconSettings, IconX } from '@tabler/icons-react'
 import { Trans, useTranslation } from 'react-i18next'
-import LinkTargetBlank from '@/components/common/Link'
 import { useCopied } from '@/hooks/useCopied'
 import { navigateToSettings } from '@/modals/Settings'
-import { trackingEvent } from '@/packages/event'
-import { buildWorkspAIceUrl } from '@/packages/remote'
-import platform from '@/platform'
-import * as settingActions from '@/stores/settingActions'
 
 export interface ImageGenerationErrorTipsProps {
   record: ImageGeneration
@@ -92,19 +87,10 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
                     component="span"
                     className="cursor-pointer underline"
                     c="workspaice-brand"
-                    onClick={() => {
-                      platform.openLink(
-                        buildWorkspAIceUrl(
-                          `/redirect_app/view_more_plans/${settingActions.getLanguage()}?utm_source=app&utm_content=image_creator_upgrade_required`
-                        )
-                      )
-                      trackingEvent('click_view_more_plans_button_from_image_creator', {
-                        event_category: 'user',
-                      })
-                    }}
+                    onClick={() => navigateToSettings()}
                   />
                 ),
-                LinkToHomePage: <LinkTargetBlank href="https://workspaiceai.app" />,
+                LinkToHomePage: <span />,
               }}
             />
           </Text>

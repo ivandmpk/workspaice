@@ -2,19 +2,13 @@ import { Link } from '@mui/material'
 import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { FC } from 'react'
 import { Trans } from 'react-i18next'
-import LinkTargetBlank from '@/components/common/Link'
 import { navigateToSettings } from '@/modals/Settings'
-import { trackingEvent } from '@/packages/event'
-import { buildWorkspAIceUrl } from '@/packages/remote'
-import platform from '@/platform'
-import * as settingActions from '@/stores/settingActions'
-import { useSettingsStore } from '@/stores/settingsStore'
 
 interface WorkspAIceAIErrorMessageProps {
   errorCode: number
   /** Optional model name for `{{model}}` interpolation in i18n keys. */
   model?: string
-  /** Tracking source label appended to upgrade-link analytics events. */
+  /** Kept for callers that still identify where the local-only error was rendered. */
   trackingSource?: string
 }
 
@@ -25,15 +19,8 @@ const SUPPORTED_WEB_BROWSING_MODELS = 'gemini-2.0-flash(API), perplexity API'
  * links (open settings, switch search provider, upgrade plan). Returns `null`
  * for unknown codes so callers can fall back to a generic message.
  */
-export const WorkspAIceAIErrorMessage: FC<WorkspAIceAIErrorMessageProps> = ({
-  errorCode,
-  model,
-  trackingSource = 'msg_upgrade_required',
-}) => {
-  const licensePlanName = useSettingsStore((s) => s.licensePlanName)
-  const isFreePlan = licensePlanName === 'WorkspAIce AI Free'
-  const codeName = isFreePlan ? 'token_quota_exhausted_free' : undefined
-  const detail = WorkspAIceAIAPIError.getDetail(errorCode, codeName)
+export const WorkspAIceAIErrorMessage: FC<WorkspAIceAIErrorMessageProps> = ({ errorCode, model }) => {
+  const detail = WorkspAIceAIAPIError.getDetail(errorCode)
   if (!detail) return null
 
   return (
@@ -70,32 +57,13 @@ export const WorkspAIceAIErrorMessage: FC<WorkspAIceAIErrorMessageProps> = ({
             type="button"
             className="cursor-pointer italic"
             onClick={() => {
-              platform.openLink(
-                buildWorkspAIceUrl(
-                  `/redirect_app/view_more_plans/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
-                )
-              )
-              trackingEvent('click_view_more_plans_button_from_upgrade_error_tips', {
-                event_category: 'user',
-              })
+              navigateToSettings()
             }}
           />
         ),
-        LinkToHomePage: <LinkTargetBlank href="https://workspaiceai.app" />,
-        LinkToAdvancedFileProcessing: (
-          <LinkTargetBlank
-            href={buildWorkspAIceUrl(
-              `/redirect_app/advanced_file_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
-            )}
-          />
-        ),
-        LinkToAdvancedUrlProcessing: (
-          <LinkTargetBlank
-            href={buildWorkspAIceUrl(
-              `/redirect_app/advanced_url_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=${trackingSource}`
-            )}
-          />
-        ),
+        LinkToHomePage: <span />,
+        LinkToAdvancedFileProcessing: <span />,
+        LinkToAdvancedUrlProcessing: <span />,
         OpenDocumentParserSettingButton: (
           <Link
             component="button"

@@ -4,12 +4,8 @@ import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { AdaptiveModal } from '@/components/common/AdaptiveModal'
-import LinkTargetBlank from '@/components/common/Link'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
 import { navigateToSettings } from '@/modals/Settings'
-import { trackingEvent } from '@/packages/event'
-import { buildWorkspAIceUrl } from '@/packages/remote'
-import platform from '@/platform'
 import {
   isSessionAttachmentRagAuthError,
   isSessionAttachmentRagIndexingError,
@@ -17,7 +13,6 @@ import {
   SESSION_ATTACHMENT_RAG_REQUIRES_KNOWLEDGE_BASE_ERROR,
   SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR,
 } from '@/stores/sessionHelpers'
-import * as settingActions from '@/stores/settingActions'
 
 interface FileParseErrorProps {
   errorCode: string
@@ -100,14 +95,8 @@ const FileParseError = NiceModal.create(({ errorCode, fileName }: FileParseError
             <a
               className="cursor-pointer underline font-semibold text-blue-600 hover:text-blue-700"
               onClick={() => {
-                platform.openLink(
-                  buildWorkspAIceUrl(
-                    `/redirect_app/view_more_plans/${settingActions.getLanguage()}?utm_source=app&utm_content=file_parse_error`
-                  )
-                )
-                trackingEvent('click_view_more_plans_button_from_file_parse_error', {
-                  event_category: 'user',
-                })
+                onClose()
+                navigateToSettings('/document-parser')
               }}
             />
           ),
@@ -120,21 +109,9 @@ const FileParseError = NiceModal.create(({ errorCode, fileName }: FileParseError
               }}
             />
           ),
-          LinkToHomePage: <LinkTargetBlank href="https://workspaiceai.app" />,
-          LinkToAdvancedFileProcessing: (
-            <LinkTargetBlank
-              href={buildWorkspAIceUrl(
-                `/redirect_app/advanced_file_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=file_parse_error`
-              )}
-            />
-          ),
-          LinkToAdvancedUrlProcessing: (
-            <LinkTargetBlank
-              href={buildWorkspAIceUrl(
-                `/redirect_app/advanced_url_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=file_parse_error`
-              )}
-            />
-          ),
+          LinkToHomePage: <span />,
+          LinkToAdvancedFileProcessing: <span />,
+          LinkToAdvancedUrlProcessing: <span />,
         }}
       />
     )

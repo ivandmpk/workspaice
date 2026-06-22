@@ -8,18 +8,12 @@ import { IconCheck, IconChevronDown, IconChevronUp, IconCopy, IconLanguage, Icon
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { trackJkClickEvent } from '@/analytics/jk'
-import { JK_EVENTS, JK_PAGE_NAMES } from '@/analytics/jk-events'
 import { WorkspAIceAIErrorMessage } from '@/components/common/WorkspAIceAIErrorMessage'
 import { useCopied } from '@/hooks/useCopied'
 import { navigateToSettings } from '@/modals/Settings'
-import { trackingEvent } from '@/packages/event'
-import { buildWorkspAIceUrl } from '@/packages/remote'
 import { translateTexts } from '@/packages/translation'
-import platform from '@/platform'
 import * as settingActions from '@/stores/settingActions'
-import { useLanguage, useSettingsStore } from '@/stores/settingsStore'
-import LinkTargetBlank from '../common/Link'
+import { useLanguage } from '@/stores/settingsStore'
 
 const MAX_CHARS = 200
 const MAX_LINES = 3
@@ -146,7 +140,6 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
   const { msg, onRetry, isBubbleLayout } = props
   const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
-  const licenseKey = useSettingsStore((state) => state.licenseKey)
   const language = useLanguage()
   const [translatedText, setTranslatedText] = useState<string | null>(null)
   const [isTranslating, setIsTranslating] = useState(false)
@@ -257,15 +250,8 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
                 }}
               />
             ),
-            LinkToLicensePricing: (
-              <LinkTargetBlank
-                className="!font-bold !text-gray-700 hover:!text-blue-600 transition-colors"
-                href={buildWorkspAIceUrl(
-                  `/redirect_app/advanced_url_processing/${settingActions.getLanguage()}?utm_source=app&utm_content=msg_bad_provider`
-                )}
-              />
-            ),
-            a: <a href={buildWorkspAIceUrl(`/redirect_app/faqs/${settingActions.getLanguage()}`)} target="_blank" />,
+            LinkToLicensePricing: <span />,
+            a: <span />,
           }}
         />
       )
@@ -313,10 +299,7 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
         components={[
           <a
             key="a"
-            href={buildWorkspAIceUrl(
-              `/redirect_app/faqs/${settingActions.getLanguage()}?utm_source=app&utm_content=msg_error_unknown`
-            )}
-            target="_blank"
+            onClick={() => navigateToSettings()}
           ></a>,
         ]}
       />
@@ -401,38 +384,6 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
             </div>
           )}
         </>
-      )}
-      {!licenseKey && (
-        <div className="mt-3 pt-3 border-t border-red-200 dark:border-red-800/30 text-right">
-          <Tooltip
-            label={t(
-              'If you have never had a license before, you can claim it after logging in on the official website.'
-            )}
-            withArrow
-            multiline
-            maw={240}
-            position="bottom-end"
-            styles={{
-              tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                backdropFilter: 'blur(4px)',
-              },
-            }}
-          >
-            <span
-              className="text-sm font-medium text-blue-600 cursor-pointer hover:text-blue-700 hover:underline transition-colors"
-              onClick={() => {
-                trackJkClickEvent(JK_EVENTS.FREE_LICENSE_CLAIM_CLICK, {
-                  pageName: JK_PAGE_NAMES.CHAT_PAGE,
-                  content: 'chat_error',
-                })
-                platform.openLink('https://workspaiceai.app/login')
-              }}
-            >
-              {t('WorkspAIce AI free trial available')} →
-            </span>
-          </Tooltip>
-        </div>
       )}
     </div>
   )
