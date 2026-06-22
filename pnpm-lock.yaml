@@ -17,6 +17,9 @@ patchedDependencies:
   '@ai-sdk/deepseek@2.0.17':
     hash: 38ca8fe1e6bf5a471413f4cbe6d1fe49d0cd4e74e9494fe802c3a7036497eb41
     path: patches/@ai-sdk__deepseek@2.0.17.patch
+  app-builder-lib@26.8.1:
+    hash: 91faca24aefb2bc130d2a09d861fd8a23d7fa67d4e4fc821fc3c696f520938bc
+    path: patches/app-builder-lib@26.8.1.patch
   libsql@0.5.22:
     hash: 1cd6cac4cce1855ac60c054495f98b9ba467098185ea666dff300e0245a4c75f
     path: patches/libsql@0.5.22.patch
@@ -792,7 +795,7 @@ importers:
         specifier: ^4.0.2
         version: 4.1.0(@lobehub/ui@4.32.2)(@types/react@18.3.27)(antd@6.2.3(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mastra/core':
-        specifier: ^0.13.2
+        specifier: 0.13.2
         version: 0.13.2(encoding@0.1.13)(openapi-types@12.1.3)(react@18.3.1)(zod@4.3.6)
       '@mastra/libsql':
         specifier: 0.13.2
@@ -821,6 +824,36 @@ importers:
       '@opentelemetry/sdk-trace-node':
         specifier: ^2.5.0
         version: 2.5.0(@opentelemetry/api@1.9.0)
+      '@protobufjs/aspromise':
+        specifier: 1.1.2
+        version: 1.1.2
+      '@protobufjs/base64':
+        specifier: 1.1.2
+        version: 1.1.2
+      '@protobufjs/codegen':
+        specifier: 2.0.4
+        version: 2.0.4
+      '@protobufjs/eventemitter':
+        specifier: 1.1.0
+        version: 1.1.0
+      '@protobufjs/fetch':
+        specifier: 1.1.0
+        version: 1.1.0
+      '@protobufjs/float':
+        specifier: 1.0.2
+        version: 1.0.2
+      '@protobufjs/inquire':
+        specifier: 1.1.0
+        version: 1.1.0
+      '@protobufjs/path':
+        specifier: 1.1.2
+        version: 1.1.2
+      '@protobufjs/pool':
+        specifier: 1.1.0
+        version: 1.1.0
+      '@protobufjs/utf8':
+        specifier: 1.1.0
+        version: 1.1.0
       auto-launch:
         specifier: ^5.0.6
         version: 5.0.6
@@ -866,6 +899,12 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.23
+      long:
+        specifier: 5.3.2
+        version: 5.3.2
+      node-fetch:
+        specifier: 2.7.0
+        version: 2.7.0(encoding@0.1.13)
       ofetch:
         specifier: ^1.0.1
         version: 1.5.1
@@ -876,7 +915,7 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       protobufjs:
-        specifier: ^7.5.4
+        specifier: 7.5.4
         version: 7.5.4
       sanitize-filename:
         specifier: ^1.6.3
@@ -884,12 +923,21 @@ importers:
       tar:
         specifier: ^4.4.19
         version: 4.4.19
+      tr46:
+        specifier: 0.0.3
+        version: 0.0.3
       type-is:
         specifier: ^2.0.1
         version: 2.0.1
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
+      webidl-conversions:
+        specifier: 3.0.1
+        version: 3.0.1
+      whatwg-url:
+        specifier: 5.0.0
+        version: 5.0.0
       yauzl:
         specifier: ^3.2.0
         version: 3.2.0
@@ -5345,9 +5393,6 @@ packages:
 
   '@types/pg@8.15.5':
     resolution: {integrity: sha512-LF7lF6zWEKxuT3/OR8wAZGzkg4ENGXFNyiV/JeOt9z5B+0ZVwbql9McqX5c/WStFq1GaGso7H1AzP/qSzmlCKQ==}
-
-  '@types/pg@8.6.1':
-    resolution: {integrity: sha512-1Kc4oAGzAl7uqUStZCDvaLFqZrW9qWSjXOmBfdgyBP5La7Us6Mg4GBvRlSoaZMhQF/zSj1C8CtKMBkoiT8eL8w==}
 
   '@types/plist@3.0.5':
     resolution: {integrity: sha512-E6OCaRmAe4WDmWNsL/9RMqdkkzDCY1etutkflWk4c+AcjDU07Pcz1fQwTX0TQz+Pxqn9i4L1TU3UFpjnrcDgxA==}
@@ -18889,15 +18934,9 @@ snapshots:
 
   '@types/pg-pool@2.0.6':
     dependencies:
-      '@types/pg': 8.6.1
+      '@types/pg': 8.15.5
 
   '@types/pg@8.15.5':
-    dependencies:
-      '@types/node': 20.2.5
-      pg-protocol: 1.11.0
-      pg-types: 2.2.0
-
-  '@types/pg@8.6.1':
     dependencies:
       '@types/node': 20.2.5
       pg-protocol: 1.11.0
@@ -19477,7 +19516,7 @@ snapshots:
 
   app-builder-bin@5.0.0-alpha.12: {}
 
-  app-builder-lib@26.8.1(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1):
+  app-builder-lib@26.8.1(patch_hash=91faca24aefb2bc130d2a09d861fd8a23d7fa67d4e4fc821fc3c696f520938bc)(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/asar': 3.4.1
@@ -21056,7 +21095,7 @@ snapshots:
 
   dmg-builder@26.8.1(electron-builder-squirrel-windows@26.8.1):
     dependencies:
-      app-builder-lib: 26.8.1(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
+      app-builder-lib: 26.8.1(patch_hash=91faca24aefb2bc130d2a09d861fd8a23d7fa67d4e4fc821fc3c696f520938bc)(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
       builder-util: 26.8.1
       fs-extra: 10.1.0
       iconv-lite: 0.6.3
@@ -21173,7 +21212,7 @@ snapshots:
 
   electron-builder-squirrel-windows@26.8.1(dmg-builder@26.8.1):
     dependencies:
-      app-builder-lib: 26.8.1(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
+      app-builder-lib: 26.8.1(patch_hash=91faca24aefb2bc130d2a09d861fd8a23d7fa67d4e4fc821fc3c696f520938bc)(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
       builder-util: 26.8.1
       electron-winstaller: 5.4.0
     transitivePeerDependencies:
@@ -21182,7 +21221,7 @@ snapshots:
 
   electron-builder@26.8.1(electron-builder-squirrel-windows@26.8.1):
     dependencies:
-      app-builder-lib: 26.8.1(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
+      app-builder-lib: 26.8.1(patch_hash=91faca24aefb2bc130d2a09d861fd8a23d7fa67d4e4fc821fc3c696f520938bc)(dmg-builder@26.8.1)(electron-builder-squirrel-windows@26.8.1)
       builder-util: 26.8.1
       builder-util-runtime: 9.5.1
       chalk: 4.1.2
