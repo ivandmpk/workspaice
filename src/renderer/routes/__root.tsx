@@ -56,8 +56,6 @@ import { router } from '@/router'
 import Sidebar from '@/Sidebar'
 import storage from '@/storage'
 import { useSession } from '@/stores/chatStore'
-import { initOnboardingStore, onboardingStore } from '@/stores/onboardingStore'
-import * as settingActions from '@/stores/settingActions'
 import { initSettingsStore, settingsStore, useLanguage, useSettingsStore, useTheme } from '@/stores/settingsStore'
 import { useUIStore } from '@/stores/uiStore'
 import { blobToDataUrl } from './image-creator/-components/constants'
@@ -142,27 +140,15 @@ function Root() {
     // biome-ignore lint/nursery/noFloatingPromises: inline call
     ;(async () => {
       // Wait for stores to hydrate from persistent storage
-      await Promise.all([initSettingsStore(), initOnboardingStore()])
+      await initSettingsStore()
       void prefetchModelRegistry()
 
-      // Skip guide-related checks if already on guide or settings/mcp page
-      if (location.pathname === '/guide' || location.pathname === '/settings/mcp') {
+      if (location.pathname === '/settings/mcp') {
         initialized.current = true
         return
       }
 
       initialized.current = true
-
-      // Check if user needs onboarding guide
-      // Conditions: not completed onboarding AND no valid config
-      const onboardingCompleted = onboardingStore.getState().completed
-      const needsSetup = settingActions.needEditSetting()
-
-      // Auto-navigate to guide for new users who need setup
-      if (!onboardingCompleted && needsSetup) {
-        router.navigate({ to: '/guide', replace: true })
-        return
-      }
 
       const shouldShowAboutDialogWhenStartUp = await platform.shouldShowAboutDialogWhenStartUp()
       if (shouldShowAboutDialogWhenStartUp) {
@@ -189,18 +175,7 @@ function Root() {
   }, [_theme])
 
   useEffect(() => {
-    ;(() => {
-      const { startupPage } = settingsStore.getState()
-      const sid = JSON.parse(localStorage.getItem('_currentSessionIdCachedAtom') || '""') as string
-      if (sid && startupPage === 'session') {
-        router.navigate({
-          to: '/session/$sessionId',
-          params: { sessionId: sid },
-          search: (prev) => prev,
-          replace: true,
-        })
-      }
-    })()
+    router.navigate({ to: '/', replace: true })
   }, [])
 
   useEffect(() => {

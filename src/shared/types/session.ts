@@ -237,7 +237,7 @@ export const CompactionPointSchema = z.object({
 })
 
 // Session schemas
-export const SessionTypeSchema = z.enum(['chat', 'picture', 'guide'])
+export const SessionTypeSchema = z.enum(['chat', 'picture'])
 
 export const MessageForkListSchema = z.object({
   id: z.string(),

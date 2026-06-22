@@ -4,7 +4,6 @@ import {
   IconCirclePlus,
   IconCode,
   IconDownload,
-  IconHelpCircle,
   IconInfoCircle,
   IconLayoutSidebarLeftCollapse,
   IconPhotoPlus,
@@ -251,17 +250,6 @@ export default function Sidebar() {
                 color="workspaice-secondary"
                 size={24}
                 onClick={() => {
-                  navigate({ to: '/guide' })
-                  setShowSidebar(false)
-                }}
-              >
-                <ScalableIcon icon={IconHelpCircle} size={20} />
-              </ActionIcon>
-              <ActionIcon
-                variant="transparent"
-                color="workspaice-secondary"
-                size={24}
-                onClick={() => {
                   navigateToSettings()
                   setShowSidebar(false)
                 }}
@@ -279,15 +267,6 @@ export default function Sidebar() {
                 label={t('Settings')}
                 leftSection={<ScalableIcon icon={IconSettingsFilled} size={20} />}
                 onClick={() => navigateToSettings()}
-                variant="light"
-                p="xs"
-              />
-              <NavLink
-                c="workspaice-secondary"
-                className="rounded"
-                label={t('Help')}
-                leftSection={<ScalableIcon icon={IconHelpCircle} size={20} />}
-                onClick={() => navigate({ to: '/guide' })}
                 variant="light"
                 p="xs"
               />

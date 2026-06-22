@@ -628,7 +628,7 @@ export async function exportChat(session: Session, scope: ExportChatScope, forma
 export function mergeSettings(
   globalSettings: Settings,
   sessionSetting?: SessionSettings,
-  sessionType?: 'picture' | 'chat' | 'guide'
+  sessionType?: 'picture' | 'chat'
 ): SessionSettings {
   if (!sessionSetting) {
     return SessionSettingsSchema.parse(globalSettings)
@@ -649,7 +649,6 @@ export function mergeSettings(
 
 export function initEmptyChatSession(): Omit<Session, 'id'> {
   const settings = settingsStore.getState().getSettings()
-  const { chat: lastUsedChatModel } = lastUsedModelStore.getState()
   const newSession: Omit<Session, 'id'> = {
     name: 'Untitled',
     type: 'chat',
@@ -658,12 +657,6 @@ export function initEmptyChatSession(): Omit<Session, 'id'> {
       maxContextMessageCount: settings.maxContextMessageCount ?? Number.MAX_SAFE_INTEGER,
       temperature: settings.temperature || undefined,
       topP: settings.topP || undefined,
-      ...(settings.defaultChatModel
-        ? {
-            provider: settings.defaultChatModel.provider,
-            modelId: settings.defaultChatModel.model,
-          }
-        : lastUsedChatModel),
     },
   }
   if (settings.defaultPrompt) {

@@ -5,7 +5,6 @@ import {
   Divider,
   FileButton,
   Flex,
-  Radio,
   Select,
   Stack,
   Switch,
@@ -118,20 +117,6 @@ export function RouteComponent() {
           />
         </Stack>
 
-        {/* Startup Page */}
-        <Stack>
-          <Text>{t('Startup Page')}</Text>
-          <Radio.Group
-            value={settings.startupPage}
-            defaultValue="home"
-            onChange={(val) => setSettings({ startupPage: val as any })}
-          >
-            <Flex gap="md">
-              <Radio label={t('Home Page')} value="home" />
-              <Radio label={t('Last Session')} value="session" />
-            </Flex>
-          </Radio.Group>
-        </Stack>
       </Stack>
 
       <Divider />

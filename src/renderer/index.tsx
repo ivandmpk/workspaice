@@ -30,7 +30,6 @@ import './setup/global_error_handler'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { initSessionAttachmentRagMaintenance } from './setup/session_attachment_rag_maintenance'
 import { initLastUsedModelStore } from './stores/lastUsedModelStore'
-import { initOnboardingStore } from './stores/onboardingStore'
 import { initRecentDirectoriesStore } from './stores/recentDirectoriesStore'
 import { initSettingsStore } from './stores/settingsStore'
 
@@ -124,13 +123,13 @@ initializeApp()
     const [settings] = await Promise.all([
       initSettingsStore(),
       initLastUsedModelStore(),
-      initOnboardingStore(),
       initRecentDirectoriesStore(),
     ])
 
     i18n.changeLanguage(settings.language)
     if (platform.type === 'desktop') {
       initSessionAttachmentRagMaintenance()
+      window.location.hash = '/'
     }
 
     // 初始化完成，可以开始渲染
