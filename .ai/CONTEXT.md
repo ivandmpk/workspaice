@@ -144,9 +144,13 @@ This file is living memory for AI agents working on this repository. Read it bef
 - Renderer startup no longer initializes hosted telemetry, hosted remote config, license reconciliation, or hosted update listeners.
 - Hosted remote API module was replaced with local-first stubs returning empty data or explicit local-only errors.
 - Hosted provider settings routes and component subtree were deleted.
-- Verification note: `git diff --check` passes and old-name text/path searches pass. `pnpm check` is currently blocked because the local shell uses Node v26 and `node_modules` is missing; repo requires Node `>=22.12.0 <25.0.0`.
+- Verification note: `git diff --check` passes and old-name text/path searches pass. Use Homebrew Node 22 for project commands because the default shell Node may be outside the repo engine range: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" <command>`.
 - Added `.ai/AGENT_RULES.md` with mandatory rules for context updates, dev-branch workflow, commits, no pushes unless asked, local-first product constraints, and ambiguity handling.
 - Simplified `README.md` to describe WorkspAIce as a GPLv3 fork of the original Chatbox app, document the local-first macOS/Windows direction, remove upstream marketing/download/service content, and keep relevant setup/development details.
+- Installed dependencies with Node 22. `pnpm install` completed; native `zipfile` attempted a source build and logged `/bin/sh: python: command not found`, but install/postinstall completed.
+- Started the desktop dev app with Node 22. Main/preload/renderer booted at `http://localhost:1212/`; PID/log during this session: `32121`, `/var/folders/_8/9kbq_whj0cz1g_ybdxbvppp00000gn/T/opencode/workspaice-dev.log`.
+- Fixed dev startup blockers from hosted-service cleanup: `useProviders.ts` syntax error, missing `icon-workspaice.svg`, stale hosted guide copy, local-only remote/license stubs, remote dialog types, image-model groups, knowledge-base remote config access, and image-generation settings import.
+- Verification note: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" pnpm exec tsc --noEmit` passes. Latest dev log shows app initialization and Vite HMR reload noise, not the previous renderer compile blockers.
 
 ## Open Product Questions
 

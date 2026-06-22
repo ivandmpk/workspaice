@@ -569,7 +569,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
     if (claimWaitingShownRef.current) return
     claimWaitingShownRef.current = true
 
-    await streamFixedMessage(t("We're waiting for you to finish on workspaiceai.app..."), [
+    await streamFixedMessage(t("We're waiting for you to finish provider setup..."), [
       {
         type: 'tool-show_claim_waiting',
         toolCallId: `claim-waiting-${Date.now()}`,
@@ -588,7 +588,9 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
   const onClaimDetected = useCallback(
     async (license: import('@/packages/remote').UserLicense) => {
       try {
-        await premiumActions.activate(license.key, 'login')
+        if (license.key) {
+          await premiumActions.activate(license.key, 'login')
+        }
       } catch (err) {
         console.error('[guide] auto-activate after free-plan claim failed:', err)
       }

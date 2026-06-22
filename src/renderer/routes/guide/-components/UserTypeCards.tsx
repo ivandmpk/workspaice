@@ -32,7 +32,7 @@ export function UserTypeCards({ onSelect, disabled }: UserTypeCardsProps) {
   const cardTexts = {
     novice: {
       title: t("I'm new to this"),
-      description: t('Use WorkspAIce AI service'),
+      description: t('Guide me through local setup'),
     },
     expert: {
       title: t('Skip guide'),

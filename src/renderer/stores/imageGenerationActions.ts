@@ -22,6 +22,7 @@ import {
   updateRecord,
 } from './imageGenerationStore'
 import { queryClient } from './queryClient'
+import { settingsStore } from './settingsStore'
 
 const log = getLogger('image-generation-actions')
 

@@ -26,8 +26,8 @@ export class WorkspAIceSearch extends WebSearch {
       return {
         items: res.links.map((link) => ({
           title: link.title,
-          link: link.url,
-          snippet: link.content,
+          link: link.link,
+          snippet: link.snippet,
         })),
       }
     } else {

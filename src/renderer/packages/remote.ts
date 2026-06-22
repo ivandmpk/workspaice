@@ -1,4 +1,5 @@
 import type {
+  SearchResult,
   WorkspAIceAILicenseDetail,
   Config,
   CopilotDetail,
@@ -72,6 +73,8 @@ export interface DialogConfig {
   enabled: boolean
   title?: string
   content?: string
+  markdown?: string
+  buttons?: Array<{ label: string; url: string }>
 }
 
 export async function getDialogConfig(_params: { uuid: string; language: string; version: string }): Promise<null> {
@@ -117,7 +120,7 @@ export async function parseUserLinkPro(_params: {
   licenseKey: string
   url: string
   abortSignal?: AbortSignal
-}): Promise<never> {
+}): Promise<{ storageKey: string; title: string }> {
   throw hostedServiceError()
 }
 
@@ -127,7 +130,7 @@ export async function parseUserLinkFree(params: { url: string }): Promise<{ titl
   return { title: params.url, text }
 }
 
-export async function webBrowsing(_params: { licenseKey: string; query: string }): Promise<never> {
+export async function webBrowsing(_params: { licenseKey: string; query: string }): Promise<{ links: SearchResult['items'] }> {
   throw hostedServiceError()
 }
 

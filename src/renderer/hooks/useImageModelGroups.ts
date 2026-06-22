@@ -20,7 +20,7 @@ export interface ImageModelGroup {
 function remoteImageModelToOption(model: RemoteModelInfo): ImageModelOption {
   return {
     modelId: model.modelId,
-    displayName: model.modelName || model.modelId,
+    displayName: model.nickname || model.modelId,
   }
 }
 
@@ -125,12 +125,10 @@ export function useImageModelGroups(): ImageModelGroup[] {
 
     return groups
   }, [
-    workspaiceProvider,
     openAIProvider,
     geminiProvider,
     customGeminiProviders,
     providerSettingsMap,
-    workspaiceAIImageModels,
     openAIImageModels,
     geminiImageModels,
   ])

@@ -306,8 +306,8 @@ const KnowledgeBasePage: React.FC = () => {
     const fetchWorkspAIceAIModels = async () => {
       try {
         const config = await remote.getRemoteConfig('knowledge_base_models')
-        if (config.knowledge_base_models) {
-          setWorkspAIceAIModels(config.knowledge_base_models)
+        if (config) {
+          setWorkspAIceAIModels(config)
         }
       } catch (error) {
         toastError(t('Failed to fetch WorkspAIce AI models config, Error: {{error}}', { error: error }))
