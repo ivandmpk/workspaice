@@ -302,6 +302,7 @@ const creteMantineTheme = (scale = 1) =>
     primaryColor: 'workspaice-brand',
     colors: {
       'workspaice-brand': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-brand)')),
+      'workspaice-accent2': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-accent2)')),
       'workspaice-gray': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-gray)')),
       'workspaice-success': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-success)')),
       'workspaice-error': colorsTuple(Array.from({ length: 10 }, () => 'var(--workspaice-tint-error)')),
@@ -596,6 +597,7 @@ export const Route = createRootRoute({
 
 type ExtendedCustomColors =
   | 'workspaice-brand'
+  | 'workspaice-accent2'
   | 'workspaice-gray'
   | 'workspaice-success'
   | 'workspaice-error'

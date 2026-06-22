@@ -26,126 +26,140 @@
 
 :root {
   /* colors */
-  --workspaice-tint-primary: #212529;
-  --workspaice-tint-secondary: #495057;
-  --workspaice-tint-tertiary: #868e96;
+  --workspaice-tint-primary: #303841;
+  --workspaice-tint-secondary: #3a4452;
+  --workspaice-tint-tertiary: #6b7785;
 
   --workspaice-tint-white: #ffffff;
   --workspaice-tint-black: #000000;
   --workspaice-tint-gray: #868e96;
 
   --workspaice-tint-disabled: #adb5bd;
-  --workspaice-tint-brand: #228be6;
+  --workspaice-tint-brand: #76abae;
+  --workspaice-tint-accent2: #ff5722;
   --workspaice-tint-placeholder: #adb5bd;
-  --workspaice-tint-error: #fa5252;
-  --workspaice-tint-error-disabled: #ff8787;
-  --workspaice-tint-warning: #fab005;
-  --workspaice-tint-success: #12b886;
+  --workspaice-tint-error: #e26d5a;
+  --workspaice-tint-error-disabled: #f0a599;
+  --workspaice-tint-warning: #d99a2b;
+  --workspaice-tint-success: #5fb3a8;
 
-  --workspaice-border-primary: #dee2e6;
-  --workspaice-border-secondary: #ced4da;
-  --workspaice-border-warning: #fab005;
-  --workspaice-border-error: #fa5252;
-  --workspaice-border-success: #12b886;
-  --workspaice-border-brand: #228be6;
+  --workspaice-border-primary: #d6d6d6;
+  --workspaice-border-secondary: #c4c4c4;
+  --workspaice-border-warning: #d99a2b;
+  --workspaice-border-error: #e26d5a;
+  --workspaice-border-success: #5fb3a8;
+  --workspaice-border-brand: #76abae;
+  --workspaice-border-accent2: #ff5722;
 
-  --workspaice-background-primary: #ffffff;
-  --workspaice-background-primary-hover: #f8f9fa;
-  --workspaice-background-secondary: #f1f3f5;
-  --workspaice-background-secondary-hover: #e9ecef;
-  --workspaice-background-tertiary: #dee2e6;
-  --workspaice-background-tertiary-hover: #ced4da;
-  --workspaice-background-disabled: #e9ecef;
+  --workspaice-background-primary: #f5f5f5;
+  --workspaice-background-primary-hover: #ececec;
+  --workspaice-background-secondary: #e7e7e7;
+  --workspaice-background-secondary-hover: #dedede;
+  --workspaice-background-tertiary: #d6d6d6;
+  --workspaice-background-tertiary-hover: #c4c4c4;
+  --workspaice-background-disabled: #dcdcdc;
 
-  --workspaice-background-brand-primary: #228be6;
-  --workspaice-background-brand-primary-hover: #1c7ed6;
-  --workspaice-background-brand-secondary: rgb(34, 139, 230, 0.08);
-  --workspaice-background-brand-secondary-hover: rgb(34, 139, 230, 0.16);
+  --workspaice-background-brand-primary: #76abae;
+  --workspaice-background-brand-primary-hover: #62999c;
+  --workspaice-background-brand-secondary: rgb(118, 171, 174, 0.08);
+  --workspaice-background-brand-secondary-hover: rgb(118, 171, 174, 0.16);
+
+  --workspaice-background-accent2-primary: #ff5722;
+  --workspaice-background-accent2-primary-hover: #e64a19;
+  --workspaice-background-accent2-secondary: rgb(255, 87, 34, 0.08);
+  --workspaice-background-accent2-secondary-hover: rgb(255, 87, 34, 0.16);
 
   --workspaice-background-gray-primary: #868e96;
   --workspaice-background-gray-primary-hover: #495057;
   --workspaice-background-gray-secondary: rgb(134, 142, 150, 0.1);
   --workspaice-background-gray-secondary-hover: rgb(134, 142, 150, 0.12);
 
-  --workspaice-background-success-primary: #12b886;
-  --workspaice-background-success-primary-hover: #0ca678;
-  --workspaice-background-success-secondary: rgb(18, 184, 134, 0.1);
-  --workspaice-background-success-secondary-hover: rgb(18, 184, 134, 0.12);
+  --workspaice-background-success-primary: #5fb3a8;
+  --workspaice-background-success-primary-hover: #4a9c91;
+  --workspaice-background-success-secondary: rgb(95, 179, 168, 0.1);
+  --workspaice-background-success-secondary-hover: rgb(95, 179, 168, 0.12);
 
-  --workspaice-background-error-primary: #fa5252;
-  --workspaice-background-error-primary-hover: #f03e3e;
-  --workspaice-background-error-secondary: rgb(250, 82, 82, 0.1);
-  --workspaice-background-error-secondary-hover: rgb(250, 82, 82, 0.12);
+  --workspaice-background-error-primary: #e26d5a;
+  --workspaice-background-error-primary-hover: #c95844;
+  --workspaice-background-error-secondary: rgb(226, 109, 90, 0.1);
+  --workspaice-background-error-secondary-hover: rgb(226, 109, 90, 0.12);
 
-  --workspaice-background-warning-primary: #fab005;
-  --workspaice-background-warning-primary-hover: #f59f00;
-  --workspaice-background-warning-secondary: rgb(250, 176, 5, 0.1);
-  --workspaice-background-warning-secondary-hover: rgb(250, 176, 5, 0.12);
+  --workspaice-background-warning-primary: #d99a2b;
+  --workspaice-background-warning-primary-hover: #b8801f;
+  --workspaice-background-warning-secondary: rgb(217, 154, 43, 0.1);
+  --workspaice-background-warning-secondary-hover: rgb(217, 154, 43, 0.12);
 
-  --workspaice-background-mask-overlay: rgb(59, 59, 59, 0.64);
-  --workspaice-background-mask-lighten: rgb(255, 255, 255, 0.76);
+  --workspaice-background-mask-overlay: rgb(48, 56, 65, 0.64);
+  --workspaice-background-mask-lighten: rgb(245, 245, 245, 0.76);
 }
 
 :root[data-mantine-color-scheme="dark"] {
   /* colors */
-  --workspaice-tint-primary: #ffffff;
-  --workspaice-tint-secondary: #ced4da;
+  --workspaice-tint-primary: #f5f5f5;
+  --workspaice-tint-secondary: #d4d4d4;
   --workspaice-tint-tertiary: #828282;
 
   --workspaice-tint-white: #ffffff;
   --workspaice-tint-black: #000000;
-  --workspaice-tint-gray: #868e96;
+  --workspaice-tint-gray: #828282;
 
   --workspaice-tint-disabled: #696969;
-  --workspaice-tint-brand: #4dabf7;
+  --workspaice-tint-brand: #76abae;
+  --workspaice-tint-accent2: #ff7043;
   --workspaice-tint-placeholder: #828282;
-  --workspaice-tint-error: #f03e3e;
-  --workspaice-tint-error-disabled: rgb(224, 49, 49, 0.5);
-  --workspaice-tint-warning: #ffe066;
-  --workspaice-tint-success: #63e6be;
+  --workspaice-tint-error: #e26d5a;
+  --workspaice-tint-error-disabled: rgb(226, 109, 90, 0.5);
+  --workspaice-tint-warning: #d99a2b;
+  --workspaice-tint-success: #5fb3a8;
 
   --workspaice-border-primary: #495057;
-  --workspaice-border-secondary: #868e96;
-  --workspaice-border-warning: #ffe066;
-  --workspaice-border-error: #f03e3e;
-  --workspaice-border-success: #63e6be;
-  --workspaice-border-brand: #1971c2;
+  --workspaice-border-secondary: #3a4452;
+  --workspaice-border-warning: #d99a2b;
+  --workspaice-border-error: #e26d5a;
+  --workspaice-border-success: #5fb3a8;
+  --workspaice-border-brand: #76abae;
+  --workspaice-border-accent2: #ff7043;
 
-  --workspaice-background-primary: #242424;
-  --workspaice-background-primary-hover: #1f1f1f;
-  --workspaice-background-secondary: #3b3b3b;
-  --workspaice-background-secondary-hover: #495057;
-  --workspaice-background-tertiary: #424242;
-  --workspaice-background-tertiary-hover: #696969;
-  --workspaice-background-disabled: #2e2e2e;
+  --workspaice-background-primary: #303841;
+  --workspaice-background-primary-hover: #3a4452;
+  --workspaice-background-secondary: #222831;
+  --workspaice-background-secondary-hover: #2e3640;
+  --workspaice-background-tertiary: #404a56;
+  --workspaice-background-tertiary-hover: #4d5764;
+  --workspaice-background-disabled: #2e3640;
 
-  --workspaice-background-brand-primary: #1971c2;
-  --workspaice-background-brand-primary-hover: #1864ab;
-  --workspaice-background-brand-secondary: rgb(28, 126, 214, 0.2);
-  --workspaice-background-brand-secondary-hover: rgb(34, 139, 230, 0.24);
+  --workspaice-background-brand-primary: #76abae;
+  --workspaice-background-brand-primary-hover: #8fc1c5;
+  --workspaice-background-brand-secondary: rgb(118, 171, 174, 0.2);
+  --workspaice-background-brand-secondary-hover: rgb(143, 193, 197, 0.24);
+
+  --workspaice-background-accent2-primary: #ff7043;
+  --workspaice-background-accent2-primary-hover: #ff8a65;
+  --workspaice-background-accent2-secondary: rgb(255, 112, 67, 0.2);
+  --workspaice-background-accent2-secondary-hover: rgb(255, 138, 101, 0.24);
 
   --workspaice-background-gray-primary: #343a40;
-  --workspaice-background-gray-primary-hover: #212529;
+  --workspaice-background-gray-primary-hover: #222831;
   --workspaice-background-gray-secondary: rgb(134, 142, 150, 0.15);
   --workspaice-background-gray-secondary-hover: rgb(134, 142, 150, 0.2);
 
-  --workspaice-background-success-primary: #099268;
-  --workspaice-background-success-primary-hover: #087f5b;
-  --workspaice-background-success-secondary: rgb(18, 184, 134, 0.15);
-  --workspaice-background-success-secondary-hover: rgb(18, 184, 134, 0.2);
+  --workspaice-background-success-primary: #5fb3a8;
+  --workspaice-background-success-primary-hover: #7fc8bd;
+  --workspaice-background-success-secondary: rgb(95, 179, 168, 0.15);
+  --workspaice-background-success-secondary-hover: rgb(127, 200, 189, 0.2);
 
-  --workspaice-background-error-primary: #e03131;
-  --workspaice-background-error-primary-hover: #c92a2a;
-  --workspaice-background-error-secondary: rgb(250, 82, 82, 0.15);
-  --workspaice-background-error-secondary-hover: rgb(250, 82, 82, 0.2);
+  --workspaice-background-error-primary: #e26d5a;
+  --workspaice-background-error-primary-hover: #ee8773;
+  --workspaice-background-error-secondary: rgb(226, 109, 90, 0.15);
+  --workspaice-background-error-secondary-hover: rgb(238, 135, 115, 0.2);
 
-  --workspaice-background-warning-primary: #f08c00;
-  --workspaice-background-warning-primary-hover: #e67700;
-  --workspaice-background-warning-secondary: rgb(250, 176, 5, 0.15);
-  --workspaice-background-warning-secondary-hover: rgb(250, 176, 5, 0.2);
+  --workspaice-background-warning-primary: #d99a2b;
+  --workspaice-background-warning-primary-hover: #e6b04a;
+  --workspaice-background-warning-secondary: rgb(217, 154, 43, 0.15);
+  --workspaice-background-warning-secondary-hover: rgb(230, 176, 74, 0.2);
 
-  --workspaice-background-mask-overlay: rgb(31, 31, 31, 0.78);
-  --workspaice-background-mask-lighten: rgb(173, 181, 189, 0.48);
+  --workspaice-background-mask-overlay: rgb(0, 0, 0, 0.78);
+  --workspaice-background-mask-lighten: rgb(245, 245, 245, 0.48);
 }
 
 :root[data-mantine-color-scheme="light"][data-mantine-color-scheme],
@@ -159,6 +173,16 @@
   --mantine-color-workspaice-brand-light-color: var(--workspaice-tint-brand);
   --mantine-color-workspaice-brand-outline: var(--workspaice-border-brand);
   --mantine-color-workspaice-brand-outline-hover: color-mix(in srgb, var(--workspaice-border-brand), transparent 95%);
+
+  /* accent2 */
+  --mantine-color-workspaice-accent2-text: var(--workspaice-tint-accent2);
+  --mantine-color-workspaice-accent2-filled: var(--workspaice-background-accent2-primary);
+  --mantine-color-workspaice-accent2-filled-hover: var(--workspaice-background-accent2-primary-hover);
+  --mantine-color-workspaice-accent2-light: var(--workspaice-background-accent2-secondary);
+  --mantine-color-workspaice-accent2-light-hover: var(--workspaice-background-accent2-secondary-hover);
+  --mantine-color-workspaice-accent2-light-color: var(--workspaice-tint-accent2);
+  --mantine-color-workspaice-accent2-outline: var(--workspaice-border-accent2);
+  --mantine-color-workspaice-accent2-outline-hover: color-mix(in srgb, var(--workspaice-border-accent2), transparent 95%);
 
   /* success */
   --mantine-color-workspaice-success-text: var(--workspaice-tint-success);

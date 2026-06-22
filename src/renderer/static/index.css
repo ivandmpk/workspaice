@@ -58,18 +58,18 @@ html[data-theme="dark"] {
     border-radius: 6px;
   }
   ::-webkit-scrollbar:hover {
-    background-color: #333333;
+    background-color: #222831;
   }
   ::scrollbar:hover {
-    background-color: #333333;
+    background-color: #222831;
   }
   /* 滚动条上的滑块 */
   ::-webkit-scrollbar-thumb {
-    background-color: #b1b1b1;
+    background-color: #d4d4d4;
     border-radius: 6px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #8c8c8c;
+    background-color: #a8a8a8;
   }
   /* 滚动条的轨道 */
   ::-webkit-scrollbar-track {
@@ -81,11 +81,11 @@ html[data-theme="dark"] {
   }
 
   a {
-    color: #fff;
+    color: #f5f5f5;
   }
-  /* 错误消息中的链接强制成蓝色 */
+  /* 错误消息中的链接强制成主色 */
   .message-error-tips a {
-    color: #2563eb !important;
+    color: #76abae !important;
   }
 }
 
@@ -117,11 +117,11 @@ html[data-theme="light"] {
   }
   /* 滚动条上的滑块 */
   ::-webkit-scrollbar-thumb {
-    background-color: #c6c6c6;
+    background-color: #d6d6d6;
     border-radius: 6px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #a0a0a0;
+    background-color: #6b7785;
   }
   /* 滚动条的轨道 */
   ::-webkit-scrollbar-track {
@@ -133,11 +133,11 @@ html[data-theme="light"] {
   }
 
   a {
-    color: #333;
+    color: #303841;
   }
-  /* 错误消息中的链接强制成蓝色 */
+  /* 错误消息中的链接强制成主色 */
   .message-error-tips a {
-    color: #2563eb !important;
+    color: #76abae !important;
   }
 }
 
