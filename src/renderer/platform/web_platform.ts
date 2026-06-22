@@ -53,9 +53,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
   public onWindowFocused(callback: () => void): () => void {
     return () => null
   }
-  public onUpdateDownloaded(callback: () => void): () => void {
-    return () => null
-  }
   public async openLink(url: string): Promise<void> {
     window.open(url)
   }
@@ -154,10 +151,6 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
 
   public async setFullscreen(enabled: boolean): Promise<void> {
     return
-  }
-
-  installUpdate(): Promise<void> {
-    throw new Error('Method not implemented.')
   }
 
   public getKnowledgeBaseController(): KnowledgeBaseController {

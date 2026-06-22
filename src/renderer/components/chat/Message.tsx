@@ -44,7 +44,6 @@ import '../../static/Block.css'
 import { generateMore, modifyMessage, regenerateInNewFork, removeMessage } from '@/stores/sessionActions'
 import * as toastActions from '@/stores/toastActions'
 import ActionMenu, { type ActionMenuItemProps } from '../ActionMenu'
-import { isContainRenderableCode, MessageArtifact } from '../Artifact'
 import { AssistantAvatar, SystemAvatar, UserAvatar } from '../common/Avatar'
 import { ScalableIcon } from '../common/ScalableIcon'
 import Loading from '../icons/Loading'
@@ -92,7 +91,6 @@ const _Message: FC<Props> = (props) => {
     enableMarkdownRendering,
     enableLaTeXRendering,
     enableMermaidRendering,
-    autoPreviewArtifacts,
     autoCollapseCodeBlock,
     showAvatar,
     messageLayout,
@@ -100,7 +98,6 @@ const _Message: FC<Props> = (props) => {
 
   const isBubbleLayout = messageLayout === 'bubble'
 
-  const [previewArtifact, setPreviewArtifact] = useState(autoPreviewArtifacts)
   const [shouldThrowError, setShouldThrowError] = useState(false)
 
   const contentLength = useMemo(() => {
@@ -229,14 +226,6 @@ const _Message: FC<Props> = (props) => {
     }
     tips.push({ label: messageTimestamp })
   }
-
-  // 是否需要渲染 Aritfact 组件
-  const needArtifact = useMemo(() => {
-    if (msg.role !== 'assistant') {
-      return false
-    }
-    return isContainRenderableCode(getMessageText(msg))
-  }, [msg.contentParts, msg.role, msg])
 
   const trackWithSessionName = useCallback(
     async (event: string) => {

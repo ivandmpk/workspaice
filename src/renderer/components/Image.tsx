@@ -5,11 +5,6 @@ import type React from 'react'
 import { forwardRef, memo } from 'react'
 import { useFetchBlob } from '@/hooks/useBlob'
 
-export function isBlockedRemoteAssetUrl(src?: string) {
-  if (!src) return false
-  return src.startsWith('https://static.workspaiceai.app/') || src.startsWith('https://download.workspaiceai.app/')
-}
-
 export const ImageInStorage = memo(
   forwardRef<
     HTMLImageElement,
@@ -60,9 +55,6 @@ export function Img(props: {
   className?: string
   onClick?: (e: React.MouseEvent<HTMLImageElement>) => void
 }) {
-  if (isBlockedRemoteAssetUrl(props.src)) {
-    return <div className={`bg-slate-300/50 w-full h-full ${props.className || ''}`} />
-  }
   return <img src={props.src} className={`max-w-full max-h-full ${props.className || ''}`} onClick={props.onClick} />
 }
 

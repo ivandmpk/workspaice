@@ -33,7 +33,6 @@ import icon from './static/icon.png'
 import { settingsStore, useLanguage } from './stores/settingsStore'
 import { taskSessionStore } from './stores/taskSessionStore'
 import { useUIStore } from './stores/uiStore'
-import { installUpdate, useUpdateStore } from './stores/updateStore'
 import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET } from './variables'
 
 export default function Sidebar() {
@@ -219,8 +218,6 @@ export default function Sidebar() {
           <SessionList sessionListViewportRef={sessionListViewportRef} />
         )}
 
-        <SidebarUpdateBanner />
-
         <Stack gap={0} px="xs" pb="xs">
           <Divider />
           <Stack gap="xs" pt="xs" mb="xs">
@@ -265,19 +262,17 @@ export default function Sidebar() {
                 p="xs"
               />
 
-              {!versionHook.isExceeded && (
-                <ActionIcon
-                  variant="transparent"
-                  color="workspaice-secondary"
-                  size={24}
-                  onClick={() => {
-                    navigate({ to: '/guide' })
-                    setShowSidebar(false)
-                  }}
-                >
-                  <ScalableIcon icon={IconHelpCircle} size={20} />
-                </ActionIcon>
-              )}
+              <ActionIcon
+                variant="transparent"
+                color="workspaice-secondary"
+                size={24}
+                onClick={() => {
+                  navigate({ to: '/guide' })
+                  setShowSidebar(false)
+                }}
+              >
+                <ScalableIcon icon={IconHelpCircle} size={20} />
+              </ActionIcon>
               <ActionIcon
                 variant="transparent"
                 color="workspaice-secondary"
@@ -319,17 +314,15 @@ export default function Sidebar() {
                 variant="light"
                 p="xs"
               />
-              {!versionHook.isExceeded && (
-                <NavLink
-                  c="workspaice-secondary"
-                  className="rounded"
-                  label={t('Help')}
-                  leftSection={<ScalableIcon icon={IconHelpCircle} size={20} />}
-                  onClick={() => navigate({ to: '/guide' })}
-                  variant="light"
-                  p="xs"
-                />
-              )}
+              <NavLink
+                c="workspaice-secondary"
+                className="rounded"
+                label={t('Help')}
+                leftSection={<ScalableIcon icon={IconHelpCircle} size={20} />}
+                onClick={() => navigate({ to: '/guide' })}
+                variant="light"
+                p="xs"
+              />
               {FORCE_ENABLE_DEV_PAGES && (
                 <NavLink
                   c="workspaice-secondary"
@@ -374,53 +367,6 @@ export default function Sidebar() {
   )
 }
 
-/**
- * Desktop: shows update banner when an update is downloaded and ready to install.
- * Not shown on mobile (mobile uses dot indicator on About link).
- */
-function SidebarUpdateBanner() {
-  const isMobile = WORKSPAICE_BUILD_TARGET === 'mobile_app'
-  if (isMobile) return null
-  return <SidebarUpdateBannerInner />
-}
-
-function SidebarUpdateBannerInner() {
-  const { t } = useTranslation()
-  const updateStatus = useUpdateStore((s) => s.status)
-  const updateVersion = useUpdateStore((s) => s.version)
-
-  if (updateStatus !== 'downloaded') return null
-
-  return (
-    <Box px="xs" pb={4}>
-      <Flex
-        align="center"
-        gap="xs"
-        px="sm"
-        py={6}
-        className="rounded-md cursor-pointer bg-workspaice-background-brand-secondary"
-        onClick={installUpdate}
-      >
-        <ScalableIcon icon={IconDownload} size={16} className="text-workspaice-brand flex-shrink-0" />
-        <Text size="sm" c="workspaice-brand" lineClamp={1} flex={1}>
-          {`${t('Update ready to install')}${updateVersion ? ` (v${updateVersion})` : ''}`}
-        </Text>
-      </Flex>
-    </Box>
-  )
-}
-
-/**
- * About NavLink with update dot indicator.
- * Desktop: shows dot when electron-updater detects update (downloaded/available).
- * Mobile: shows dot when remote API says needCheckUpdate.
- */
-function useShowUpdateDot(versionHook: ReturnType<typeof useVersion>) {
-  const updateStatus = useUpdateStore((s) => s.status)
-  const isMobile = WORKSPAICE_BUILD_TARGET === 'mobile_app'
-  return isMobile ? versionHook.needCheckUpdate : updateStatus === 'downloaded'
-}
-
 function AboutNavLink({
   versionHook,
   navigate,
@@ -429,7 +375,6 @@ function AboutNavLink({
   navigate: ReturnType<typeof useNavigate>
 }) {
   const { t } = useTranslation()
-  const showDot = useShowUpdateDot(versionHook)
 
   return (
     <NavLink
@@ -438,7 +383,6 @@ function AboutNavLink({
       label={
         <Flex align="center" gap={6}>
           <span>{`${t('About')} ${/\d/.test(versionHook.version) ? `(${versionHook.version})` : ''}`}</span>
-          {showDot && <Box w={8} h={8} miw={8} bg="workspaice-brand" style={{ borderRadius: '50%' }} />}
         </Flex>
       }
       leftSection={<ScalableIcon icon={IconInfoCircle} size={20} />}
@@ -450,7 +394,7 @@ function AboutNavLink({
 }
 
 /**
- * Small screen About icon with dot indicator for mobile.
+ * Small screen About icon.
  */
 function SmallScreenAboutIcon({
   versionHook,
@@ -461,8 +405,6 @@ function SmallScreenAboutIcon({
   navigate: ReturnType<typeof useNavigate>
   setShowSidebar: (v: boolean) => void
 }) {
-  const showDot = useShowUpdateDot(versionHook)
-
   return (
     <Box className="relative">
       <ActionIcon
@@ -476,9 +418,6 @@ function SmallScreenAboutIcon({
       >
         <ScalableIcon icon={IconInfoCircle} size={20} />
       </ActionIcon>
-      {showDot && (
-        <Box w={8} h={8} bg="workspaice-brand" className="absolute -top-0.5 -right-0.5" style={{ borderRadius: '50%' }} />
-      )}
     </Box>
   )
 }

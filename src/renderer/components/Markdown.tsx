@@ -19,7 +19,6 @@ import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import * as latex from '../packages/latex'
-import { isRenderableCodeLanguage } from './Artifact'
 import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
 import NiceModal from '@ebay/nice-modal-react'
 import { ActionIcon, Flex, Loader, Stack, Text, Tooltip, useComputedColorScheme } from '@mantine/core'
@@ -439,11 +438,11 @@ const BlockCode = memo(
     const colorScheme = forceColorScheme || computedColorScheme
     const shikiTheme: ShikiTheme = colorScheme !== 'light' ? 'one-dark-pro' : 'one-light'
     const languageName = useMemo(() => language.toUpperCase(), [language])
-    const isRenderableCode = useMemo(() => isRenderableCodeLanguage(language), [language])
+    const isHtmlCode = language.toLowerCase() === 'html'
     const [deploying, setDeploying] = useState(false)
     const canDeploy = useMemo(
-      () => isRenderableCode && String(children).trim().length > 0,
-      [children, isRenderableCode]
+      () => isHtmlCode && String(children).trim().length > 0,
+      [children, isHtmlCode]
     )
 
     const icon = useMemo(() => CodeIcons[languageName] || IconCode, [languageName])
@@ -457,16 +456,6 @@ const BlockCode = memo(
         onCodeCopy?.()
       },
       [copy, onCodeCopy]
-    )
-    const onClickArtifact = useCallback(
-      (event: React.MouseEvent) => {
-        event.stopPropagation()
-        event.preventDefault()
-        NiceModal.show('artifact-preview', {
-          htmlCode: String(children),
-        }).catch(() => null)
-      },
-      [children]
     )
 
     const onClickDeploy = useCallback(
@@ -532,14 +521,6 @@ const BlockCode = memo(
                   onClick={onClickCopy}
                 >
                   {copied ? <IconCheck /> : <IconCopy />}
-                </ActionIcon>
-              </Tooltip>
-            )}
-
-            {isRenderableCode && (
-              <Tooltip label={t('Preview')} withArrow openDelay={1000}>
-                <ActionIcon variant="transparent" color="workspaice-tertiary" size={20} onClick={onClickArtifact}>
-                  <IconPlayerPlayFilled />
                 </ActionIcon>
               </Tooltip>
             )}

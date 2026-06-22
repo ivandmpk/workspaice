@@ -14,14 +14,8 @@ import { difference, intersection, keyBy, uniq, uniqBy } from 'lodash'
 import oldStore from 'store'
 import { v4 as uuidv4 } from 'uuid'
 import {
-  artifactSessionCN,
-  artifactSessionEN,
   defaultSessionsForCN,
   defaultSessionsForEN,
-  imageCreatorSessionForCN,
-  imageCreatorSessionForEN,
-  mermaidSessionCN,
-  mermaidSessionEN,
 } from '@/packages/initial_data'
 import platform from '@/platform'
 import type { Storage } from '@/platform/interfaces'
@@ -232,20 +226,8 @@ async function migrate_0_to_1(dataStore: MigrateStore) {
   }
 }
 
-async function migrate_1_to_2(dataStore: MigrateStore) {
-  const sessions = await dataStore.getData<Session[]>(StorageKey.ChatSessions, [])
-  const lang = await platform.getLocale()
-  if (lang.startsWith('zh')) {
-    if (sessions.find((session) => session.id === imageCreatorSessionForCN.id)) {
-      return
-    }
-    await dataStore.setData(StorageKey.ChatSessions, [...sessions, imageCreatorSessionForCN])
-  } else {
-    if (sessions.find((session) => session.id === imageCreatorSessionForEN.id)) {
-      return
-    }
-    await dataStore.setData(StorageKey.ChatSessions, [...sessions, imageCreatorSessionForEN])
-  }
+async function migrate_1_to_2(_dataStore: MigrateStore) {
+  // Demo session seeding removed — new installs start empty
 }
 
 async function migrate_2_to_3(dataStore: MigrateStore) {
@@ -268,14 +250,8 @@ async function migrate_2_to_3(dataStore: MigrateStore) {
   }
 }
 
-async function migrate_3_to_4(dataStore: MigrateStore) {
-  const sessions = await dataStore.getData<Session[]>(StorageKey.ChatSessions, [])
-  const lang = await platform.getLocale()
-  const targetSession = lang.startsWith('zh') ? artifactSessionCN : artifactSessionEN
-  if (sessions.find((session) => session.id === targetSession.id)) {
-    return
-  }
-  await dataStore.setData(StorageKey.ChatSessions, [...sessions, targetSession])
+async function migrate_3_to_4(_dataStore: MigrateStore) {
+  // Demo artifact session seeding removed — new installs start empty
 }
 
 // 已经迁移到storage migration
@@ -298,14 +274,8 @@ async function migrate_4_to_5(dataStore: MigrateStore): Promise<boolean> {
   return true
 }
 
-async function migrate_5_to_6(dataStore: MigrateStore) {
-  const sessions = await dataStore.getData<Session[]>(StorageKey.ChatSessions, [])
-  const lang = await platform.getLocale()
-  const targetSession = lang.startsWith('zh') ? mermaidSessionCN : mermaidSessionEN
-  if (sessions.find((session) => session.id === targetSession.id)) {
-    return
-  }
-  await dataStore.setData(StorageKey.ChatSessions, [...sessions, targetSession])
+async function migrate_5_to_6(_dataStore: MigrateStore) {
+  // Demo mermaid session seeding removed — new installs start empty
 }
 
 // 针对 mobile 端，从 store 迁移至 sqlite

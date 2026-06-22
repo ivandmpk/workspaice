@@ -30,7 +30,6 @@ function createDependencies(): ModelDependencies {
         })
       ),
     },
-    getRemoteConfig: vi.fn(),
     platformType: 'desktop',
   }
 }

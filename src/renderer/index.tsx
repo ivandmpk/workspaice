@@ -129,11 +129,9 @@ initializeApp()
     ])
 
     i18n.changeLanguage(settings.language)
-    // Initialize auto-updater event listeners (desktop only, idempotent)
     if (platform.type === 'desktop') {
       initSessionAttachmentRagMaintenance()
     }
-    // Cleanup is intentionally not captured — listeners persist for the app lifetime
 
     // 初始化完成，可以开始渲染
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

@@ -36,7 +36,6 @@ export default class OpenRouter extends AbstractAISDKModel {
     return createOpenRouter({
       apiKey: this.options.apiKey,
       headers: {
-        'HTTP-Referer': 'https://workspaiceai.app',
         'X-Title': 'WorkspAIce AI',
       },
     })

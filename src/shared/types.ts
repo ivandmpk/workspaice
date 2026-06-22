@@ -106,9 +106,6 @@ export interface Toast {
 }
 
 export interface RemoteConfig {
-  setting_workspaiceai_first: boolean
-  current_version: string
-  product_ids: number[]
   knowledge_base_models?: {
     embedding: string
     vision: string

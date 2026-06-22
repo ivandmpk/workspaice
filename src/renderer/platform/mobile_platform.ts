@@ -108,9 +108,6 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
   public onWindowFocused(callback: () => void): () => void {
     return () => null
   }
-  public onUpdateDownloaded(callback: () => void): () => void {
-    return () => null
-  }
   public async openLink(url: string): Promise<void> {
     try {
       // 使用 Browser.open 打开
@@ -243,10 +240,6 @@ export default class MobilePlatform extends MobileSQLiteStorage implements Platf
 
   public async setFullscreen(enabled: boolean): Promise<void> {
     return
-  }
-
-  installUpdate(): Promise<void> {
-    throw new Error('Method not implemented.')
   }
 
   public getKnowledgeBaseController(): KnowledgeBaseController {

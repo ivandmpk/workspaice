@@ -35,7 +35,6 @@ export interface ModelDependencies {
   request: RequestAdapter
   storage: StorageAdapter
   sentry: SentryAdapter
-  getRemoteConfig(): any
   oauth?: OAuthAdapter
   /** Current platform type, used for OAuth auth resolution */
   platformType?: 'desktop' | 'web' | 'mobile'

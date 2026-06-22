@@ -1,6 +1,5 @@
 import platform from '@/platform'
 import { ApiError, BaseError, NetworkError } from '../../shared/models/errors'
-import { isLocalHost } from '../../shared/utils/network_utils'
 import { handleMobileRequest } from './mobile-request'
 
 interface RequestOptions {
@@ -38,35 +37,23 @@ async function retryRequest<T>(fn: () => Promise<T>, retry: number, url: string)
   throw requestError || new Error('Unknown error')
 }
 
-function buildHeaders(options: RequestOptions, url: string): Headers {
+function buildHeaders(options: RequestOptions, _url: string): Headers {
   const headers = new Headers(options.headers)
   headers.set('Content-Type', 'application/json')
-
-  if (options.useProxy && !isLocalHost(url) && platform.type !== 'mobile') {
-    headers.set('WORKSPAICE-TARGET-URI', url)
-    headers.set('WORKSPAICE-PLATFORM', platform.type)
-  }
 
   return headers
 }
 
 async function doRequest(url: string, options: RequestOptions): Promise<Response> {
   const { signal, retry = 3, useProxy = false, body, method } = options
-  let requestUrl = url
   const headers = buildHeaders(options, url)
-
-  if (useProxy && !isLocalHost(url) && platform.type !== 'mobile') {
-    const version = await platform.getVersion()
-    headers.set('WORKSPAICE-VERSION', version || 'unknown')
-    requestUrl = 'https://cors-proxy.workspaiceai.app/proxy-api/completions'
-  }
 
   const makeRequest = async () => {
     if (platform.type === 'mobile' && useProxy) {
-      return handleMobileRequest(requestUrl, method, headers, body, signal)
+      return handleMobileRequest(url, method, headers, body, signal)
     }
 
-    const res = await fetch(requestUrl, { method, headers, body, signal })
+    const res = await fetch(url, { method, headers, body, signal })
     if (!res.ok) {
       const err = await res.text().catch(() => null)
       throw new ApiError(`Status Code ${res.status}`, err ?? undefined)
@@ -74,7 +61,7 @@ async function doRequest(url: string, options: RequestOptions): Promise<Response
     return res
   }
 
-  return retryRequest(makeRequest, retry, requestUrl)
+  return retryRequest(makeRequest, retry, url)
 }
 
 export const apiRequest = {

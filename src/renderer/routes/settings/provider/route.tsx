@@ -12,7 +12,6 @@ import { ProviderList } from '@/components/settings/provider/ProviderList'
 import ProviderSpotlight, { providerSpotlight } from '@/components/settings/provider/ProviderSpotlight'
 import { useProviderImport } from '@/hooks/useProviderImport'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
-import useVersion from '@/hooks/useVersion'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { add as addToast } from '@/stores/toastActions'
 import { decodeBase64 } from '@/utils/base64'
@@ -35,17 +34,14 @@ export function RouteComponent() {
   const routerState = useRouterState()
   const customProviders = useSettingsStore((state) => state.customProviders)
   const providersMap = useSettingsStore((state) => state.providers)
-  const { isExceeded } = useVersion()
 
   const providers = useMemo<ProviderInfo[]>(() => {
-    const systemProviders = SystemProviders().filter(
-      (p) => !(isExceeded && p.name.toLocaleLowerCase().match(/openai|claude|gemini/i))
-    )
+    const systemProviders = SystemProviders()
     return [...systemProviders, ...(customProviders || [])].map((p) => ({
       ...p,
       ...(providersMap?.[p.id] || {}),
     }))
-  }, [customProviders, isExceeded, providersMap])
+  }, [customProviders, providersMap])
 
   const allSystemProviders = useMemo(() => {
     return providers.filter((p) => !p.isCustom)

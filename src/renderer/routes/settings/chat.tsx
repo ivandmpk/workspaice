@@ -422,17 +422,6 @@ export function RouteComponent() {
             }
           />
           <Switch
-            label={t('Auto-preview artifacts')}
-            checked={settings.autoPreviewArtifacts}
-            description={t('Automatically render generated artifacts (e.g., HTML with CSS, JS, Tailwind)')}
-            onChange={() =>
-              setSettings({
-                ...settings,
-                autoPreviewArtifacts: !settings.autoPreviewArtifacts,
-              })
-            }
-          />
-          <Switch
             label={t('Paste long text as a file')}
             checked={settings.pasteLongTextAsAFile}
             description={t(

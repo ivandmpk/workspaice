@@ -91,7 +91,6 @@ export function settings(): Settings {
     enableLaTeXRendering: true,
     enableMermaidRendering: true,
     injectDefaultMetadata: true,
-    autoPreviewArtifacts: false,
     autoCollapseCodeBlock: true,
     pasteLongTextAsAFile: true,
 
@@ -101,8 +100,6 @@ export function settings(): Settings {
     compactionThreshold: 0.6,
 
     autoLaunch: false,
-    autoUpdate: false,
-    betaUpdate: false,
 
     shortcuts: {
       quickToggle: 'Alt+`', // 快速切换窗口显隐的快捷键

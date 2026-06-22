@@ -189,8 +189,8 @@ export function formatChatAsMarkdown(sessionName: string, threads: SessionThread
   }
   content += '--------------------\n\n'
   content += `
-<a href="https://workspaiceai.app" style="display: flex; align-items: center;">
-<img src='https://workspaiceai.app/icon.png' style='width: 40px; height: 40px; padding-right: 6px'>
+<a href="https://github.com/ivandmpk/workspaice" style="display: flex; align-items: center;">
+<img src='https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png' style='width: 40px; height: 40px; padding-right: 6px'>
 <b style='font-size:30px'>WorkspAIce AI</b>
 </a>
 `
@@ -258,7 +258,7 @@ export function formatChatAsTxt(sessionName: string, threads: SessionThread[]) {
     content += '\n\n\n\n'
   }
   content += `========================================================================\n\n`
-  content += `WorkspAIce AI (https://workspaiceai.app)`
+  content += `WorkspAIce (https://github.com/ivandmpk/workspaice)`
   return content
 }
 
@@ -347,24 +347,24 @@ export async function formatChatAsHtml(sessionName: string, threads: SessionThre
         }
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <link rel="shortcut icon" href="https://workspaiceai.app/icon.png">
+    <link rel="shortcut icon" href="https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png">
 </head>
 <body class='bg-slate-100'>
     <div class='mx-auto max-w-5xl shadow-md prose bg-white px-2 py-4'>
         <h1 class='flex flex-row justify-between items-center my-4 h-8'>
             <span>${sessionName}</span>
-            <a href="https://workspaiceai.app" target="_blank" >
-                <img src='https://workspaiceai.app/icon.png' class="w-12">
+            <a href="https://github.com/ivandmpk/workspaice" target="_blank" >
+                <img src='https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png' class="w-12">
             </a>
         </h1>
         <hr />
         ${content}
         <hr />
-        <a href="https://workspaiceai.app" style="display: flex; align-items: center;" class="text-sky-500" target="_blank">
-            <img src='https://workspaiceai.app/icon.png' class="w-12 pr-2">
+        <a href="https://github.com/ivandmpk/workspaice" style="display: flex; align-items: center;" class="text-sky-500" target="_blank">
+            <img src='https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png' class="w-12 pr-2">
             <b style='font-size:30px'>WorkspAIce AI</b>
         </a>
-        <p><a a href="https://workspaiceai.app" target="_blank">https://workspaiceai.app</a></p>
+        <p><a a href="https://github.com/ivandmpk/workspaice" target="_blank">https://github.com/ivandmpk/workspaice</a></p>
     </div>
 </body>
 </html>

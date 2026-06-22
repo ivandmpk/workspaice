@@ -62,10 +62,6 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
       },
     },
     sentry,
-    getRemoteConfig: () => {
-      // Main层的远程配置，暂时不需要用到
-      throw new Error('Not implemented')
-    },
   }
 }
 

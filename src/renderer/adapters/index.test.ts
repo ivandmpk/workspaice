@@ -55,10 +55,6 @@ vi.mock('@/storage/StoreStorage', () => ({
   },
 }))
 
-vi.mock('@/stores/settingActions', () => ({
-  getRemoteConfig: vi.fn().mockReturnValue({}),
-}))
-
 vi.mock('@/utils/request', () => ({
   apiRequest: {
     post: vi.fn(),
@@ -164,7 +160,6 @@ describe('createModel', () => {
     expect(dependencies).toHaveProperty('storage')
     expect(dependencies).toHaveProperty('request')
     expect(dependencies).toHaveProperty('sentry')
-    expect(dependencies).toHaveProperty('getRemoteConfig')
   })
 
   it('returns the model instance from getModel', async () => {
@@ -240,15 +235,5 @@ describe('createModel', () => {
     expect(dependencies.sentry).toBeDefined()
     expect(dependencies.sentry).toHaveProperty('captureException')
     expect(dependencies.sentry).toHaveProperty('withScope')
-  })
-
-  it('dependencies getRemoteConfig is a function', async () => {
-    const settings = createTestSettings()
-
-    await createModel(settings)
-
-    const callArgs = getFirstGetModelCall()
-    const dependencies = callArgs[3]
-    expect(typeof dependencies.getRemoteConfig).toBe('function')
   })
 })

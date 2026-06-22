@@ -17,7 +17,6 @@ function createDependencies(overrides?: Partial<NonNullable<ModelDependencies['o
       captureException: vi.fn(),
       withScope: vi.fn(),
     },
-    getRemoteConfig: vi.fn(),
     oauth: {
       refreshCredential: vi.fn(),
       persistCredential: vi.fn(),

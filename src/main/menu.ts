@@ -205,13 +205,13 @@ export default class MenuBuilder {
         {
           label: 'Learn More',
           click() {
-            shell.openExternal('https://workspaiceai.app')
+            shell.openExternal('https://github.com/ivandmpk/workspaice')
           },
         },
         {
           label: 'Github Repo',
           click() {
-            shell.openExternal('https://github.com/workspaiceai/workspaice')
+            shell.openExternal('https://github.com/ivandmpk/workspaice')
           },
         },
         // {
@@ -223,7 +223,7 @@ export default class MenuBuilder {
         {
           label: 'Search Issues',
           click() {
-            shell.openExternal('https://github.com/workspaiceai/workspaice/issues?q=is%3Aissue')
+            shell.openExternal('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
           },
         },
       ],
@@ -296,13 +296,13 @@ export default class MenuBuilder {
           {
             label: 'Learn More',
             click() {
-              shell.openExternal('https://workspaiceai.app')
+              shell.openExternal('https://github.com/ivandmpk/workspaice')
             },
           },
           {
             label: 'Github Repo',
             click() {
-              shell.openExternal('https://github.com/workspaiceai/workspaice')
+              shell.openExternal('https://github.com/ivandmpk/workspaice')
             },
           },
           // {
@@ -314,7 +314,7 @@ export default class MenuBuilder {
           {
             label: 'Search Issues',
             click() {
-              shell.openExternal('https://github.com/workspaiceai/workspaice/issues?q=is%3Aissue')
+              shell.openExternal('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
             },
           },
         ],

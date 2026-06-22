@@ -393,7 +393,6 @@ export const SettingsSchema = GlobalSessionSettingsSchema.extend({
   enableMermaidRendering: z.boolean().default(true),
   enableLaTeXRendering: z.boolean().default(true),
   injectDefaultMetadata: z.boolean().default(true), // 是否注入默认附加元数据（如模型名称、当前日期）
-  autoPreviewArtifacts: z.boolean().default(false), // 是否自动展开预览 artifacts
   autoCollapseCodeBlock: z.boolean().default(true), // 是否自动折叠代码块
   pasteLongTextAsAFile: z.boolean().default(true), // 是否将长文本粘贴为文件
 
@@ -403,8 +402,6 @@ export const SettingsSchema = GlobalSessionSettingsSchema.extend({
   compactionThreshold: z.number().min(0.4).max(0.9).default(0.6),
 
   autoLaunch: z.boolean().default(false),
-  autoUpdate: z.boolean().default(true), // 是否自动检查更新
-  betaUpdate: z.boolean().default(false), // 是否自动检查 beta 更新
 
   shortcuts: ShortcutSettingSchema,
 

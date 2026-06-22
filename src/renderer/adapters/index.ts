@@ -68,7 +68,6 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
       },
     },
     sentry: new RendererSentryAdapter(),
-    getRemoteConfig: settingActions.getRemoteConfig,
     oauth:
       platform.type === 'desktop'
         ? {

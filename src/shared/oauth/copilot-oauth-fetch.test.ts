@@ -17,7 +17,6 @@ function createDependencies() {
       captureException: vi.fn(),
       withScope: vi.fn(),
     },
-    getRemoteConfig: vi.fn(),
     platformType: 'desktop',
   }
 

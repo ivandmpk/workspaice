@@ -32,16 +32,6 @@ export interface Platform extends Storage {
   onSystemThemeChange(callback: () => void): () => void
   onWindowShow(callback: () => void): () => void
   onWindowFocused(callback: () => void): () => void
-  onUpdateDownloaded(callback: () => void): () => void
-  onUpdaterChecking?(callback: () => void): () => void
-  onUpdaterAvailable?(callback: (data: { version: string }) => void): () => void
-  onUpdaterNotAvailable?(callback: () => void): () => void
-  onUpdaterProgress?(
-    callback: (data: { percent: number; bytesPerSecond: number; transferred: number; total: number }) => void
-  ): () => void
-  onUpdaterDownloaded?(callback: (data: { version: string }) => void): () => void
-  onUpdaterError?(callback: (data: { message: string }) => void): () => void
-  checkForUpdate?(): Promise<{ started: boolean }>
   onNavigate?(callback: (path: string) => void): () => void
   openLink(url: string): Promise<void>
   getDeviceName(): Promise<string>
@@ -91,7 +81,6 @@ export interface Platform extends Storage {
 
   isFullscreen(): Promise<boolean>
   setFullscreen(enabled: boolean): Promise<void>
-  installUpdate(): Promise<void>
 
   getKnowledgeBaseController(): KnowledgeBaseController
   getSessionAttachmentRagController(): SessionAttachmentRagController

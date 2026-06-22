@@ -22,7 +22,6 @@ import path from 'path'
 // @ts-expect-error - source-map-support doesn't have type definitions
 import * as sourceMapSupport from 'source-map-support'
 import type { ShortcutSetting } from 'src/shared/types'
-import { AppUpdater } from './app-updater'
 import * as autoLauncher from './autoLauncher'
 import { handleDeepLink } from './deeplinks'
 import { parseFile } from './file-parser'
@@ -510,9 +509,6 @@ if (!gotTheLock) {
       await createWindow()
       await initializeSessionAttachmentRagAfterAppReady()
       ensureTray()
-      // Remove this if your app does not use auto updates
-      // eslint-disable-next-line
-      new AppUpdater(() => mainWindow)
 
       // 处理启动时的 Deep Link (Windows/Linux)
       // macOS 会通过 open-url 事件处理，不需要在这里处理

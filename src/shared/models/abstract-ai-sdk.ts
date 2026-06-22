@@ -194,13 +194,7 @@ export default abstract class AbstractAISDKModel implements ModelInterface {
         e instanceof ApiError &&
         e.message.includes('Invalid content type. image_url is only supported by certain models.')
       ) {
-        // 根据当前 IP，判断是否在错误中推荐 WorkspAIce AI 4
-        const remoteConfig = this.dependencies.getRemoteConfig()
-        if (remoteConfig.setting_workspaiceai_first) {
-          throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image')
-        } else {
-          throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image_2')
-        }
+        throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image_2')
       }
 
       // 添加请求信息到 Sentry

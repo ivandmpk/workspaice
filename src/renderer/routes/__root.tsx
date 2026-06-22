@@ -127,7 +127,7 @@ function BackgroundImageOverlay() {
 }
 
 function Root() {
-  const { isExceeded, isExceededResolved } = useVersion()
+  useVersion()
   const location = useLocation()
   const spellCheck = useSettingsStore((state) => state.spellCheck)
   const language = useLanguage()
@@ -151,10 +151,6 @@ function Root() {
         return
       }
 
-      if (!isExceededResolved) {
-        return
-      }
-
       initialized.current = true
 
       // Check if user needs onboarding guide
@@ -163,7 +159,7 @@ function Root() {
       const needsSetup = settingActions.needEditSetting()
 
       // Auto-navigate to guide for new users who need setup
-      if (!isExceeded && !onboardingCompleted && needsSetup) {
+      if (!onboardingCompleted && needsSetup) {
         router.navigate({ to: '/guide', replace: true })
         return
       }
@@ -174,7 +170,7 @@ function Root() {
         return
       }
     })()
-  }, [setOpenAboutDialog, location.pathname, isExceeded, isExceededResolved])
+  }, [setOpenAboutDialog, location.pathname])
 
   const showSidebar = useUIStore((s) => s.showSidebar)
   const sidebarWidth = useSidebarWidth()

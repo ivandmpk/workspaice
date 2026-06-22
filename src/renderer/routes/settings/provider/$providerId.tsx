@@ -514,7 +514,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
         <Flex>
           <ScalableIcon icon={IconHelpCircle} />
           <Text span size="xs" c="workspaice-tertiary">
-            <a href="https://docs.workspaiceai.app/guides/providers" target="_blank" rel="noopener">
+            <a href="https://github.com/ivandmpk/workspaice" target="_blank" rel="noopener">
               {t('Setup guide')}
             </a>
           </Text>

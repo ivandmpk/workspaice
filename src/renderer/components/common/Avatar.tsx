@@ -3,7 +3,7 @@ import { IconMessageCircle, IconPhoto, IconSettingsFilled, IconUser } from '@tab
 import clsx from 'clsx'
 import type { FC } from 'react'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { ImageInStorage, isBlockedRemoteAssetUrl } from '../Image'
+import { ImageInStorage } from '../Image'
 import Robot from '../icons/Robot'
 import { ScalableIcon } from './ScalableIcon'
 
@@ -84,7 +84,7 @@ export const AssistantAvatar: FC<AssistantAvatarProps> = ({
   const realSize = typeof size === 'number' ? size : { xs: 18, sm: 20, md: 28, lg: 32, xl: 36 }[size]
   const iconSize = Math.ceil(realSize / 2) + 2
   const defaultAssistantAvatarKey = useSettingsStore((s) => s.defaultAssistantAvatarKey)
-  const safePicUrl = isBlockedRemoteAssetUrl(picUrl) ? undefined : picUrl
+  const safePicUrl = picUrl
   return (
     <Avatar
       size={realSize}
