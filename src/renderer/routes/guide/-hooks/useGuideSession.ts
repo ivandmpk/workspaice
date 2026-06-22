@@ -208,7 +208,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
 - 🆘 [Help Center](`),
             helpCenterUrl,
             t(`) — FAQs
-- 📮 Contact us: hi@workspaiceai.com
+- 📮 Contact us: Report issues on GitHub
 
 💡 Follow WorkspAIce on [Xiaohongshu](https://www.xiaohongshu.com/user/profile/67b581b6000000000e01d11f) for the latest updates and tips
 
@@ -233,7 +233,7 @@ WorkspAIce is an **all-in-one AI chat client** that supports 30+ mainstream mode
 - 🆘 [Help Center](`),
             helpCenterUrl,
             t(`) — FAQs
-- 📮 Contact us: hi@workspaiceai.com
+- 📮 Contact us: Report issues on GitHub
 
 ---
 

@@ -194,13 +194,13 @@ export class WorkspAIceAIAPIError extends BaseError {
       name: 'system_error',
       code: 20019,
       i18nKey:
-        'An error occurred while processing your request. Please try again later. If this error continues, please send an email to hi@workspaiceai.com for support.',
+        'An error occurred while processing your request. Please try again later. If this error continues, please send an email to Report issues on GitHub for support.',
     },
     unknown: {
       name: 'unknown',
       code: 20020,
       i18nKey:
-        'An unknown error occurred. Please try again later. If this error continues, please send an email to hi@workspaiceai.com for support.',
+        'An unknown error occurred. Please try again later. If this error continues, please send an email to Report issues on GitHub for support.',
     },
     model_not_support_web_browsing: {
       name: 'model_not_support_web_browsing',
