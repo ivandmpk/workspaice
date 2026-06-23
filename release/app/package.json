@@ -53,7 +53,7 @@
     "path-to-regexp": "^8.3.0",
     "protobufjs": "7.5.4",
     "sanitize-filename": "^1.6.3",
-    "tar": "^4.4.19",
+    "tar": "^7.5.16",
     "tr46": "0.0.3",
     "type-is": "^2.0.1",
     "uuid": "^9.0.0",
