@@ -197,13 +197,6 @@ export default abstract class AbstractAISDKModel implements ModelInterface {
         throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image', 'model_not_support_image_2')
       }
 
-      // 添加请求信息到 Sentry
-      this.dependencies.sentry.withScope((scope) => {
-        scope.setTag('provider_name', this.name)
-        scope.setExtra('messages', JSON.stringify(messages))
-        scope.setExtra('options', JSON.stringify(options))
-        this.dependencies.sentry.captureException(e)
-      })
       throw e
     }
   }
