@@ -26,6 +26,8 @@ interface ExecResult {
 interface ExecOptions {
   timeout?: number
   cwd?: string
+  /** Optional data piped to the child's stdin (keeps untrusted content out of the shell command string). */
+  input?: string
 }
 
 interface SandboxStatus {
@@ -39,6 +41,25 @@ let workingDirectory: string | null = null
 let runningChild: ChildProcess | null = null
 
 let sandboxManagerRef: typeof import('@anthropic-ai/sandbox-runtime')['SandboxManager'] | null = null
+
+// Restrict an optional caller-supplied cwd to the sandbox working directory.
+// There is no legitimate reason for the renderer to run a sandbox command with
+// a cwd outside the initialized sandbox root, and allowing it would let a
+// command execute (and resolve relative paths) outside the intended scope.
+function resolveSafeCwd(requested: string | undefined): string | undefined {
+  if (!workingDirectory) {
+    return requested
+  }
+  if (!requested) {
+    return workingDirectory
+  }
+  const root = path.resolve(workingDirectory)
+  const resolved = path.resolve(workingDirectory, requested)
+  if (resolved === root || resolved.startsWith(root + path.sep)) {
+    return resolved
+  }
+  throw new Error('cwd escapes sandbox working directory')
+}
 
 function toWSLPath(winPath: string): string {
   const normalized = winPath.replace(/\\/g, '/')
@@ -139,8 +160,9 @@ export async function execCommand(command: string, options?: ExecOptions): Promi
   }
 
   const wrappedCommand = await sandboxManagerRef.wrapWithSandbox(command)
-  const cwd = options?.cwd ?? workingDirectory ?? undefined
+  const cwd = resolveSafeCwd(options?.cwd)
   const timeout = options?.timeout ?? 30_000
+  const input = options?.input
 
   return new Promise((resolve, reject) => {
     const stdoutChunks: Uint8Array[] = []
@@ -149,10 +171,17 @@ export async function execCommand(command: string, options?: ExecOptions): Promi
     const child = spawn(wrappedCommand, {
       shell: true,
       cwd,
-      stdio: ['ignore', 'pipe', 'pipe'],
+      stdio: [input !== undefined ? 'pipe' : 'ignore', 'pipe', 'pipe'],
       detached: true,
     })
     runningChild = child
+
+    if (input !== undefined && child.stdin) {
+      child.stdin.on('error', () => {
+        // ignore EPIPE if the child exits before consuming stdin
+      })
+      child.stdin.end(input)
+    }
 
     let timedOut = false
     const killTree = () => {
@@ -182,8 +211,8 @@ export async function execCommand(command: string, options?: ExecOptions): Promi
       killTree()
     }, timeout)
 
-    child.stdout.on('data', (chunk: Uint8Array) => stdoutChunks.push(chunk))
-    child.stderr.on('data', (chunk: Uint8Array) => stderrChunks.push(chunk))
+    child.stdout?.on('data', (chunk: Uint8Array) => stdoutChunks.push(chunk))
+    child.stderr?.on('data', (chunk: Uint8Array) => stderrChunks.push(chunk))
 
     child.on('error', (err) => {
       clearTimeout(timer)
@@ -238,8 +267,10 @@ export async function readFile(filePath: string): Promise<{ success: boolean; co
 
 export async function writeFile(filePath: string, content: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const escaped = content.replace(/'/g, "'\\''")
-    const result = await execCommand(`printf '%s' '${escaped}' > ${shellEscape(filePath)}`)
+    // Pipe the (untrusted) file content through stdin instead of interpolating
+    // it into the shell command string, so file content can never break out of
+    // quoting or inject shell metacharacters. Only the path is shell-escaped.
+    const result = await execCommand(`cat > ${shellEscape(filePath)}`, { input: content })
     if (result.exitCode !== 0) {
       return { success: false, error: result.stderr || `Exit code ${result.exitCode}` }
     }
