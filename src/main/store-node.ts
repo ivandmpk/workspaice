@@ -1,4 +1,5 @@
-import { app, powerMonitor } from 'electron'
+import crypto from 'crypto'
+import { app, powerMonitor, safeStorage } from 'electron'
 import Store from 'electron-store'
 import * as fs from 'fs-extra'
 import path from 'path'
@@ -11,6 +12,112 @@ const logger = getLogger('store-node')
 
 const configPath = path.resolve(app.getPath('userData'), 'config.json')
 const configBackupFilenamePattern = /^config-backup-\d{4}-\d{2}-\d{2}T\d{2}_\d{2}_\d{2}\.\d{3}Z\.json$/
+const encryptionKeyPath = path.resolve(app.getPath('userData'), '.config-key')
+
+// SECURITY: config.json holds provider API keys. We encrypt it at rest via
+// electron-store's `encryptionKey`, where the key itself is a random value
+// protected by the OS keychain through Electron's safeStorage (so it is not
+// hardcoded in the bundle). If safeStorage is unavailable (e.g. some Linux
+// setups), we fall back to an unencrypted store rather than failing to launch.
+//
+// Migration is non-destructive: `conf` (electron-store's backend) returns the
+// raw bytes when decryption fails, so a pre-existing plaintext config.json is
+// read normally and transparently re-written encrypted on the next write.
+function resolveEncryptionKey(): string | undefined {
+  try {
+    if (!safeStorage.isEncryptionAvailable()) {
+      logger.warn('safeStorage unavailable; config.json will be stored unencrypted')
+      return undefined
+    }
+    if (fs.existsSync(encryptionKeyPath)) {
+      try {
+        const encrypted = fs.readFileSync(encryptionKeyPath) as Buffer
+        const key = safeStorage.decryptString(encrypted)
+        if (key) {
+          return key
+        }
+        logger.warn('config key decrypted empty; regenerating')
+      } catch (err) {
+        logger.error('failed to decrypt existing config key; regenerating', err)
+      }
+    }
+    const newKey = crypto.randomBytes(32).toString('hex')
+    fs.writeFileSync(encryptionKeyPath, safeStorage.encryptString(newKey) as unknown as Uint8Array)
+    return newKey
+  } catch (err) {
+    logger.error('failed to resolve config encryption key; storing config unencrypted', err)
+    return undefined
+  }
+}
+
+const encryptionKey = resolveEncryptionKey()
+
+// Mirrors conf's on-disk format: [16-byte IV][':'][aes-256-cbc ciphertext],
+// key = pbkdf2(encryptionKey, iv.toString(), 10000, 32, 'sha512'). Returns the
+// decrypted plaintext, or null if the data is not in encrypted form.
+function tryDecryptConfigBuffer(data: Buffer): string | null {
+  if (!encryptionKey) {
+    return null
+  }
+  try {
+    if (data.length < 17 || data.slice(16, 17).toString() !== ':') {
+      return null
+    }
+    const iv = data.subarray(0, 16) as unknown as Uint8Array
+    const password = crypto.pbkdf2Sync(encryptionKey, iv.toString(), 10000, 32, 'sha512') as unknown as Uint8Array
+    const decipher = crypto.createDecipheriv('aes-256-cbc', password, iv)
+    const ciphertext = data.subarray(17) as unknown as Uint8Array
+    const parts = [decipher.update(ciphertext), decipher.final()] as unknown as Uint8Array[]
+    return Buffer.concat(parts).toString('utf8')
+  } catch {
+    return null
+  }
+}
+
+// Returns true if a config-backup file is legacy plaintext (parses as JSON and
+// is NOT in the encrypted IV-prefixed format). Used to purge plaintext backups
+// that would otherwise leak API keys after encryption is enabled.
+function isLegacyPlaintextConfigFile(filepath: string): boolean {
+  try {
+    const buf = fs.readFileSync(filepath)
+    if (buf.length >= 17 && buf.slice(16, 17).toString() === ':' && tryDecryptConfigBuffer(buf) !== null) {
+      return false // valid encrypted file
+    }
+    JSON.parse(buf.toString('utf8'))
+    return true // parsed as plaintext JSON
+  } catch {
+    return false
+  }
+}
+
+// One-time cleanup: once encryption is active, delete any plaintext backups
+// (they contain unencrypted API keys). New backups copy the now-encrypted
+// config.json and are therefore encrypted at rest.
+function purgeLegacyPlaintextBackups() {
+  if (!encryptionKey) {
+    return
+  }
+  try {
+    const userData = app.getPath('userData')
+    const filenames = fs.readdirSync(userData)
+    for (const filename of filenames) {
+      if (!filename.startsWith('config-backup-') || !configBackupFilenamePattern.test(filename)) {
+        continue
+      }
+      const filepath = path.resolve(userData, filename)
+      if (isLegacyPlaintextConfigFile(filepath)) {
+        try {
+          fs.unlinkSync(filepath)
+          logger.info('purged legacy plaintext config backup:', filename)
+        } catch (err) {
+          logger.warn('failed to purge legacy plaintext config backup:', filename, err)
+        }
+      }
+    }
+  } catch (err) {
+    logger.error('failed to purge legacy plaintext backups:', err)
+  }
+}
 
 // 1) 检查配置文件是否合法
 // 如果配置文件不合法，则使用最新的备份文件
@@ -39,8 +146,36 @@ interface StoreType {
 }
 export const store = new Store<StoreType>({
   clearInvalidConfig: true, // 当配置JSON不合法时，清空配置
+  ...(encryptionKey ? { encryptionKey } : {}),
 })
-logger.info('init store, config path:', store.path)
+logger.info('init store, config path:', store.path, 'encrypted:', Boolean(encryptionKey))
+
+// Ensure the config is written back in encrypted form immediately after a
+// plaintext -> encrypted migration, then remove any plaintext backups.
+if (encryptionKey) {
+  try {
+    migratePlaintextConfigToEncrypted()
+    purgeLegacyPlaintextBackups()
+  } catch (err) {
+    logger.error('post-init encryption migration step failed:', err)
+  }
+}
+
+// If config.json is still plaintext on disk (first launch after enabling
+// encryption), force one rewrite through the store so it is persisted
+// encrypted. Idempotent: subsequent launches see an encrypted file and skip.
+function migratePlaintextConfigToEncrypted() {
+  if (!encryptionKey || !fs.existsSync(configPath)) {
+    return
+  }
+  const buf = fs.readFileSync(configPath)
+  const alreadyEncrypted = buf.length >= 17 && buf.slice(16, 17).toString() === ':' && tryDecryptConfigBuffer(buf) !== null
+  if (alreadyEncrypted) {
+    return
+  }
+  store.set(store.store)
+  logger.info('migrated plaintext config.json to encrypted at rest')
+}
 
 // 3) 启动自动备份，每10分钟备份一次，并自动清理多余的备份文件
 autoBackup()
@@ -236,7 +371,13 @@ export async function clearBackups() {
  */
 function checkConfigValid(filepath: string) {
   try {
-    JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    const buf = fs.readFileSync(filepath)
+    const decrypted = tryDecryptConfigBuffer(buf)
+    // Validate either the decrypted payload (encrypted file) or the raw bytes
+    // (legacy plaintext file). This keeps the backup-restore safety net working
+    // after encryption is enabled instead of treating encrypted files as
+    // "invalid" and clobbering them with stale plaintext backups.
+    JSON.parse(decrypted ?? buf.toString('utf8'))
   } catch (err) {
     return false
   }
