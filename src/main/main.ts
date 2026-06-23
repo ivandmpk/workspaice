@@ -337,8 +337,23 @@ async function createWindow() {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       spellcheck: true,
-      webSecurity: false, // 其中一个作用是解决跨域问题
+      // SECURITY: webSecurity is intentionally disabled because the renderer
+      // makes provider API requests (OpenAI, Anthropic, Ollama, user-configured
+      // custom hosts, etc.) via `fetch()` directly from the page. Those third
+      // party APIs do not return CORS headers, so enabling the same-origin
+      // policy would break every AI provider call. The residual XSS risk is
+      // mitigated by: contextIsolation, the preload IPC channel allowlist
+      // (src/shared/ipc-channels.ts), denying in-page navigation
+      // (setWindowOpenHandler below), and the Content-Security-Policy applied in
+      // onHeadersReceived. Properly re-enabling this requires routing all
+      // provider requests through the main process (no CORS) — tracked as a
+      // dedicated follow-up.
+      webSecurity: false,
       allowRunningInsecureContent: false,
+      // Pin secure defaults explicitly so a future Electron upgrade cannot
+      // silently regress them.
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: app.isPackaged
         ? path.join(__dirname, '../preload/index.js')
         : path.join(__dirname, '../../out/preload/index.js'),
@@ -407,13 +422,34 @@ async function createWindow() {
   // https://www.computerhope.com/jargon/m/menubar.htm
   mainWindow.setMenuBarVisibility(false)
 
-  // 网络问题
+  // Content-Security-Policy.
+  // The app calls user-configured AI provider hosts (and loads remote avatars /
+  // images) directly from the renderer, so connect-src and img-src must stay
+  // broad. The valuable restriction here is on script/object/base/frame: an
+  // injected remote <script src> or <object> is blocked, shrinking the
+  // XSS-to-exfiltration surface that webSecurity:false would otherwise leave
+  // wide open. 'unsafe-inline'/'unsafe-eval' are required by the bundler,
+  // Vite HMR (dev), and some UI libraries.
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline'",
+    'img-src * data: blob:',
+    "font-src 'self' data:",
+    'media-src * data: blob:',
+    // Allow arbitrary provider hosts, localhost, and dev HMR websockets.
+    'connect-src * data: blob:',
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'none'",
+  ].join('; ')
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        // 'Content-Security-Policy': ['default-src \'self\'']
-        // 'Content-Security-Policy': ['*'], // 为了支持代理
+        'Content-Security-Policy': [cspDirectives],
+        'X-Content-Type-Options': ['nosniff'],
       },
     })
   })

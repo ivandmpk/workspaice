@@ -1,5 +1,7 @@
+import type { InvokableIpcChannel } from './ipc-channels'
+
 export interface ElectronIPC {
-  invoke: (channel: string, ...args: any[]) => Promise<any>
+  invoke: (channel: InvokableIpcChannel, ...args: any[]) => Promise<any>
   getPathForFile: (file: File) => string
   onSystemThemeChange: (callback: () => void) => () => void
   onWindowMaximizedChanged: (callback: (_: Electron.IpcRendererEvent, windowMaximized: boolean) => void) => () => void

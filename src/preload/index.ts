@@ -2,8 +2,19 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, webUtils } from 'electron'
 import type { ElectronIPC } from 'src/shared/electron-types'
+import { isInvokableIpcChannel } from 'src/shared/ipc-channels'
 
 // export type Channels = 'ipc-example';
+
+// Security boundary: only forward invoke() calls for channels that are on the
+// explicit allowlist. This prevents a compromised renderer from reaching
+// arbitrary ipcMain.handle channels (store I/O, shell exec, OAuth, etc.) by name.
+function invokeAllowed(channel: string, ...args: unknown[]): Promise<unknown> {
+  if (!isInvokableIpcChannel(channel)) {
+    return Promise.reject(new Error(`Blocked IPC invoke to disallowed channel: ${String(channel)}`))
+  }
+  return ipcRenderer.invoke(channel, ...args)
+}
 
 function createListener<T extends unknown[]>(channel: string) {
   return (callback: (...args: T) => void) => {
@@ -14,7 +25,7 @@ function createListener<T extends unknown[]>(channel: string) {
 }
 
 const electronHandler: ElectronIPC = {
-  invoke: ipcRenderer.invoke,
+  invoke: invokeAllowed,
   getPathForFile: (file: File) => webUtils.getPathForFile(file),
   onSystemThemeChange: (callback: () => void) => {
     ipcRenderer.on('system-theme-updated', callback)
