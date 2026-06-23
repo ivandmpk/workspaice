@@ -8,7 +8,7 @@ This file is living memory for AI agents working on this repository. Read it bef
 - Origin: fresh fork of an existing GPLv3 desktop AI client.
 - License: GPLv3. The fork is intended to remain under GPLv3 if released.
 - User intent: personal/non-commercial redesign and refactor into the app experience the user wants.
-- Current state: early fork cleanup and local-only product reset.
+- Current state: `1.0.0-beta` hardening baseline closed; active development now targets `1.0.1-beta`.
 
 ## Product Goals
 
@@ -139,8 +139,10 @@ This file is living memory for AI agents working on this repository. Read it bef
 
 ## Current Progress
 
-- **v1.0.0-beta released for testing.** Built for macOS (arm64/x64, DMG) and Windows (x64/arm64, NSIS Setup.exe). All unsigned. Removed broken `signtoolOptions` reference to missing `custom_win_sign.js` from electron-builder.yml. **Development frozen until beta testing completes — no further code changes until test feedback is received.** *Exception: critical build fixes for the macOS packaged app.*
-- **Versioning started.** First beta release tagged: `v1.0.0-beta`. Version is set in `package.json` and flows to Electron's `app.getVersion()` (About page, Sidebar, electron-builder artifact names).
+- **v1.0.0-beta hardening baseline closed.** Built for macOS (arm64/x64, DMG) and Windows (x64/arm64, NSIS Setup.exe). All unsigned. Removed broken `signtoolOptions` reference to missing `custom_win_sign.js` from electron-builder.yml. Post-release macOS packaging fixes and the security hardening pass are now documented as part of the completed `1.0.0-beta` baseline.
+- **Versioning moved to 1.0.1-beta.** First beta release was tagged as `v1.0.0-beta` / `1.0.0-beta`; active development now targets `1.0.1-beta`. Version is set in `package.json` and `release/app/package.json` and flows to Electron's `app.getVersion()` (About page, Sidebar, electron-builder artifact names).
+- **Root changelog added.** `CHANGELOG.md` now records the complete fork-to-now `1.0.0-beta` changeset and reserves an Unreleased `1.0.1-beta` section for all future development.
+- **Installed local 1.0.1-beta macOS arm64 test build.** Ran `PATH="/opt/homebrew/opt/node@22/bin:$PATH" pnpm build` and `pnpm exec electron-builder --mac --arm64`; build completed with pre-existing Rollup warnings. Replaced `/Applications/WorkspAIce.app` with `release/build/mac-arm64/WorkspAIce.app`. Installed app reports `CFBundleShortVersionString=1.0.1-beta`, code signature verifies, and launch smoke check shows main/GPU/network/renderer processes running after startup.
 - Initial repository scan completed.
 - Confirmed GPLv3 license file exists at `LICENSE`.
 - Identified main renderer redesign entry points and branding references.
