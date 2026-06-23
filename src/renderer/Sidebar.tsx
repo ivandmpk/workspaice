@@ -1,9 +1,20 @@
-import { ActionIcon, Box, Button, Flex, Image, NavLink, SegmentedControl, Stack, Text, Tooltip } from '@mantine/core'
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Image,
+  NavLink,
+  SegmentedControl,
+  Stack,
+  Text,
+  Tooltip,
+} from '@mantine/core'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import {
   IconCirclePlus,
   IconCode,
-  IconDownload,
   IconInfoCircle,
   IconLayoutSidebarLeftCollapse,
   IconPhotoPlus,
@@ -25,13 +36,12 @@ import { useIsSmallScreen, useSidebarWidth } from './hooks/useScreenChange'
 import useVersion from './hooks/useVersion'
 import { navigateToSettings } from './modals/Settings'
 import { trackingEvent } from './packages/event'
-import platform from './platform'
-import { featureFlags } from './utils/feature-flags'
 import icon from './static/icon.png'
 import { settingsStore, useLanguage } from './stores/settingsStore'
 import { taskSessionStore } from './stores/taskSessionStore'
 import { useUIStore } from './stores/uiStore'
-import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET } from './variables'
+import { featureFlags } from './utils/feature-flags'
+import { WORKSPAICE_BUILD_PLATFORM } from './variables'
 
 export default function Sidebar() {
   const { t } = useTranslation()
@@ -161,6 +171,15 @@ export default function Sidebar() {
               <Text span c="workspaice-secondary" size="xl" lh={1.2} fw="700">
                 WorkspAIce
               </Text>
+              <Badge
+                color="workspaice-accent2"
+                variant="filled"
+                size="xs"
+                radius="sm"
+                styles={{ label: { letterSpacing: 0.6 } }}
+              >
+                BETA
+              </Badge>
               {/\d/.test(versionHook.version) && (
                 <Text span c="workspaice-tertiary" size="sm">
                   {versionHook.version}
@@ -257,7 +276,7 @@ export default function Sidebar() {
                 <ScalableIcon icon={IconSettingsFilled} size={20} />
               </ActionIcon>
 
-              <SmallScreenAboutIcon versionHook={versionHook} navigate={navigate} setShowSidebar={setShowSidebar} />
+              <SmallScreenAboutIcon navigate={navigate} setShowSidebar={setShowSidebar} />
             </Flex>
           ) : (
             <>
@@ -344,11 +363,9 @@ function AboutNavLink({
  * Small screen About icon.
  */
 function SmallScreenAboutIcon({
-  versionHook,
   navigate,
   setShowSidebar,
 }: {
-  versionHook: ReturnType<typeof useVersion>
   navigate: ReturnType<typeof useNavigate>
   setShowSidebar: (v: boolean) => void
 }) {

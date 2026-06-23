@@ -1,0 +1,124 @@
+# Changelog
+
+All notable WorkspAIce changes are tracked here.
+
+## [1.0.1-beta] - 2026-06-23
+
+Second WorkspAIce beta release, focused on workspace organization, release readiness, and making the beta state visible in the app shell.
+
+### UI And Release Polish
+
+- Added a compact red/orange `BETA` badge beside the WorkspAIce sidebar title so users have a persistent visual reminder that this is a beta build.
+
+### Workspaces
+
+- Added workspace folders to organize chats into named groups with create, rename, and delete.
+- Added per-workspace new-chat button to create chats directly inside a workspace.
+- Workspace rows support right-click/context-menu rename and destructive delete (deletes all contained chats).
+- Chats can be moved between workspaces and the ungrouped "Chat" section via right-click menu or drag-and-drop.
+- Workspaces appear above the Chat section in the sidebar; ungrouped chats remain under Chat.
+- Workspaces stored in local storage; workspace membership stored in session metadata (IndexedDB on desktop, SQLite on mobile).
+
+## [1.0.0-beta] - 2026-06-23
+
+First WorkspAIce beta baseline after the original fork, including all cleanup, local-first changes, release fixes, and hardening completed through June 23, 2026.
+
+### Fork Reset And Branding
+
+- Rebranded the app and repository surface to WorkspAIce.
+- Established WorkspAIce as a GPLv3, local-first desktop fork for macOS and Windows.
+- Added `.ai/CONTEXT.md` and `.ai/AGENT_RULES.md` so AI agents can preserve project direction, workflow rules, risks, and verification notes across sessions.
+- Reworked README content with WorkspAIce direction, provider model, GPL/fork credits, setup notes, and app icon banner.
+
+### Local-First Product Cleanup
+
+- Removed bundled hosted-service direction from startup, settings, provider registration, docs, and user-facing flows.
+- Removed hosted telemetry initialization, hosted remote config initialization, hosted license reconciliation, and hosted update listeners from renderer startup.
+- Replaced hosted remote API behavior with local-first stubs that return empty data or explicit local-only errors.
+- Removed hosted provider settings routes and related component trees.
+- Removed cloud service settings including built-in hosted MCP provisioning, hosted web search upsells, hosted search defaults, and error-reporting toggles.
+- Made MCP custom-server only in runtime bootstrap, settings, and menu paths.
+- Defaulted web search to user-configured providers: Bing, Tavily, BoCha, and Querit.
+- Removed license, account, premium, subscription, hosted parser, copilot, hosted KB/RAG, hosted OAuth/login, and hosted plan upgrade surfaces.
+- Removed auto-updater behavior, hosted CORS proxy URL, Artifact preview feature, seeded demo data, hosted remote config branching, and hosted referer headers.
+- Blocked bundled hosted asset loads from persisted seeded sessions so old remote avatar/image URLs are treated as absent.
+
+
+### UI, Theme, And Startup
+
+- Applied the WorkspAIce four-color palette across renderer globals, Mantine bindings, MUI integration, scrollbars, and links.
+- Replaced app icons across macOS, Windows, Linux, renderer, favicon, splash, tray, and mobile source surfaces with the WorkspAIce W + AI mark.
+- Added deterministic icon regeneration via `scripts/regen-app-icons.mjs`.
+- Removed the Getting Started/onboarding guide from startup, routes, session unions, sidebar/help navigation, and first-run prompts.
+- Changed desktop startup to open a blank new-chat page at `#/` instead of restoring an old route/session.
+- Changed new chat creation so it does not preselect the default or last-used chat model.
+- Fixed provider icons by replacing the problematic Vite glob with explicit image imports.
+- Removed remaining hosted trial/upgrade links from chat, file parse, knowledge base, image generation, and shared error flows.
+
+### Providers And Model Behavior
+
+- Preserved local and user-configured external providers while removing bundled hosted provider registration.
+- Fixed local dev startup issues caused by hosted-service cleanup.
+- Improved Ollama vision detection by using native `POST /api/show` capabilities when available.
+- Tightened Ollama fallback vision-family detection and avoided broad false-positive `qwen3*` and small text-only `gemma3` matches.
+- Kept manual model capability checkboxes supported.
+
+### Landing Page
+
+- Added a static `landing/` site with hero, provider, local-first, credits, and footer sections.
+- Added light/dark theme support, mobile responsive layout, local assets only, and no external runtime dependencies.
+- Added Docker/nginx deployment files with gzip and cache headers.
+- Fixed landing page WCAG AA contrast and cache behavior.
+
+### Packaging And Release Fixes
+
+- Tagged and configured the first beta release as `v1.0.0-beta` / `1.0.0-beta`.
+- Fixed v1.0.0-beta build configuration, release notes, and unsigned macOS/Windows packaging setup.
+- Removed broken Windows signing configuration that referenced a missing signing script.
+- Regenerated stale `pnpm-lock.yaml` entries so `release/app` production dependencies are represented correctly.
+- Fixed macOS packaged-app crashes caused by missing runtime modules such as `electron-debug`, `protobufjs/minimal`, protobuf helper packages, and `whatwg-url`.
+- Added required runtime and peer dependency closures to root and `release/app` manifests while the deeper packaging issue was diagnosed.
+- Diagnosed the root cause of recurring packaged `Cannot find module` crashes: electron-builder 26's pnpm collector dropped deduplicated transitive subtrees from the asar.
+- Added `patches/app-builder-lib@26.8.1.patch` so electron-builder tries the NPM collector first and packs the full flat dependency tree.
+- Moved pnpm patch, override, and build-dependency configuration into `pnpm-workspace.yaml` because pnpm 10.33 ignores the `pnpm` field in `package.json`.
+- Exact-pinned version-coupled `@mastra/core`, `@mastra/libsql`, and `@mastra/rag` in `release/app/package.json` to avoid npm install pulling incompatible versions.
+- Verified rebuilt macOS arm64/x64 packages launch without the previous module resolution and `@mastra/libsql` crashes.
+
+### Security Hardening
+
+- Added a preload IPC allowlist in `src/shared/ipc-channels.ts` and blocked arbitrary `invoke()` channel access.
+- Added Content Security Policy, `X-Content-Type-Options`, Referrer-Policy, and HSTS headers.
+- Explicitly pinned `nodeIntegration:false` and `contextIsolation:true` in Electron webPreferences.
+- Kept `webSecurity:false` for now because renderer-side provider API calls still require CORS-free access.
+- Encrypted config/API keys at rest using electron-store plus Electron `safeStorage`, with a one-time plaintext migration and legacy backup purge.
+- Restricted sandbox `cwd` handling to the sandbox root.
+- Changed sandbox file writes to use stdin instead of shell interpolation.
+- Added strict skill and script name validation before skill script execution.
+- Standardized skills IPC install/delete/check-update failures into structured `{ success: false, error }` envelopes.
+- Upgraded `tar` from `^4.4.19` to `^7.5.16` for CVE-2021-37712.
+- Removed legacy Webpack and ESLint infrastructure that was no longer used by the Electron Vite/Biome workflow.
+- Removed dead Sentry no-op calls and stale config atom code.
+- Routed leftover `Mermaid.tsx` loading copy through i18n.
+
+### Documentation And I18n
+
+- Cleaned hosted-service references from docs, i18n locales, PRDs, and changelog translations.
+- Updated technical docs around provider setup, tools/integrations, auto-updater removal, dependency reorganization, storage, and session attachment RAG notes.
+- Updated `.ai/CONTEXT.md` with packaging root-cause analysis, security hardening notes, versioning state, and open risks.
+
+### Verification Highlights
+
+- TypeScript checks passed after major cleanup and hardening passes.
+- `git diff --check` passed after cleanup/hardening work.
+- `pnpm build` passed after the hardening pass.
+- Playwright/CDP regression checks covered startup, settings, hosted-service removals, landing page behavior, theme behavior, and provider icons.
+- macOS arm64/x64 packages were rebuilt and smoke-tested after packaged-app crash fixes.
+
+### Known Remaining Risks
+
+- `webSecurity:false` remains until provider API calls are routed through the main process.
+- `node-fetch@2.7.0` remains in `release/app` because `zeroentropy` via `@mastra/rag` still needs it; no patched CJS-compatible 2.x release exists.
+- Mobile SQLite still uses no encryption pending the mobile-support decision.
+- Some broad Biome suppressions remain as cleanup follow-up work.
+- `WorkspAIceAIAPIError` remains as dead hosted-era compatibility code in a few catch paths.
+- Larger architecture work such as `InputBox.tsx` refactor, MUI to Mantine migration, and state management consolidation remains deferred.

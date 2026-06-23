@@ -1,0 +1,131 @@
+// Allowlist of IPC channels the renderer is permitted to invoke through the
+// preload contextBridge. This is a security boundary: the preload validates the
+// channel name against this list before forwarding to `ipcRenderer.invoke`, so a
+// compromised renderer (e.g. via XSS) cannot reach arbitrary `ipcMain.handle`
+// channels by name.
+//
+// Every entry corresponds to a real `ipcMain.handle(...)` registration in
+// `src/main`. When you add, remove, or rename a main-process handler, update
+// this list accordingly. All channels here are static (string literals or
+// constant enum values) — there are no dynamically constructed invoke channels.
+//
+// NOTE: dynamic per-transport MCP *event* channels
+// (`mcp:stdio-transport:<id>:<event>`) are intentionally NOT in this list. They
+// are registered as one-way listeners via `addMcpStdioTransportEventListener`,
+// not via `invoke`, and are handled by a separate, dedicated bridge method.
+
+export const INVOKABLE_IPC_CHANNELS = [
+  'appLog',
+  'clearLogs',
+  'delStoreBlob',
+  'delStoreValue',
+  'dialog:openDirectory',
+  'ensureAutoLaunch',
+  'ensureProxy',
+  'ensureShortcutConfig',
+  'exportLogs',
+  'getAllStoreKeys',
+  'getAllStoreValues',
+  'getArch',
+  'getConfig',
+  'getDeviceName',
+  'getHostname',
+  'getLocale',
+  'getPlatform',
+  'getSettings',
+  'getStoreBlob',
+  'getStoreValue',
+  'getVersion',
+  'isFullscreen',
+  'kb:create',
+  'kb:delete',
+  'kb:file:count',
+  'kb:file:delete',
+  'kb:file:get-metas',
+  'kb:file:list',
+  'kb:file:list-paginated',
+  'kb:file:pause',
+  'kb:file:read-chunks',
+  'kb:file:resume',
+  'kb:file:retry',
+  'kb:file:upload',
+  'kb:list',
+  'kb:search',
+  'kb:update',
+  'listStoreBlobKeys',
+  'mcp:stdio-transport:close',
+  'mcp:stdio-transport:create',
+  'mcp:stdio-transport:send',
+  'mcp:stdio-transport:start',
+  'oauth:cancel',
+  'oauth:exchange-code',
+  'oauth:get-supported-providers',
+  'oauth:login',
+  'oauth:refresh',
+  'oauth:start-device-flow',
+  'oauth:start-login',
+  'oauth:wait-device-token',
+  'openLink',
+  'parseFileLocally',
+  'parseUrl',
+  'parser:cancel-mineru-parse',
+  'parser:parse-file-with-mineru',
+  'parser:test-mineru',
+  'relaunch',
+  'sandbox:check-availability',
+  'sandbox:edit',
+  'sandbox:exec',
+  'sandbox:find',
+  'sandbox:grep',
+  'sandbox:init',
+  'sandbox:kill',
+  'sandbox:ls',
+  'sandbox:read',
+  'sandbox:reset',
+  'sandbox:status',
+  'sandbox:write',
+  'session-attachment-rag:cleanup-orphans',
+  'session-attachment-rag:clear-all',
+  'session-attachment-rag:create',
+  'session-attachment-rag:delete-attachment',
+  'session-attachment-rag:delete-message-attachments',
+  'session-attachment-rag:delete-session-attachments',
+  'session-attachment-rag:get-attachments',
+  'session-attachment-rag:get-debug-snapshot',
+  'session-attachment-rag:query',
+  'session-attachment-rag:read-parents',
+  'session-attachment-rag:rebind',
+  'session-attachment-rag:retry',
+  'session-attachment-rag:run-maintenance',
+  'setAllStoreValues',
+  'setFullscreen',
+  'setStoreBlob',
+  'setStoreValue',
+  'shouldShowAboutDialogWhenStartUp',
+  'shouldUseDarkColors',
+  'skills:check-update',
+  'skills:check-updates-batch',
+  'skills:delete',
+  'skills:discover',
+  'skills:execute-script',
+  'skills:get-directory',
+  'skills:install',
+  'skills:install-marketplace',
+  'skills:load',
+  'skills:open-directory',
+  'skills:scan-repo',
+  'switch-theme',
+  'window:close',
+  'window:is-maximized',
+  'window:maximize',
+  'window:minimize',
+  'window:unmaximize',
+] as const
+
+export type InvokableIpcChannel = (typeof INVOKABLE_IPC_CHANNELS)[number]
+
+const INVOKABLE_IPC_CHANNEL_SET: ReadonlySet<string> = new Set(INVOKABLE_IPC_CHANNELS)
+
+export function isInvokableIpcChannel(channel: unknown): channel is InvokableIpcChannel {
+  return typeof channel === 'string' && INVOKABLE_IPC_CHANNEL_SET.has(channel)
+}

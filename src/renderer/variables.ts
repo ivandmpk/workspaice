@@ -1,5 +1,5 @@
-// 在 webpack.config.base.ts 的 webpack.EnvironmentPlugin 中注册的变量，
-// 在编译时 webpack 会根据环境变量替换掉 process.env.XXX
+// Build-time environment variables injected by electron-vite's `define` config.
+// Vite replaces `process.env.WORKSPAICE_BUILD_*` at compile time.
 
 export const WORKSPAICE_BUILD_TARGET = (process.env.WORKSPAICE_BUILD_TARGET || 'unknown') as 'unknown' | 'mobile_app'
 export const WORKSPAICE_BUILD_PLATFORM = (process.env.WORKSPAICE_BUILD_PLATFORM || 'unknown') as

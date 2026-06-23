@@ -8,7 +8,7 @@ import { discoverSkills } from './discovery'
 import { detectSkillsInRepo } from './github-fetcher'
 import { checkForUpdates, deleteSkill, installSkillFromGitHub, installSkillFromMarketplace } from './installer'
 import { parseSkillFile } from './parser'
-import { isValidSkillName } from './validation'
+import { isValidScriptName, isValidSkillName } from './validation'
 
 const log = getLogger('skills:ipc-handlers')
 function getSkillsDir(): string {
@@ -89,12 +89,16 @@ export function registerSkillsHandlers() {
           throw new Error('Skill name and script name are required')
         }
 
-        if (skillName.includes('..') || skillName.includes('/') || skillName.includes('\\')) {
-          throw new Error('Invalid skill name: path traversal not allowed')
+        // Strict allowlist validation (defense in depth on top of the realpath
+        // prefix check below): skill names are lowercase-kebab; script names may
+        // carry an extension but cannot be hidden files, contain separators, or
+        // traverse with `..`.
+        if (!isValidSkillName(skillName)) {
+          throw new Error('Invalid skill name')
         }
 
-        if (scriptName.includes('..') || scriptName.includes('/') || scriptName.includes('\\')) {
-          throw new Error('Invalid script name: path traversal not allowed')
+        if (!isValidScriptName(scriptName)) {
+          throw new Error('Invalid script name')
         }
 
         const skillsDir = getSkillsDir()
@@ -199,8 +203,9 @@ export function registerSkillsHandlers() {
     try {
       return await installSkillFromGitHub(params.owner, params.repo, params.skillPath)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error('skills:install failed', error)
-      throw error
+      return { success: false, skillName: '', error: msg }
     }
   })
 
@@ -208,8 +213,9 @@ export function registerSkillsHandlers() {
     try {
       return await installSkillFromMarketplace(skill)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error('skills:install-marketplace failed', error)
-      throw error
+      return { success: false, skillName: skill?.name ?? '', error: msg }
     }
   })
 
@@ -217,8 +223,9 @@ export function registerSkillsHandlers() {
     try {
       return await deleteSkill(skillName)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error(`skills:delete failed for "${skillName}"`, error)
-      throw error
+      return { success: false, error: msg }
     }
   })
 
@@ -226,8 +233,9 @@ export function registerSkillsHandlers() {
     try {
       return await checkForUpdates(skillName)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error(`skills:check-update failed for "${skillName}"`, error)
-      throw error
+      return { hasUpdate: false, error: msg }
     }
   })
 

@@ -41,10 +41,11 @@ export function MessageMermaid(props: { source: string; theme: 'light' | 'dark';
 }
 
 export function Loading() {
+  const { t } = useTranslation()
   return (
     <div className="inline-flex items-center gap-2 border border-solid border-gray-500 rounded-md p-2 my-2">
       <ChartBarStacked size={30} strokeWidth={1} />
-      <span>Loading...</span>
+      <span>{t('Loading...')}</span>
     </div>
   )
 }

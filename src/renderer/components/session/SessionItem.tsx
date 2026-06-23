@@ -1,7 +1,16 @@
 import NiceModal from '@ebay/nice-modal-react'
 import { ActionIcon, Flex, Text } from '@mantine/core'
 import type { SessionMeta } from '@shared/types'
-import { IconCopy, IconDots, IconEdit, IconStar, IconStarFilled, IconTrash } from '@tabler/icons-react'
+import {
+  IconCopy,
+  IconDots,
+  IconEdit,
+  IconFolder,
+  IconInbox,
+  IconStar,
+  IconStarFilled,
+  IconTrash,
+} from '@tabler/icons-react'
 import clsx from 'clsx'
 import { memo, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +23,7 @@ import {
 } from '@/stores/chatStore'
 import { copyAndSwitchSession, switchCurrentSession } from '@/stores/sessionActions'
 import { useUIStore } from '@/stores/uiStore'
+import { moveSessionToWorkspace, useWorkspaces } from '@/stores/workspaceStore'
 import ActionMenu, { type ActionMenuItemProps } from '../ActionMenu'
 import { AssistantAvatar } from '../common/Avatar'
 import { ScalableIcon } from '../common/ScalableIcon'
@@ -39,9 +49,30 @@ function SessionItem(props: Props) {
   const [menuOpened, setMenuOpened] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const deletingRef = useRef(false)
+  const { data: workspaces = [] } = useWorkspaces()
 
-  const actionMenuItems = useMemo<ActionMenuItemProps[]>(
-    () => [
+  const actionMenuItems = useMemo<ActionMenuItemProps[]>(() => {
+    const moveItems: ActionMenuItemProps[] = [
+      { divider: true },
+      {
+        text: t('Move to Chat'),
+        icon: IconInbox,
+        disabled: !session.workspaceId,
+        onClick: () => {
+          void moveSessionToWorkspace(session.id, undefined)
+        },
+      },
+      ...workspaces.map<ActionMenuItemProps>((workspace) => ({
+        text: workspace.name,
+        icon: IconFolder,
+        disabled: session.workspaceId === workspace.id,
+        onClick: () => {
+          void moveSessionToWorkspace(session.id, workspace.id)
+        },
+      })),
+    ]
+
+    return [
       {
         text: t('Edit'),
         icon: IconEdit,
@@ -65,6 +96,7 @@ function SessionItem(props: Props) {
           void updateSessionStore(session.id, { starred: !session.starred })
         },
       },
+      ...moveItems,
       { divider: true },
       {
         doubleCheck: true,
@@ -90,9 +122,8 @@ function SessionItem(props: Props) {
           }
         },
       },
-    ],
-    [session, selected, t, deleting]
-  )
+    ]
+  }, [session, selected, t, deleting, workspaces])
 
   return (
     <Flex
