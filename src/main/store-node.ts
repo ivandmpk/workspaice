@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { app, powerMonitor, safeStorage } from 'electron'
 import Store from 'electron-store'
 import * as fs from 'fs-extra'
@@ -169,7 +169,8 @@ function migratePlaintextConfigToEncrypted() {
     return
   }
   const buf = fs.readFileSync(configPath)
-  const alreadyEncrypted = buf.length >= 17 && buf.slice(16, 17).toString() === ':' && tryDecryptConfigBuffer(buf) !== null
+  const alreadyEncrypted =
+    buf.length >= 17 && buf.slice(16, 17).toString() === ':' && tryDecryptConfigBuffer(buf) !== null
   if (alreadyEncrypted) {
     return
   }
@@ -378,7 +379,7 @@ function checkConfigValid(filepath: string) {
     // after encryption is enabled instead of treating encrypted files as
     // "invalid" and clobbering them with stale plaintext backups.
     JSON.parse(decrypted ?? buf.toString('utf8'))
-  } catch (err) {
+  } catch {
     return false
   }
   return true
