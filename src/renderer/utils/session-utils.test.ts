@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest'
-
 import type { SessionMeta } from '@shared/types'
+import { describe, expect, it } from 'vitest'
 import { sortSessionRecords } from '@/storage/SessionMetaStorage'
 
 import { createSessionMetaRecordsFromLegacyList, sortSessions } from './session-utils'
@@ -67,5 +66,13 @@ describe('createSessionMetaRecordsFromLegacyList', () => {
       'social',
       'travel',
     ])
+  })
+
+  it('preserves workspace assignments in metadata records', () => {
+    const session = { id: 'workspace-chat', name: 'Workspace chat', workspaceId: 'workspace-1' } as SessionMeta
+
+    const records = createSessionMetaRecordsFromLegacyList([session], 10_000)
+
+    expect(records[0].workspaceId).toBe('workspace-1')
   })
 })

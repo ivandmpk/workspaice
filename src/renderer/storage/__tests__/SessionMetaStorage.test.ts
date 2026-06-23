@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto'
-import { beforeEach, describe, expect, it } from 'vitest'
 import type { SessionMetaRecord } from '@shared/types'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { IndexedDBSessionMetaStorage } from '../SessionMetaStorage'
 
 function makeRecord(overrides: Partial<SessionMetaRecord> & { id: string }): SessionMetaRecord {
@@ -53,6 +53,15 @@ describe('IndexedDBSessionMetaStorage', () => {
     await storage.create(record)
     const result = await storage.getById('test-1')
     expect(result).toEqual(record)
+  })
+
+  it('preserves workspace assignment', async () => {
+    const record = makeRecord({ id: 'test-workspace', workspaceId: 'workspace-1' })
+    await storage.create(record)
+
+    const result = await storage.getById('test-workspace')
+
+    expect(result?.workspaceId).toBe('workspace-1')
   })
 
   it('getById returns null for non-existent', async () => {

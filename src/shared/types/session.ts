@@ -268,6 +268,7 @@ export const SessionSchema = z.object({
   id: z.string(),
   type: SessionTypeSchema.optional(),
   name: z.string(),
+  workspaceId: z.string().optional(),
   picUrl: z.string().optional(),
   messages: z.array(MessageSchema),
   starred: z.boolean().optional(),
@@ -285,6 +286,7 @@ export const SessionSchema = z.object({
 export const SessionMetaSchema = SessionSchema.pick({
   id: true,
   name: true,
+  workspaceId: true,
   starred: true,
   hidden: true,
   assistantAvatarKey: true,
@@ -302,6 +304,14 @@ export const SessionMetaPageSchema = z.object({
   items: z.array(SessionMetaRecordSchema),
   nextCursor: z.number().nullable(),
   total: z.number(),
+})
+
+export const WorkspaceSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  sortOrder: z.number(),
+  createdAt: z.number(),
+  expanded: z.boolean().optional(),
 })
 
 export const SessionThreadBriefSchema = z.object({
@@ -339,5 +349,6 @@ export type Session = z.infer<typeof SessionSchema>
 export type SessionMeta = z.infer<typeof SessionMetaSchema>
 export type SessionMetaRecord = z.infer<typeof SessionMetaRecordSchema>
 export type SessionMetaPage = z.infer<typeof SessionMetaPageSchema>
+export type Workspace = z.infer<typeof WorkspaceSchema>
 export type SessionThread = z.infer<typeof SessionThreadSchema>
 export type SessionThreadBrief = z.infer<typeof SessionThreadBriefSchema>

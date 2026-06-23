@@ -548,6 +548,7 @@
   "network proxy error tips": "Due to the proxy address you have configured as {{proxy}}, please verify if the proxy server is functioning properly, or consider removing the proxy address from the settings.",
   "New": "New",
   "New Chat": "New Chat",
+  "New Chat in Workspace": "New Chat in Workspace",
   "New Creation": "New Creation",
   "New knowledge base name": "New knowledge base name",
   "New Task": "New Task",

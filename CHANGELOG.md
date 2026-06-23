@@ -2,9 +2,9 @@
 
 All notable WorkspAIce changes are tracked here.
 
-## [Unreleased] - 1.0.1-beta
+## [1.0.1-beta]
 
-Development after the hardened `1.0.0-beta` baseline targets `1.0.1-beta`.
+Development after the hardened `1.0.0-beta` baseline.
 
 ## [1.0.0-beta] - 2026-06-23
 
@@ -29,6 +29,15 @@ First WorkspAIce beta baseline after the original fork, including all cleanup, l
 - Removed license, account, premium, subscription, hosted parser, copilot, hosted KB/RAG, hosted OAuth/login, and hosted plan upgrade surfaces.
 - Removed auto-updater behavior, hosted CORS proxy URL, Artifact preview feature, seeded demo data, hosted remote config branching, and hosted referer headers.
 - Blocked bundled hosted asset loads from persisted seeded sessions so old remote avatar/image URLs are treated as absent.
+
+### Workspaces
+
+- Added workspace folders to organize chats into named groups with create, rename, and delete.
+- Added per-workspace new-chat button to create chats directly inside a workspace.
+- Workspace rows support right-click/context-menu rename and destructive delete (deletes all contained chats).
+- Chats can be moved between workspaces and the ungrouped "Chat" section via right-click menu or drag-and-drop.
+- Workspaces appear above the Chat section in the sidebar; ungrouped chats remain under Chat.
+- Workspaces stored in local storage; workspace membership stored in session metadata (IndexedDB on desktop, SQLite on mobile).
 
 ### UI, Theme, And Startup
 

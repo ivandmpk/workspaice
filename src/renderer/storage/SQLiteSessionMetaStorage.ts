@@ -1,7 +1,7 @@
 import {
   CapacitorSQLite,
-  SQLiteConnection,
   type capSQLiteSet,
+  SQLiteConnection,
   type SQLiteDBConnection,
 } from '@capacitor-community/sqlite'
 import type { SessionMetaPage, SessionMetaRecord } from '@shared/types'
@@ -66,6 +66,7 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
       CREATE TABLE IF NOT EXISTS session_meta (
         id TEXT PRIMARY KEY NOT NULL,
         name TEXT NOT NULL DEFAULT '',
+        workspace_id TEXT,
         starred INTEGER NOT NULL DEFAULT 0,
         hidden INTEGER NOT NULL DEFAULT 0,
         assistant_avatar_key TEXT,
@@ -77,6 +78,12 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
       )
     `)
 
+    const columns = await this.database.query('PRAGMA table_info(session_meta)')
+    const hasWorkspaceId = columns.values?.some((column) => column.name === 'workspace_id')
+    if (!hasWorkspaceId) {
+      await this.database.execute('ALTER TABLE session_meta ADD COLUMN workspace_id TEXT')
+    }
+
     await this.database.execute(`
       CREATE INDEX IF NOT EXISTS idx_session_meta_sort_order
       ON session_meta(sort_order DESC)
@@ -87,6 +94,7 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
     return {
       id: record.id,
       name: record.name,
+      workspace_id: record.workspaceId || null,
       starred: record.starred ? 1 : 0,
       hidden: record.hidden ? 1 : 0,
       assistant_avatar_key: record.assistantAvatarKey || null,
@@ -102,6 +110,7 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
     return {
       id: row.id as string,
       name: row.name as string,
+      workspaceId: (row.workspace_id as string) || undefined,
       starred: row.starred === 1 ? true : undefined,
       hidden: row.hidden === 1 ? true : undefined,
       assistantAvatarKey: (row.assistant_avatar_key as string) || undefined,
@@ -118,11 +127,12 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
     const row = this.recordToRow(record)
     await this.database.run(
       `INSERT INTO session_meta
-       (id, name, starred, hidden, assistant_avatar_key, pic_url, background_image, type, sort_order, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, name, workspace_id, starred, hidden, assistant_avatar_key, pic_url, background_image, type, sort_order, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         row.id,
         row.name,
+        row.workspace_id,
         row.starred,
         row.hidden,
         row.assistant_avatar_key,
@@ -140,8 +150,8 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
     if (records.length === 0) return
 
     const statement = `INSERT OR REPLACE INTO session_meta
-      (id, name, starred, hidden, assistant_avatar_key, pic_url, background_image, type, sort_order, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (id, name, workspace_id, starred, hidden, assistant_avatar_key, pic_url, background_image, type, sort_order, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     const set: capSQLiteSet[] = records.map((record) => {
       const row = this.recordToRow(record)
       return {
@@ -149,6 +159,7 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
         values: [
           row.id,
           row.name,
+          row.workspace_id,
           row.starred,
           row.hidden,
           row.assistant_avatar_key,
@@ -174,11 +185,12 @@ export class SQLiteSessionMetaStorage implements SessionMetaStorage {
 
     await this.database.run(
       `UPDATE session_meta SET
-       name = ?, starred = ?, hidden = ?, assistant_avatar_key = ?, pic_url = ?,
+       name = ?, workspace_id = ?, starred = ?, hidden = ?, assistant_avatar_key = ?, pic_url = ?,
        background_image = ?, type = ?, sort_order = ?, created_at = ?
        WHERE id = ?`,
       [
         row.name,
+        row.workspace_id,
         row.starred,
         row.hidden,
         row.assistant_avatar_key,

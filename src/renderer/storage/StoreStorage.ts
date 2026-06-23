@@ -11,6 +11,7 @@ export enum StorageKey {
   ConfigVersion = 'configVersion',
   RemoteConfig = 'remoteConfig',
   ChatSessionsList = 'chat-sessions-list',
+  Workspaces = 'workspaces',
   ChatSessionSettings = 'chat-session-settings',
   PictureSessionSettings = 'picture-session-settings',
   AuthInfo = 'authInfo',
