@@ -203,8 +203,9 @@ export function registerSkillsHandlers() {
     try {
       return await installSkillFromGitHub(params.owner, params.repo, params.skillPath)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error('skills:install failed', error)
-      throw error
+      return { success: false, skillName: '', error: msg }
     }
   })
 
@@ -212,8 +213,9 @@ export function registerSkillsHandlers() {
     try {
       return await installSkillFromMarketplace(skill)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error('skills:install-marketplace failed', error)
-      throw error
+      return { success: false, skillName: skill?.name ?? '', error: msg }
     }
   })
 
@@ -221,8 +223,9 @@ export function registerSkillsHandlers() {
     try {
       return await deleteSkill(skillName)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error(`skills:delete failed for "${skillName}"`, error)
-      throw error
+      return { success: false, error: msg }
     }
   })
 
@@ -230,8 +233,9 @@ export function registerSkillsHandlers() {
     try {
       return await checkForUpdates(skillName)
     } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
       log.error(`skills:check-update failed for "${skillName}"`, error)
-      throw error
+      return { hasUpdate: false, error: msg }
     }
   })
 
