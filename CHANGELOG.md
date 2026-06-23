@@ -2,7 +2,13 @@
 
 All notable WorkspAIce changes are tracked here.
 
-## [1.0.1-beta]
+## [1.0.1-beta] - 2026-06-23
+
+Second WorkspAIce beta release, focused on workspace organization, release readiness, and making the beta state visible in the app shell.
+
+### UI And Release Polish
+
+- Added a compact red/orange `BETA` badge beside the WorkspAIce sidebar title so users have a persistent visual reminder that this is a beta build.
 
 ### Workspaces
 
