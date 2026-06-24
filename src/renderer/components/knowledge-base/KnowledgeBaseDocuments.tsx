@@ -572,7 +572,11 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         return <IconCircleCheck size={16} color="var(--workspaice-tint-success)" />
       case 'processing':
         return (
-          <IconLoader size={16} color="var(--workspaice-tint-warning)" style={{ animation: 'spin 1s linear infinite' }} />
+          <IconLoader
+            size={16}
+            color="var(--workspaice-tint-warning)"
+            style={{ animation: 'spin 1s linear infinite' }}
+          />
         )
       case 'pending':
         return <IconLoader size={16} color="var(--workspaice-tint-gray)" />
@@ -589,7 +593,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
             case 'mineru':
               return t('MinerU parse failed')
             case 'local':
-              return t('WorkspAIce AI parse failed')
+              return t('Local parse failed')
             default:
               return t('Local parse failed')
           }
@@ -870,7 +874,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                                     {doc.parser_type && (
                                       <Pill size="xs" c="dimmed">
                                         {doc.parser_type === 'local'
-                                          ? 'WorkspAIce AI'
+                                          ? 'Local'
                                           : doc.parser_type === 'mineru'
                                             ? 'MinerU'
                                             : 'Local'}
@@ -1019,7 +1023,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         file={chunksPreview.selectedFile}
         knowledgeBaseId={knowledgeBase?.id}
       />
-
     </Stack>
   )
 }

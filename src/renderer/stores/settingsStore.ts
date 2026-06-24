@@ -19,7 +19,7 @@ const log = getLogger('settings-store')
 /**
  * Returns platform-specific default document parser configuration.
  * - Desktop: 'local' (has full Node.js environment for local parsing)
- * - Mobile/Web: 'none' (only basic text file support by default, user can enable workspaice-ai)
+ * - Mobile/Web: 'none' (only basic text file support by default)
  */
 export function getPlatformDefaultDocumentParser(): DocumentParserConfig {
   return platform.type === 'desktop' ? { type: 'local' } : { type: 'none' }
@@ -84,11 +84,6 @@ export const settingsStore = createStore<Settings & Action>()(
               settings.shortcuts.inputBoxSendMessageWithoutResponse =
                 settings.shortcuts.inpubBoxSendMessageWithoutResponse ||
                 settings.shortcuts.inputBoxSendMessageWithoutResponse
-            case 1:
-              if (settings.licenseKey && !settings.licenseActivationMethod) {
-                settings.licenseActivationMethod = 'manual'
-                settings.memorizedManualLicenseKey = settings.licenseKey
-              }
             case 2:
               // Add skills defaults for existing users upgrading from before skills feature
               if (!settings.skills) {

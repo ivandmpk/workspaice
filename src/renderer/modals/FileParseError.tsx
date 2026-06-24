@@ -37,7 +37,7 @@ const FileParseError = NiceModal.create(({ errorCode, fileName }: FileParseError
       return (
         <Text>
           {t(
-            'This large file needs WorkspAIce AI to finish indexing. Sign in to WorkspAIce AI, then retry this file. If you do not want to use WorkspAIce AI, remove the file and upload a smaller attachment instead.'
+            'Large-file chat indexing is not available in this local-only build. Remove the file and upload a smaller attachment, or add it to Knowledge Base instead.'
           )}
         </Text>
       )

@@ -24,7 +24,7 @@ export class LocalParser implements DocumentParser {
   async parse(filePath: string, meta: ParserFileMeta): Promise<string> {
     if (isLegacyOfficeFilePath(filePath)) {
       throw new Error(
-        'Legacy Office formats (.doc/.xls/.ppt) are not supported by local parser. Please convert to .docx/.xlsx/.pptx or switch document parser to WorkspAIce AI.'
+        'Legacy Office formats (.doc/.xls/.ppt) are not supported by the local parser. Please convert to .docx/.xlsx/.pptx or choose another available document parser.'
       )
     }
 

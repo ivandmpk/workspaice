@@ -250,7 +250,6 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
                 }}
               />
             ),
-            LinkToLicensePricing: <span />,
             a: <span />,
           }}
         />
@@ -294,15 +293,7 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
     tips.push(<WorkspAIceAIErrorMessage errorCode={msg.errorCode} model={msg.model} />)
   } else {
     tips.push(
-      <Trans
-        i18nKey="unknown error tips"
-        components={[
-          <a
-            key="a"
-            onClick={() => navigateToSettings()}
-          ></a>,
-        ]}
-      />
+      <Trans i18nKey="unknown error tips" components={[<a key="a" onClick={() => navigateToSettings()}></a>]} />
     )
   }
   return (

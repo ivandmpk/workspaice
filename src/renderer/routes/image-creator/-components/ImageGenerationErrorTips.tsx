@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Flex, Paper, Text, Tooltip } from '@mantine/core'
 import { WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { ImageGeneration } from '@shared/types'
-import { IconCheck, IconCopy, IconRefresh, IconSettings, IconX } from '@tabler/icons-react'
+import { IconCheck, IconCopy, IconRefresh, IconX } from '@tabler/icons-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useCopied } from '@/hooks/useCopied'
 import { navigateToSettings } from '@/modals/Settings'
@@ -48,8 +48,6 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
     (workspaiceAIErrorDetail || imageGenerationTaskErrorCode) && errorDebugInfo.length > 0
   )
   const { copied, copy } = useCopied(errorDebugInfo.join('\n'))
-  const isLicenseError =
-    workspaiceAIErrorDetail && ['license_not_found', 'expired_license'].includes(workspaiceAIErrorDetail.name)
 
   return (
     <Paper
@@ -127,17 +125,6 @@ export function ImageGenerationErrorTips({ record, onRetry, isRetrying }: ImageG
         )}
 
         <Flex gap="sm">
-          {isLicenseError && (
-            <Button
-              variant="light"
-              color="gray"
-              leftSection={<IconSettings size={16} />}
-              onClick={() => navigateToSettings()}
-              radius="md"
-            >
-              {t('Settings')}
-            </Button>
-          )}
           <Button
             variant="light"
             color="workspaice-error"

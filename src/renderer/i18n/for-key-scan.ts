@@ -15,26 +15,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function _errorI18nKeys(t: (key: string) => string) {
   // BEGIN GENERATED ERROR I18N KEYS
+  t('The selected provider is rate limited. Please try again later or choose a different provider.')
+  t('Invalid request parameters detected. Please check your model/provider settings and try again.')
   t(
-    'You have reached your monthly quota for the {{model}} model. Please <OpenSettingButton>go to Settings</OpenSettingButton> to switch to a different model, view your quota usage, or upgrade your plan.'
-  )
-  t(
-    'You have reached your daily quota for the {{model}} model. Please <OpenSettingButton>go to Settings</OpenSettingButton> to switch to a different model, view your quota usage, or upgrade your plan.'
-  )
-  t(
-    'Your current License (WorkspAIce AI Free/Lite) does not support the {{model}} model. To use this model, please <OpenMorePlanButton>upgrade</OpenMorePlanButton> to WorkspAIce AI Pro or a higher-tier package. Alternatively, you can switch to a different model by <OpenSettingButton>accessing the settings</OpenSettingButton>.'
-  )
-  t('Your license has expired. Please check your subscription or purchase a new one.')
-  t(
-    'You have selected WorkspAIce AI as the model provider, but a license key has not been entered yet. Please <OpenSettingButton>click here to open Settings</OpenSettingButton> and enter your license key, or choose a different model provider.'
-  )
-  t('The license key you entered is invalid. Please check your license key and try again.')
-  t('You have exceeded the rate limit for the WorkspAIce AI service. Please try again later.')
-  t(
-    'Invalid request parameters detected. Please try again later. Persistent failures may indicate an outdated software version. Consider upgrading to access the latest performance improvements and features.'
-  )
-  t(
-    'File type not supported. Supported formats vary by parser. Try PDF, modern Office files, EPUB, CSV/TSV, HTML/Markdown, or non-binary text/code files. Legacy Office formats may require WorkspAIce AI cloud parsing.'
+    'File type not supported. Supported formats vary by parser. Try PDF, modern Office files, EPUB, CSV/TSV, HTML/Markdown, or non-binary text/code files.'
   )
   t(
     'The file you sent has expired. To protect your privacy, all file-related cache data has been cleared. You need to create a new conversation or refresh the context, and then send the file again.'
@@ -44,38 +28,32 @@ function _errorI18nKeys(t: (key: string) => string) {
   )
   t('The file size exceeds the limit of 50MB. Please reduce the file size and try again.')
   t(
-    "The {{model}} API doesn't support document understanding. You can use <LinkToAdvancedFileProcessing>WorkspAIce AI Service</LinkToAdvancedFileProcessing> for cloud-based document analysis, or download <LinkToHomePage>WorkspAIce Desktop App</LinkToHomePage> for local document analysis."
+    "The {{model}} API doesn't support document understanding. Use a model with file support, or use local document parsing before sending the attachment."
   )
   t(
     "The {{model}} API doesn't support document understanding. You can download <LinkToHomePage>WorkspAIce Desktop App</LinkToHomePage> for local document analysis."
   )
   t(
-    'Sorry, the current model {{model}} API itself does not support image understanding. If you need to send images, please switch to another model or use the recommended <OpenMorePlanButton>WorkspAIce AI Models</OpenMorePlanButton>.'
+    'Sorry, the current model {{model}} API itself does not support image understanding. Please switch to a model with vision support.'
   )
   t(
     'Vision capability is not enabled for Model {{model}}. Please enable it or set a default OCR model in <OpenSettingButton>Settings</OpenSettingButton>'
   )
   t(
-    'The {{model}} API itself does not support sending files. Due to the complexity of file parsing locally, WorkspAIce only processes text-based files (including code). For additional file formats and enhanced document understanding capabilities, <LinkToAdvancedFileProcessing>WorkspAIce AI Service</LinkToAdvancedFileProcessing> is recommended.'
+    'The {{model}} API itself does not support sending files. WorkspAIce can only inline text-based files for this model. Use a compatible model or Knowledge Base for larger documents.'
   )
   t(
     'The {{model}} API itself does not support sending files. Due to the complexity of file parsing locally, WorkspAIce only processes text-based files (including code).'
   )
   t(
-    'An error occurred while processing your request. Please try again later. If this error continues, please check the logs or report the issue on GitHub.'
+    'An error occurred while processing your request. Please try again later. If this error continues, please send an email to Report issues on GitHub for support.'
   )
   t(
-    'An unknown error occurred. Please try again later. If this error continues, please check the logs or report the issue on GitHub.'
-  )
-  t(
-    'The {{model}} API itself does not support web browsing. Supported models: <OpenMorePlanButton>WorkspAIce AI models</OpenMorePlanButton>, {{supported_web_browsing_models}}'
+    'An unknown error occurred. Please try again later. If this error continues, please send an email to Report issues on GitHub for support.'
   )
   t('The {{model}} API itself does not support web browsing. Supported models: {{supported_web_browsing_models}}')
   t(
     'No search results found. Please use another <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton> or try again later.'
-  )
-  t(
-    'The selected search provider is not available in this local-only build. Please choose a different <OpenExtensionSettingButton>search provider</OpenExtensionSettingButton>.'
   )
   t(
     'You have selected Tavily as the search provider, but an API key has not been entered yet. Please <OpenExtensionSettingButton>click here to open Settings</OpenExtensionSettingButton> and enter your API key, or choose a different search provider.'
@@ -84,26 +62,25 @@ function _errorI18nKeys(t: (key: string) => string) {
     'Tool use is not enabled for Model {{model}}. Please enable it in <OpenSettingButton>provider settings</OpenSettingButton> or switch to a model that supports tool use.'
   )
   t(
-    'Mobile devices temporarily do not support local parsing of this file type. Please use text files (txt, markdown, etc.) or use <LinkToAdvancedFileProcessing>WorkspAIce AI Service</LinkToAdvancedFileProcessing> for cloud-based document analysis.'
+    'Mobile devices temporarily do not support local parsing of this file type. Please use text files (txt, markdown, etc.) or parse the file on the desktop app.'
   )
   t(
-    'The web version temporarily does not support local parsing of this file type. Please use text files (txt, markdown, etc.) or use <LinkToAdvancedFileProcessing>WorkspAIce AI Service</LinkToAdvancedFileProcessing> for cloud-based document analysis.'
+    'The web version temporarily does not support local parsing of this file type. Please use text files (txt, markdown, etc.) or parse the file on the desktop app.'
   )
   t(
-    'Local document parsing failed. You can go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and switch to WorkspAIce AI for cloud-based document parsing.'
-  )
-  t('WorkspAIce AI document parsing failed. Please try again later.')
-  t(
-    'Document parsing failed. You can go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and switch to WorkspAIce AI for cloud-based document parsing.'
+    'Local document parsing failed. You can go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and choose an available local or user-configured parser.'
   )
   t(
-    'Selected document parser is currently only supported in Knowledge Base. For chat file attachments, please go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and switch to Local or WorkspAIce AI.'
+    'Document parsing failed. You can go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and choose a different available parser.'
+  )
+  t(
+    'Selected document parser is currently only supported in Knowledge Base. For chat file attachments, please go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and switch to Local.'
   )
   t(
     'MinerU API token is required. Please go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and configure your MinerU API token.'
   )
   t(
-    'This file type requires a document parser. Please go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and enable WorkspAIce AI document parsing.'
+    'This file type requires a document parser. Please go to <OpenDocumentParserSettingButton>Settings</OpenDocumentParserSettingButton> and enable an available local or user-configured parser.'
   )
   t(
     'You have selected BoCha as the search provider, but an API key has not been entered yet. Please <OpenExtensionSettingButton>click here to open Settings</OpenExtensionSettingButton> and enter your API key, or choose a different search provider.'
@@ -162,15 +139,8 @@ function _otherI18nKeys(t: (key: string) => string) {
   t('Text Only')
   t('Local')
   t('MinerU')
-  t(
-    'Only supports basic text files (.txt, .md, .json, code files, etc.). For PDF and Office files, please switch to WorkspAIce AI.'
-  )
-  t(
-    'Uses built-in document parsing feature, supports common file types. Free usage, no compute points will be consumed.'
-  )
-  t(
-    'Cloud-based document parsing service, supports PDF, Office files, EPUB and many other file types. Consumes compute points.'
-  )
+  t('Basic text file support only (.txt, .md, .json, code files, etc.)')
+  t('Uses built-in document parsing feature, supports common file types.')
   t('Third-party cloud parsing service, supports PDF and most Office files. Requires API token.')
 
   // src/renderer/components/knowledge-base/KnowledgeBaseForm.tsx

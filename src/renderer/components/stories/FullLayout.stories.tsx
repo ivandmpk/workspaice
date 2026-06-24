@@ -149,7 +149,7 @@ export const CurrentLayout: StoryObj = {
             <Button variant="light" size="sm" fullWidth mb="xs">
               <IconCirclePlus size={16} className="mr-2" /> New Chat
             </Button>
-            <NavItem icon={IconMessageChatbot} label="My Copilots" />
+            <NavItem icon={IconMessageChatbot} label="Assistants" />
             <NavItem icon={IconSettingsFilled} label="Settings" />
             <NavItem icon={IconHelpCircle} label="Help" />
             <NavItem icon={IconInfoCircle} label="About (v1.18)" />
@@ -302,7 +302,9 @@ export const OptimizedLayout: StoryObj = {
       }}
     >
       {/* Sidebar — CSS Grid column */}
-      <Box style={{ borderRight: '1px solid var(--workspaice-border-primary)', display: 'flex', flexDirection: 'column' }}>
+      <Box
+        style={{ borderRight: '1px solid var(--workspaice-border-primary)', display: 'flex', flexDirection: 'column' }}
+      >
         <Flex align="center" justify="space-between" px="md" py="sm">
           <Text fw={700} size="lg">
             WorkspAIce
@@ -345,7 +347,7 @@ export const OptimizedLayout: StoryObj = {
 
         <Divider />
         <Flex align="center" justify="center" gap="md" py="sm">
-          <Tooltip label="My Copilots" withArrow>
+          <Tooltip label="Assistants" withArrow>
             <ActionIcon variant="subtle" color="gray" size={32} radius="md">
               <IconMessageChatbot size={18} />
             </ActionIcon>

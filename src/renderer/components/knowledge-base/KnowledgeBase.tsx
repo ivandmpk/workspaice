@@ -210,10 +210,9 @@ const KnowledgeBasePage: React.FC = () => {
   function formatParserType(parserType?: DocumentParserType): string {
     switch (parserType) {
       case 'local':
-        return 'WorkspAIce AI'
+        return t('Local')
       case 'mineru':
         return 'MinerU'
-      case 'local':
       default:
         return t('Local')
     }
@@ -386,16 +385,16 @@ const KnowledgeBasePage: React.FC = () => {
           />
           <DocumentParserDisplay parserType={editKb?.documentParser?.type} />
           <KnowledgeBaseModelSelectors
-                embeddingModelList={embeddingModelList}
-                rerankModelList={rerankModelList}
-                visionModelList={visionModelList}
-                embeddingModel={editKb ? `${editKb.embeddingModel}` : ''}
-                rerankModel={editRerankModel}
-                visionModel={editVisionModel}
-                onRerankModelChange={setEditRerankModel}
-                onVisionModelChange={setEditVisionModel}
-                isEmbeddingDisabled
-              />
+            embeddingModelList={embeddingModelList}
+            rerankModelList={rerankModelList}
+            visionModelList={visionModelList}
+            embeddingModel={editKb ? `${editKb.embeddingModel}` : ''}
+            rerankModel={editRerankModel}
+            visionModel={editVisionModel}
+            onRerankModelChange={setEditRerankModel}
+            onVisionModelChange={setEditVisionModel}
+            isEmbeddingDisabled
+          />
           <KnowledgeBaseFormActions
             onCancel={() => setEditKb(null)}
             onConfirm={handleSaveEditKb}

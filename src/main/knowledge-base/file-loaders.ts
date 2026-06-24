@@ -18,8 +18,8 @@ const log = getLogger('knowledge-base:file-loaders')
 
 /**
  * Parse error message to extract user-friendly message
- * Handles JSON error responses from WorkspAIce AI API
- * Uses i18nKey from WorkspAIceAIAPIError.codeNameMap for known error codes
+ * Handles JSON error responses from parser/provider APIs.
+ * Uses i18nKey from the shared error map for known error codes.
  */
 function parseErrorMessage(errorMessage: string): string {
   // Try to extract error code from JSON error response
@@ -32,7 +32,7 @@ function parseErrorMessage(errorMessage: string): string {
       const parsed = JSON.parse(jsonStr)
       const errorCode = parsed.error?.code
 
-      // Try to get i18nKey from WorkspAIceAIAPIError.codeNameMap
+      // Try to get i18nKey from the shared error map.
       if (errorCode && WorkspAIceAIAPIError.codeNameMap[errorCode]) {
         return WorkspAIceAIAPIError.codeNameMap[errorCode].i18nKey
       }

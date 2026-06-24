@@ -20,7 +20,9 @@ import { ImageInStorage } from '../Image'
 function getTranslatedErrorMessage(errorCode: string | undefined, t: (key: string) => string): string | undefined {
   if (!errorCode) return undefined
   if (isSessionAttachmentRagAuthError(errorCode)) {
-    return t('This large file needs WorkspAIce AI to finish indexing. Sign in to WorkspAIce AI, then retry this file.')
+    return t(
+      'Large-file chat indexing is not available in this local-only build. Use Knowledge Base or a smaller file.'
+    )
   }
   if (isSessionAttachmentRagIndexingError(errorCode)) {
     return t(
@@ -56,7 +58,7 @@ function getErrorStatusLabel(errorCode: string | undefined, t: (key: string) => 
     return t('Too large')
   }
   if (isSessionAttachmentRagAuthError(errorCode)) {
-    return t('Sign in needed')
+    return t('Unavailable')
   }
   if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR) {
     return t('Switch model')

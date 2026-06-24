@@ -214,7 +214,6 @@ export async function submitNewUserMessage(
   newUserMsg = await attachLargeFileRagMetadata(sessionId, newUserMsg)
 
   const globalSettings = settingsStore.getState().getSettings()
-  const isPro = settingActions.isPro()
 
   // 根据需要，插入空白的回复消息
   let newAssistantMsg = createMessage('assistant', '')
@@ -224,7 +223,7 @@ export async function submitNewUserMessage(
     }
     newAssistantMsg.status.push({
       type: 'sending_file',
-      mode: isPro ? 'advanced' : 'local',
+      mode: 'local',
     })
   }
   if (newUserMsg.links && newUserMsg.links.length > 0) {
@@ -233,7 +232,7 @@ export async function submitNewUserMessage(
     }
     newAssistantMsg.status.push({
       type: 'loading_webpage',
-      mode: isPro ? 'advanced' : 'local',
+      mode: 'local',
     })
   }
   if (needGenerating) {

@@ -12,7 +12,7 @@ export default function DesktopDownloadReminder() {
   const location = useLocation()
   const language = useLanguage()
   const setSettings = useSettingsStore((state) => state.setSettings)
-  const dismissed = useSettingsStore((state) => state.workspaiceAIDesktopPromptDismissed)
+  const dismissed = useSettingsStore((state) => state.desktopDownloadPromptDismissed)
 
   if (platform.type !== 'web' || dismissed) {
     return null
@@ -29,14 +29,13 @@ export default function DesktopDownloadReminder() {
           <Flex justify="space-between" gap="sm" align="flex-start">
             <Flex gap="sm" align="flex-start" flex={1}>
               <ScalableIcon icon={IconDeviceDesktop} size={20} className="text-workspaice-brand mt-2 shrink-0" />
-                <Text fw={600}>{t('More advanced features are available in WorkspAIce Desktop.')}
-                </Text>
+              <Text fw={600}>{t('More advanced features are available in WorkspAIce Desktop.')}</Text>
             </Flex>
 
             <ActionIcon
               variant="subtle"
               color="workspaice-secondary"
-              onClick={() => setSettings({ workspaiceAIDesktopPromptDismissed: true })}
+              onClick={() => setSettings({ desktopDownloadPromptDismissed: true })}
               aria-label={t('Close') || 'Close'}
             >
               <ScalableIcon icon={IconX} size={16} />
@@ -55,7 +54,9 @@ export default function DesktopDownloadReminder() {
             className="mx-2"
             onClick={() =>
               platform.openLink(
-                buildWorkspAIceUrl(`/redirect_app/homepage/${language}?utm_source=web&utm_content=floating_desktop_prompt#download`)
+                buildWorkspAIceUrl(
+                  `/redirect_app/homepage/${language}?utm_source=web&utm_content=floating_desktop_prompt#download`
+                )
               )
             }
           >

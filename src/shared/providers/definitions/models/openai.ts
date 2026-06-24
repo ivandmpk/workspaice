@@ -52,7 +52,7 @@ export default class OpenAI extends AbstractAISDKModel {
       headers = this.options.extraHeaders
     } else if (this.options.apiHost.includes('openrouter.ai')) {
       headers = {
-        'X-Title': 'WorkspAIce AI',
+        'X-Title': 'WorkspAIce',
       }
     } else if (this.options.apiHost.includes('aihubmix.com')) {
       headers = {

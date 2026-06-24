@@ -6,11 +6,6 @@ import { settingsStore } from './settingsStore'
 export function needEditSetting() {
   const settings = settingsStore.getState()
 
-  // 激活了workspaice ai
-  if (settings.licenseKey) {
-    return false
-  }
-
   if (settings.providers && Object.keys(settings.providers).length > 0) {
     const providers = settings.providers
     const keys = Object.keys(settings.providers)
@@ -49,22 +44,6 @@ export function getLanguage() {
 
 export function getProxy() {
   return settingsStore.getState().proxy
-}
-
-export function getLicenseKey() {
-  return settingsStore.getState().licenseKey
-}
-
-export function getLicenseDetail() {
-  return settingsStore.getState().licenseDetail
-}
-
-export function isPaid() {
-  return !!getLicenseKey()
-}
-
-export function isPro() {
-  return !!getLicenseKey() && !getLicenseDetail()?.name.toLowerCase().includes('lite')
 }
 
 export function getAutoGenerateTitle() {

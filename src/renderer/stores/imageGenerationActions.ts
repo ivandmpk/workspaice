@@ -29,7 +29,7 @@ const log = getLogger('image-generation-actions')
 // AbortController for cancelling in-flight polling
 let currentAbortController: AbortController | null = null
 
-function getLicenseKey(): string {
+function getHostedImageServiceToken(): string {
   return ''
 }
 
@@ -115,7 +115,7 @@ export async function createAndGenerate(params: GenerateImageParams): Promise<st
 }
 
 async function generateImages(recordId: string, params: GenerateImageParams): Promise<void> {
-  const licenseKey = getLicenseKey()
+  const hostedServiceToken = getHostedImageServiceToken()
   const num = params.imageGenerateNum || 1
 
   // Create AbortController for this generation
@@ -163,7 +163,7 @@ async function generateImages(recordId: string, params: GenerateImageParams): Pr
         quantity: num,
         images: referenceImageData.length > 0 ? referenceImageData : undefined,
       },
-      licenseKey
+      hostedServiceToken
     )
 
     log.debug('Submitted image generation task:', submission.task_id, 'items:', submission.items.length)
@@ -176,7 +176,7 @@ async function generateImages(recordId: string, params: GenerateImageParams): Pr
 
     // Poll until all items are finished, progressively updating as images complete
     let lastCompletedCount = 0
-    const finalResult = await pollTaskUntilComplete(submission.task_id, licenseKey, {
+    const finalResult = await pollTaskUntilComplete(submission.task_id, hostedServiceToken, {
       signal,
       onPoll: async (response) => {
         const completedUrls = getCompletedImageUrls(response)
@@ -384,7 +384,7 @@ export async function resumeGeneration(recordId: string): Promise<void> {
     throw new Error('No task ID found for this record')
   }
 
-  const licenseKey = getLicenseKey()
+  const hostedServiceToken = getHostedImageServiceToken()
   store.setCurrentGeneratingId(recordId)
 
   // Create AbortController for resume operation
@@ -393,11 +393,11 @@ export async function resumeGeneration(recordId: string): Promise<void> {
 
   try {
     // Check current status, then poll if not finished
-    const currentStatus = await pollImageTask(record.taskId, licenseKey, signal)
+    const currentStatus = await pollImageTask(record.taskId, hostedServiceToken, signal)
 
     let finalResult = currentStatus
     if (!currentStatus.is_finished) {
-      finalResult = await pollTaskUntilComplete(record.taskId, licenseKey, { signal })
+      finalResult = await pollTaskUntilComplete(record.taskId, hostedServiceToken, { signal })
     }
 
     // Collect successful image URLs into generatedImages

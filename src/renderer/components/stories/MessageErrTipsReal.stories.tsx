@@ -142,7 +142,7 @@ export const WithoutRetry: StoryObj<typeof MessageErrTips> = {
   name: 'Error Without Retry Button',
   args: {
     msg: makeErrorMessage({
-      error: 'Your subscription has expired. Please renew to continue.',
+      error: 'The provider rejected this request. Please check your configuration and try again.',
       errorCode: 403,
     }),
   },

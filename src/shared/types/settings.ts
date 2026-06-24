@@ -11,7 +11,6 @@ export { ModelProviderType } from './provider'
  * Document parser service type
  * - none: No parsing service, only supports basic text files (mobile/web default)
  * - local: Local parsing using built-in libraries (desktop default)
- * - workspaice-ai: WorkspAIce cloud parsing service (requires login, consumes compute points)
  * - mineru: Third-party MinerU parsing service (desktop only)
  */
 export type DocumentParserType = 'none' | 'local' | 'mineru'
@@ -148,48 +147,6 @@ export const SessionSettingsSchema = GlobalSessionSettingsSchema.extend({
   imageGenerateNum: z.number().optional().catch(1),
   providerOptions: ProviderOptionsSchema.optional().catch(undefined),
   autoCompaction: z.boolean().optional().catch(undefined),
-})
-
-const UnifiedTokenUsageDetailSchema = z.object({
-  type: z.string(), // "plan" | "trial" | "invitation_reward" | ... (more types in future)
-  token_usage: z.number(),
-  token_limit: z.number(),
-  expires_at: z.string().nullish(),
-})
-
-const WorkspAIceAILicenseDetailSchema = z.object({
-  type: z.enum(['workspaiceai-3.5', 'workspaiceai-4']).optional(),
-  name: z.string(),
-  status: z.string().optional(),
-  defaultModel: z.enum(['workspaiceai-3.5', 'workspaiceai-4']).optional(),
-  remaining_quota_35: z.number(),
-  remaining_quota_4: z.number(),
-  remaining_quota_image: z.number(),
-  image_used_count: z.number(),
-  image_total_quota: z.number(),
-  plan_image_limit: z.number(),
-  token_refreshed_time: z.string(),
-  token_next_refresh_time: z.string().optional(),
-  token_expire_time: z.string().nullish(),
-  remaining_quota_unified: z.number(),
-  expansion_pack_limit: z.number(),
-  expansion_pack_usage: z.number(),
-  unified_token_usage: z.number(),
-  unified_token_limit: z.number(),
-  unified_token_usage_details: z.array(UnifiedTokenUsageDetailSchema).default([]),
-  aggregated_reward_details: UnifiedTokenUsageDetailSchema.default({
-    type: 'reward',
-    token_usage: 0,
-    token_limit: 0,
-    expires_at: null,
-  }),
-  key: z.string().optional(),
-  price_type: z.string().optional(),
-  order_type: z.string().optional(),
-  utm_source: z.string().optional(),
-  expires_at: z.string().optional(),
-  recurring_canceled: z.boolean().nullish(),
-  payment_type: z.string().optional(),
 })
 
 export const shortcutSendValues = [
@@ -331,17 +288,7 @@ export const SettingsSchema = GlobalSessionSettingsSchema.extend({
     .optional()
     .catch(undefined),
 
-  // workspaiceai
-  licenseKey: z.string().optional(),
-  licenseInstances: z.record(z.string(), z.string()).optional().catch(undefined),
-  licenseDetail: WorkspAIceAILicenseDetailSchema.optional().catch(undefined),
-  licensePlanName: z.string().optional(),
-  licenseActivationMethod: z.enum(['login', 'manual']).optional(),
-  hasExpiredLicense: z.boolean().default(false),
-  lastSelectedLicenseByUser: z.record(z.string(), z.string()).optional().catch(undefined),
-  // 在 licensekeyview UI中显示/记忆的key，以免用户使用 login 方式后老 key 被清除，他也不记得
-  memorizedManualLicenseKey: z.string().optional(),
-  workspaiceAIDesktopPromptDismissed: z.boolean().default(false),
+  desktopDownloadPromptDismissed: z.boolean().default(false),
 
   // chat settings
   showWordCount: z.boolean().optional().catch(undefined),
@@ -428,8 +375,6 @@ export type OpenAIParams = z.infer<typeof OpenAIParamsSchema>
 export type GoogleParams = z.infer<typeof GoogleParamsSchema>
 export type ProviderOptions = z.infer<typeof ProviderOptionsSchema>
 export type GlobalSessionSettings = z.infer<typeof GlobalSessionSettingsSchema>
-export type WorkspAIceAILicenseDetail = z.infer<typeof WorkspAIceAILicenseDetailSchema>
-export type UnifiedTokenUsageDetail = z.infer<typeof UnifiedTokenUsageDetailSchema>
 export type ShortcutSendValue = z.infer<typeof ShortcutSendValueSchema>
 export type ShortcutToggleWindowValue = z.infer<typeof ShortcutToggleWindowValueSchema>
 export type ShortcutName = keyof ShortcutSetting

@@ -399,7 +399,7 @@ async function migrate_9_to_10(dataStore: MigrateStore): Promise<boolean> {
       chatglmApiKey,
       chatglmModel,
 
-      // workspaice-ai
+      // legacy hosted provider
       workspaiceAIModel,
 
       // claude

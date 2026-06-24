@@ -204,7 +204,7 @@ function Root() {
     } else if (pathname === '/' || pathname.startsWith('/session/')) {
       setSidebarMode('chat')
     }
-    // Other routes (settings, copilots, about, etc.) don't change sidebarMode
+    // Other routes (settings, about, etc.) don't change sidebarMode
   }, [location.pathname, setSidebarMode])
 
   const { needRoomForMacWindowControls } = useNeedRoomForWinControls()
