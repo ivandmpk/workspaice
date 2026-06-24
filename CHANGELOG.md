@@ -2,6 +2,10 @@
 
 All notable WorkspAIce changes are tracked here.
 
+## [1.0.2-beta] - Unreleased
+
+Future development after `1.0.1-beta` should be recorded here until the next beta release is cut.
+
 ## [1.0.1-beta] - 2026-06-23
 
 Second WorkspAIce beta release, focused on workspace organization, release readiness, and making the beta state visible in the app shell.
