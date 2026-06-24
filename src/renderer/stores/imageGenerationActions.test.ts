@@ -7,6 +7,7 @@ const updateRecordMock = vi.fn()
 const setQueryDataMock = vi.fn()
 const invalidateQueriesMock = vi.fn()
 const getImageMock = vi.fn()
+const paintMock = vi.fn()
 const setCurrentGeneratingIdMock = vi.fn()
 const setCurrentRecordIdMock = vi.fn()
 const trackEventMock = vi.fn()
@@ -23,6 +24,12 @@ vi.mock('@/packages/remote', () => ({
   submitImageGeneration: submitImageGenerationMock,
   pollTaskUntilComplete: pollTaskUntilCompleteMock,
   pollImageTask: vi.fn(),
+}))
+
+vi.mock('@shared/providers', () => ({
+  getModel: vi.fn(() => ({
+    paint: paintMock,
+  })),
 }))
 
 vi.mock('./imageGenerationStore', () => ({
@@ -52,6 +59,7 @@ vi.mock('./settingsStore', () => ({
   settingsStore: {
     getState: () => ({
       licenseKey: 'license-key',
+      getSettings: () => ({}),
     }),
   },
 }))
@@ -70,11 +78,18 @@ vi.mock('@/lib/utils', () => ({
 }))
 
 vi.mock('@/platform', () => ({
-  default: {},
+  default: {
+    getConfig: vi.fn(async () => ({})),
+    getImageGenerationStorage: vi.fn(() => ({
+      getById: vi.fn(async () => ({ generatedImages: [] })),
+    })),
+  },
 }))
 
 vi.mock('@/storage', () => ({
-  default: {},
+  default: {
+    setBlob: vi.fn(),
+  },
 }))
 
 vi.mock('@/storage/StoreStorage', () => ({
@@ -100,6 +115,7 @@ describe('imageGenerationActions reference image payload', () => {
       ],
     })
     getImageMock.mockResolvedValue('data:image/png;base64,AAAA')
+    paintMock.mockResolvedValue(['data:image/png;base64,OUTPUT'])
   })
 
   it('sends reference images as image_url entries for both URLs and stored images', async () => {
@@ -116,16 +132,20 @@ describe('imageGenerationActions reference image payload', () => {
     })
 
     await vi.waitFor(() => {
-      expect(submitImageGenerationMock).toHaveBeenCalledTimes(1)
+      expect(paintMock).toHaveBeenCalledTimes(1)
     })
 
-    expect(submitImageGenerationMock).toHaveBeenCalledWith(
+    expect(paintMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        images: [{ image_url: 'https://example.com/reference.png' }, { image_url: 'data:image/png;base64,AAAA' }],
+        images: [{ imageUrl: 'https://example.com/reference.png' }, { imageUrl: 'data:image/png;base64,AAAA' }],
       }),
-      'license-key'
+      expect.any(AbortSignal),
+      expect.any(Function)
     )
-    expect(trackEventMock).toHaveBeenCalledWith('generate_image', expect.objectContaining({ has_reference: true }))
+    expect(trackEventMock).toHaveBeenCalledWith(
+      'generate_image',
+      expect.objectContaining({ has_reference: true, path: 'direct' })
+    )
   })
 
   it('stores structured error codes from WorkspAIce AI image generation failures', async () => {
@@ -133,7 +153,7 @@ describe('imageGenerationActions reference image payload', () => {
     class StructuredImageGenerationError extends BaseError {
       public code = 20004
     }
-    submitImageGenerationMock.mockRejectedValueOnce(new StructuredImageGenerationError('license not found'))
+    paintMock.mockRejectedValueOnce(new StructuredImageGenerationError('provider rejected request'))
 
     const { createAndGenerate } = await import('./imageGenerationActions')
 
@@ -152,27 +172,15 @@ describe('imageGenerationActions reference image payload', () => {
         'record-1',
         expect.objectContaining({
           status: 'error',
-          error: 'license not found',
+          error: 'provider rejected request',
           errorCode: 20004,
         })
       )
     })
   })
 
-  it('stores failed item error messages from async image generation results', async () => {
-    pollTaskUntilCompleteMock.mockResolvedValueOnce({
-      task_id: 'task-1',
-      is_finished: true,
-      items: [
-        {
-          uuid: 'item-1',
-          status: 'failed',
-          created_at: '2026-05-08T15:23:34.442+08:00',
-          error_code: 'image_content_moderation_blocked',
-          error_message: 'Content rejected by content moderation',
-        },
-      ],
-    })
+  it('stores a direct-path error when the provider returns no generated images', async () => {
+    paintMock.mockResolvedValueOnce([])
 
     const { createAndGenerate } = await import('./imageGenerationActions')
 
@@ -191,9 +199,7 @@ describe('imageGenerationActions reference image payload', () => {
         'record-1',
         expect.objectContaining({
           status: 'error',
-          error: 'Content rejected by content moderation',
-          errorCode: 'image_content_moderation_blocked',
-          errorItemUuid: 'item-1',
+          error: 'All images failed to generate',
         })
       )
     })

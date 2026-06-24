@@ -284,6 +284,7 @@ export default function Sidebar() {
                 c="workspaice-secondary"
                 className="rounded"
                 label={t('Settings')}
+                data-testid="settings-nav-link"
                 leftSection={<ScalableIcon icon={IconSettingsFilled} size={20} />}
                 onClick={() => navigateToSettings()}
                 variant="light"

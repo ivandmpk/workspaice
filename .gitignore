@@ -101,6 +101,8 @@ build-web.sh
 # testing
 /coverage
 /test/output
+/test-results
+/playwright-report
 
 # next.js
 /.next/

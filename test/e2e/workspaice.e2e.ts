@@ -1,0 +1,136 @@
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
+import os from 'node:os'
+import path from 'node:path'
+import { test as base, type ElectronApplication, _electron as electron, expect, type Page } from '@playwright/test'
+
+type Fixtures = {
+  app: ElectronApplication
+  page: Page
+  rendererErrors: string[]
+}
+
+const require = createRequire(__filename)
+const electronPath = require('electron') as string
+const rootDir = path.resolve(__dirname, '../..')
+const mainEntry = path.join(rootDir, 'release/app/dist/main/main.js')
+const rendererEntry = path.join(rootDir, 'release/app/dist/renderer/index.html')
+
+const test = base.extend<Fixtures>({
+  // biome-ignore lint/correctness/noEmptyPattern: Playwright fixture factories require object destructuring.
+  app: async ({}, use) => {
+    if (!fs.existsSync(mainEntry) || !fs.existsSync(rendererEntry)) {
+      throw new Error('E2E requires a built app. Run `pnpm build` before `playwright test`.')
+    }
+
+    const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'workspaice-e2e-'))
+    const app = await electron.launch({
+      executablePath: electronPath,
+      args: [mainEntry],
+      cwd: rootDir,
+      timeout: 60_000,
+      env: {
+        ...process.env,
+        CI: '1',
+        NODE_ENV: 'production',
+        ELECTRON_DISABLE_SECURITY_WARNINGS: 'true',
+        WORKSPAICE_DISABLE_GPU: '1',
+        WORKSPAICE_E2E_USER_DATA_DIR: userDataDir,
+      },
+    })
+
+    try {
+      await use(app)
+    } finally {
+      await app.close()
+      fs.rmSync(userDataDir, { recursive: true, force: true })
+    }
+  },
+  page: async ({ app }, use) => {
+    const page = await app.firstWindow()
+    await page.waitForLoadState('domcontentloaded')
+    await use(page)
+  },
+  rendererErrors: async ({ page }, use) => {
+    const errors: string[] = []
+    page.on('pageerror', (error) => {
+      errors.push(error.message)
+    })
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+    await use(errors)
+  },
+})
+
+test.describe.configure({ mode: 'serial' })
+
+test.afterEach(({ rendererErrors }) => {
+  expect(rendererErrors).toEqual([])
+})
+
+test('launches to the first meaningful chat screen', async ({ app, page }) => {
+  await expect(page).toHaveTitle(/WorkspAIce|Electron/)
+  await expect(page.getByText('What can I help you with today?')).toBeVisible()
+  await expect(page.getByTestId('message-input')).toBeVisible()
+  await expect(page.getByTestId('new-chat-button')).toBeVisible()
+  await expect(page.locator('.vite-error-overlay')).toHaveCount(0)
+
+  const appPath = await app.evaluate(async ({ app }) => app.getAppPath())
+  expect(appPath).toContain('workspaice')
+})
+
+test('opens model provider settings and edits a mock custom provider', async ({ page }) => {
+  await page.getByTestId('settings-nav-link').click()
+  await expect(page.getByText('Settings').first()).toBeVisible()
+  await expect(page.getByText('Model Provider')).toBeVisible()
+
+  await page.getByTestId('add-provider-button').click()
+  await page.getByText('Add Custom Provider').click()
+  await page.getByTestId('custom-provider-name-input').fill('E2E Mock Provider')
+  await page.getByTestId('custom-provider-add-button').click()
+
+  await expect(page.getByTestId('provider-name-input')).toHaveValue('E2E Mock Provider')
+  await page.getByTestId('provider-api-host-input').fill('http://127.0.0.1:9/v1')
+  await page.getByTestId('provider-api-key-input').fill('sk-e2e-not-real')
+
+  await expect(page.getByTestId('provider-api-host-input')).toHaveValue('http://127.0.0.1:9/v1')
+  await expect(page.getByTestId('provider-api-key-input')).toHaveValue('sk-e2e-not-real')
+})
+
+test('preserves composer draft input without calling a provider', async ({ page }) => {
+  await page.getByTestId('message-input').fill('E2E draft message that must stay local')
+  await expect(page.getByTestId('message-input')).toHaveValue('E2E draft message that must stay local')
+})
+
+test('creates, renames, creates a chat inside, and deletes a workspace', async ({ page }) => {
+  await page.getByTestId('new-workspace-button').click()
+  await page.getByTestId('workspace-name-input').fill('E2E Workspace')
+  await page.getByTestId('workspace-save-button').click()
+
+  const workspaceRow = page.locator('[data-testid^="workspace-row-"]').filter({ hasText: 'E2E Workspace' })
+  await expect(workspaceRow).toBeVisible()
+  const workspaceTestId = await workspaceRow.getAttribute('data-testid')
+  const workspaceId = workspaceTestId?.replace('workspace-row-', '')
+  expect(workspaceId).toBeTruthy()
+
+  await workspaceRow.hover()
+  await page.getByTestId(`new-chat-in-workspace-${workspaceId}`).click()
+  await expect(workspaceRow.getByText('1')).toBeVisible()
+
+  await workspaceRow.hover()
+  await workspaceRow.getByLabel('Workspace actions').click()
+  await page.getByRole('menuitem', { name: 'Rename' }).click()
+  await page.getByTestId('workspace-name-input').fill('E2E Workspace Renamed')
+  await page.getByTestId('workspace-save-button').click()
+  await expect(page.locator(`[data-testid="workspace-row-${workspaceId}"]`)).toContainText('E2E Workspace Renamed')
+
+  const renamedWorkspaceRow = page.locator(`[data-testid="workspace-row-${workspaceId}"]`)
+  await renamedWorkspaceRow.hover()
+  await renamedWorkspaceRow.getByLabel('Workspace actions').click()
+  await page.getByRole('menuitem', { name: 'Delete' }).click()
+  await page.getByRole('menuitem', { name: 'Delete Workspace and Chats?' }).click()
+  await expect(page.locator(`[data-testid="workspace-row-${workspaceId}"]`)).toHaveCount(0)
+})

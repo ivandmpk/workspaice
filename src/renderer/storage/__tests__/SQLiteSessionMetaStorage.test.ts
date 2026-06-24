@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { SessionMetaRecord } from '@shared/types'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SQLiteSessionMetaStorage } from '../SQLiteSessionMetaStorage'
 
 const mockDatabase = vi.hoisted(() => ({
@@ -18,7 +18,7 @@ const mockConnection = vi.hoisted(() => ({
 
 vi.mock('@capacitor-community/sqlite', () => ({
   CapacitorSQLite: {},
-  SQLiteConnection: vi.fn(function () {
+  SQLiteConnection: vi.fn(function SQLiteConnection() {
     return mockConnection
   }),
 }))
@@ -41,6 +41,7 @@ describe('SQLiteSessionMetaStorage', () => {
     mockDatabase.execute.mockResolvedValue({ changes: { changes: 0 } })
     mockDatabase.run.mockResolvedValue({ changes: { changes: 1 } })
     mockDatabase.executeSet.mockResolvedValue({ changes: { changes: 1 } })
+    mockDatabase.query.mockResolvedValue({ values: [{ name: 'workspace_id' }] })
   })
 
   it('createMany delegates batch writes to the Capacitor SQLite transaction API', async () => {
@@ -54,11 +55,11 @@ describe('SQLiteSessionMetaStorage', () => {
       [
         {
           statement: expect.stringContaining('INSERT OR REPLACE INTO session_meta'),
-          values: ['a', 'Test Session', 0, 0, null, null, null, 'chat', 100, 100],
+          values: ['a', 'Test Session', null, 0, 0, null, null, null, 'chat', 100, 100],
         },
         {
           statement: expect.stringContaining('INSERT OR REPLACE INTO session_meta'),
-          values: ['b', 'Test Session', 1, 0, null, null, null, 'chat', 100, 100],
+          values: ['b', 'Test Session', null, 1, 0, null, null, null, 'chat', 100, 100],
         },
       ],
       true

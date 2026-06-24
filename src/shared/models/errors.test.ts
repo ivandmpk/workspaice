@@ -4,9 +4,9 @@ import {
   AIProviderNoImplementedPaintError,
   ApiError,
   BaseError,
-  WorkspAIceAIAPIError,
   NetworkError,
   OCRError,
+  WorkspAIceAIAPIError,
 } from './errors'
 
 describe('BaseError', () => {
@@ -95,13 +95,13 @@ describe('WorkspAIceAIAPIError', () => {
     expect(error.requestId).toBe('req-123')
   })
 
-  it('fromCodeName returns WorkspAIceAIAPIError for known codename', () => {
-    const error = WorkspAIceAIAPIError.fromCodeName('quota exceeded', 'token_quota_exhausted', 'req-123')
+  it('fromCodeName returns WorkspAIceAIAPIError for known local/provider codename', () => {
+    const error = WorkspAIceAIAPIError.fromCodeName('rate limited', 'rate_limit_exceeded', 'req-123')
 
     expect(error).toBeInstanceOf(WorkspAIceAIAPIError)
-    expect(error?.message).toBe('quota exceeded')
-    expect(error?.code).toBe(10004)
-    expect(error?.detail.name).toBe('token_quota_exhausted')
+    expect(error?.message).toBe('rate limited')
+    expect(error?.code).toBe(20005)
+    expect(error?.detail.name).toBe('rate_limit_exceeded')
     expect(error?.requestId).toBe('req-123')
   })
 
@@ -118,11 +118,11 @@ describe('WorkspAIceAIAPIError', () => {
   })
 
   it('getDetail returns detail for known code', () => {
-    const detail = WorkspAIceAIAPIError.getDetail(10004)
+    const detail = WorkspAIceAIAPIError.getDetail(20005)
 
     expect(detail).not.toBeNull()
-    expect(detail?.name).toBe('token_quota_exhausted')
-    expect(detail?.code).toBe(10004)
+    expect(detail?.name).toBe('rate_limit_exceeded')
+    expect(detail?.code).toBe(20005)
     expect(typeof detail?.i18nKey).toBe('string')
   })
 
@@ -140,8 +140,11 @@ describe('WorkspAIceAIAPIError', () => {
 
 describe('Error inheritance', () => {
   it('all exported errors are instanceof Error and BaseError', () => {
-    const workspaiceDetail = WorkspAIceAIAPIError.getDetail(10004)
+    const workspaiceDetail = WorkspAIceAIAPIError.getDetail(20005)
     expect(workspaiceDetail).not.toBeNull()
+    if (!workspaiceDetail) {
+      throw new Error('Expected local provider error detail')
+    }
 
     const errors = [
       new BaseError('base'),
@@ -150,7 +153,7 @@ describe('Error inheritance', () => {
       new AIProviderNoImplementedPaintError('ProviderA'),
       new AIProviderNoImplementedChatError('ProviderB'),
       new OCRError('ocr-provider', new Error('ocr failed')),
-      new WorkspAIceAIAPIError('workspaice', workspaiceDetail!),
+      new WorkspAIceAIAPIError('workspaice', workspaiceDetail),
     ]
 
     for (const error of errors) {

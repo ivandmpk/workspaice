@@ -530,6 +530,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                 {t('Name')}
               </Text>
               <TextInput
+                data-testid="provider-name-input"
                 flex={1}
                 value={baseInfo.name}
                 onChange={(e) => {
@@ -672,6 +673,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
               </Flex>
               <Flex gap="xs" align="center">
                 <PasswordInput
+                  data-testid="provider-api-key-input"
                   flex={1}
                   value={providerSettings?.apiKey || ''}
                   onChange={handleApiKeyChange}
@@ -713,6 +715,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
             </Flex>
             <Flex gap="xs" align="center">
               <TextInput
+                data-testid="provider-api-host-input"
                 flex={1}
                 value={providerSettings?.apiHost}
                 placeholder={baseInfo.defaultSettings?.apiHost}
@@ -738,6 +741,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   </Flex>
                   <Flex gap="xs" align="center">
                     <TextInput
+                      data-testid="provider-api-host-input"
                       flex={1}
                       value={providerSettings?.apiHost}
                       placeholder={baseInfo.defaultSettings?.apiHost}
@@ -754,6 +758,7 @@ function ProviderSettings({ providerId }: { providerId: string }) {
                   </Flex>
                   <Flex gap="xs" align="center">
                     <TextInput
+                      data-testid="provider-api-path-input"
                       flex={1}
                       value={providerSettings?.apiPath}
                       onChange={handleApiPathChange}

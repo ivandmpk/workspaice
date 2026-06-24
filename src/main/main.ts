@@ -320,6 +320,8 @@ async function createWindow() {
   }
 
   const [state] = windowState.getState()
+  const devPreloadPath = path.join(__dirname, '../../out/preload/index.js')
+  const builtPreloadPath = path.join(__dirname, '../preload/index.js')
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -356,7 +358,9 @@ async function createWindow() {
       contextIsolation: true,
       preload: app.isPackaged
         ? path.join(__dirname, '../preload/index.js')
-        : path.join(__dirname, '../../out/preload/index.js'),
+        : fs.existsSync(builtPreloadPath)
+          ? builtPreloadPath
+          : devPreloadPath,
     },
   })
 

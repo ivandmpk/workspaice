@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ApiError, WorkspAIceAIAPIError } from '../models/errors'
+import type { ApiError, WorkspAIceAIAPIError } from '../models/errors'
 import { createAfetch } from './request'
 
 const platformInfo = {
@@ -14,14 +14,14 @@ describe('createAfetch', () => {
     vi.unstubAllGlobals()
   })
 
-  it('stores request id from WorkspAIce error body on known WorkspAIce errors', async () => {
+  it('stores request id from WorkspAIce error body on known local/provider errors', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
         new Response(
           JSON.stringify({
             error: {
-              code: 'token_quota_exhausted',
+              code: 'rate_limit_exceeded',
               request_id: 'req-from-body',
             },
           }),
@@ -39,7 +39,7 @@ describe('createAfetch', () => {
         { parseWorkspAIceRemoteError: true }
       )
     ).rejects.toMatchObject({
-      code: 10004,
+      code: 20005,
       requestId: 'req-from-body',
     } satisfies Partial<WorkspAIceAIAPIError>)
   })

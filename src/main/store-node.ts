@@ -10,6 +10,12 @@ import { getLogger } from './util'
 
 const logger = getLogger('store-node')
 
+if (process.env.WORKSPAICE_E2E_USER_DATA_DIR) {
+  fs.ensureDirSync(process.env.WORKSPAICE_E2E_USER_DATA_DIR)
+  app.setPath('userData', process.env.WORKSPAICE_E2E_USER_DATA_DIR)
+  logger.info('using isolated E2E userData path:', process.env.WORKSPAICE_E2E_USER_DATA_DIR)
+}
+
 const configPath = path.resolve(app.getPath('userData'), 'config.json')
 const configBackupFilenamePattern = /^config-backup-\d{4}-\d{2}-\d{2}T\d{2}_\d{2}_\d{2}\.\d{3}Z\.json$/
 const encryptionKeyPath = path.resolve(app.getPath('userData'), '.config-key')

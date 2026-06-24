@@ -364,6 +364,7 @@ function WorkspaceSection(props: { workspace: Workspace; sessions: SessionMetaRe
       {
         text: t('Rename'),
         icon: IconEdit,
+        testId: `workspace-rename-${workspace.id}`,
         onClick: () => {
           void NiceModal.show('workspace-edit', { workspace })
         },
@@ -375,6 +376,7 @@ function WorkspaceSection(props: { workspace: Workspace; sessions: SessionMetaRe
         },
         text: t('Delete'),
         icon: IconTrash,
+        testId: `workspace-delete-${workspace.id}`,
         onClick: async () => {
           await deleteWorkspaceAndSessions(workspace.id)
           if (selectedSessionInWorkspace) {
@@ -417,6 +419,7 @@ function WorkspaceSection(props: { workspace: Workspace; sessions: SessionMetaRe
       <Flex
         align="center"
         className="cursor-pointer rounded-sm group/workspace-item hover:bg-workspaice-background-gray-secondary"
+        data-testid={`workspace-row-${workspace.id}`}
         mx="xs"
         px="xs"
         py={8}
