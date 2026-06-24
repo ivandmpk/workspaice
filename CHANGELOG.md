@@ -9,6 +9,13 @@ Second WorkspAIce beta release, focused on workspace organization, release readi
 ### UI And Release Polish
 
 - Added a compact red/orange `BETA` badge beside the WorkspAIce sidebar title so users have a persistent visual reminder that this is a beta build.
+- Removed remaining hosted license, subscription, and WorkspAIce AI service labels from settings, defaults, exports, parser flows, image generation recovery, and locale scan surfaces.
+- Renamed the desktop reminder dismissal setting to remove hosted-era licensing terminology.
+
+### Local Dev And Settings Stability
+
+- Guarded the Knowledge Base settings route on non-desktop renderers so local browser smoke tests show the unsupported state instead of calling the desktop-only controller.
+- Cleaned up floating-promise warnings in the Knowledge Base settings page.
 
 ### Workspaces
 

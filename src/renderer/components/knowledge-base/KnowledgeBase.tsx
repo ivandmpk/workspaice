@@ -109,6 +109,7 @@ const ModelPill: React.FC<ModelPillProps> = ({
 
 const KnowledgeBasePage: React.FC = () => {
   const { t } = useTranslation()
+  const isDesktop = platform.type === 'desktop'
   const [kbList, setKbList] = useState<KnowledgeBase[]>([])
   const [newKbName, setNewKbName] = useState('')
   const [showCreate, setShowCreate] = useState(false)
@@ -122,7 +123,7 @@ const KnowledgeBasePage: React.FC = () => {
   const [editRerankModel, setEditRerankModel] = useState<string | null>(null)
   const [editVisionModel, setEditVisionModel] = useState<string | null>(null)
   const [deleteConfirmKb, setDeleteConfirmKb] = useState<(Partial<KnowledgeBase> & { id: number }) | null>(null)
-  const [isUnsupportedPlatform, setIsUnsupportedPlatform] = useState(false)
+  const [isUnsupportedPlatform, setIsUnsupportedPlatform] = useState(!isDesktop)
 
   const { providers } = useProviders()
 
@@ -157,8 +158,8 @@ const KnowledgeBasePage: React.FC = () => {
   }, [getModelList])
 
   const knowledgeBaseController = useMemo(() => {
-    return platform.getKnowledgeBaseController()
-  }, [])
+    return isDesktop ? platform.getKnowledgeBaseController() : null
+  }, [isDesktop])
 
   const getProviderName = useCallback(
     (providerId: string) => {
@@ -219,7 +220,7 @@ const KnowledgeBasePage: React.FC = () => {
   }
 
   const fetchKbList = useCallback(async () => {
-    if (isUnsupportedPlatform) return
+    if (isUnsupportedPlatform || !knowledgeBaseController) return
     try {
       const list = await knowledgeBaseController.list()
       if (list) {
@@ -231,11 +232,12 @@ const KnowledgeBasePage: React.FC = () => {
   }, [knowledgeBaseController, isUnsupportedPlatform, t])
 
   useEffect(() => {
-    fetchKbList()
+    void fetchKbList()
   }, [fetchKbList])
 
   // Check platform compatibility
   useEffect(() => {
+    if (!isDesktop) return
     const checkPlatform = async () => {
       try {
         const platformName = await platform.getPlatform()
@@ -246,12 +248,13 @@ const KnowledgeBasePage: React.FC = () => {
         console.error('Failed to check platform compatibility:', error)
       }
     }
-    checkPlatform()
-  }, [])
+    void checkPlatform()
+  }, [isDesktop])
 
   const createKb = async () => {
     if (!newKbName) return
     if (!newEmbeddingModel) return
+    if (!knowledgeBaseController) return
 
     try {
       await knowledgeBaseController.create({
@@ -279,7 +282,7 @@ const KnowledgeBasePage: React.FC = () => {
       setNewVisionModel(null)
       setNewDocumentParser({ type: 'local' })
       setShowCreate(false)
-      fetchKbList()
+      await fetchKbList()
     } catch (e) {
       toastError(t('Failed to create knowledge base, Error: {{error}}', { error: e }))
     }
@@ -293,6 +296,7 @@ const KnowledgeBasePage: React.FC = () => {
 
   const handleSaveEditKb = async () => {
     if (!editKb) return
+    if (!knowledgeBaseController) return
 
     try {
       await knowledgeBaseController.update({
@@ -304,7 +308,7 @@ const KnowledgeBasePage: React.FC = () => {
       setEditKb(null)
       setEditRerankModel(null)
       setEditVisionModel(null)
-      fetchKbList()
+      await fetchKbList()
     } catch (e) {
       toastError(t('Failed to update knowledge base, Error: {{error}}', { error: e }))
     }
@@ -312,11 +316,12 @@ const KnowledgeBasePage: React.FC = () => {
 
   const handleDeleteKb = async () => {
     if (!deleteConfirmKb) return
+    if (!knowledgeBaseController) return
     try {
       await knowledgeBaseController.delete(deleteConfirmKb.id)
       setDeleteConfirmKb(null)
       setEditKb(null) // Close edit modal if it's open
-      fetchKbList()
+      await fetchKbList()
     } catch (error) {
       console.error('Failed to delete knowledge base:', error)
     }
@@ -344,9 +349,11 @@ const KnowledgeBasePage: React.FC = () => {
           icon={<ScalableIcon icon={IconInfoCircle} size={16} />}
         >
           <Text size="sm">
-            {t(
-              'Knowledge Base functionality is not available on Windows ARM64 due to library compatibility issues. This feature is supported on Windows x64, macOS, and Linux.'
-            )}
+            {isDesktop
+              ? t(
+                  'Knowledge Base functionality is not available on Windows ARM64 due to library compatibility issues. This feature is supported on Windows x64, macOS, and Linux.'
+                )
+              : t('Knowledge Base is currently supported on the desktop app only.')}
           </Text>
         </Alert>
       )}
