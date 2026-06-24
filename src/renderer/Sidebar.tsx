@@ -168,23 +168,27 @@ export default function Sidebar() {
           <Flex align="center" gap="sm">
             <Flex align="center" gap="sm" onClick={() => navigate({ to: '/about' })} style={{ cursor: 'pointer' }}>
               <Image src={icon} w={20} h={20} />
-              <Text span c="workspaice-secondary" size="xl" lh={1.2} fw="700">
-                WorkspAIce
-              </Text>
-              <Badge
-                color="workspaice-accent2"
-                variant="filled"
-                size="xs"
-                radius="sm"
-                styles={{ label: { letterSpacing: 0.6 } }}
-              >
-                BETA
-              </Badge>
-              {/\d/.test(versionHook.version) && (
-                <Text span c="workspaice-tertiary" size="sm">
-                  {versionHook.version}
-                </Text>
-              )}
+              <Box>
+                <Flex align="center" gap="sm">
+                  <Text span c="workspaice-secondary" size="xl" lh={1.2} fw="700">
+                    WorkspAIce
+                  </Text>
+                  {/\d/.test(versionHook.version) && (
+                    <Text span c="workspaice-tertiary" size="sm">
+                      {versionHook.version}
+                    </Text>
+                  )}
+                </Flex>
+                <Badge
+                  color="workspaice-accent2"
+                  variant="filled"
+                  size="xs"
+                  radius="sm"
+                  styles={{ label: { letterSpacing: 0.6 } }}
+                >
+                  BETA
+                </Badge>
+              </Box>
             </Flex>
             {FORCE_ENABLE_DEV_PAGES && <ThemeSwitchButton size="xs" />}
           </Flex>
