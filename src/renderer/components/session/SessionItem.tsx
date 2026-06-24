@@ -55,7 +55,7 @@ function SessionItem(props: Props) {
     const moveItems: ActionMenuItemProps[] = [
       { divider: true },
       {
-        text: t('Move to Chat'),
+        text: t('Move to Workspace'),
         icon: IconInbox,
         disabled: !session.workspaceId,
         onClick: () => {
