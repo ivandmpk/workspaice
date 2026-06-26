@@ -105,6 +105,7 @@ export const INVOKABLE_IPC_CHANNELS = [
   'shouldUseDarkColors',
   'skills:check-update',
   'skills:check-updates-batch',
+  'skills:create',
   'skills:delete',
   'skills:discover',
   'skills:execute-script',

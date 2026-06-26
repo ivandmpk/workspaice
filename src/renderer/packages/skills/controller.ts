@@ -33,6 +33,10 @@ export const skillsController = {
     return window.electronAPI.invoke('skills:get-directory')
   },
 
+  createSkill(name: string, description: string, body: string): Promise<SkillInstallResult> {
+    return window.electronAPI.invoke('skills:create', { name, description, body })
+  },
+
   async openSkillsDirectory(): Promise<void> {
     await window.electronAPI.invoke('skills:open-directory')
   },

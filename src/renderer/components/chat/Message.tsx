@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react'
-import { ActionIcon, type ActionIconProps, Flex, Image as Img, Loader, Text, Tooltip as Tooltip1 } from '@mantine/core'
+import { ActionIcon, type ActionIconProps, Badge, Flex, Image as Img, Loader, Text, Tooltip as Tooltip1 } from '@mantine/core'
 import { Box, Grid, useTheme } from '@mui/material'
 import type { Message, MessagePicture, MessageToolCallPart, SessionType } from '@shared/types'
 import { getMessageText } from '@shared/utils/message'
@@ -17,6 +17,7 @@ import {
   IconQuoteFilled,
   IconReload,
   IconTrash,
+  IconWand,
 } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
@@ -401,6 +402,21 @@ const _Message: FC<Props> = (props) => {
           className={cn('msg-content', { 'msg-content-small': small })}
           sx={small ? { fontSize: theme.typography.body2.fontSize } : {}}
         >
+          {msg.invokedSkills && msg.invokedSkills.length > 0 && (
+            <Flex gap="xxs" wrap="wrap" mb="xs">
+              {msg.invokedSkills.map((s) => (
+                <Badge
+                  key={s.name}
+                  size="sm"
+                  variant={isUserBubble ? 'white' : 'light'}
+                  color="workspaice-brand"
+                  leftSection={<IconWand size={12} />}
+                >
+                  {s.name}
+                </Badge>
+              ))}
+            </Flex>
+          )}
           {msg.reasoningContent && <ReasoningContentUI message={msg} onCopyReasoningContent={onCopyReasoningContent} />}
           {getMessageText(msg, true, true).trim() === '' && <p></p>}
           {groupedContentParts.length > 0 && (

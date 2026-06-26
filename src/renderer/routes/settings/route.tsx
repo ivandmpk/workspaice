@@ -50,21 +50,21 @@ const ITEMS = [
         },
       ]
     : []),
-  ...(featureFlags.knowledgeBase
-    ? [
-        {
-          key: 'knowledge-base',
-          label: 'Knowledge Base',
-          icon: <IconBook className="w-full h-full" />,
-        },
-      ]
-    : []),
   ...(featureFlags.skills
     ? [
         {
           key: 'skills',
           label: 'Skills',
           icon: <IconWand className="w-full h-full" />,
+        },
+      ]
+    : []),
+  ...(featureFlags.knowledgeBase
+    ? [
+        {
+          key: 'knowledge-base',
+          label: 'Knowledge Base',
+          icon: <IconBook className="w-full h-full" />,
         },
       ]
     : []),

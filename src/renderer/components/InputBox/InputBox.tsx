@@ -76,7 +76,10 @@ import * as atoms from '@/stores/atoms'
 import { compactionUIStateMapAtom } from '@/stores/atoms/compactionAtoms'
 import * as chatStore from '@/stores/chatStore'
 import { useSession, useSessionSettings } from '@/stores/chatStore'
+import { getSlashQuery, parseSlashInvocation } from '@/packages/skills/slash'
+import { useEnabledSkills } from '@/packages/skills/useEnabledSkills'
 import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
+import SkillSlashMenu from './SkillSlashMenu'
 import { useUIStore } from '@/stores/uiStore'
 import { delay } from '@/utils'
 import { featureFlags } from '@/utils/feature-flags'
@@ -277,6 +280,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     // The parent only keeps a ref to the latest text and a boolean for empty/non-empty.
     const messageInputFieldRef = useRef<MessageInputFieldRef>(null)
     const latestInputRef = useRef('')
+    const outerEnabledSkills = useEnabledSkills()
     const [hasTextContent, setHasTextContent] = useState(false)
     const draftMessageIdRef = useRef<string | undefined>(undefined)
 
@@ -734,13 +738,23 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
           return
         }
 
+        // Deterministic skill invocation: strip a leading `/skill-name args` so the
+        // sent text is just the args; the skill itself is recorded on the message.
+        const slash = parseSlashInvocation(
+          latestInputRef.current,
+          outerEnabledSkills.map((s) => s.name)
+        )
+        const submitText = slash ? slash.cleanText : latestInputRef.current
+        const invokedSkills = slash ? [slash.invocation] : []
+
         // Build the message with the latest input text, bypassing debounce delay
         const latestMessage = sessionHelpers.constructUserMessage(
           preConstructedMessage.draftMessageId,
-          latestInputRef.current,
+          submitText,
           pictureKeys,
           preprocessedFilesForSubmit,
-          preConstructedMessage.preprocessedLinks
+          preConstructedMessage.preprocessedLinks,
+          invokedSkills
         )
         if (!latestMessage) {
           console.error('No constructed message available')
@@ -1949,8 +1963,76 @@ const MessageInputField = memo(
         [setMessageInput, onUserInput]
       )
 
+      // --- Skill slash-command picker ---
+      const enabledSkills = useEnabledSkills()
+      const [slashActiveIndex, setSlashActiveIndex] = useState(0)
+      const slashQuery = getSlashQuery(messageInput)
+      const slashMatches = useMemo(
+        () =>
+          slashQuery === null
+            ? []
+            : enabledSkills
+                .filter(
+                  (s) => s.name.includes(slashQuery) || s.description.toLowerCase().includes(slashQuery)
+                )
+                .slice(0, 8),
+        [slashQuery, enabledSkills]
+      )
+      const slashOpen = slashMatches.length > 0
+      // biome-ignore lint/correctness/useExhaustiveDependencies: reset highlight when the result set changes
+      useEffect(() => {
+        setSlashActiveIndex(0)
+      }, [slashQuery])
+
+      const selectSlashSkill = useCallback(
+        (skill: { name: string }) => {
+          setMessageInput(`/${skill.name} `)
+          onUserInput?.()
+          inputRef.current?.focus()
+        },
+        [setMessageInput, onUserInput]
+      )
+
+      const handleKeyDown = useCallback(
+        (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+          if (slashOpen) {
+            if (event.key === 'ArrowDown') {
+              event.preventDefault()
+              setSlashActiveIndex((i) => (i + 1) % slashMatches.length)
+              return
+            }
+            if (event.key === 'ArrowUp') {
+              event.preventDefault()
+              setSlashActiveIndex((i) => (i - 1 + slashMatches.length) % slashMatches.length)
+              return
+            }
+            if (event.key === 'Enter' || event.key === 'Tab') {
+              event.preventDefault()
+              selectSlashSkill(slashMatches[slashActiveIndex])
+              return
+            }
+            if (event.key === 'Escape') {
+              event.preventDefault()
+              setMessageInput('')
+              return
+            }
+          }
+          onKeyDown(event)
+        },
+        [slashOpen, slashMatches, slashActiveIndex, selectSlashSkill, onKeyDown, setMessageInput]
+      )
+
       return (
-        <Textarea
+        <Box className="relative flex-1">
+          {slashOpen && (
+            <SkillSlashMenu
+              skills={slashMatches}
+              activeIndex={slashActiveIndex}
+              onSelect={selectSlashSkill}
+              onHover={setSlashActiveIndex}
+            />
+          )}
+          <Textarea
           unstyled={true}
           styles={{ input: { fontSize: 14 } }}
           classNames={{
@@ -1971,10 +2053,11 @@ const MessageInputField = memo(
           autoFocus={autoFocus}
           readOnly={isReadOnly}
           onChange={onChange}
-          onKeyDown={onKeyDown}
+          onKeyDown={handleKeyDown}
           onPaste={onPaste}
           data-testid="message-input"
         />
+        </Box>
       )
     }
   )

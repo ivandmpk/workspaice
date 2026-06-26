@@ -62,6 +62,41 @@ export function registerSkillsHandlers() {
     return getSkillsDir()
   })
 
+  ipcMain.handle('skills:create', async (_event, params: { name: string; description: string; body: string }) => {
+    try {
+      const { name, description, body } = params
+      if (!isValidSkillName(name)) {
+        return {
+          success: false,
+          skillName: name,
+          error: 'Invalid name. Use lowercase letters, numbers and hyphens (max 64 chars).',
+        }
+      }
+      const trimmedDescription = (description ?? '').trim()
+      if (!trimmedDescription) {
+        return { success: false, skillName: name, error: 'Description is required.' }
+      }
+      if (trimmedDescription.length > 1024) {
+        return { success: false, skillName: name, error: 'Description must be 1024 characters or fewer.' }
+      }
+
+      const skillDir = path.join(getSkillsDir(), name)
+      if (fs.existsSync(skillDir)) {
+        return { success: false, skillName: name, error: 'A skill with this name already exists.' }
+      }
+      fs.mkdirSync(skillDir, { recursive: true })
+      // name is validated kebab-case; description is double-quoted + escaped for YAML safety.
+      const yamlDescription = `"${trimmedDescription.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+      const content = `---\nname: ${name}\ndescription: ${yamlDescription}\n---\n\n${(body ?? '').trim()}\n`
+      fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content, 'utf-8')
+      return { success: true, skillName: name }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
+      log.error('skills:create failed', error)
+      return { success: false, skillName: params?.name ?? '', error: msg }
+    }
+  })
+
   ipcMain.handle('skills:open-directory', async () => {
     try {
       const skillsDir = getSkillsDir()

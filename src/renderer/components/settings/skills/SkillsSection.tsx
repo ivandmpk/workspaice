@@ -32,6 +32,7 @@ import { useSkillTranslation } from '@/hooks/useSkillTranslation'
 import { skillsController } from '@/packages/skills/controller'
 import { toastError } from '@/packages/toast'
 import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
+import CreateSkillModal from './CreateSkillModal'
 import GitHubInstallModal, { type DetectedSkill } from './GitHubInstallModal'
 import SkillsSpotlight, { skillsSpotlight } from './SkillsSpotlight'
 
@@ -197,6 +198,7 @@ export const SkillsSection: FC = () => {
   const [installModalOpen, setInstallModalOpen] = useState(false)
   const [repoInfo, setRepoInfo] = useState({ owner: '', repo: '' })
   const [showGithubInput, setShowGithubInput] = useState(false)
+  const [createModalOpen, setCreateModalOpen] = useState(false)
   const skillSettings = useSettingsStore((state) => state.skills)
   const { translatedSkills, getTranslatedName, isTranslating, translationEnabled, toggleTranslation } =
     useSkillTranslation(skills)
@@ -240,6 +242,18 @@ export const SkillsSection: FC = () => {
       return { skills: { ...state.skills, enabledSkillNames: current.filter((n) => n !== name) } }
     })
   }, [])
+
+  const handleSkillCreated = useCallback(
+    (createdName: string) => {
+      settingsStore.setState((state) => {
+        const current = state.skills.enabledSkillNames
+        if (current.includes(createdName)) return state
+        return { skills: { ...state.skills, enabledSkillNames: [...current, createdName] } }
+      })
+      void fetchSkills()
+    },
+    [fetchSkills]
+  )
 
   const handleOpenFolder = useCallback(async () => {
     try {
@@ -336,6 +350,15 @@ export const SkillsSection: FC = () => {
           <Button
             variant="light"
             size="xs"
+            leftSection={<ScalableIcon icon={IconWand} size={14} />}
+            onClick={() => setCreateModalOpen(true)}
+          >
+            {t('New Skill')}
+          </Button>
+          <Button
+            variant="subtle"
+            size="xs"
+            color="gray"
             leftSection={<ScalableIcon icon={IconPlus} size={14} />}
             onClick={skillsSpotlight.open}
           >
@@ -452,6 +475,12 @@ export const SkillsSection: FC = () => {
           })}
         </SimpleGrid>
       )}
+
+      <CreateSkillModal
+        opened={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onCreated={handleSkillCreated}
+      />
 
       <GitHubInstallModal
         opened={installModalOpen}

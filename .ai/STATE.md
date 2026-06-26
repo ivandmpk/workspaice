@@ -9,6 +9,7 @@ For agents, not humans. What's true right now. Edit in place after every task (s
 
 ## In Flight / Next Up
 
+- Skills slash feature shipped (flag `skills` now on for desktop): `/` picker in the composer, deterministic SKILL.md injection, in-app skill editor. Verified by typecheck + unit (`packages/skills/slash.test.ts`) + integration. **Live e2e (`test/e2e/skills-slash.e2e.ts`) is unrun** — Electron won't launch in the dev sandbox (see ARCHITECTURE_NOTES). Run it in a real desktop/CI environment before trusting the click-through.
 - Chat surface redesign (`MessageList.tsx`, `Message.tsx`, `InputBox.tsx`) — not started.
 - `InputBox.tsx` refactor, MUI→Mantine migration, state management consolidation — deferred architecture work, no active owner.
 

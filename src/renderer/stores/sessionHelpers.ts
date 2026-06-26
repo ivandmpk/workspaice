@@ -454,12 +454,17 @@ export function constructUserMessage(
     tokenCountMap?: Record<string, number>
     lineCount?: number
     byteLength?: number
-  }> = []
+  }> = [],
+  invokedSkills: Array<{ name: string; args?: string }> = []
 ): Message {
   // 只使用原始文本，不添加文件和链接内容
   const msg = createMessage('user', text)
   if (messageId) {
     msg.id = messageId
+  }
+
+  if (invokedSkills.length > 0) {
+    msg.invokedSkills = invokedSkills
   }
 
   // 添加图片
