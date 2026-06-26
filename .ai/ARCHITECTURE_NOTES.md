@@ -1,0 +1,45 @@
+# Architecture Notes
+
+For agents, not humans. Non-obvious, hard-won engineering knowledge. Add an entry whenever you discover or fix something a future agent would otherwise have to rediscover the hard way (see `AGENT_RULES.md` End-of-Task Checklist item 2). Don't remove an entry unless the underlying issue is genuinely gone from the code.
+
+## Current Architecture
+
+- The root renderer route uses `MantineProvider`, MUI `ThemeProvider`, `NiceModal.Provider`, and global error boundaries.
+- `routes/__root.tsx` has function `creteMantineTheme` (upstream typo preserved) that configures Mantine colors, typography, spacing, radii, and component defaults.
+- `globals.css` defines CSS variables for light/dark modes. Many components depend on these variable names.
+- The main shell uses a persistent/temporary `SwipeableDrawer` sidebar depending on screen size.
+- Chat pages are built from `Header`, `MessageList`, `InputBox`, and `ThreadHistoryDrawer`.
+- Mobile, RTL, safe-area, and desktop window-control behavior already exist. Preserve unless intentionally removing mobile/web support.
+- Background images can be configured globally or per session; root route renders `BackgroundImageOverlay` for root/session pages.
+- Chat orchestration is a single streaming loop, not a multi-step agent loop: `src/renderer/stores/session/orchestration.ts` builds context + tools once per turn and calls `model.chatStream()`, which wraps the `ai` SDK's `streamText()`. The AI SDK's internal loop (not WorkspAIce code) handles any multi-round tool-call/tool-result exchange within that single call.
+- Tools are assembled in `src/renderer/stores/session/tools-builder.ts` from MCP (`src/renderer/packages/mcp/controller.ts`), web search, file access, knowledge-base/session-attachment RAG, sandbox, and skills (`src/renderer/packages/skills/controller.ts` → `src/main/skills/ipc-handlers.ts`).
+- Models that don't support native tool-use get a "legacy tool fallback" (`legacy-tool-fallback.ts`) that runs web/KB search via prompt engineering before the model call, as a separate code path from native tool-use. Skills have no equivalent fallback for non-tool-use models.
+- Tool error shapes are inconsistent across integrations (MCP returns caught errors as values, skills return structured `{success, stderr, exitCode}`, web/file tools throw or return error objects). No unified tool-error format exists yet.
+- `@mastra/*` (`core`, `rag`, `libsql`) is used only for RAG/reranking (`src/shared/models/rerank.ts`, knowledge-base/session-attachment vector DB and chunking), not for orchestration.
+
+## Branding State
+
+- The active product name is WorkspAIce.
+- The repository should be stripped of old upstream product naming.
+- Since this is a fresh fork, local storage/database/protocol namespaces can be renamed without backward-compatible migrations unless the user later asks for data migration.
+- Hosted upstream service surfaces should be removed rather than renamed into fake WorkspAIce services.
+- App icon is the WorkspAIce W + AI mark (`design-materials/icon-main.png`). Regenerate all derived assets (macOS icns, Windows ico, Linux PNG set, tray template, splash screens, mobile resources) with `PATH="/opt/homebrew/opt/node@22/bin:$PATH" node scripts/regen-app-icons.mjs`. macOS tray uses a monochrome 'W' template per Apple conventions (no 'AI' badge at 16px).
+- Theme palette: light `#F5F5F5` / dark `#303841` / accent `#76ABAE` / second accent `#FF5722` (`design-materials/color-palette.txt`), registered as `workspaice-accent2` in the Mantine theme.
+
+## Known Risk Areas
+
+- `InputBox.tsx` is very large and behavior-heavy. Prefer localized, visual changes unless refactoring with tests.
+- Renaming app IDs/protocols can break installed-app behavior, deep links, settings paths, and local data. This is acceptable in the fresh fork unless the user asks for migration.
+- Mobile support exists via Capacitor. Preserve if not intentionally dropping mobile builds.
+- RTL and safe-area behavior exists. Preserve unless intentionally redesigning supported platforms.
+
+- **electron-builder + pnpm dependency collector (ROOT CAUSE of recurring `Cannot find module` crashes — fixed via patch).** electron-builder 26 picks a node-modules collector based on detected package manager. Because the repo is a pnpm workspace (`packageManager: pnpm` + `pnpm-lock.yaml`), it used `PnpmNodeModulesCollector`, which runs `pnpm list --prod --json --depth Infinity` and trusts that output. `pnpm list --json` **deduplicates/collapses repeated subtrees** (e.g. `electron-store > conf > ajv` is emitted with empty `dependencies`), silently dropping ~149 transitive packages (`fast-deep-equal`, `fast-uri`, `@emotion/*`, `@babel/*`, `function-bind`, `get-intrinsic`, etc.) from the asar → runtime `Cannot find module` crashes. **Fix:** `patches/app-builder-lib@26.8.1.patch` makes `out/util/appFileCopier.js` try the **NPM** collector first (`const pmApproaches = [PM.NPM, <detected>, PM.TRAVERSAL]`). electron-builder's `NpmNodeModulesCollector` runs `npm list` (keeps a `_dependencies` field on every node) and back-fills deduplicated subtrees from a name@version cache, collecting the complete tree from `release/app`'s flat npm install (created by `ensure-app-deps.cjs`). It also tolerates the mis-declared `@types/*` runtime deps that `ensure-app-deps` strips. Asar grew 463 → 574 packages. **This patch is pinned to `app-builder-lib@26.8.1` — re-verify on any electron-builder upgrade.**
+- **pnpm 10.33 ignores the `pnpm` field in `package.json`.** Patch/override/onlyBuiltDependencies config must live in `pnpm-workspace.yaml`, not `package.json`.
+- **npm (release/app) does NOT honor pnpm `overrides` → version-coupled packages must be exact-pinned in `release/app/package.json`.** `ensure-app-deps.cjs` runs `npm install` in `release/app`, which ignores pnpm `overrides` in `pnpm-workspace.yaml`. Example: caret ranges let npm pull `@mastra/libsql@0.13.8` (peer `@mastra/core >=0.15.3 <0.16`) against pinned `@mastra/core@0.13.2`, causing `TypeError: Class extends value undefined`. **Fix:** `@mastra/core`/`@mastra/libsql`/`@mastra/rag` are exact-pinned (`0.13.2`/`0.13.2`/`1.0.8`) in `release/app/package.json` to mirror the pnpm overrides. Any future version-coupled dependency must be exact-pinned the same way, not just overridden in `pnpm-workspace.yaml`.
+- **General coupling note.** Always run `pnpm install` at the workspace root after changing `package.json`, `pnpm-workspace.yaml`, or `release/app/package.json`. With the NPM-collector patch, missing transitive deps no longer need to be added manually to `release/app/package.json`.
+- **node-fetch@2.7.0 in release/app (CVE-2022-0235 / CVE-2023-26159 — cannot remove yet).** Required because `zeroentropy` (pulled in by `@mastra/rag`) requires it; removing it causes `Cannot find module 'whatwg-url'` crashes in the packaged app. No patched 2.x exists; 3.x is ESM-only and incompatible with the CJS Electron main process. Long-term fix: remove or scope the `@mastra/rag` import so `zeroentropy` isn't eagerly loaded at main-process startup.
+- **IPC channel allowlist.** The preload bridge (`src/preload/index.ts`) validates all `invoke()` calls against `src/shared/ipc-channels.ts` (105 channels). Any new `ipcMain.handle` registration must also be added to `INVOKABLE_IPC_CHANNELS` in `ipc-channels.ts` or it is blocked at the bridge.
+- **Config encryption key.** `config.json` is encrypted at rest via electron-store + `safeStorage`. The OS-keychain-protected key is stored at `{userData}/.config-key`. If deleted/corrupted (e.g. macOS keychain reset), the store regenerates a new key and re-encrypts — the old encrypted data becomes unreadable. Advise users not to delete `.config-key`.
+- **webSecurity:false** is intentionally kept — the renderer calls provider APIs via `fetch()` directly and most providers don't send CORS headers. Re-enabling requires routing all provider requests through the main process (no CORS); tracked as a follow-up, not yet started.
+- **Mobile SQLite encryption** — `storages.ts:109` still uses `'no-encryption'`. SQLCipher for Capacitor is a follow-up pending the mobile-support decision.
+- **biome-ignore-all directives** — 4 files suppress `noExplicitAny` blanket. Narrowing to per-line suppressions is a low-priority cleanup. `settingsStore.ts` also suppresses `noFallthroughSwitchClause` for the migration switch.
