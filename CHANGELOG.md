@@ -6,6 +6,12 @@ All notable WorkspAIce changes are tracked here.
 
 Future development after `1.0.1-beta` should be recorded here until the next beta release is cut.
 
+### Chat Organization
+
+- Added multi-select mode for regular chats across workspaces and the ungrouped Chat section.
+- Added bulk move to any workspace or back to Chat, preserving selected chat order at the top of the destination.
+- Added confirmed bulk deletion with selected-count feedback and retry-safe partial failure handling.
+
 ## [1.0.1-beta] - 2026-06-23
 
 Second WorkspAIce beta release, focused on workspace organization, release readiness, and making the beta state visible in the app shell.

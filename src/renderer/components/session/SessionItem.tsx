@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react'
-import { ActionIcon, Flex, Text } from '@mantine/core'
+import { ActionIcon, Box, Checkbox, Flex, Text } from '@mantine/core'
 import type { SessionMeta } from '@shared/types'
 import {
   IconCopy,
@@ -31,13 +31,20 @@ import { ScalableIcon } from '../common/ScalableIcon'
 export interface Props {
   session: SessionMeta
   selected: boolean
+  selectionMode?: boolean
+  bulkSelected?: boolean
+  onToggleSelection?: (sessionId: string) => void
 }
 
 function SessionItem(props: Props) {
-  const { session, selected } = props
+  const { session, selected, selectionMode = false, bulkSelected = false, onToggleSelection } = props
   const { t } = useTranslation()
   const setShowSidebar = useUIStore((s) => s.setShowSidebar)
   const onClick = () => {
+    if (selectionMode) {
+      onToggleSelection?.(session.id)
+      return
+    }
     switchCurrentSession(session.id)
     if (isSmallScreen) {
       setShowSidebar(false)
@@ -50,6 +57,7 @@ function SessionItem(props: Props) {
   const [deleting, setDeleting] = useState(false)
   const deletingRef = useRef(false)
   const { data: workspaces = [] } = useWorkspaces()
+  const visuallySelected = selectionMode ? bulkSelected : selected
 
   const actionMenuItems = useMemo<ActionMenuItemProps[]>(() => {
     const moveItems: ActionMenuItemProps[] = [
@@ -132,7 +140,7 @@ function SessionItem(props: Props) {
         'cursor-pointer rounded-sm group/session-item',
         isSmallScreen
           ? ''
-          : selected
+          : visuallySelected
             ? 'bg-workspaice-background-brand-secondary'
             : 'hover:bg-workspaice-background-gray-secondary'
       )}
@@ -142,43 +150,59 @@ function SessionItem(props: Props) {
       gap={10}
       onClick={onClick}
     >
-      <AssistantAvatar
-        avatarKey={session.assistantAvatarKey}
-        picUrl={session.picUrl}
-        sessionType={session.type}
-        size="sm"
-        type="chat"
-        c={selected ? 'workspaice-brand' : 'workspaice-primary'}
-      />
+      {selectionMode ? (
+        <Box w={24} h={24} className="flex shrink-0 items-center justify-center">
+          <Checkbox
+            checked={bulkSelected}
+            onChange={() => onToggleSelection?.(session.id)}
+            onClick={(event) => event.stopPropagation()}
+            aria-label={String(t('Select {{name}}', { name: session.name }))}
+            size="sm"
+          />
+        </Box>
+      ) : (
+        <AssistantAvatar
+          avatarKey={session.assistantAvatarKey}
+          picUrl={session.picUrl}
+          sessionType={session.type}
+          size="sm"
+          type="chat"
+          c={selected ? 'workspaice-brand' : 'workspaice-primary'}
+        />
+      )}
 
-      <Text span flex={1} lineClamp={1} c={selected ? 'workspaice-brand' : 'workspaice-primary'}>
+      <Text span flex={1} lineClamp={1} c={visuallySelected ? 'workspaice-brand' : 'workspaice-primary'}>
         {session.name}
       </Text>
 
-      <ActionMenu
-        type="desktop"
-        items={actionMenuItems}
-        position="bottom-start"
-        opened={menuOpened}
-        onChange={(opened) => setMenuOpened(opened)}
-      >
-        <ActionIcon
-          variant="transparent"
-          size={20}
-          color={session.starred ? 'workspaice-brand' : 'workspaice-tertiary'}
-          className={isSmallScreen || session.starred || menuOpened ? '' : 'group-hover/session-item:visible invisible'}
-          onClick={(event) => {
-            event.stopPropagation()
-            event.preventDefault()
-          }}
+      {!selectionMode && (
+        <ActionMenu
+          type="desktop"
+          items={actionMenuItems}
+          position="bottom-start"
+          opened={menuOpened}
+          onChange={(opened) => setMenuOpened(opened)}
         >
-          {session.starred ? (
-            <ScalableIcon icon={IconStarFilled} className="text-inherit" size={16} />
-          ) : (
-            <ScalableIcon icon={IconDots} className="text-inherit" size={16} />
-          )}
-        </ActionIcon>
-      </ActionMenu>
+          <ActionIcon
+            variant="transparent"
+            size={20}
+            color={session.starred ? 'workspaice-brand' : 'workspaice-tertiary'}
+            className={
+              isSmallScreen || session.starred || menuOpened ? '' : 'group-hover/session-item:visible invisible'
+            }
+            onClick={(event) => {
+              event.stopPropagation()
+              event.preventDefault()
+            }}
+          >
+            {session.starred ? (
+              <ScalableIcon icon={IconStarFilled} className="text-inherit" size={16} />
+            ) : (
+              <ScalableIcon icon={IconDots} className="text-inherit" size={16} />
+            )}
+          </ActionIcon>
+        </ActionMenu>
+      )}
     </Flex>
   )
 }
