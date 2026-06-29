@@ -56,7 +56,12 @@ export const ImageModelSelect = forwardRef<HTMLButtonElement, ImageModelSelectPr
         onOptionSubmit={handleOptionSubmit}
       >
         <Combobox.Target targetType="button">
-          <button ref={ref} onClick={() => combobox.toggleDropdown()} className="border-none bg-transparent p-0 flex">
+          <button
+            ref={ref}
+            type="button"
+            onClick={() => combobox.toggleDropdown()}
+            className="border-none bg-transparent p-0 flex"
+          >
             {children}
           </button>
         </Combobox.Target>

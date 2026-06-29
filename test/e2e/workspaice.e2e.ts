@@ -105,6 +105,15 @@ test('preserves composer draft input without calling a provider', async ({ page 
   await expect(page.getByTestId('message-input')).toHaveValue('E2E draft message that must stay local')
 })
 
+test('opens the image creator and preserves a local prompt draft', async ({ page }) => {
+  await page.getByTestId('new-image-button').click()
+  await expect(page.getByText('Image Creator', { exact: true }).first()).toBeVisible()
+
+  const prompt = page.getByPlaceholder('Describe the image you want to create...')
+  await prompt.fill('A geometric WorkspAIce desktop wallpaper')
+  await expect(prompt).toHaveValue('A geometric WorkspAIce desktop wallpaper')
+})
+
 test('creates, renames, creates a chat inside, and deletes a workspace', async ({ page }) => {
   await page.getByTestId('new-workspace-button').click()
   await page.getByTestId('workspace-name-input').fill('E2E Workspace')
@@ -133,4 +142,17 @@ test('creates, renames, creates a chat inside, and deletes a workspace', async (
   await page.getByRole('menuitem', { name: 'Delete' }).click()
   await page.getByRole('menuitem', { name: 'Delete Workspace and Chats?' }).click()
   await expect(page.locator(`[data-testid="workspace-row-${workspaceId}"]`)).toHaveCount(0)
+})
+
+test('enters and cancels empty bulk chat selection without mutating sessions', async ({ page }) => {
+  await page.getByTestId('select-chats-button').click()
+
+  const toolbar = page.getByTestId('bulk-selection-toolbar')
+  await expect(toolbar).toBeVisible()
+  await expect(toolbar).toContainText('Select chats')
+  await expect(page.getByTestId('move-selected-chats-button')).toBeDisabled()
+  await expect(page.getByTestId('delete-selected-chats-button')).toBeDisabled()
+
+  await page.getByTestId('cancel-chat-selection-button').click()
+  await expect(toolbar).toHaveCount(0)
 })

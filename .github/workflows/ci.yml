@@ -8,8 +8,12 @@ on:
 
 jobs:
   qa:
-    name: QA
-    runs-on: macos-latest
+    name: QA (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     env:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       QA_BIOME_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -40,7 +44,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-${{ matrix.os }}
           path: coverage
           if-no-files-found: ignore
 
@@ -48,7 +52,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-artifacts
+          name: playwright-artifacts-${{ matrix.os }}
           path: |
             test-results
             playwright-report

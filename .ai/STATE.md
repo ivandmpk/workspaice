@@ -9,7 +9,7 @@ For agents, not humans. What's true right now. Edit in place after every task (s
 
 ## In Flight / Next Up
 
-- Skills slash feature shipped (flag `skills` now on for desktop): `/` picker in the composer, deterministic SKILL.md injection, in-app skill editor. Verified by typecheck + unit (`packages/skills/slash.test.ts`) + integration. **Live e2e (`test/e2e/skills-slash.e2e.ts`) is unrun** — Electron won't launch in the dev sandbox (see ARCHITECTURE_NOTES). Run it in a real desktop/CI environment before trusting the click-through.
+- QA expansion is active. Deterministic gates now enforce no skipped tests, measure all production TypeScript, and run 1,099 unit + 37 integration + 7 Electron E2E scenarios. Current coverage floor is 20% statements/lines and 15% branches/functions. Next highest-risk coverage targets: `src/main/store-node.ts`, knowledge-base/session-attachment RAG main-process paths, `InputBox.tsx`, `MessageList.tsx`, and session CRUD/messages.
 - Chat surface redesign (`MessageList.tsx`, `Message.tsx`, `InputBox.tsx`) — not started.
 - `InputBox.tsx` refactor, MUI→Mantine migration, state management consolidation — deferred architecture work, no active owner.
 

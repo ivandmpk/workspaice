@@ -9,7 +9,11 @@ on:
 
 jobs:
   mac-package:
-    name: macOS Package Smoke
+    name: macOS Package Smoke (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm64, x64]
     runs-on: macos-latest
     env:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
@@ -32,7 +36,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build and package macOS app
-        run: pnpm qa:release:mac
+        run: pnpm qa:release:mac:${{ matrix.arch }}
 
       - name: Verify package outputs
         run: |
@@ -45,6 +49,46 @@ jobs:
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: macos-package
+          name: macos-package-${{ matrix.arch }}
+          path: release/build
+          if-no-files-found: error
+
+  windows-package:
+    name: Windows Package Smoke (x64)
+    runs-on: windows-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and package Windows app
+        run: pnpm qa:release:win
+
+      - name: Verify package outputs
+        shell: pwsh
+        run: |
+          $installers = Get-ChildItem -Path release/build -Filter *.exe
+          if ($installers.Count -eq 0) { throw 'No Windows installer was produced.' }
+          $installers | ForEach-Object { Write-Host $_.FullName }
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-package-x64
           path: release/build
           if-no-files-found: error

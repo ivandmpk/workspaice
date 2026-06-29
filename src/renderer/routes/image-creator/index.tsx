@@ -118,13 +118,16 @@ function InputToolbar({
           </UnstyledButton>
         ) : (
           <ImageModelSelect modelGroups={modelGroups} onSelect={onModelSelect}>
-            <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+            <Box
+              component="span"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+            >
               <IconSparkles size={16} className="text-[var(--workspaice-tint-secondary)]" />
               <Text size="sm" className="text-[var(--workspaice-tint-secondary)] max-w-[120px] truncate">
                 {modelDisplayName}
               </Text>
               <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
-            </UnstyledButton>
+            </Box>
           </ImageModelSelect>
         )}
 

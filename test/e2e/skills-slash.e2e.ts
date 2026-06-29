@@ -76,23 +76,25 @@ test('creates a skill in Settings and invokes it via "/" in the composer', async
   await page.getByText('Skills', { exact: true }).first().click()
 
   // Create a skill via the in-app editor
-  await page.getByRole('button', { name: 'New Skill' }).click()
-  await page.getByLabel('Name').fill(SKILL_NAME)
-  await page.getByLabel('Description', { exact: true }).fill('E2E skill used to verify slash invocation.')
-  await page.getByLabel('Instructions').fill('# Instructions\n\nRespond with the word OK.')
-  await page.getByRole('button', { name: 'Create' }).click()
+  await page.getByTestId('new-skill-button').click()
+  await page.getByTestId('skill-name-input').fill(SKILL_NAME)
+  await page.getByTestId('skill-description-input').fill('E2E skill used to verify slash invocation.')
+  await page.getByTestId('skill-instructions-input').fill('# Instructions\n\nRespond with the word OK.')
+  await page.getByTestId('skill-create-button').click()
 
   // It appears in the user skills list (auto-enabled on create)
   await expect(page.getByText(SKILL_NAME).first()).toBeVisible()
 
   // Back to a chat and open the slash picker
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.mantine-Modal-overlay')).toHaveCount(0)
   await page.getByTestId('new-chat-button').click()
   const input = page.getByTestId('message-input')
   await input.click()
   await input.fill('/')
 
   // The enabled skill shows in the "/" menu; selecting it fills the composer
-  const option = page.getByRole('option', { name: new RegExp(SKILL_NAME) })
+  const option = page.getByText(`/${SKILL_NAME}`, { exact: true })
   await expect(option).toBeVisible()
   await option.click()
   await expect(input).toHaveValue(new RegExp(`^/${SKILL_NAME}\\s`))

@@ -54,6 +54,7 @@ const CreateSkillModal: FC<{
           label={t('Name')}
           description={t('Lowercase letters, numbers and hyphens only')}
           placeholder="my-skill"
+          data-testid="skill-name-input"
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
           error={name.length > 0 && !nameValid ? String(t('Invalid name')) : undefined}
@@ -63,6 +64,7 @@ const CreateSkillModal: FC<{
           label={t('Description')}
           description={t('Shown in the skill list and the "/" menu')}
           placeholder={String(t('What this skill does and when to use it'))}
+          data-testid="skill-description-input"
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
           required
@@ -71,6 +73,7 @@ const CreateSkillModal: FC<{
           label={t('Instructions')}
           description={t('Markdown instructions the model follows when the skill is invoked')}
           placeholder={'# Instructions\n\n...'}
+          data-testid="skill-instructions-input"
           value={body}
           onChange={(e) => setBody(e.currentTarget.value)}
           autosize
@@ -81,7 +84,12 @@ const CreateSkillModal: FC<{
           <Button variant="subtle" color="gray" onClick={onClose}>
             {t('Cancel')}
           </Button>
-          <Button onClick={() => void handleSave()} loading={saving} disabled={!canSave}>
+          <Button
+            data-testid="skill-create-button"
+            onClick={() => void handleSave()}
+            loading={saving}
+            disabled={!canSave}
+          >
             {t('Create')}
           </Button>
         </Flex>

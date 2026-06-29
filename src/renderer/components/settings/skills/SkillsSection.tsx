@@ -216,7 +216,7 @@ export const SkillsSection: FC = () => {
   }, [])
 
   useEffect(() => {
-    fetchSkills()
+    void fetchSkills()
   }, [fetchSkills])
 
   const originalUserSkillByPath = useMemo(() => {
@@ -351,6 +351,7 @@ export const SkillsSection: FC = () => {
             variant="light"
             size="xs"
             leftSection={<ScalableIcon icon={IconWand} size={14} />}
+            data-testid="new-skill-button"
             onClick={() => setCreateModalOpen(true)}
           >
             {t('New Skill')}

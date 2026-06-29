@@ -1,232 +1,169 @@
-// TODO: Migrate tests to use msw instead of @ai-sdk/provider-utils/test createTestServer
-// The createTestServer utility was removed in AI SDK v6
+import type { ModelMessage } from 'ai'
 import type { ModelDependencies } from 'src/shared/types/adapters'
 import type { ProviderModelInfo } from 'src/shared/types/settings'
-import type { SentryScope } from 'src/shared/utils/sentry_adapter'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import OpenAI from './openai'
 
-describe.skip('OpenAI Adapter', () => {
-  let dependencies: ModelDependencies
-  let openai: OpenAI
+const dependencies: ModelDependencies = {
+  request: {
+    apiRequest: vi.fn(),
+    fetchWithOptions: vi.fn(),
+  },
+  storage: {
+    saveImage: vi.fn(),
+    getImage: vi.fn(),
+  },
+  sentry: {
+    withScope: vi.fn(),
+    captureException: vi.fn(),
+  },
+}
 
-  const server = {
-    urls: {} as Record<string, { response: unknown }>,
-  }
+function sseResponse(events: unknown[]): Response {
+  const body = `${events.map((event) => `data: ${JSON.stringify(event)}\n\n`).join('')}data: [DONE]\n\n`
+  return new Response(body, {
+    status: 200,
+    headers: { 'content-type': 'text/event-stream' },
+  })
+}
 
-  beforeEach(() => {
-    vi.clearAllMocks()
+function createOpenAI(customFetch: typeof fetch, overrides: Partial<ProviderModelInfo> = {}) {
+  return new OpenAI(
+    {
+      apiKey: 'test-api-key',
+      apiHost: 'https://api.example.test',
+      model: {
+        modelId: 'gpt-test',
+        type: 'chat',
+        ...overrides,
+      },
+      dalleStyle: 'vivid',
+      injectDefaultMetadata: true,
+      useProxy: false,
+      customFetch,
+    },
+    dependencies
+  )
+}
 
-    dependencies = {
-      request: {
-        apiRequest: async (options) =>
-          fetch(options.url, {
-            method: options.method,
-            headers: options.headers as HeadersInit,
-            body: options.body as BodyInit,
-          }),
-        fetchWithOptions: async (url, options) => fetch(url, options as RequestInit),
-      },
-      storage: {
-        saveImage: vi.fn().mockResolvedValue('mock-storage-key'),
-        getImage: vi.fn().mockResolvedValue('https://example.com/image.png'),
-      },
-      sentry: {
-        withScope: vi.fn((callback: (scope: SentryScope) => void) => callback({ setTag: vi.fn(), setExtra: vi.fn() })),
-        captureException: vi.fn(),
-      },
-    }
+const messages: ModelMessage[] = [{ role: 'user', content: 'Hello' }]
+
+describe('OpenAI adapter', () => {
+  it('streams text through the configured endpoint with authentication', async () => {
+    const customFetch = vi.fn<typeof fetch>().mockResolvedValue(
+      sseResponse([
+        {
+          id: 'chatcmpl-1',
+          object: 'chat.completion.chunk',
+          created: 1,
+          model: 'gpt-test',
+          choices: [{ index: 0, delta: { role: 'assistant', content: '' }, finish_reason: null }],
+        },
+        {
+          id: 'chatcmpl-1',
+          object: 'chat.completion.chunk',
+          created: 1,
+          model: 'gpt-test',
+          choices: [{ index: 0, delta: { content: 'Hello from OpenAI' }, finish_reason: null }],
+        },
+        {
+          id: 'chatcmpl-1',
+          object: 'chat.completion.chunk',
+          created: 1,
+          model: 'gpt-test',
+          choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
+          usage: { prompt_tokens: 2, completion_tokens: 4, total_tokens: 6 },
+        },
+      ])
+    )
+    const model = createOpenAI(customFetch)
+
+    const chunks = []
+    for await (const chunk of model.chatStream(messages, {})) chunks.push(chunk)
+
+    expect(
+      chunks
+        .filter((chunk) => chunk.type === 'text-delta')
+        .map((chunk) => chunk.text)
+        .join('')
+    ).toBe('Hello from OpenAI')
+    expect(chunks).toContainEqual(expect.objectContaining({ type: 'finish', finishReason: 'stop' }))
+
+    const [url, init] = customFetch.mock.calls[0]
+    expect(String(url)).toBe('https://api.example.test/v1/chat/completions')
+    expect(new Headers(init?.headers).get('authorization')).toBe('Bearer test-api-key')
+    expect(JSON.parse(String(init?.body))).toMatchObject({ model: 'gpt-test', stream: true })
   })
 
-  const createOpenAI = (overrides: Record<string, unknown> = {}) => {
-    const model: ProviderModelInfo = {
-      modelId: (overrides.modelId as string) || 'gpt-4',
-      type: 'chat',
-      capabilities: overrides.capabilities as ProviderModelInfo['capabilities'],
+  it('sends image content for vision-capable models', async () => {
+    const customFetch = vi.fn<typeof fetch>().mockResolvedValue(
+      sseResponse([
+        {
+          id: 'chatcmpl-vision',
+          object: 'chat.completion.chunk',
+          created: 1,
+          model: 'gpt-vision',
+          choices: [{ index: 0, delta: { content: 'An image' }, finish_reason: 'stop' }],
+        },
+      ])
+    )
+    const model = createOpenAI(customFetch, { modelId: 'gpt-vision', capabilities: ['vision'] })
+    const visionMessages: ModelMessage[] = [
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: 'Describe it' },
+          { type: 'image', image: new URL('https://example.test/image.png') },
+        ],
+      },
+    ]
+
+    for await (const _chunk of model.chatStream(visionMessages, {})) {
+      // Consume the stream so the request body is produced and validated.
     }
-    return new OpenAI(
+
+    const request = JSON.parse(String(customFetch.mock.calls[0][1]?.body))
+    expect(request.messages[0].content).toContainEqual({
+      type: 'image_url',
+      image_url: { url: 'https://example.test/image.png' },
+    })
+  })
+
+  it('propagates non-retryable authentication errors', async () => {
+    const customFetch = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(
+        Response.json({ error: { message: 'Invalid API key', type: 'invalid_request_error' } }, { status: 401 })
+      )
+    const model = createOpenAI(customFetch)
+
+    const consume = async () => {
+      for await (const _chunk of model.chatStream(messages, {})) {
+        // Consume until the provider error is surfaced.
+      }
+    }
+
+    await expect(consume()).rejects.toThrow(/API Error|Invalid API key|401/)
+    expect(customFetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('uses configured model fallbacks when remote model listing fails', async () => {
+    const fallback: ProviderModelInfo[] = [{ modelId: 'offline-model', type: 'chat' }]
+    const customFetch = vi.fn<typeof fetch>().mockRejectedValue(new Error('offline'))
+    const model = new OpenAI(
       {
         apiKey: 'test-api-key',
-        apiHost: 'https://api.openai.com',
-        model,
+        apiHost: 'https://api.example.test',
+        model: { modelId: 'gpt-test', type: 'chat' },
         dalleStyle: 'vivid',
         injectDefaultMetadata: true,
         useProxy: false,
-        stream: false,
-        ...overrides,
+        customFetch,
+        listModelsFallback: fallback,
       },
       dependencies
     )
-  }
 
-  describe('Text Messages', () => {
-    it('should handle simple text messages', async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = {
-        type: 'json-value',
-        body: {
-          id: 'chatcmpl-123',
-          object: 'chat.completion',
-          created: 1677652288,
-          model: 'gpt-4',
-          choices: [
-            {
-              index: 0,
-              message: { role: 'assistant', content: 'Hello world' },
-              finish_reason: 'stop',
-            },
-          ],
-          usage: { prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 },
-        },
-      }
-
-      openai = createOpenAI()
-      const result = await openai.chat(
-        [
-          { role: 'system', content: 'You are a helpful assistant' },
-          { role: 'user', content: 'Hello' },
-        ],
-        {}
-      )
-
-      expect(result.contentParts).toEqual([{ type: 'text', text: 'Hello world' }])
-      expect(result.usage).toEqual({ inputTokens: 10, outputTokens: 2, totalTokens: 12 })
-    })
-
-    it('should handle multimodal messages with images', async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = {
-        type: 'json-value',
-        body: {
-          id: 'chatcmpl-456',
-          object: 'chat.completion',
-          created: 1677652288,
-          model: 'gpt-4-vision-preview',
-          choices: [
-            {
-              index: 0,
-              message: { role: 'assistant', content: 'I see an image' },
-              finish_reason: 'stop',
-            },
-          ],
-          usage: { prompt_tokens: 100, completion_tokens: 10, total_tokens: 110 },
-        },
-      }
-
-      openai = createOpenAI({ modelId: 'gpt-4-vision-preview', capabilities: ['vision'] })
-      const result = await openai.chat(
-        [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: 'What is in this image?' },
-              { type: 'image', image: 'https://example.com/test-image.jpg' },
-            ],
-          },
-        ],
-        {}
-      )
-
-      expect(result.contentParts).toEqual([{ type: 'text', text: 'I see an image' }])
-    })
-  })
-
-  describe('Streaming', () => {
-    it('should parse streaming text response', async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = {
-        type: 'stream-chunks',
-        chunks: [
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"content":"The"},"finish_reason":null}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"content":" answer"},"finish_reason":null}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"content":" is"},"finish_reason":null}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"content":" 42"},"finish_reason":null}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}\n\n`,
-          `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[],"usage":{"prompt_tokens":10,"completion_tokens":4,"total_tokens":14}}\n\n`,
-          'data: [DONE]\n\n',
-        ],
-      }
-
-      openai = createOpenAI({ stream: true })
-      const onResultChange = vi.fn()
-      const result = await openai.chat([{ role: 'user', content: 'What is the meaning of life?' }], { onResultChange })
-
-      expect(onResultChange).toHaveBeenCalled()
-      expect(result.contentParts).toEqual([{ type: 'text', text: 'The answer is 42' }])
-      expect(result.usage).toEqual({ inputTokens: 10, outputTokens: 4, totalTokens: 14 })
-    })
-
-    it('should handle tool calls in streaming response', async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = ({ callNumber }: { callNumber: number }) => {
-        if (callNumber === 0) {
-          return {
-            type: 'stream-chunks',
-            chunks: [
-              `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}\n\n`,
-              `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"id":"call_abc","type":"function","function":{"name":"get_weather","arguments":"{\\"location\\":\\"Tokyo\\"}"}}]},"finish_reason":null}]}\n\n`,
-              `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{},"finish_reason":"tool_calls"}]}\n\n`,
-              `data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[],"usage":{"prompt_tokens":20,"completion_tokens":15,"total_tokens":35}}\n\n`,
-              'data: [DONE]\n\n',
-            ],
-          }
-        }
-        return {
-          type: 'stream-chunks',
-          chunks: [
-            `data: {"id":"chatcmpl-456","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}\n\n`,
-            `data: {"id":"chatcmpl-456","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{"content":"The weather in Tokyo is sunny."},"finish_reason":null}]}\n\n`,
-            `data: {"id":"chatcmpl-456","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}\n\n`,
-            `data: {"id":"chatcmpl-456","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4","choices":[],"usage":{"prompt_tokens":40,"completion_tokens":10,"total_tokens":50}}\n\n`,
-            'data: [DONE]\n\n',
-          ],
-        }
-      }
-
-      openai = createOpenAI({ stream: true, capabilities: ['tool_use'] })
-      const result = await openai.chat([{ role: 'user', content: 'What is the weather in Tokyo?' }], {})
-
-      const toolCallParts = result.contentParts.filter((part) => part.type === 'tool-call')
-      expect(toolCallParts.length).toBeGreaterThan(0)
-
-      const toolCall = toolCallParts[0] as { type: string; toolCallId: string; toolName: string; args: string }
-      expect(toolCall.toolCallId).toBe('call_abc')
-      expect(toolCall.toolName).toBe('get_weather')
-      expect(toolCall.args).toEqual({ location: 'Tokyo' })
-    })
-  })
-
-  describe('Error Handling', () => {
-    it('should handle 401 unauthorized error', async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = {
-        type: 'error',
-        status: 401,
-        body: JSON.stringify({
-          error: {
-            message: 'Invalid API key provided',
-            type: 'invalid_request_error',
-            code: 'invalid_api_key',
-          },
-        }),
-      }
-
-      openai = createOpenAI({ apiKey: 'invalid-key' })
-      await expect(openai.chat([{ role: 'user', content: 'Hello' }], {})).rejects.toThrow()
-      expect(dependencies.sentry.captureException).toHaveBeenCalled()
-    })
-
-    it('should handle 429 rate limit error', { timeout: 10000 }, async () => {
-      server.urls['https://api.openai.com/v1/chat/completions'].response = {
-        type: 'error',
-        status: 429,
-        body: JSON.stringify({
-          error: {
-            message: 'Rate limit exceeded',
-            type: 'rate_limit_error',
-            code: 'rate_limit',
-          },
-        }),
-      }
-
-      openai = createOpenAI()
-      await expect(openai.chat([{ role: 'user', content: 'Hello' }], {})).rejects.toThrow()
-    })
+    await expect(model.listModels()).resolves.toEqual(fallback)
   })
 })
