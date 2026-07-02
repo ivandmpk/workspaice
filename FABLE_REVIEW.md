@@ -19,14 +19,14 @@ _Last updated 2026-07-02 (branch `dev`). Findings below are the original snapsho
 - **§8 cleanups:** §8.1 dead deps — `react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals` ✅ (the `store` / `material-ui-popup-state` / `react-swipeable-views` audit is still open) · §8.2 dead code — App Store rating flow + `trackEvent`/`trackGenerateEvent` ✅ (Sentry-shim shrink still open) · §8.3 biome safe-autofix + repo-wide diagnostic ratchet (`qa:biome-ratchet`, baseline 0 errors / 826 warnings) ✅ · §8.10 stale docs deleted ✅
 - **P1 — Security spine (part):** SEC-1 ✅ — implemented as a native **approval ledger** (`src/main/mcp/approval-ledger.ts`), which is stronger than the "resolve-by-id" minimal version below: the renderer can also write the settings blob, so a fingerprint-gated native confirmation is the real trust anchor while `webSecurity` is off. See `.ai/ARCHITECTURE_NOTES.md`.
 - **Low-risk hardening batch:** SEC-7 ✅ (sed passed as a single shell-escaped arg) · STAB-2 ✅ (`parseJsonArg` guard on the `setStoreValue`/`setAllStoreValues`/`ensureShortcutConfig`/`ensureProxy` handlers — zod-validating high-value channel payloads is still open) · STAB-3 ✅ (`getDeviceName` async `execFile`) · §6.6 ✅ (skills script SIGTERM→SIGKILL escalation, resolve on `close`) · §8.9 ✅ (9 dead `.erb/scripts` removed, biome baseline ratcheted to 0/824).
+- **P1 — SEC-2 ✅ (2026-07-02):** Electron 35.7.5 → 42.5.0 (Chromium 148, Node 24). Kept electron-builder 26.8.1 + the NPM-collector patch (unchanged, re-verified: mac arm64 asar complete). Two upgrade-induced fixes: `.erb/scripts/postinstall.cjs` now downloads the Electron dist (E42 removed the postinstall download), and `store-node.ts` became lazily initialized via `initStore()` because E42's `safeStorage.isEncryptionAvailable()` is false pre-ready — the old module-load init silently disabled config encryption (and would have wiped an existing encrypted config via `clearInvalidConfig`). Verified: `qa:ci` green, `qa:release:mac` packaged-app safeStorage round-trip. `qa:release:win` smoke deferred by user — run before the next Windows release.
 
 **Open — recommended order:**
 
-1. **SEC-2** (Electron upgrade) — next P1; **its own session** (touches the `app-builder-lib@26.8.1` patch + `electron-store@8`, needs `qa:release:mac`/`win` smoke).
-2. **P2:** SEC-3 (provider proxy → `webSecurity:true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · §6.3 tool-error unification · §9.1 a11y labels.
-3. **Low / opportunistic:** §6.4 `noFloatingPromises` burndown · §8.2 Sentry-shim shrink · §8.1 remaining dep audit · §8.5 error-mapper rename · §8.6 `biome-ignore-all` narrowing.
-4. **P3 / with redesign:** InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4.
-5. **Product decision:** SEC-6 (mobile SQLite encryption) resolves for free if mobile is dropped.
+1. **P2:** SEC-3 (provider proxy → `webSecurity:true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · §6.3 tool-error unification · §9.1 a11y labels.
+2. **Low / opportunistic:** §6.4 `noFloatingPromises` burndown · §8.2 Sentry-shim shrink · §8.1 remaining dep audit · §8.5 error-mapper rename · §8.6 `biome-ignore-all` narrowing.
+3. **P3 / with redesign:** InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4.
+4. **Product decision:** SEC-6 (mobile SQLite encryption) resolves for free if mobile is dropped.
 
 ---
 
@@ -89,7 +89,7 @@ Ordered by severity. "Known/tracked" = already in `.ai/` notes.
 ### 5.1 High
 
 - ✅ **DONE (2026-07-02, approval-ledger approach — see §0)** — **[SEC-1] Renderer can spawn arbitrary processes via `mcp:stdio-transport:create`** (`src/main/mcp/ipc-stdio-transport.ts:36`). The handler accepts `command`, `args`, and `env` directly from the renderer and spawns it. Legitimate use is user-configured MCP servers, but combined with `webSecurity: false` this is the XSS→RCE escalation path: any injected script in the page has full network access *and* a process-spawning primitive. Mitigation options in §7.
-- **[SEC-2] Electron 35.7.5 is past end-of-support** (`package.json:201`). No more Chromium security patches. Upgrade to a supported major. Interacts with: the `app-builder-lib@26.8.1` patch pin, `electron-store@8` (v9+ is ESM), and the CJS main process. Plan as its own task with `qa:release:*` smoke tests.
+- ✅ **DONE (2026-07-02, Electron 42.5.0 — see §0)** — **[SEC-2] Electron 35.7.5 is past end-of-support** (`package.json:201`). No more Chromium security patches. Upgrade to a supported major. Interacts with: the `app-builder-lib@26.8.1` patch pin, `electron-store@8` (v9+ is ESM), and the CJS main process. Plan as its own task with `qa:release:*` smoke tests.
 - **[SEC-3] `webSecurity: false`** (`src/main/main.ts:353`). Known/tracked; the inline comment and CSP are good interim work. The durable fix (route provider `fetch()` through the main process, then re-enable) unlocks removing `'unsafe-eval'` pressure and downgrades SEC-1 from "RCE chain" to "defense in depth".
 
 ### 5.2 Medium
@@ -128,7 +128,7 @@ In dependency order — each step makes the next cheaper:
 1. **Scheme-allowlist `shell.openExternal`** ([SEC-4]). One shared `openExternalSafe(url)` helper in `main.ts` used by both call sites. ~20 lines, do first.
 2. **Constrain MCP stdio spawn** ([SEC-1]). Minimal version: persist MCP server configs in the main-process store and change `mcp:stdio-transport:create` to accept a server *id*, resolving command/args/env main-side; the renderer settings UI already writes configs through `setSettings`, so the data is available. This closes renderer-supplied arbitrary spawn even while `webSecurity` is off. (The deep-link install flow already requires user confirmation via modal — good; keep that.)
 3. **Route provider HTTP through the main process, re-enable `webSecurity`** ([SEC-3]). Largest item: add a main-process fetch/stream proxy IPC (streaming via `webContents.send` chunks or a `MessagePort`), point the model adapters' `fetch` implementation at it (the `ai` SDK accepts a custom `fetch`), then flip `webSecurity: true`. Also lets `connect-src` tighten.
-4. **Electron upgrade to a supported major** ([SEC-2]). Re-verify: the `app-builder-lib` patch (pinned to 26.8.1 — check whether newer electron-builder fixed the pnpm collector, which would let you drop the patch), `electron-store@8` compatibility, `safeStorage` behavior, and run `qa:release:mac` + `qa:release:win`.
+4. ✅ **DONE (2026-07-02)** — **Electron upgrade to a supported major** ([SEC-2]). Re-verify: the `app-builder-lib` patch (pinned to 26.8.1 — check whether newer electron-builder fixed the pnpm collector, which would let you drop the patch), `electron-store@8` compatibility, `safeStorage` behavior, and run `qa:release:mac` + `qa:release:win`.
 5. **Drop `'unsafe-eval'` from the packaged-build CSP** ([SEC-8]); keep it dev-only.
 6. **Skill-install trust UX:** before enabling a GitHub/marketplace-installed skill that has a `scripts/` dir, show the script list (and ideally contents) in the confirmation UI; consider executing skill scripts through the sandbox runtime when available instead of raw `spawn`.
 7. ✅ **DONE (2026-07-02)** — **Fix the sed escaping** ([SEC-7]): the sed program is now passed as a single `shellEscape`'d argument (the Node read→replace→write alternative was rejected because `execCommand`'s output is unconditionally truncated, which would corrupt large files).
@@ -196,7 +196,7 @@ Ordered roughly by value-to-effort. All are local-first-compatible (no hosted se
 | Priority | Items | Rationale |
 |---|---|---|
 | ✅ **P0 — DONE** | SEC-4 (openExternal allowlist) · PROD-1 (remove EdgeOne) · STAB-1 (un-gate window from KB init) · DOC-1 (stale docs) | Shipped 2026-07-02. |
-| **P1 — this cycle** | ✅ SEC-1 (MCP spawn constraint) · ✅ dead deps + dead upstream code (§8.1–8.2, partial — Sentry shim + 3-dep audit open) · ✅ biome ratchet (§8.3) · ⏳ **SEC-2 (Electron upgrade) — remaining, own session** | SEC-2 is the last P1; it interacts with the `app-builder-lib` patch and needs `qa:release:*` smoke. |
+| ✅ **P1 — DONE** | ✅ SEC-1 (MCP spawn constraint) · ✅ dead deps + dead upstream code (§8.1–8.2, partial — Sentry shim + 3-dep audit open) · ✅ biome ratchet (§8.3) · ✅ SEC-2 (Electron 35 → 42) | SEC-2 shipped 2026-07-02; win-package smoke deferred (see §0). |
 | **P2 — next cycle** | SEC-3 (main-process provider proxy → `webSecurity: true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · tool-error unification (§6.3) · a11y labels (§9.1) | Proxy work is the largest single engineering item; schedule deliberately. |
 | **P3 — with redesign** | InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4 | Ride along with the already-planned chat-surface redesign. |
 

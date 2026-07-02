@@ -8,6 +8,8 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 
 ### Security And Stability
 
+- Upgraded Electron from 35 (end-of-support) to 42 (Chromium 148, Node 24), restoring Chromium security-patch coverage for the app shell.
+- Fixed a config-encryption regression the Electron upgrade would otherwise have introduced: on Electron 42 the OS-keychain check reports unavailable until the app is ready, so the config store is now initialized after readiness. Without this, `config.json` (which holds provider API keys) would silently be written unencrypted — and an existing encrypted config would have been wiped on first launch.
 - External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
 - The main window now appears immediately on launch instead of waiting for knowledge-base initialization — a slow or corrupt knowledge-base database can no longer prevent the app from opening.
 - Launching a local (stdio) MCP server now requires a one-time native approval that shows the exact command; approved servers run silently afterwards, and editing a server's command/args/env re-prompts. This blocks a compromised renderer from silently spawning arbitrary processes.
