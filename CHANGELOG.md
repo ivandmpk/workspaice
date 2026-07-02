@@ -16,6 +16,7 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 - Removed the "Publish Webpage" button on HTML code blocks and the underlying EdgeOne integration — HTML artifacts are no longer sent to a third-party hosted service.
 - Removed the inherited iOS App Store rating prompt, which was never applicable to this desktop fork.
 - Removed the dead telemetry plumbing (`trackEvent`/`trackGenerateEvent`) — all tracking was already a no-op stub; nothing was ever sent.
+- Dropped four unused dependencies (`react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals`) and the CRA-era `reportWebVitals` scaffold.
 
 ### Chat Organization
 
