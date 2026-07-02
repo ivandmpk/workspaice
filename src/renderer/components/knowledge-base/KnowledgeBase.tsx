@@ -14,7 +14,6 @@ import { useProviders } from '@/hooks/useProviders'
 import { toastError } from '@/packages/toast'
 import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { trackEvent } from '@/utils/track'
 import { ScalableIcon } from '../common/ScalableIcon'
 import KnowledgeBaseDocuments from './KnowledgeBaseDocuments'
 import {
@@ -264,15 +263,6 @@ const KnowledgeBasePage: React.FC = () => {
         visionModel: newVisionModel || '',
         documentParser: newDocumentParser,
         providerMode: 'custom',
-      })
-
-      trackEvent('knowledge_base_created', {
-        provider_mode: 'custom',
-        embedding_model: newEmbeddingModel,
-        rerank_model: newRerankModel || null,
-        vision_model: newVisionModel || null,
-        document_parser: newDocumentParser?.type || 'global',
-        knowledge_base_name: newKbName,
       })
 
       // Reset form

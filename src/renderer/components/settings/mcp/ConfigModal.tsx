@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '@/components/layout/Overlay'
 import { MCPServer } from '@/packages/mcp/controller'
 import type { MCPServerConfig } from '@/packages/mcp/types'
-import { trackEvent } from '@/utils/track'
 import { getConfigFromFormValues, getFormValuesFromConfig, type MCPServerConfigFormValues } from './utils'
 
 interface ConnectionTestingResult {
@@ -85,7 +84,6 @@ const ConfigForm: FC<{
     console.debug('Testing connection with config', config)
     setTesting(true)
     setTestingResult(null)
-    trackEvent('test_mcp_server_connection', { type: config.transport.type })
     try {
       const server = new MCPServer(config.transport)
       testingAbortController.current = new AbortController()
@@ -114,7 +112,6 @@ const ConfigForm: FC<{
 
   const handleSubmit = (values: typeof form.values) => {
     console.debug('form onSubmit', values)
-    trackEvent('save_mcp_server', { type: values.transport.type, name: values.name })
     return props.onSave(getConfigFromFormValues(values))
   }
 

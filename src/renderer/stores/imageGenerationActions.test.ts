@@ -10,7 +10,6 @@ const getImageMock = vi.fn()
 const paintMock = vi.fn()
 const setCurrentGeneratingIdMock = vi.fn()
 const setCurrentRecordIdMock = vi.fn()
-const trackEventMock = vi.fn()
 
 vi.mock('@/adapters', () => ({
   createModelDependencies: vi.fn(async () => ({
@@ -62,10 +61,6 @@ vi.mock('./settingsStore', () => ({
       getSettings: () => ({}),
     }),
   },
-}))
-
-vi.mock('@/utils/track', () => ({
-  trackEvent: trackEventMock,
 }))
 
 vi.mock('@/lib/utils', () => ({
@@ -141,10 +136,6 @@ describe('imageGenerationActions reference image payload', () => {
       }),
       expect.any(AbortSignal),
       expect.any(Function)
-    )
-    expect(trackEventMock).toHaveBeenCalledWith(
-      'generate_image',
-      expect.objectContaining({ has_reference: true, path: 'direct' })
     )
   })
 

@@ -18,7 +18,6 @@ const mocks = vi.hoisted(() => ({
   initializeTargetMessage: vi.fn(),
   findTargetMessageIndex: vi.fn(),
   handleGenerationError: vi.fn(),
-  trackGenerateEvent: vi.fn(),
   setBlob: vi.fn(),
 }))
 
@@ -70,7 +69,6 @@ vi.mock('./utils', () => ({
   getSessionWebBrowsing: vi.fn(() => false),
   handleGenerationError: mocks.handleGenerationError,
   initializeTargetMessage: mocks.initializeTargetMessage,
-  trackGenerateEvent: mocks.trackGenerateEvent,
 }))
 
 import { orchestrateGeneration } from './orchestration'

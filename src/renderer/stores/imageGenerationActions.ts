@@ -12,7 +12,6 @@ import {
 import platform from '@/platform'
 import storage from '@/storage'
 import { StorageKeyGenerator } from '@/storage/StoreStorage'
-import { trackEvent } from '@/utils/track'
 import {
   addGeneratedImage,
   createRecord,
@@ -145,13 +144,6 @@ async function generateImages(recordId: string, params: GenerateImageParams): Pr
       }
     }
 
-    trackEvent('generate_image', {
-      provider: params.model.provider,
-      model: params.model.modelId,
-      num_images: num,
-      has_reference: params.referenceImages.length > 0,
-    })
-
     // Single submit with quantity
     const submission = await submitImageGeneration(
       {
@@ -267,14 +259,6 @@ async function generateImagesDirect(recordId: string, params: GenerateImageParam
         images.push({ imageUrl: imageData })
       }
     }
-
-    trackEvent('generate_image', {
-      provider: params.model.provider,
-      model: params.model.modelId,
-      num_images: num,
-      has_reference: params.referenceImages.length > 0,
-      path: 'direct',
-    })
 
     // Call model.paint() with progressive callback
     const resultDataUrls = await model.paint(

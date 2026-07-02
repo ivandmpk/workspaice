@@ -48,7 +48,6 @@ import { useChunksPreview } from '@/hooks/useChunksPreview'
 import { toastError } from '@/packages/toast'
 import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { trackEvent } from '@/utils/track'
 import ChunksPreviewModal from './ChunksPreviewModal'
 
 interface KnowledgeBaseDocumentsProps {
@@ -301,17 +300,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
           // Don't show additional error toast here since individual errors were already shown
         }
 
-        // Track successful uploads only
         if (successfulUploads.length > 0) {
-          trackEvent('knowledge_base_document_added', {
-            knowledge_base_id: knowledgeBase.id,
-            knowledge_base_name: knowledgeBase.name,
-            file_count: successfulUploads.length,
-            total_attempted: files.length,
-            failed_count: blockedUploadCount,
-            file_types: Array.from(new Set(correctedFiles.map((f) => f.type || 'unknown'))),
-          })
-
           // Immediately refresh the data to show the new files
           await Promise.all([refetch(), refetchCount()])
 

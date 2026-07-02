@@ -24,13 +24,7 @@ import { persistStreamingMessage, updateStreamingCache } from './messages'
 import { getOCRModel, ocrImagesInMessages } from './ocr-helper'
 import { createInitialState, processStreamChunk } from './stream-chunk-processor'
 import { buildToolsForSession } from './tools-builder'
-import {
-  findTargetMessageIndex,
-  getSessionWebBrowsing,
-  handleGenerationError,
-  initializeTargetMessage,
-  trackGenerateEvent,
-} from './utils'
+import { findTargetMessageIndex, getSessionWebBrowsing, handleGenerationError, initializeTargetMessage } from './utils'
 
 const log = getLogger('session-orchestration')
 
@@ -132,8 +126,6 @@ export async function orchestrateGeneration(
   if (!session || !settings) {
     return
   }
-
-  trackGenerateEvent(sessionId, settings, globalSettings, session.type, options)
 
   const startTime = Date.now()
   let firstTokenLatency: number | undefined
