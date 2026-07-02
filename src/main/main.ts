@@ -640,12 +640,24 @@ app.on('open-url', async (_event, url) => {
 
 // --------- IPC 监听 ---------
 
+// Renderer-supplied JSON crosses the IPC boundary as a string. Parse it through
+// this guard so malformed input surfaces as a clear, typed error instead of an
+// opaque `SyntaxError: Unexpected token` propagating back through `invoke`.
+function parseJsonArg<T>(json: string, channel: string): T {
+  try {
+    return JSON.parse(json) as T
+  } catch (e: unknown) {
+    const detail = e instanceof Error ? e.message : String(e)
+    throw new Error(`Invalid JSON payload for IPC channel "${channel}": ${detail}`)
+  }
+}
+
 ipcMain.handle('getStoreValue', (event, key) => {
   return store.get(key)
 })
 ipcMain.handle('setStoreValue', (event, key, dataJson) => {
   // 仅在传输层用 JSON 序列化，存储层用原生数据，避免存储层 JSON 损坏后无法自动处理的情况
-  const data = JSON.parse(dataJson)
+  const data = parseJsonArg(dataJson, 'setStoreValue')
   return store.set(key, data)
 })
 ipcMain.handle('delStoreValue', (event, key) => {
@@ -658,7 +670,7 @@ ipcMain.handle('getAllStoreKeys', (event) => {
   return Object.keys(store.store)
 })
 ipcMain.handle('setAllStoreValues', (event, dataJson) => {
-  const data = JSON.parse(dataJson)
+  const data = parseJsonArg<Record<string, unknown>>(dataJson, 'setAllStoreValues')
   store.store = { ...store.store, ...data }
 })
 
@@ -687,13 +699,16 @@ ipcMain.handle('getArch', () => {
 ipcMain.handle('getHostname', () => {
   return os.hostname()
 })
-ipcMain.handle('getDeviceName', () => {
+ipcMain.handle('getDeviceName', async () => {
   if (process.platform === 'darwin') {
     try {
-      const { execSync } = require('child_process')
-      const computerName = execSync('scutil --get ComputerName', { encoding: 'utf8' }).trim()
-      return computerName || os.hostname()
-    } catch (error) {
+      // execFile (async, argv form — no shell) so the main process event loop
+      // isn't blocked while `scutil` runs.
+      const { execFile } = require('node:child_process')
+      const { promisify } = require('node:util')
+      const { stdout } = await promisify(execFile)('scutil', ['--get', 'ComputerName'], { timeout: 5_000 })
+      return stdout.trim() || os.hostname()
+    } catch {
       return os.hostname()
     }
   } else if (process.platform === 'win32') {
@@ -713,7 +728,7 @@ ipcMain.handle('openLink', (_event, link) => {
   return openExternalSafe(link)
 })
 ipcMain.handle('ensureShortcutConfig', (event, json) => {
-  const config: ShortcutSetting = JSON.parse(json)
+  const config = parseJsonArg<ShortcutSetting>(json, 'ensureShortcutConfig')
   unregisterShortcuts()
   registerShortcuts(config)
 })
@@ -721,7 +736,7 @@ ipcMain.handle('ensureShortcutConfig', (event, json) => {
 ipcMain.handle('shouldUseDarkColors', () => nativeTheme.shouldUseDarkColors)
 
 ipcMain.handle('ensureProxy', (event, json) => {
-  const config: { proxy?: string } = JSON.parse(json)
+  const config = parseJsonArg<{ proxy?: string }>(json, 'ensureProxy')
   proxy.ensure(config.proxy)
 })
 

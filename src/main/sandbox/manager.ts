@@ -286,10 +286,14 @@ export async function editFile(
   replace: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // Escape sed BRE metacharacters for correctness, then hand the whole sed
+    // program to the shell as one single-quoted argument. Single-quoting (via
+    // shellEscape) is what makes this safe: it neutralizes shell metacharacters
+    // such as backticks and `"` that would otherwise trigger command
+    // substitution when a search/replace string contained them.
     const escapeSedBRE = (s: string) => s.replace(/[\\.*[\]^$&/]/g, '\\$&').replace(/\n/g, '\\n')
-    const escapedSearch = escapeSedBRE(search)
-    const escapedReplace = escapeSedBRE(replace)
-    const result = await execCommand(`sed -i'' "s/${escapedSearch}/${escapedReplace}/g" ${shellEscape(filePath)}`)
+    const sedProgram = `s/${escapeSedBRE(search)}/${escapeSedBRE(replace)}/g`
+    const result = await execCommand(`sed -i'' ${shellEscape(sedProgram)} ${shellEscape(filePath)}`)
     if (result.exitCode !== 0) {
       return { success: false, error: result.stderr || `Exit code ${result.exitCode}` }
     }

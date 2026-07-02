@@ -151,9 +151,20 @@ export function registerSkillsHandlers() {
 
         return await new Promise((resolve) => {
           const TIMEOUT_MS = 30_000
+          const KILL_GRACE_MS = 3_000
           let stdout = ''
           let stderr = ''
           let settled = false
+          let timedOut = false
+          let timeoutTimer: NodeJS.Timeout | undefined
+          let killTimer: NodeJS.Timeout | undefined
+
+          const clearTimers = () => {
+            if (timeoutTimer) clearTimeout(timeoutTimer)
+            if (killTimer) clearTimeout(killTimer)
+            timeoutTimer = undefined
+            killTimer = undefined
+          }
 
           const resolveOnce = (result: {
             success: boolean
@@ -165,12 +176,12 @@ export function registerSkillsHandlers() {
               return
             }
             settled = true
+            clearTimers()
             resolve(result)
           }
 
           const child = spawn(resolvedScriptPath, args, {
             cwd: scriptDir,
-            timeout: TIMEOUT_MS,
             stdio: ['ignore', 'pipe', 'pipe'],
             env: {
               PATH: process.env.PATH,
@@ -195,22 +206,33 @@ export function registerSkillsHandlers() {
             resolveOnce({ success: false, stdout, stderr: stderr || error.message, exitCode: null })
           })
 
+          // Resolve only on the real process exit ('close' fires after the child's
+          // stdio streams have flushed) so a killed child's streams are never
+          // abandoned mid-write.
           child.on('close', (code, signal) => {
-            if (signal === 'SIGTERM') {
-              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out', exitCode: null })
+            if (timedOut) {
+              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out (30s)', exitCode: null })
+            } else if (signal) {
+              resolveOnce({ success: false, stdout, stderr: stderr || `Script terminated (${signal})`, exitCode: null })
             } else {
               resolveOnce({ success: code === 0, stdout, stderr, exitCode: code })
             }
           })
 
-          setTimeout(() => {
-            if (settled) {
+          timeoutTimer = setTimeout(() => {
+            if (settled || child.killed) {
               return
             }
-            if (!child.killed) {
-              child.kill('SIGTERM')
-              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out (30s)', exitCode: null })
-            }
+            timedOut = true
+            child.kill('SIGTERM')
+            // Escalate to SIGKILL if the child ignores SIGTERM. Resolution still
+            // happens on 'close', so output collected so far isn't lost and the
+            // child is guaranteed to be reaped.
+            killTimer = setTimeout(() => {
+              if (!settled) {
+                child.kill('SIGKILL')
+              }
+            }, KILL_GRACE_MS)
           }, TIMEOUT_MS)
         })
       } catch (error) {
