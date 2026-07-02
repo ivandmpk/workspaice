@@ -546,9 +546,7 @@ if (!gotTheLock) {
   app
     .whenReady()
     .then(async () => {
-      await knowledgeBaseInitPromise
       await createWindow()
-      await initializeSessionAttachmentRagAfterAppReady()
       ensureTray()
 
       // 处理启动时的 Deep Link (Windows/Linux)
@@ -602,6 +600,13 @@ if (!gotTheLock) {
       app.on('before-quit', () => {
         destroyTray()
       })
+
+      // Deliberately last (STAB-1): a hung/slow knowledge-base init (corrupt
+      // DB, locked file) must not prevent the window, tray, shortcuts, or
+      // deep links from coming up. The renderer accesses the KB lazily via
+      // IPC, and session-attachment RAG still waits for the KB to be ready.
+      await knowledgeBaseInitPromise
+      await initializeSessionAttachmentRagAfterAppReady()
     })
     .catch((err: unknown) => log.error('App initialization failed:', err))
 }
