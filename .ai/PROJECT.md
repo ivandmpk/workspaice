@@ -52,6 +52,7 @@ Generic workflow rules (branch, commits, pushing, ambiguity) live in `AGENT_RULE
 - QA integration tests: `pnpm qa:integration`.
 - QA coverage: `pnpm qa:coverage`.
 - QA skipped-test audit: `pnpm qa:no-skipped`.
+- QA biome diagnostic-count ratchet: `pnpm qa:biome-ratchet` (repo-wide; baseline in `scripts/qa/biome-baseline.json`; `--update-baseline` after intentional reductions).
 - QA Electron E2E: `pnpm qa:e2e`.
 - Full QA CI contract: `pnpm qa:ci`.
 - macOS release/package smoke: `pnpm qa:release:mac`.

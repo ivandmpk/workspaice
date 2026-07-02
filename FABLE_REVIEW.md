@@ -9,6 +9,26 @@ This document is written for future LLM/coding agents. Every recommendation name
 
 ---
 
+## 0. Implementation Status
+
+_Last updated 2026-07-02 (branch `dev`). Findings below are the original snapshot; resolved IDs are marked ✅ inline in §5. `.ai/STATE.md` is the live tracker — start there. Full history is in `git log` / `CHANGELOG.md`._
+
+**Completed (all shipped with full `pnpm qa:ci` green — 1,118 unit + 37 integration + 7 E2E):**
+
+- **P0 — Phase 1 hygiene sweep:** SEC-4 ✅ · PROD-1 ✅ · STAB-1 ✅ · DOC-1 ✅
+- **§8 cleanups:** §8.1 dead deps — `react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals` ✅ (the `store` / `material-ui-popup-state` / `react-swipeable-views` audit is still open) · §8.2 dead code — App Store rating flow + `trackEvent`/`trackGenerateEvent` ✅ (Sentry-shim shrink still open) · §8.3 biome safe-autofix + repo-wide diagnostic ratchet (`qa:biome-ratchet`, baseline 0 errors / 826 warnings) ✅ · §8.10 stale docs deleted ✅
+- **P1 — Security spine (part):** SEC-1 ✅ — implemented as a native **approval ledger** (`src/main/mcp/approval-ledger.ts`), which is stronger than the "resolve-by-id" minimal version below: the renderer can also write the settings blob, so a fingerprint-gated native confirmation is the real trust anchor while `webSecurity` is off. See `.ai/ARCHITECTURE_NOTES.md`.
+
+**Open — recommended order:**
+
+1. **SEC-2** (Electron upgrade) — next P1; **its own session** (touches the `app-builder-lib@26.8.1` patch + `electron-store@8`, needs `qa:release:mac`/`win` smoke).
+2. **P2:** SEC-3 (provider proxy → `webSecurity:true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · §6.3 tool-error unification · §9.1 a11y labels.
+3. **Low / opportunistic:** SEC-7 · STAB-2 · STAB-3 · §6.4 `noFloatingPromises` burndown · §6.6 child-leak accounting · §8.2 Sentry-shim shrink · §8.1 remaining dep audit · §8.5 error-mapper rename · §8.6 `biome-ignore-all` narrowing · §8.9 dead `.erb/` scripts.
+4. **P3 / with redesign:** InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4.
+5. **Product decision:** SEC-6 (mobile SQLite encryption) resolves for free if mobile is dropped.
+
+---
+
 ## 1. Executive Summary
 
 WorkspAIce is in solid shape for a 1.0.x-beta. The de-commercialization of the Chatbox fork is nearly complete and unusually disciplined: telemetry and Sentry are stubbed to no-ops, config is encrypted at rest via `safeStorage`, the preload bridge enforces an explicit IPC allowlist, skill/sandbox script execution is carefully path-validated, and the deterministic QA gate (typecheck + 1,099 unit + 37 integration + 7 E2E scenarios) is real and passing.
@@ -67,16 +87,16 @@ Ordered by severity. "Known/tracked" = already in `.ai/` notes.
 
 ### 5.1 High
 
-- **[SEC-1] Renderer can spawn arbitrary processes via `mcp:stdio-transport:create`** (`src/main/mcp/ipc-stdio-transport.ts:36`). The handler accepts `command`, `args`, and `env` directly from the renderer and spawns it. Legitimate use is user-configured MCP servers, but combined with `webSecurity: false` this is the XSS→RCE escalation path: any injected script in the page has full network access *and* a process-spawning primitive. Mitigation options in §7.
+- ✅ **DONE (2026-07-02, approval-ledger approach — see §0)** — **[SEC-1] Renderer can spawn arbitrary processes via `mcp:stdio-transport:create`** (`src/main/mcp/ipc-stdio-transport.ts:36`). The handler accepts `command`, `args`, and `env` directly from the renderer and spawns it. Legitimate use is user-configured MCP servers, but combined with `webSecurity: false` this is the XSS→RCE escalation path: any injected script in the page has full network access *and* a process-spawning primitive. Mitigation options in §7.
 - **[SEC-2] Electron 35.7.5 is past end-of-support** (`package.json:201`). No more Chromium security patches. Upgrade to a supported major. Interacts with: the `app-builder-lib@26.8.1` patch pin, `electron-store@8` (v9+ is ESM), and the CJS main process. Plan as its own task with `qa:release:*` smoke tests.
 - **[SEC-3] `webSecurity: false`** (`src/main/main.ts:353`). Known/tracked; the inline comment and CSP are good interim work. The durable fix (route provider `fetch()` through the main process, then re-enable) unlocks removing `'unsafe-eval'` pressure and downgrades SEC-1 from "RCE chain" to "defense in depth".
 
 ### 5.2 Medium
 
-- **[SEC-4] `openLink` IPC and `setWindowOpenHandler` pass URLs to `shell.openExternal` with no scheme check** (`src/main/main.ts:421`, `main.ts:707`). A compromised renderer (or a crafted link in rendered markdown) can open `file://`, `smb://`, or protocol handlers of other apps. One-line fix: allowlist `http:`, `https:`, `mailto:`.
-- **[PROD-1] EdgeOne hosted deploy still shipped** (`src/renderer/packages/edgeone.ts`, `deployHtmlToEdgeOne` imported by `components/Markdown.tsx`, plus `modals/EdgeOneDeploySuccess.tsx`). Sends user HTML artifacts to `https://mcp.edgeone.site`. Violates the local-first non-negotiable. Remove the button, the package, and the modal.
+- ✅ **DONE (2026-07-02)** — **[SEC-4] `openLink` IPC and `setWindowOpenHandler` pass URLs to `shell.openExternal` with no scheme check** (`src/main/main.ts:421`, `main.ts:707`). A compromised renderer (or a crafted link in rendered markdown) can open `file://`, `smb://`, or protocol handlers of other apps. One-line fix: allowlist `http:`, `https:`, `mailto:`.
+- ✅ **DONE (2026-07-02)** — **[PROD-1] EdgeOne hosted deploy still shipped** (`src/renderer/packages/edgeone.ts`, `deployHtmlToEdgeOne` imported by `components/Markdown.tsx`, plus `modals/EdgeOneDeploySuccess.tsx`). Sends user HTML artifacts to `https://mcp.edgeone.site`. Violates the local-first non-negotiable. Remove the button, the package, and the modal.
 - **[SEC-5] node-fetch@2.7.0 CVEs in packaged app** — known/tracked; root cause is eager `zeroentropy` loading via `@mastra/rag`. The long-term fix (lazy/scoped import) is described in `.ai/ARCHITECTURE_NOTES.md`.
-- **[STAB-1] Window creation is gated on knowledge-base init** (`src/main/main.ts:548`: `await knowledgeBaseInitPromise` before `createWindow()`). A hung/slow libsql init (corrupt DB, locked file) means *no window ever appears* and no user-visible error. Show the window first; let KB init resolve behind it (the renderer already tolerates async RAG readiness — see `refreshSessionAttachmentStatuses`).
+- ✅ **DONE (2026-07-02)** — **[STAB-1] Window creation is gated on knowledge-base init** (`src/main/main.ts:548`: `await knowledgeBaseInitPromise` before `createWindow()`). A hung/slow libsql init (corrupt DB, locked file) means *no window ever appears* and no user-visible error. Show the window first; let KB init resolve behind it (the renderer already tolerates async RAG readiness — see `refreshSessionAttachmentStatuses`).
 - **[SEC-6] Mobile SQLite `'no-encryption'`** — known/tracked, pending the mobile-support decision. If mobile is dropped (open product question), this disappears for free.
 
 ### 5.3 Low
@@ -85,7 +105,7 @@ Ordered by severity. "Known/tracked" = already in `.ai/` notes.
 - **[SEC-8] CSP includes `'unsafe-eval'` in production.** Vite production bundles don't need eval; the comment attributes it to HMR and "some UI libraries". Test a packaged build without it (watch mermaid/shiki/katex) and split the CSP into dev vs. prod variants.
 - **[STAB-2] `setStoreValue`/`ensureProxy`/`ensureShortcutConfig` `JSON.parse` renderer input unguarded** (`src/main/main.ts:642+`) — malformed input throws back through IPC as an opaque error. Wrap and return a typed error.
 - **[STAB-3] `getDeviceName` uses `execSync`** (`src/main/main.ts:687`) — blocks the main process; use the async form or cache once at startup.
-- **[DOC-1] Stale root docs contradict reality:** `CODE_REVIEW.md` (2026-06-23) still lists "API keys stored in plaintext" and "wildcard invoke proxy" as open criticals — both fixed. `ERROR_HANDLING.md` describes an active Sentry integration — Sentry is now a no-op stub. Stale security docs are actively harmful to future agents; update or delete both.
+- ✅ **DONE (2026-07-02)** — **[DOC-1] Stale root docs contradict reality:** `CODE_REVIEW.md` (2026-06-23) still lists "API keys stored in plaintext" and "wildcard invoke proxy" as open criticals — both fixed. `ERROR_HANDLING.md` describes an active Sentry integration — Sentry is now a no-op stub. Stale security docs are actively harmful to future agents; update or delete both.
 
 ---
 
@@ -174,8 +194,8 @@ Ordered roughly by value-to-effort. All are local-first-compatible (no hosted se
 
 | Priority | Items | Rationale |
 |---|---|---|
-| **P0 — do next** | SEC-4 (openExternal allowlist) · PROD-1 (remove EdgeOne) · STAB-1 (un-gate window from KB init) · DOC-1 (stale docs) | Each is <1 day, closes a real hole or a product-rule violation. |
-| **P1 — this cycle** | SEC-1 (MCP spawn constraint) · SEC-2 (Electron upgrade) · dead deps + dead upstream code (§8.1–8.2) · biome ratchet (§8.3) | The two security items are the meat; the cleanups shrink the surface the upgrade has to cross. |
+| ✅ **P0 — DONE** | SEC-4 (openExternal allowlist) · PROD-1 (remove EdgeOne) · STAB-1 (un-gate window from KB init) · DOC-1 (stale docs) | Shipped 2026-07-02. |
+| **P1 — this cycle** | ✅ SEC-1 (MCP spawn constraint) · ✅ dead deps + dead upstream code (§8.1–8.2, partial — Sentry shim + 3-dep audit open) · ✅ biome ratchet (§8.3) · ⏳ **SEC-2 (Electron upgrade) — remaining, own session** | SEC-2 is the last P1; it interacts with the `app-builder-lib` patch and needs `qa:release:*` smoke. |
 | **P2 — next cycle** | SEC-3 (main-process provider proxy → `webSecurity: true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · tool-error unification (§6.3) · a11y labels (§9.1) | Proxy work is the largest single engineering item; schedule deliberately. |
 | **P3 — with redesign** | InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4 | Ride along with the already-planned chat-surface redesign. |
 
