@@ -18,12 +18,13 @@ _Last updated 2026-07-02 (branch `dev`). Findings below are the original snapsho
 - **P0 — Phase 1 hygiene sweep:** SEC-4 ✅ · PROD-1 ✅ · STAB-1 ✅ · DOC-1 ✅
 - **§8 cleanups:** §8.1 dead deps — `react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals` ✅ (the `store` / `material-ui-popup-state` / `react-swipeable-views` audit is still open) · §8.2 dead code — App Store rating flow + `trackEvent`/`trackGenerateEvent` ✅ (Sentry-shim shrink still open) · §8.3 biome safe-autofix + repo-wide diagnostic ratchet (`qa:biome-ratchet`, baseline 0 errors / 826 warnings) ✅ · §8.10 stale docs deleted ✅
 - **P1 — Security spine (part):** SEC-1 ✅ — implemented as a native **approval ledger** (`src/main/mcp/approval-ledger.ts`), which is stronger than the "resolve-by-id" minimal version below: the renderer can also write the settings blob, so a fingerprint-gated native confirmation is the real trust anchor while `webSecurity` is off. See `.ai/ARCHITECTURE_NOTES.md`.
+- **Low-risk hardening batch:** SEC-7 ✅ (sed passed as a single shell-escaped arg) · STAB-2 ✅ (`parseJsonArg` guard on the `setStoreValue`/`setAllStoreValues`/`ensureShortcutConfig`/`ensureProxy` handlers — zod-validating high-value channel payloads is still open) · STAB-3 ✅ (`getDeviceName` async `execFile`) · §6.6 ✅ (skills script SIGTERM→SIGKILL escalation, resolve on `close`) · §8.9 ✅ (9 dead `.erb/scripts` removed, biome baseline ratcheted to 0/824).
 
 **Open — recommended order:**
 
 1. **SEC-2** (Electron upgrade) — next P1; **its own session** (touches the `app-builder-lib@26.8.1` patch + `electron-store@8`, needs `qa:release:mac`/`win` smoke).
 2. **P2:** SEC-3 (provider proxy → `webSecurity:true`) · SEC-8 (prod CSP) · SEC-5 (node-fetch) · §6.3 tool-error unification · §9.1 a11y labels.
-3. **Low / opportunistic:** SEC-7 · STAB-2 · STAB-3 · §6.4 `noFloatingPromises` burndown · §6.6 child-leak accounting · §8.2 Sentry-shim shrink · §8.1 remaining dep audit · §8.5 error-mapper rename · §8.6 `biome-ignore-all` narrowing · §8.9 dead `.erb/` scripts.
+3. **Low / opportunistic:** §6.4 `noFloatingPromises` burndown · §8.2 Sentry-shim shrink · §8.1 remaining dep audit · §8.5 error-mapper rename · §8.6 `biome-ignore-all` narrowing.
 4. **P3 / with redesign:** InputBox split · MUI→Mantine · settings responsiveness · features F1/F2/F4.
 5. **Product decision:** SEC-6 (mobile SQLite encryption) resolves for free if mobile is dropped.
 
@@ -101,10 +102,10 @@ Ordered by severity. "Known/tracked" = already in `.ai/` notes.
 
 ### 5.3 Low
 
-- **[SEC-7] `editFile` sed escaping is incomplete** (`src/main/sandbox/manager.ts:289`): `escapeSedBRE` escapes BRE metacharacters but not `` ` `` or `"`, and the sed expression is wrapped in **double** quotes — a search/replace string containing a backtick triggers shell command substitution, and a `"` breaks the command. Not a privilege escalation (the same caller can run arbitrary `execCommand`), but it's a correctness bug and hygiene gap. Use single-quoted sed with proper escaping, or do the edit in Node and write via the existing stdin-pipe path.
+- ✅ **DONE (2026-07-02)** — **[SEC-7] `editFile` sed escaping is incomplete** (`src/main/sandbox/manager.ts:289`): `escapeSedBRE` escapes BRE metacharacters but not `` ` `` or `"`, and the sed expression is wrapped in **double** quotes — a search/replace string containing a backtick triggers shell command substitution, and a `"` breaks the command. Fixed by building the sed program and passing it as a single `shellEscape`'d (single-quoted) argument, which neutralizes all shell metacharacters; BRE escaping retained for sed correctness.
 - **[SEC-8] CSP includes `'unsafe-eval'` in production.** Vite production bundles don't need eval; the comment attributes it to HMR and "some UI libraries". Test a packaged build without it (watch mermaid/shiki/katex) and split the CSP into dev vs. prod variants.
-- **[STAB-2] `setStoreValue`/`ensureProxy`/`ensureShortcutConfig` `JSON.parse` renderer input unguarded** (`src/main/main.ts:642+`) — malformed input throws back through IPC as an opaque error. Wrap and return a typed error.
-- **[STAB-3] `getDeviceName` uses `execSync`** (`src/main/main.ts:687`) — blocks the main process; use the async form or cache once at startup.
+- ✅ **DONE (2026-07-02)** — **[STAB-2] `setStoreValue`/`ensureProxy`/`ensureShortcutConfig` `JSON.parse` renderer input unguarded** (`src/main/main.ts:642+`) — malformed input threw back through IPC as an opaque error. Added a `parseJsonArg` helper that wraps the parse on those handlers plus `setAllStoreValues` and throws a channel-labelled error. (Zod-validating high-value channel payloads — §6.2 — is still open.)
+- ✅ **DONE (2026-07-02)** — **[STAB-3] `getDeviceName` uses `execSync`** (`src/main/main.ts:687`) — blocked the main process; now uses async `execFile` (argv form, no shell).
 - ✅ **DONE (2026-07-02)** — **[DOC-1] Stale root docs contradict reality:** `CODE_REVIEW.md` (2026-06-23) still lists "API keys stored in plaintext" and "wildcard invoke proxy" as open criticals — both fixed. `ERROR_HANDLING.md` describes an active Sentry integration — Sentry is now a no-op stub. Stale security docs are actively harmful to future agents; update or delete both.
 
 ---
@@ -112,11 +113,11 @@ Ordered by severity. "Known/tracked" = already in `.ai/` notes.
 ## 6. Stability Improvements
 
 1. **Un-gate window creation from KB init** ([STAB-1]) — biggest startup-robustness win, small diff in `main.ts`.
-2. **Add typed guards around IPC `JSON.parse` boundaries** ([STAB-2]) and consider zod-validating high-value channel payloads (`skills:*`, `mcp:stdio-transport:create`, `sandbox:*`) in the main process — the preload allowlist controls *which* channels are callable, not *what* is sent.
+2. **Add typed guards around IPC `JSON.parse` boundaries** ([STAB-2] ✅) and consider zod-validating high-value channel payloads (`skills:*`, `mcp:stdio-transport:create`, `sandbox:*`) in the main process — the preload allowlist controls *which* channels are callable, not *what* is sent. (The `JSON.parse` guard shipped; the zod payload validation is still open.)
 3. **Unify the tool-error shape.** Known gap (`.ai/ARCHITECTURE_NOTES.md`): MCP returns caught errors as values, skills return `{success, stderr, exitCode}`, web/file tools throw or return error objects. A single `{ok, value|error}` envelope in `tools-builder.ts` wrappers would simplify `stream-chunk-processor.ts` and make model-visible errors consistent.
 4. **Burn down the 53 `noFloatingPromises` diagnostics** — these are the classic source of "nothing happened and nothing logged" bugs. Prioritize `src/renderer/stores/` and main-process files.
 5. **Raise coverage on the named high-risk targets** from `.ai/STATE.md`: `src/main/store-node.ts` (backup/restore/encryption edge cases are exactly where data loss lives), KB/session-attachment RAG main paths, `InputBox.tsx`, `MessageList.tsx`, session CRUD.
-6. **Watchdog for `skills:execute-script` and sandbox child leaks:** the skills timeout resolves the promise but the killed child's streams are abandoned; add `child.kill` → `close`-event accounting (minor, but easy).
+6. ✅ **DONE (2026-07-02)** — **Watchdog for `skills:execute-script` and sandbox child leaks:** the skills timeout resolved the promise but the killed child's streams were abandoned. Now resolves on the child's `close` event, escalates SIGTERM→SIGKILL after a 3s grace, and clears its timers on settle. (Sandbox `execCommand` already had close-event accounting.)
 
 ---
 
@@ -130,7 +131,7 @@ In dependency order — each step makes the next cheaper:
 4. **Electron upgrade to a supported major** ([SEC-2]). Re-verify: the `app-builder-lib` patch (pinned to 26.8.1 — check whether newer electron-builder fixed the pnpm collector, which would let you drop the patch), `electron-store@8` compatibility, `safeStorage` behavior, and run `qa:release:mac` + `qa:release:win`.
 5. **Drop `'unsafe-eval'` from the packaged-build CSP** ([SEC-8]); keep it dev-only.
 6. **Skill-install trust UX:** before enabling a GitHub/marketplace-installed skill that has a `scripts/` dir, show the script list (and ideally contents) in the confirmation UI; consider executing skill scripts through the sandbox runtime when available instead of raw `spawn`.
-7. **Fix the sed escaping** ([SEC-7]) or replace `editFile` with read→replace→write via the existing stdin path.
+7. ✅ **DONE (2026-07-02)** — **Fix the sed escaping** ([SEC-7]): the sed program is now passed as a single `shellEscape`'d argument (the Node read→replace→write alternative was rejected because `execCommand`'s output is unconditionally truncated, which would corrupt large files).
 8. **node-fetch CVE**: implement the tracked fix (scope the `@mastra/rag` import so `zeroentropy` isn't eagerly loaded at main startup), then drop `node-fetch` from `release/app`.
 
 ---
@@ -145,7 +146,7 @@ In dependency order — each step makes the next cheaper:
 6. **Narrow the 4 `biome-ignore-all` files** (known/tracked) and give `Mermaid.tsx`'s `noDangerouslySetInnerHtml` suppression a real justification comment (`<explanation>` placeholder is still there).
 7. **UI-stack consolidation (MUI→Mantine)** is already the standing direction; the practical next step is an inventory: `grep -rl "@mui/" src/renderer | wc -l` and migrate leaf components opportunistically during the chat redesign rather than as a standalone rewrite.
 8. **Comment-language consistency:** main-process files mix Chinese and English comments. Fine functionally; translate opportunistically when touching a file (don't do a bulk pass — it pollutes blame).
-9. **`.erb/` directory** still carries webpack-era scripts of which only a few (`ensure-app-deps.cjs`, `clean.js`, `notarize.js`, `patch-libsql.cjs`, `postinstall.cjs`) are referenced by `package.json`. Delete the dead ones (`check-port-in-use.js`, `link-modules.*`, duplicate `.js`/`.cjs` pairs) after grepping for references.
+9. ✅ **DONE (2026-07-02)** — **`.erb/` directory** still carries webpack-era scripts of which only a few (`ensure-app-deps.cjs`, `clean.js`, `notarize.js`, `patch-libsql.cjs`, `postinstall.cjs`, plus `check-native-dep.cjs` which `postinstall` requires) are live. Removed 9 dead scripts (`check-port-in-use.js`, `link-modules.*`, `electron-rebuild.*`, `check-native-dep.js` dup, `check-node-env.js`, `check-build-exists.ts`, `mocks/fileMock.js`) after a repo-wide reference grep. Note: `delete-source-maps.js` was left in place — the `delete-sourcemaps` npm script points at a non-existent `delete-source-maps-runner.js`, a pre-existing breakage; decide rename-vs-remove when next touching build scripts.
 10. **Delete or refresh stale root docs** ([DOC-1]): `CODE_REVIEW.md`, `ERROR_HANDLING.md`.
 
 ---
