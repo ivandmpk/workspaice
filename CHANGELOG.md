@@ -6,6 +6,10 @@ All notable WorkspAIce changes are tracked here.
 
 Future development after `1.0.1-beta` should be recorded here until the next beta release is cut.
 
+### Security And Stability
+
+- External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
+
 ### Chat Organization
 
 - Added multi-select mode for regular chats across workspaces and the ungrouped Chat section.

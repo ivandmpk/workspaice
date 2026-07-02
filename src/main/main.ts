@@ -14,7 +14,7 @@ import './legacy-database-migration'
  */
 
 import fs from 'node:fs'
-import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, nativeTheme, session, shell, Tray } from 'electron'
+import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, nativeTheme, session, Tray } from 'electron'
 import electronDebug from 'electron-debug'
 import log from 'electron-log/main'
 import os from 'os'
@@ -29,6 +29,7 @@ import Locale from './locales'
 import * as mcpIpc from './mcp/ipc-stdio-transport'
 import MenuBuilder from './menu'
 import { registerOAuthHandlers } from './oauth'
+import { openExternalSafe } from './open-external'
 import * as proxy from './proxy'
 import { registerSandboxHandlers } from './sandbox'
 import { registerSkillsHandlers } from './skills'
@@ -418,7 +419,7 @@ async function createWindow() {
 
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url)
+    void openExternalSafe(edata.url)
     return { action: 'deny' }
   })
 
@@ -703,8 +704,8 @@ ipcMain.handle('getLocale', () => {
     return ''
   }
 })
-ipcMain.handle('openLink', (event, link) => {
-  return shell.openExternal(link)
+ipcMain.handle('openLink', (_event, link) => {
+  return openExternalSafe(link)
 })
 ipcMain.handle('ensureShortcutConfig', (event, json) => {
   const config: ShortcutSetting = JSON.parse(json)

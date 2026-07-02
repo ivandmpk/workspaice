@@ -6,8 +6,9 @@ import type {
   OAuthStartResult,
 } from '@shared/oauth'
 import { OAuthIpcChannels } from '@shared/oauth'
-import { ipcMain, shell } from 'electron'
+import { ipcMain } from 'electron'
 import log from 'electron-log/main'
+import { openExternalSafe } from '../open-external'
 import { anthropicOAuthProvider } from './providers/anthropic'
 import { githubCopilotOAuthProvider } from './providers/github-copilot'
 import { minimaxCnOAuthProvider, minimaxOAuthProvider } from './providers/minimax'
@@ -118,7 +119,7 @@ export function registerOAuthHandlers(): void {
       log.info(`[OAuth] Starting callback login for provider: ${providerId}`)
       const credentials = await provider.login({
         openUrl: async (url) => {
-          await shell.openExternal(url)
+          await openExternalSafe(url)
         },
         signal,
       })

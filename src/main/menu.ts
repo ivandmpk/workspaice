@@ -1,5 +1,6 @@
-import { app, type BrowserWindow, Menu, MenuItem, type MenuItemConstructorOptions, shell } from 'electron'
+import { app, type BrowserWindow, Menu, MenuItem, type MenuItemConstructorOptions } from 'electron'
 import Locale from './locales'
+import { openExternalSafe } from './open-external'
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string
@@ -205,13 +206,13 @@ export default class MenuBuilder {
         {
           label: 'Learn More',
           click() {
-            shell.openExternal('https://github.com/ivandmpk/workspaice')
+            void openExternalSafe('https://github.com/ivandmpk/workspaice')
           },
         },
         {
           label: 'Github Repo',
           click() {
-            shell.openExternal('https://github.com/ivandmpk/workspaice')
+            void openExternalSafe('https://github.com/ivandmpk/workspaice')
           },
         },
         // {
@@ -223,7 +224,7 @@ export default class MenuBuilder {
         {
           label: 'Search Issues',
           click() {
-            shell.openExternal('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
+            void openExternalSafe('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
           },
         },
       ],
@@ -296,13 +297,13 @@ export default class MenuBuilder {
           {
             label: 'Learn More',
             click() {
-              shell.openExternal('https://github.com/ivandmpk/workspaice')
+              void openExternalSafe('https://github.com/ivandmpk/workspaice')
             },
           },
           {
             label: 'Github Repo',
             click() {
-              shell.openExternal('https://github.com/ivandmpk/workspaice')
+              void openExternalSafe('https://github.com/ivandmpk/workspaice')
             },
           },
           // {
@@ -314,7 +315,7 @@ export default class MenuBuilder {
           {
             label: 'Search Issues',
             click() {
-              shell.openExternal('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
+              void openExternalSafe('https://github.com/ivandmpk/workspaice/issues?q=is%3Aissue')
             },
           },
         ],
