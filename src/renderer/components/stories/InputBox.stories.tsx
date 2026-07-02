@@ -1,4 +1,5 @@
 import { ActionIcon, Badge, Box, Flex, Menu, Stack, Text, Textarea, Tooltip, UnstyledButton } from '@mantine/core'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   IconAdjustmentsHorizontal,
   IconArrowUp,
@@ -13,7 +14,6 @@ import {
   IconWorldWww,
   IconX,
 } from '@tabler/icons-react'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import React, { useState } from 'react'
 
 const meta: Meta = {
@@ -116,7 +116,11 @@ export const CurrentInputBox: StoryObj = {
                 />
               </UnstyledButton>
               <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
-                <IconWorldWww size={toolbarIconSize} strokeWidth={1.8} style={{ color: 'var(--workspaice-tint-brand)' }} />
+                <IconWorldWww
+                  size={toolbarIconSize}
+                  strokeWidth={1.8}
+                  style={{ color: 'var(--workspaice-tint-brand)' }}
+                />
               </UnstyledButton>
               <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
                 <IconFilePencil
@@ -188,7 +192,11 @@ export const OptimizedInputBox: StoryObj = {
 
           {/* Token Progress Bar */}
           <Box h={2} style={{ backgroundColor: 'var(--workspaice-background-tertiary)' }}>
-            <Box h={2} w="15%" style={{ backgroundColor: 'var(--workspaice-tint-success)', transition: 'width 0.3s' }} />
+            <Box
+              h={2}
+              w="15%"
+              style={{ backgroundColor: 'var(--workspaice-tint-success)', transition: 'width 0.3s' }}
+            />
           </Box>
 
           {/* Input Area */}

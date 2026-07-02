@@ -4,8 +4,9 @@ import type { Session } from '@shared/types'
 import { createFileRoute } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { useCallback, useMemo, useState } from 'react'
-import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
+import InputBox, { type InputBoxPayload } from '@/components/InputBox/InputBox'
 import HomepageIcon from '@/components/icons/HomepageIcon'
 import Page from '@/components/layout/Page'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
@@ -13,7 +14,6 @@ import { createSession as createSessionStore } from '@/stores/chatStore'
 import { submitNewUserMessage, switchCurrentSession } from '@/stores/sessionActions'
 import { initEmptyChatSession } from '@/stores/sessionHelpers'
 import { useUIStore } from '@/stores/uiStore'
-import InputBox, { type InputBoxPayload } from '@/components/InputBox/InputBox'
 
 export const Route = createFileRoute('/')({
   component: Index,

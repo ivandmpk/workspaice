@@ -1,6 +1,6 @@
 import * as defaults from '@shared/defaults'
 import type { ChatStreamOptions, ModelStreamPart } from '@shared/models/types'
-import { ModelProviderEnum, createMessage, type Message, type TaskSession } from '@shared/types'
+import { createMessage, type Message, ModelProviderEnum, type TaskSession } from '@shared/types'
 import { getMessageText, sequenceMessages } from '@shared/utils/message'
 import type { ToolSet } from 'ai'
 import { createModel, createModelDependencies } from '@/adapters'

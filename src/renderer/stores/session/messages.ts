@@ -1,14 +1,14 @@
-import * as Sentry from '@/adapters/sentry_shim'
 import {
   AIProviderNoImplementedPaintError,
   ApiError,
   BaseError,
-  WorkspAIceAIAPIError,
   NetworkError,
+  WorkspAIceAIAPIError,
 } from '@shared/models/errors'
 import { createMessage, type Message } from '@shared/types'
 import { countMessageWords } from '@shared/utils/message'
 import { createModel } from '@/adapters'
+import * as Sentry from '@/adapters/sentry_shim'
 import { getLogger } from '@/lib/utils'
 import { runCompactionWithUIState } from '@/packages/context-management'
 import { getModelDisplayName } from '@/packages/model-setting-utils'

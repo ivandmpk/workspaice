@@ -1,10 +1,10 @@
-import type * as React from 'react'
-import TextField from '@mui/material/TextField'
+import AddIcon from '@mui/icons-material/Add'
+import CloseIcon from '@mui/icons-material/Close'
 import Autocomplete from '@mui/material/Autocomplete'
 import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
+import TextField from '@mui/material/TextField'
+import type * as React from 'react'
 import { cn } from '@/lib/utils'
-import AddIcon from '@mui/icons-material/Add'
 
 export default function CreatableSelect(props: {
   label: string | React.ReactNode

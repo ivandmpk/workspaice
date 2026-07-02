@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import type { SessionMetaRecord } from '@shared/types'
+import { describe, expect, it } from 'vitest'
 import { sortSessionRecords } from '../SessionMetaStorage'
 
 function makeRecord(overrides: Partial<SessionMetaRecord> & { id: string; sortOrder: number }): SessionMetaRecord {
@@ -123,7 +123,7 @@ describe('reorder algorithm (fractional indexing)', () => {
   })
 
   it('precision after 50 reorders between adjacent items', () => {
-    let low = 1000
+    const low = 1000
     let high = 2000
     for (let i = 0; i < 50; i++) {
       const mid = (low + high) / 2

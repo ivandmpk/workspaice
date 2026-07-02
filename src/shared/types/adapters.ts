@@ -1,5 +1,5 @@
-import type { SentryAdapter } from '../utils/sentry_adapter'
 import type { OAuthCredentials } from '../oauth/types'
+import type { SentryAdapter } from '../utils/sentry_adapter'
 
 export interface ApiRequestOptions {
   url: string

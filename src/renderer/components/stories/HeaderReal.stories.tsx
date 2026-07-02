@@ -1,8 +1,8 @@
 import NiceModal from '@ebay/nice-modal-react'
+import { Box } from '@mantine/core'
 import type { Session } from '@shared/types'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import React from 'react'
-import { Box } from '@mantine/core'
 import Header from '../layout/Header'
 
 const meta: Meta<typeof Header> = {

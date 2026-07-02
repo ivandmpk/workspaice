@@ -1,5 +1,5 @@
-import { type ReactElement, useEffect, useRef } from 'react'
 import markjs from 'mark.js'
+import { type ReactElement, useEffect, useRef } from 'react'
 
 export default function Mark(props: { children: string | ReactElement; marks: string[] }) {
   const { children, marks } = props

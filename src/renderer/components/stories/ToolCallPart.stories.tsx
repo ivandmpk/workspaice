@@ -18,6 +18,7 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   IconArrowRight,
   IconBrain,
@@ -40,7 +41,6 @@ import {
   IconTool,
   IconWorld,
 } from '@tabler/icons-react'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import clsx from 'clsx'
 import React, { useState } from 'react'
 
@@ -781,7 +781,11 @@ export const WebSearchComparison: StoryObj = {
                   {searchResults.length} results
                 </Badge>
               </Group>
-              <IconChevronRight size={14} className="rotate-90 transition-transform" color="var(--workspaice-tertiary)" />
+              <IconChevronRight
+                size={14}
+                className="rotate-90 transition-transform"
+                color="var(--workspaice-tertiary)"
+              />
             </Group>
             <Box px="sm" pb="sm" style={{ borderTop: '1px solid var(--paper-border-color)' }}>
               <Stack gap={6} mt="xs">

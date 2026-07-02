@@ -14,7 +14,10 @@ import { getRegistrySync } from './fetch'
  * - type: only filled when missing (embedding/rerank may be set by provider definition)
  * - labels: only filled when missing
  */
-export function enrichModelsFromRegistry(models: ProviderModelInfo[], workspaiceProviderId: string): ProviderModelInfo[] {
+export function enrichModelsFromRegistry(
+  models: ProviderModelInfo[],
+  workspaiceProviderId: string
+): ProviderModelInfo[] {
   const registryData = getRegistrySync()
   const providerRegistry = registryData[workspaiceProviderId]
 

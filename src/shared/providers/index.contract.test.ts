@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { MODELS_DEV_SNAPSHOT } from '../model-registry/snapshot.generated'
 import { getModelsDevProviderId } from '../model-registry/provider-mapping'
+import { MODELS_DEV_SNAPSHOT } from '../model-registry/snapshot.generated'
 import { getAllProviders } from './index'
 
 describe('provider control-plane contracts', () => {

@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Code, Collapse, Group, Paper, Stack, Text, UnstyledButton } from '@mantine/core'
 import { WorkspAIceAIAPIError } from '@shared/models/errors'
-import { type Message, type MessageReasoningPart, type MessageToolCallPart } from '@shared/types'
+import type { Message, MessageReasoningPart, MessageToolCallPart } from '@shared/types'
 import {
   IconBulb,
   IconCheck,
@@ -22,9 +22,8 @@ import {
 import clsx from 'clsx'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { WorkspAIceAIErrorMessage } from '@/components/common/WorkspAIceAIErrorMessage'
 import { ScalableIcon } from '@/components/common/ScalableIcon'
+import { WorkspAIceAIErrorMessage } from '@/components/common/WorkspAIceAIErrorMessage'
 import { formatElapsedTime, useThinkingTimer } from '@/hooks/useThinkingTimer'
 import { getToolName } from '@/packages/tools'
 import type { SearchResultItem } from '@/packages/web-search'
@@ -131,7 +130,12 @@ const ToolCallPill: FC<{
           {getToolName(part.toolName)}
         </Text>
         {isLoading ? (
-          <IconLoader size={11} className="animate-spin" color="var(--workspaice-tint-brand)" style={{ flexShrink: 0 }} />
+          <IconLoader
+            size={11}
+            className="animate-spin"
+            color="var(--workspaice-tint-brand)"
+            style={{ flexShrink: 0 }}
+          />
         ) : isError ? (
           <IconCircleXFilled size={11} color="var(--workspaice-tint-error)" style={{ flexShrink: 0 }} />
         ) : (
@@ -268,9 +272,7 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
   return (
     <Stack gap={4} mb={4}>
       <UnstyledButton
-        onClick={
-          resultCount > 0 || queries.length > 0 || hasError ? () => setExpanded((prev) => !prev) : undefined
-        }
+        onClick={resultCount > 0 || queries.length > 0 || hasError ? () => setExpanded((prev) => !prev) : undefined}
       >
         <Group
           gap={4}
@@ -332,11 +334,7 @@ export const WebSearchGroupUI: FC<{ parts: MessageToolCallPart[] }> = ({ parts }
         </div>
       )}
       {expanded && errorPart && (
-        <Box
-          ml={4}
-          pl="sm"
-          style={{ borderLeft: '1px solid var(--workspaice-tint-error)' }}
-        >
+        <Box ml={4} pl="sm" style={{ borderLeft: '1px solid var(--workspaice-tint-error)' }}>
           <ToolCallErrorDetails part={errorPart} />
         </Box>
       )}

@@ -22,7 +22,10 @@ import { parseLinkTool } from '@/packages/model-calls/toolsets/web-search'
 type ParseLinkInput = { url: string; maxLength?: number }
 
 type ParseLinkToolLike = {
-  execute: (input: ParseLinkInput, context: { abortSignal?: AbortSignal }) => Promise<{
+  execute: (
+    input: ParseLinkInput,
+    context: { abortSignal?: AbortSignal }
+  ) => Promise<{
     url: string
     title: string
     content: string

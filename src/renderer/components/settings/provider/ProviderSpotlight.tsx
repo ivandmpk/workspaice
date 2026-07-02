@@ -32,7 +32,9 @@ const ProviderSpotlight: FC<{
           providerSpotlight.close()
           onAddCustomProvider()
         },
-        leftSection: <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-workspaice-tint-brand" />,
+        leftSection: (
+          <ScalableIcon icon={IconSquareRoundedPlusFilled} size={24} className="text-workspaice-tint-brand" />
+        ),
       },
     ]
 

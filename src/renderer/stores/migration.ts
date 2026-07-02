@@ -1,4 +1,3 @@
-import * as Sentry from '@/adapters/sentry_shim'
 import {
   type ImageGeneration,
   type ModelProvider,
@@ -13,10 +12,8 @@ import { getDefaultStore } from 'jotai'
 import { difference, intersection, keyBy, uniq, uniqBy } from 'lodash'
 import oldStore from 'store'
 import { v4 as uuidv4 } from 'uuid'
-import {
-  defaultSessionsForCN,
-  defaultSessionsForEN,
-} from '@/packages/initial_data'
+import * as Sentry from '@/adapters/sentry_shim'
+import { defaultSessionsForCN, defaultSessionsForEN } from '@/packages/initial_data'
 import platform from '@/platform'
 import type { Storage } from '@/platform/interfaces'
 import { getOldVersionStorages } from '@/platform/storages'

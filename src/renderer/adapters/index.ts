@@ -1,6 +1,6 @@
 import { getModel } from '@shared/models'
 import type { ModelInterface } from '@shared/models/types'
-import { OAuthIpcChannels, type OAuthCredentials, toOAuthSettingsProviderId } from '@shared/oauth'
+import { type OAuthCredentials, OAuthIpcChannels, toOAuthSettingsProviderId } from '@shared/oauth'
 import { createAfetch } from '@shared/request/request'
 import type { SessionSettings } from '@shared/types'
 import type { ApiRequestOptions, ModelDependencies } from '@shared/types/adapters'

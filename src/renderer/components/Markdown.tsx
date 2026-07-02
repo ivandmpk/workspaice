@@ -440,10 +440,7 @@ const BlockCode = memo(
     const languageName = useMemo(() => language.toUpperCase(), [language])
     const isHtmlCode = language.toLowerCase() === 'html'
     const [deploying, setDeploying] = useState(false)
-    const canDeploy = useMemo(
-      () => isHtmlCode && String(children).trim().length > 0,
-      [children, isHtmlCode]
-    )
+    const canDeploy = useMemo(() => isHtmlCode && String(children).trim().length > 0, [children, isHtmlCode])
 
     const icon = useMemo(() => CodeIcons[languageName] || IconCode, [languageName])
 

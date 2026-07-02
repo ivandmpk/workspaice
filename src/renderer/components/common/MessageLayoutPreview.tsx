@@ -39,7 +39,9 @@ export function MessageLayoutSelector({ value, onValueChange, size = 'md', ...pr
               <Preview size={size} />
             </Box>
             <Flex align="center" justify="center" gap={4} mt="xs">
-              {selected && <ScalableIcon icon={IconCircleCheckFilled} size={18} className="text-workspaice-tint-brand" />}
+              {selected && (
+                <ScalableIcon icon={IconCircleCheckFilled} size={18} className="text-workspaice-tint-brand" />
+              )}
               <Text size="sm" fw={selected ? 500 : 400} c={selected ? 'workspaice-brand' : undefined}>
                 {t(labelKey)}
               </Text>

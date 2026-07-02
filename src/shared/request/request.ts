@@ -1,4 +1,4 @@
-import { ApiError, BaseError, WorkspAIceAIAPIError, NetworkError } from '../models/errors'
+import { ApiError, BaseError, NetworkError, WorkspAIceAIAPIError } from '../models/errors'
 import { parseJsonOrEmpty } from '../utils/json_utils'
 import { isWorkspAIceAPI } from './workspaiceai_pool'
 

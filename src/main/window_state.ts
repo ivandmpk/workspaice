@@ -1,7 +1,7 @@
 // 保持窗口大小位置变化的代码，很大程度参考了 VSCODE 的实现
 // /Users/benn/Documents/w/vscode/src/vs/platform/windows/electron-main/windowImpl.ts
 
-import { screen, type Display, type Rectangle } from 'electron'
+import { type Display, type Rectangle, screen } from 'electron'
 import { store } from './store-node'
 
 export interface IWindowState {

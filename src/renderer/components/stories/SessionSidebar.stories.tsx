@@ -16,6 +16,7 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   IconCirclePlus,
   IconDots,
@@ -30,7 +31,6 @@ import {
   IconStar,
   IconStarFilled,
 } from '@tabler/icons-react'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import React from 'react'
 
 const meta: Meta = {

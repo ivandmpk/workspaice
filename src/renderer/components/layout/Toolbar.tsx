@@ -19,10 +19,10 @@ import { deleteSession, getSession } from '@/stores/chatStore'
 import { clear as clearSession } from '@/stores/sessionActions'
 import { useUIStore } from '@/stores/uiStore'
 import ActionMenu from '../ActionMenu'
+import { ScalableIcon } from '../common/ScalableIcon'
 import Broom from '../icons/Broom'
 import LayoutExpand from '../icons/LayoutExpand'
 import LayoutShrink from '../icons/LayoutShrink'
-import { ScalableIcon } from '../common/ScalableIcon'
 
 /**
  * 顶部标题工具栏（右侧）
@@ -87,7 +87,12 @@ export default function Toolbar({ sessionId }: { sessionId: string }) {
         </ActionIcon>
       )}
 
-      <ActionIcon variant="subtle" size={28} color="workspaice-secondary" onClick={() => setThreadHistoryDrawerOpen(true)}>
+      <ActionIcon
+        variant="subtle"
+        size={28}
+        color="workspaice-secondary"
+        onClick={() => setThreadHistoryDrawerOpen(true)}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

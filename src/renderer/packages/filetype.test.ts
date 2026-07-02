@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isTextFile, isPdf, isWord, isPPT, isExcel } from './filetype'
+import { isExcel, isPdf, isPPT, isTextFile, isWord } from './filetype'
 
 function mockFile(type: string): File {
   return new File([''], 'test', { type })

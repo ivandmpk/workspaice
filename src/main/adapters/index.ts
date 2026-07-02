@@ -1,7 +1,7 @@
-import { app } from 'electron'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { app } from 'electron'
 import { getModel } from '../../shared/models'
 import type { ModelInterface } from '../../shared/models/types'
 import { createAfetch } from '../../shared/request/request'

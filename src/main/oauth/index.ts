@@ -1,5 +1,3 @@
-import { ipcMain, shell } from 'electron'
-import log from 'electron-log/main'
 import type {
   DeviceFlowStartResult,
   OAuthCredentials,
@@ -8,6 +6,8 @@ import type {
   OAuthStartResult,
 } from '@shared/oauth'
 import { OAuthIpcChannels } from '@shared/oauth'
+import { ipcMain, shell } from 'electron'
+import log from 'electron-log/main'
 import { anthropicOAuthProvider } from './providers/anthropic'
 import { githubCopilotOAuthProvider } from './providers/github-copilot'
 import { minimaxCnOAuthProvider, minimaxOAuthProvider } from './providers/minimax'

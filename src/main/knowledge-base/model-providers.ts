@@ -267,8 +267,8 @@ export async function getRerankProvider(kbId: number) {
         const sessionSettings = getMergedSettings(providerId, modelId)
         const { providerSetting, formattedApiHost } = getProviderSettings(sessionSettings, getSettings())
 
-        let apiHost = formattedApiHost
-        let token = providerSetting.apiKey
+        const apiHost = formattedApiHost
+        const token = providerSetting.apiKey
 
         const client = new CohereClient({
           environment: apiHost,

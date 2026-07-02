@@ -39,7 +39,13 @@ function RouteComponent() {
               <Text c="workspaice-tertiary">{t('about-introduction')}</Text>
 
               <Flex gap="sm">
-                <Anchor size="sm" href={`${GITHUB_URL}/blob/dev/LICENSE`} target="_blank" underline="hover" c="workspaice-tertiary">
+                <Anchor
+                  size="sm"
+                  href={`${GITHUB_URL}/blob/dev/LICENSE`}
+                  target="_blank"
+                  underline="hover"
+                  c="workspaice-tertiary"
+                >
                   {t('License (GPLv3)')}
                 </Anchor>
               </Flex>
@@ -61,11 +67,7 @@ function RouteComponent() {
               title={t('Changelog')}
               link={`${GITHUB_URL}/releases`}
             />
-            <ListItem
-              icon={<IconMail className="w-full h-full" />}
-              title={t('Feedback')}
-              link={GITHUB_ISSUES_URL}
-            />
+            <ListItem icon={<IconMail className="w-full h-full" />} title={t('Feedback')} link={GITHUB_ISSUES_URL} />
           </List>
         </Stack>
       </Container>
@@ -87,17 +89,7 @@ function List(props: { children: ReactElement | ReactElement[] }) {
   )
 }
 
-function ListItem({
-  icon,
-  title,
-  link,
-  value,
-}: {
-  icon: ReactElement
-  title: string
-  link?: string
-  value?: string
-}) {
+function ListItem({ icon, title, link, value }: { icon: ReactElement; title: string; link?: string; value?: string }) {
   return (
     <Flex
       px="md"

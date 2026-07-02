@@ -1,5 +1,3 @@
-import type { ComponentType, ReactElement } from 'react'
-
 // Import only Mono and Color components to avoid @lobehub/ui dependency
 import BaichuanColor from '@lobehub/icons/es/Baichuan/components/Color'
 import ChatGLMColor from '@lobehub/icons/es/ChatGLM/components/Color'
@@ -21,6 +19,7 @@ import QwenColor from '@lobehub/icons/es/Qwen/components/Color'
 import StepfunColor from '@lobehub/icons/es/Stepfun/components/Color'
 import YiColor from '@lobehub/icons/es/Yi/components/Color'
 import ZhipuColor from '@lobehub/icons/es/Zhipu/components/Color'
+import type { ComponentType, ReactElement } from 'react'
 
 interface IconProps {
   size?: number | string

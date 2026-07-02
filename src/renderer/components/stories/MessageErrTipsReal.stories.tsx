@@ -1,8 +1,8 @@
-import { MessageRoleEnum } from '@shared/types/session'
+import { Box, Stack, Text } from '@mantine/core'
 import type { Message } from '@shared/types'
+import { MessageRoleEnum } from '@shared/types/session'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import React from 'react'
-import { Box, Stack, Text } from '@mantine/core'
 import MessageErrTips from '../chat/MessageErrTips'
 
 const meta: Meta<typeof MessageErrTips> = {

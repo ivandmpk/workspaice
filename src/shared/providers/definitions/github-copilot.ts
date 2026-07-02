@@ -1,5 +1,5 @@
-import { ModelProviderType } from '../../types'
 import { createCopilotOAuthFetch, createOAuthCredentialManager } from '../../oauth'
+import { ModelProviderType } from '../../types'
 import { defineProvider } from '../registry'
 import OpenAI from './models/openai'
 

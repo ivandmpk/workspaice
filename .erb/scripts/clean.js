@@ -1,6 +1,6 @@
-import { rimrafSync } from 'rimraf'
 import fs from 'fs'
 import path from 'path'
+import { rimrafSync } from 'rimraf'
 import { fileURLToPath } from 'url'
 
 // Inline path constants previously imported from ../configs/webpack.paths

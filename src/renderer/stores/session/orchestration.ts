@@ -1,5 +1,5 @@
 import { buildContext } from '@shared/context'
-import { WorkspAIceAIAPIError, OCRError } from '@shared/models/errors'
+import { OCRError, WorkspAIceAIAPIError } from '@shared/models/errors'
 import type { ChatStreamOptions, ModelStreamPart } from '@shared/models/types'
 import { type Message, type MessageContentParts, ModelProviderEnum } from '@shared/types'
 import { getMessageText, sequenceMessages } from '@shared/utils/message'
@@ -50,9 +50,7 @@ async function buildInvokedSkillInstructions(messages: Message[]): Promise<strin
     try {
       const loaded = await skillsController.loadSkill(name)
       if (!loaded) continue
-      blocks.push(
-        `<skill name="${name}">\n${loaded.body.trim()}${args ? `\n\nUser input: ${args}` : ''}\n</skill>`
-      )
+      blocks.push(`<skill name="${name}">\n${loaded.body.trim()}${args ? `\n\nUser input: ${args}` : ''}\n</skill>`)
     } catch (err) {
       log.error(`Failed to load invoked skill "${name}"`, err)
     }

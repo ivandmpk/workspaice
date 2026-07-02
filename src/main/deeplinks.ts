@@ -18,5 +18,4 @@ export function handleDeepLink(mainWindow: BrowserWindow, link: string) {
     const encodedConfig = url.searchParams.get('config') || ''
     mainWindow.webContents.send('navigate-to', `/settings/provider?import=${encodeURIComponent(encodedConfig)}`)
   }
-
 }

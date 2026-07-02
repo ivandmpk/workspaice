@@ -43,10 +43,7 @@ export function sortSessions(sessions: SessionMeta[]): SessionMeta[] {
   return pinned.concat(reversed)
 }
 
-export function createSessionMetaRecordsFromLegacyList(
-  sessions: SessionMeta[],
-  now = Date.now()
-): SessionMetaRecord[] {
+export function createSessionMetaRecordsFromLegacyList(sessions: SessionMeta[], now = Date.now()): SessionMetaRecord[] {
   const sortedVisibleSessions = sortSessions(sessions)
   const sortOrderById = new Map(sortedVisibleSessions.map((session, i) => [session.id, now - i * 1000]))
   const hiddenSortOrderStart = now - sortedVisibleSessions.length * 1000

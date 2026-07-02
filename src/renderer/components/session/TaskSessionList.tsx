@@ -1,4 +1,5 @@
 import { Flex, Text } from '@mantine/core'
+import { TASK_DEFAULT_DIRECTORY } from '@shared/constants/task'
 import type { TaskSession } from '@shared/types'
 import { IconFolder } from '@tabler/icons-react'
 import { useNavigate } from '@tanstack/react-router'
@@ -8,7 +9,6 @@ import { Virtuoso } from 'react-virtuoso'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
 import { taskSessionStore, useCurrentTaskId, useTaskSessionHistory } from '@/stores/taskSessionStore'
 import { useUIStore } from '@/stores/uiStore'
-import { TASK_DEFAULT_DIRECTORY } from '@shared/constants/task'
 import { ScalableIcon } from '../common/ScalableIcon'
 
 export default function TaskSessionList() {

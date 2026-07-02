@@ -1,5 +1,4 @@
 import { createGoogleGenerativeAI, type GoogleGenerativeAIProviderOptions } from '@ai-sdk/google'
-import { buildGeminiImageConfig } from '../gemini-types'
 import type { LanguageModelV3 } from '@ai-sdk/provider'
 import { generateText } from 'ai'
 import AbstractAISDKModel, { type CallSettings } from '../../../models/abstract-ai-sdk'
@@ -9,6 +8,7 @@ import type { ProviderModelInfo } from '../../../types'
 import type { ModelDependencies } from '../../../types/adapters'
 import { normalizeGoogleThinkingConfig } from '../../../utils/google-thinking'
 import { normalizeGeminiHost } from '../../../utils/llm_utils'
+import { buildGeminiImageConfig } from '../gemini-types'
 import { isGeminiImageModel } from '../image-models'
 
 interface Options {

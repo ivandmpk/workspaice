@@ -14,6 +14,7 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   IconAdjustmentsHorizontal,
   IconArrowUp,
@@ -37,8 +38,7 @@ import {
   IconVocabulary,
   IconWorldWww,
 } from '@tabler/icons-react'
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import React from 'react'
+import type React from 'react'
 
 const meta: Meta = {
   title: 'Layout/Full Page Composition',

@@ -19,8 +19,7 @@ const ALL_PARSER_OPTIONS: {
 
 const PARSER_DESCRIPTIONS: Record<DocumentParserType, string> = {
   none: 'Basic text file support only (.txt, .md, .json, code files, etc.)',
-  local:
-    'Uses built-in document parsing feature, supports common file types.',
+  local: 'Uses built-in document parsing feature, supports common file types.',
   mineru: 'Third-party cloud parsing service, supports PDF and most Office files. Requires API token.',
 }
 

@@ -120,11 +120,7 @@ initializeApp()
     clearTimeout(tid)
 
     // 等待settings和onboarding初始化完成，避免闪屏
-    const [settings] = await Promise.all([
-      initSettingsStore(),
-      initLastUsedModelStore(),
-      initRecentDirectoriesStore(),
-    ])
+    const [settings] = await Promise.all([initSettingsStore(), initLastUsedModelStore(), initRecentDirectoriesStore()])
 
     i18n.changeLanguage(settings.language)
     if (platform.type === 'desktop') {

@@ -70,16 +70,15 @@ import {
   useModelRegistryVersion,
 } from '@/packages/model-registry'
 import * as picUtils from '@/packages/pic_utils'
+import { getSlashQuery, parseSlashInvocation } from '@/packages/skills/slash'
+import { useEnabledSkills } from '@/packages/skills/useEnabledSkills'
 import platform from '@/platform'
 import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import * as atoms from '@/stores/atoms'
 import { compactionUIStateMapAtom } from '@/stores/atoms/compactionAtoms'
 import * as chatStore from '@/stores/chatStore'
 import { useSession, useSessionSettings } from '@/stores/chatStore'
-import { getSlashQuery, parseSlashInvocation } from '@/packages/skills/slash'
-import { useEnabledSkills } from '@/packages/skills/useEnabledSkills'
 import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
-import SkillSlashMenu from './SkillSlashMenu'
 import { useUIStore } from '@/stores/uiStore'
 import { delay } from '@/utils'
 import { featureFlags } from '@/utils/feature-flags'
@@ -119,6 +118,7 @@ import {
   storeFilePromise,
   storeLinkPromise,
 } from './preprocessState'
+import SkillSlashMenu from './SkillSlashMenu'
 import TokenCountMenu from './TokenCountMenu'
 
 export type InputBoxPayload = {
@@ -1606,7 +1606,9 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                         size={toolbarIconSize}
                         strokeWidth={1.8}
                         className={
-                          knowledgeBase ? 'text-[var(--workspaice-tint-brand)]' : 'text-[var(--workspaice-tint-secondary)]'
+                          knowledgeBase
+                            ? 'text-[var(--workspaice-tint-brand)]'
+                            : 'text-[var(--workspaice-tint-secondary)]'
                         }
                       />
                     </UnstyledButton>
@@ -1625,7 +1627,9 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                       size={toolbarIconSize}
                       strokeWidth={1.8}
                       className={
-                        webBrowsingMode ? 'text-[var(--workspaice-tint-brand)]' : 'text-[var(--workspaice-tint-secondary)]'
+                        webBrowsingMode
+                          ? 'text-[var(--workspaice-tint-brand)]'
+                          : 'text-[var(--workspaice-tint-secondary)]'
                       }
                     />
                   </UnstyledButton>
@@ -1871,7 +1875,11 @@ const AttachmentMenu: React.FC<{
     >
       <Menu.Target>
         <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
-          <IconCirclePlus size={toolbarIconSize} strokeWidth={1.8} className="text-[var(--workspaice-tint-secondary)]" />
+          <IconCirclePlus
+            size={toolbarIconSize}
+            strokeWidth={1.8}
+            className="text-[var(--workspaice-tint-secondary)]"
+          />
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
@@ -1972,9 +1980,7 @@ const MessageInputField = memo(
           slashQuery === null
             ? []
             : enabledSkills
-                .filter(
-                  (s) => s.name.includes(slashQuery) || s.description.toLowerCase().includes(slashQuery)
-                )
+                .filter((s) => s.name.includes(slashQuery) || s.description.toLowerCase().includes(slashQuery))
                 .slice(0, 8),
         [slashQuery, enabledSkills]
       )
@@ -2033,30 +2039,30 @@ const MessageInputField = memo(
             />
           )}
           <Textarea
-          unstyled={true}
-          styles={{ input: { fontSize: 14 } }}
-          classNames={{
-            root: 'flex-1',
-            wrapper: 'flex-1',
-            input:
-              'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-workspaice-tint-primary leading-6',
-          }}
-          size="sm"
-          id={dom.messageInputID}
-          ref={inputRef}
-          placeholder={placeholder || ''}
-          bg="transparent"
-          autosize={true}
-          minRows={2}
-          maxRows={Math.max(4, Math.floor(viewportHeight / 100))}
-          value={messageInput}
-          autoFocus={autoFocus}
-          readOnly={isReadOnly}
-          onChange={onChange}
-          onKeyDown={handleKeyDown}
-          onPaste={onPaste}
-          data-testid="message-input"
-        />
+            unstyled={true}
+            styles={{ input: { fontSize: 14 } }}
+            classNames={{
+              root: 'flex-1',
+              wrapper: 'flex-1',
+              input:
+                'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-workspaice-tint-primary leading-6',
+            }}
+            size="sm"
+            id={dom.messageInputID}
+            ref={inputRef}
+            placeholder={placeholder || ''}
+            bg="transparent"
+            autosize={true}
+            minRows={2}
+            maxRows={Math.max(4, Math.floor(viewportHeight / 100))}
+            value={messageInput}
+            autoFocus={autoFocus}
+            readOnly={isReadOnly}
+            onChange={onChange}
+            onKeyDown={handleKeyDown}
+            onPaste={onPaste}
+            data-testid="message-input"
+          />
         </Box>
       )
     }

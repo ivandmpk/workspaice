@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import { BingSearch } from '@/packages/web-search/bing'
 import { BingNewsSearch } from '@/packages/web-search/bing-news'
 import { BochaSearch } from '@/packages/web-search/bocha'
-import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import { QueritSearch } from '@/packages/web-search/querit'
 import { TavilySearch } from '@/packages/web-search/tavily'
 

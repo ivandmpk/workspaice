@@ -215,10 +215,7 @@ const SettingsProviderProviderIdRoute = createRoute({
   getParentRoute: () => SettingsProviderRouteRoute,
 })
 
-SettingsProviderRouteRoute.addChildren([
-  SettingsProviderIndexRoute,
-  SettingsProviderProviderIdRoute,
-])
+SettingsProviderRouteRoute.addChildren([SettingsProviderIndexRoute, SettingsProviderProviderIdRoute])
 
 const routeTree = RootRoute.addChildren([
   SettingsIndexRoute,

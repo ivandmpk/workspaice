@@ -1,7 +1,7 @@
-import * as Sentry from '@/adapters/sentry_shim'
-import { store as keypairStore } from './keypairs'
-import { WORKSPAICE_BUILD_PLATFORM } from '../variables'
 import NiceModal from '@ebay/nice-modal-react'
+import * as Sentry from '@/adapters/sentry_shim'
+import { WORKSPAICE_BUILD_PLATFORM } from '../variables'
+import { store as keypairStore } from './keypairs'
 
 // 本次启动是否已经引导过用户评价 App Store
 let hasOpenAppStoreReviewPage = false

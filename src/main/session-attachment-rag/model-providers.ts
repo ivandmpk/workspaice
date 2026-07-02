@@ -5,9 +5,9 @@ import { getWorkspAIceAPIOrigin } from '../../shared/request/workspaiceai_pool'
 import { parseKnowledgeBaseModelString } from '../../shared/utils/knowledge-base-model-parser'
 import { sentry } from '../adapters/sentry'
 import { cache } from '../cache'
-import { getLogger } from '../util'
 import { createEmbeddingProviderFromModelString } from '../knowledge-base/model-providers'
 import { getSettings, store } from '../store-node'
+import { getLogger } from '../util'
 
 const log = getLogger('session-attachment-rag:model-providers')
 
@@ -56,8 +56,8 @@ export async function getSessionAttachmentRerankProvider(modelString?: string | 
           settings
         )
 
-        let apiHost = formattedApiHost
-        let token = providerSetting.apiKey
+        const apiHost = formattedApiHost
+        const token = providerSetting.apiKey
 
         if (!token) {
           throw new Error(`Missing token for rerank provider: ${providerId}`)

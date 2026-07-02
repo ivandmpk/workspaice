@@ -326,7 +326,11 @@ const SessionSettingsModal = NiceModal.create(
                 </FileButton>
 
                 {editingData.backgroundImage?.type === 'storage-key' ? (
-                  <Box w={48} h={48} className="relative overflow-hidden rounded bg-workspaice-tertiary/20 flex-shrink-0">
+                  <Box
+                    w={48}
+                    h={48}
+                    className="relative overflow-hidden rounded bg-workspaice-tertiary/20 flex-shrink-0"
+                  >
                     <ImageInStorage
                       storageKey={editingData.backgroundImage.storageKey}
                       className="object-cover w-full h-full"

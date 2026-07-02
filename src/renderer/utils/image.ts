@@ -1,5 +1,5 @@
-import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import storage from '@/storage'
+import { StorageKeyGenerator } from '@/storage/StoreStorage'
 
 export async function saveImage(category: string, picBase64: string) {
   const storageKey = StorageKeyGenerator.picture(category)
