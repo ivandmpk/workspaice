@@ -1,5 +1,4 @@
 import NiceModal from '@ebay/nice-modal-react'
-import AppStoreRating from './AppStoreRating'
 import AttachLink from './AttachLink'
 import ClearSessionList from './ClearSessionList'
 import ContentViewer from './ContentViewer'
@@ -18,7 +17,6 @@ NiceModal.register('welcome', Welcome)
 NiceModal.register('file-parse-error', FileParseError)
 NiceModal.register('content-viewer', ContentViewer)
 NiceModal.register('session-settings', SessionSettings)
-NiceModal.register('app-store-rating', AppStoreRating)
 NiceModal.register('clear-session-list', ClearSessionList)
 NiceModal.register('export-chat', ExportChat)
 NiceModal.register('message-edit', MessageEdit)

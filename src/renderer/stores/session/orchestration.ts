@@ -7,7 +7,6 @@ import type { ToolSet } from 'ai'
 import { t } from 'i18next'
 import { createModel, createModelDependencies } from '@/adapters'
 import { getLogger } from '@/lib/utils'
-import * as appleAppStore from '@/packages/apple_app_store'
 import { convertToModelMessages, injectModelSystemPrompt } from '@/packages/model-calls/message-utils'
 import { skillsController } from '@/packages/skills/controller'
 import { estimateTokensFromMessages } from '@/packages/token'
@@ -313,7 +312,6 @@ export async function orchestrateGeneration(
     }
 
     await persistStreamingMessage(sessionId, targetMsg, { refreshCounting: true })
-    appleAppStore.tickAfterMessageGenerated()
   } catch (err: unknown) {
     if (controller.signal.aborted) {
       targetMsg = {

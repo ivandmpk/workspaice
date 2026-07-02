@@ -14,6 +14,7 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 ### Local-First Cleanup
 
 - Removed the "Publish Webpage" button on HTML code blocks and the underlying EdgeOne integration — HTML artifacts are no longer sent to a third-party hosted service.
+- Removed the inherited iOS App Store rating prompt, which was never applicable to this desktop fork.
 
 ### Chat Organization
 

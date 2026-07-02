@@ -19,7 +19,6 @@ const mocks = vi.hoisted(() => ({
   findTargetMessageIndex: vi.fn(),
   handleGenerationError: vi.fn(),
   trackGenerateEvent: vi.fn(),
-  tickAfterMessageGenerated: vi.fn(),
   setBlob: vi.fn(),
 }))
 
@@ -28,7 +27,6 @@ vi.mock('@/adapters', () => ({
   createModel: mocks.createModel,
   createModelDependencies: mocks.createModelDependencies,
 }))
-vi.mock('@/packages/apple_app_store', () => ({ tickAfterMessageGenerated: mocks.tickAfterMessageGenerated }))
 vi.mock('@/packages/model-calls/message-utils', () => ({
   convertToModelMessages: mocks.convertToModelMessages,
   injectModelSystemPrompt: mocks.injectModelSystemPrompt,
@@ -174,7 +172,6 @@ describe('orchestrateGeneration', () => {
       }),
       { refreshCounting: true }
     )
-    expect(mocks.tickAfterMessageGenerated).toHaveBeenCalledOnce()
   })
 
   it('finalizes a cancelled stream without converting cancellation into an error', async () => {
@@ -196,7 +193,6 @@ describe('orchestrateGeneration', () => {
       expect.objectContaining({ generating: false, cancel: undefined, status: [] }),
       { refreshCounting: true }
     )
-    expect(mocks.tickAfterMessageGenerated).not.toHaveBeenCalled()
   })
 
   it('maps provider failures and persists the error state', async () => {

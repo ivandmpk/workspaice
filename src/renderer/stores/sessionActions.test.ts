@@ -117,8 +117,6 @@ vi.mock('@/i18n/locales', () => ({
   languageNameMap: {},
 }))
 
-vi.mock('@/packages/apple_app_store', () => ({}))
-
 vi.mock('@/stores/settingsStore', () => ({
   settingsStore: {
     getState: () => ({

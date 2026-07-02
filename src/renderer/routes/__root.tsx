@@ -239,7 +239,6 @@ function Root() {
         </Box>
       </Grid>
       {/* 对话设置 */}
-      {/* <AppStoreRatingDialog /> */}
       {/* 代码预览 */}
       {/* <ArtifactDialog /> */}
       {/* 对话列表清理 */}
