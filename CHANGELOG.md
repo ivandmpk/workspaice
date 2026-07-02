@@ -11,6 +11,10 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 - External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
 - The main window now appears immediately on launch instead of waiting for knowledge-base initialization — a slow or corrupt knowledge-base database can no longer prevent the app from opening.
 - Launching a local (stdio) MCP server now requires a one-time native approval that shows the exact command; approved servers run silently afterwards, and editing a server's command/args/env re-prompts. This blocks a compromised renderer from silently spawning arbitrary processes.
+- Sandbox file edits now pass the search/replace program as a single shell-escaped argument, so strings containing backticks or quotes can no longer break out of the command or trigger shell command substitution.
+- Malformed JSON sent to the internal store, shortcut-config, and proxy handlers now returns a clear error instead of an opaque failure through the IPC bridge.
+- Device-name lookup on macOS no longer briefly blocks the main process (moved from a synchronous to an asynchronous subprocess call).
+- A skill script that ignores the 30-second timeout is now force-terminated (SIGTERM then SIGKILL) and reaped instead of being left running, and its result is finalized only after the process fully exits.
 
 ### Local-First Cleanup
 
@@ -18,6 +22,10 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 - Removed the inherited iOS App Store rating prompt, which was never applicable to this desktop fork.
 - Removed the dead telemetry plumbing (`trackEvent`/`trackGenerateEvent`) — all tracking was already a no-op stub; nothing was ever sent.
 - Dropped four unused dependencies (`react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals`) and the CRA-era `reportWebVitals` scaffold.
+
+### Maintenance
+
+- Removed nine dead webpack/CRA-era build scripts from `.erb/scripts` and ratcheted the repo-wide Biome diagnostic baseline down to 0 errors / 824 warnings.
 
 ### Chat Organization
 
