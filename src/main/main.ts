@@ -38,6 +38,7 @@ import {
   getConfig,
   getSettings,
   getStoreBlob,
+  initStore,
   listStoreBlobKeys,
   setStoreBlob,
   store,
@@ -546,6 +547,9 @@ if (!gotTheLock) {
   app
     .whenReady()
     .then(async () => {
+      // Must run before any store access: safeStorage (config encryption key)
+      // is only available once the app is ready on Electron >=42.
+      initStore()
       await createWindow()
       ensureTray()
 
@@ -613,6 +617,7 @@ if (!gotTheLock) {
 
 // macos uses this event to handle deep links
 app.on('open-url', async (_event, url) => {
+  await app.whenReady() // createWindow (and the config store) require ready
   if (!mainWindow) {
     // 窗口未创建，立即创建
     await createWindow()

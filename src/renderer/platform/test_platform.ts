@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { type ImageGenerationStorage, IndexedDBImageGenerationStorage } from '@/storage/ImageGenerationStorage'
 import { IndexedDBSessionMetaStorage, type SessionMetaStorage } from '@/storage/SessionMetaStorage'
 import { IndexedDBTaskSessionStorage, type TaskSessionStorage } from '@/storage/TaskSessionStorage'
+import type { FileWithLegacyPath } from '@/utils/file-native-path'
 import type { Exporter, Platform, PlatformType, Storage } from './interfaces'
 import type { KnowledgeBaseController } from './knowledge-base/interface'
 import type { SessionAttachmentRagController } from './session-attachment-rag/interface'
@@ -286,7 +287,7 @@ export default class TestPlatform implements Platform {
   }
 
   public getLocalFilePath(file: File): string {
-    return file.path || ''
+    return (file as FileWithLegacyPath).path || ''
   }
 
   public async isFullscreen(): Promise<boolean> {

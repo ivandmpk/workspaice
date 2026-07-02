@@ -29,6 +29,13 @@ const encryptionKeyPath = path.resolve(app.getPath('userData'), '.config-key')
 // Migration is non-destructive: `conf` (electron-store's backend) returns the
 // raw bytes when decryption fails, so a pre-existing plaintext config.json is
 // read normally and transparently re-written encrypted on the next write.
+//
+// Since Electron 42, safeStorage.isEncryptionAvailable() returns false before
+// the app 'ready' event (it returned true pre-ready on Electron 35), so the
+// key — and therefore the store — must not be resolved at module load. Worse,
+// constructing the store keyless against an existing *encrypted* config.json
+// would trip clearInvalidConfig and wipe it. Hence the lazy initStore() below,
+// which hard-fails on pre-ready access instead of silently degrading.
 function resolveEncryptionKey(): string | undefined {
   try {
     if (!safeStorage.isEncryptionAvailable()) {
@@ -56,7 +63,7 @@ function resolveEncryptionKey(): string | undefined {
   }
 }
 
-const encryptionKey = resolveEncryptionKey()
+let encryptionKey: string | undefined
 
 // Mirrors conf's on-disk format: [16-byte IV][':'][aes-256-cbc ciphertext],
 // key = pbkdf2(encryptionKey, iv.toString(), 10000, 32, 'sha512'). Returns the
@@ -125,52 +132,106 @@ function purgeLegacyPlaintextBackups() {
   }
 }
 
-// 1) 检查配置文件是否合法
-// 如果配置文件不合法，则使用最新的备份文件
-if (fs.existsSync(configPath) && !checkConfigValid(configPath)) {
-  logger.error('config.json is invalid.')
-  const backups = getBackups()
-  if (backups.length > 0) {
-    // 不断尝试使用最新的备份文件，直到成功
-    for (let i = backups.length - 1; i >= 0; i--) {
-      const backup = backups[i]
-      if (checkConfigValid(backup.filepath)) {
-        fs.copySync(backup.filepath, configPath)
-        logger.info('use backup:', backup.filepath)
-        break
-      }
-    }
-  }
-}
-
-// 2) 初始化store
 interface StoreType {
   configVersion: number
   settings: Settings
   configs: Config
   lastShownAboutDialogVersion: string // 上次启动时自动弹出关于对话框的应用版本
 }
-export const store = new Store<StoreType>({
-  clearInvalidConfig: true, // 当配置JSON不合法时，清空配置
-  ...(encryptionKey ? { encryptionKey } : {}),
-})
-logger.info('init store, config path:', store.path, 'encrypted:', Boolean(encryptionKey))
 
-// Ensure the config is written back in encrypted form immediately after a
-// plaintext -> encrypted migration, then remove any plaintext backups.
-if (encryptionKey) {
-  try {
-    migratePlaintextConfigToEncrypted()
-    purgeLegacyPlaintextBackups()
-  } catch (err) {
-    logger.error('post-init encryption migration step failed:', err)
+let storeInstance: Store<StoreType> | undefined
+let autoBackupTimer: ReturnType<typeof setInterval> | undefined
+
+// Initializes the config store. Must be called (or first accessed via the
+// `store` proxy) only after the app 'ready' event — call it at the top of
+// app.whenReady() in main.ts. See the SECURITY note above for why pre-ready
+// initialization is forbidden.
+export function initStore(): Store<StoreType> {
+  if (storeInstance) {
+    return storeInstance
   }
+  if (!app.isReady()) {
+    throw new Error(
+      'store-node accessed before app ready: on Electron >=42 safeStorage is unavailable pre-ready, ' +
+        'and initializing the store without the encryption key would clear an encrypted config.json. ' +
+        'Call initStore() from app.whenReady() before any store access.'
+    )
+  }
+
+  // 1) 解析加密密钥
+  encryptionKey = resolveEncryptionKey()
+
+  // 2) 检查配置文件是否合法
+  // 如果配置文件不合法，则使用最新的备份文件
+  if (fs.existsSync(configPath) && !checkConfigValid(configPath)) {
+    logger.error('config.json is invalid.')
+    const backups = getBackups()
+    if (backups.length > 0) {
+      // 不断尝试使用最新的备份文件，直到成功
+      for (let i = backups.length - 1; i >= 0; i--) {
+        const backup = backups[i]
+        if (checkConfigValid(backup.filepath)) {
+          fs.copySync(backup.filepath, configPath)
+          logger.info('use backup:', backup.filepath)
+          break
+        }
+      }
+    }
+  }
+
+  // 3) 初始化store
+  storeInstance = new Store<StoreType>({
+    clearInvalidConfig: true, // 当配置JSON不合法时，清空配置
+    ...(encryptionKey ? { encryptionKey } : {}),
+  })
+  logger.info('init store, config path:', storeInstance.path, 'encrypted:', Boolean(encryptionKey))
+
+  // Ensure the config is written back in encrypted form immediately after a
+  // plaintext -> encrypted migration, then remove any plaintext backups.
+  if (encryptionKey) {
+    try {
+      migratePlaintextConfigToEncrypted(storeInstance)
+      purgeLegacyPlaintextBackups()
+    } catch (err) {
+      logger.error('post-init encryption migration step failed:', err)
+    }
+  }
+
+  // 4) 启动自动备份，每10分钟备份一次，并自动清理多余的备份文件
+  autoBackup()
+  autoBackupTimer = setInterval(autoBackup, 10 * 60 * 1000)
+  powerMonitor.on('resume', () => {
+    clearInterval(autoBackupTimer)
+    autoBackupTimer = setInterval(autoBackup, 10 * 60 * 1000)
+  })
+  powerMonitor.on('suspend', () => {
+    clearInterval(autoBackupTimer)
+  })
+
+  return storeInstance
 }
+
+// Lazy proxy so existing `store.get(...)` / `store.set(...)` call sites keep
+// working unchanged; the first access initializes the real store (post-ready).
+export const store: Store<StoreType> = new Proxy({} as Store<StoreType>, {
+  get(_target, prop) {
+    const s = initStore()
+    const value = Reflect.get(s, prop, s)
+    return typeof value === 'function' ? value.bind(s) : value
+  },
+  set(_target, prop, value) {
+    const s = initStore()
+    return Reflect.set(s, prop, value, s)
+  },
+  has(_target, prop) {
+    return Reflect.has(initStore(), prop)
+  },
+})
 
 // If config.json is still plaintext on disk (first launch after enabling
 // encryption), force one rewrite through the store so it is persisted
 // encrypted. Idempotent: subsequent launches see an encrypted file and skip.
-function migratePlaintextConfigToEncrypted() {
+function migratePlaintextConfigToEncrypted(s: Store<StoreType>) {
   if (!encryptionKey || !fs.existsSync(configPath)) {
     return
   }
@@ -180,20 +241,9 @@ function migratePlaintextConfigToEncrypted() {
   if (alreadyEncrypted) {
     return
   }
-  store.set(store.store)
+  s.set(s.store)
   logger.info('migrated plaintext config.json to encrypted at rest')
 }
-
-// 3) 启动自动备份，每10分钟备份一次，并自动清理多余的备份文件
-autoBackup()
-let autoBackupTimer = setInterval(autoBackup, 10 * 60 * 1000)
-powerMonitor.on('resume', () => {
-  clearInterval(autoBackupTimer)
-  autoBackupTimer = setInterval(autoBackup, 10 * 60 * 1000)
-})
-powerMonitor.on('suspend', () => {
-  clearInterval(autoBackupTimer)
-})
 async function autoBackup() {
   try {
     if (needBackup()) {
