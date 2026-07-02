@@ -3,7 +3,6 @@ import AppStoreRating from './AppStoreRating'
 import AttachLink from './AttachLink'
 import ClearSessionList from './ClearSessionList'
 import ContentViewer from './ContentViewer'
-import EdgeOneDeploySuccess from './EdgeOneDeploySuccess'
 import ExportChat from './ExportChat'
 import FileParseError from './FileParseError'
 import JsonViewer from './JsonViewer'
@@ -28,5 +27,4 @@ NiceModal.register('attach-link', AttachLink)
 NiceModal.register('report-content', ReportContent)
 NiceModal.register('model-edit', ModelEdit)
 NiceModal.register('thread-name-edit', ThreadNameEdit)
-NiceModal.register('edgeone-deploy-success', EdgeOneDeploySuccess)
 NiceModal.register('workspace-edit', WorkspaceEdit)

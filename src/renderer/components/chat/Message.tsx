@@ -250,9 +250,6 @@ const _Message: FC<Props> = (props) => {
   const onCodeCopy = useCallback(() => {
     trackWithSessionName(JK_EVENTS.COPY_CODE_CLICK)
   }, [trackWithSessionName])
-  const onPreviewWebpage = useCallback(() => {
-    trackWithSessionName(JK_EVENTS.PREVIEW_WEBPAGE_CLICK)
-  }, [trackWithSessionName])
 
   const contentParts = msg.contentParts || []
 
@@ -446,7 +443,6 @@ const _Message: FC<Props> = (props) => {
                         enableMermaidRendering={enableMermaidRendering}
                         generating={msg.generating}
                         onCodeCopy={onCodeCopy}
-                        onPreviewWebpage={onPreviewWebpage}
                       >
                         {item.text || ''}
                       </Markdown>

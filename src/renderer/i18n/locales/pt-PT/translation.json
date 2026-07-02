@@ -225,7 +225,6 @@
   "Delete Summary": "Eliminar Resumo",
   "Delete this record?": "Eliminar este registo?",
   "Deleting this summary will restore original messages to context calculation.": "Eliminar este resumo restaurará as mensagens originais para o cálculo do contexto.",
-  "Deploy HTML content to EdgeOne Pages and obtaining an accessible public URL.": "Publicar conteúdo HTML para EdgeOne Pages e obter um URL público acessível.",
   "Describe the image you want to create...": "Descreva a imagem que deseja criar...",
   "Describe the image you want to generate. Be as detailed as possible for best results.": "Descreva a imagem que pretende gerar. Seja o mais detalhado possível para obter os melhores resultados.",
   "Describe what you want to do...": "Descreva o que pretende fazer...",
@@ -590,8 +589,6 @@
   "Provider not found": "Fornecedor não encontrado",
   "Provider unavailable": "Fornecedor indisponível",
   "Proxy Address": "Endereço do Proxy",
-  "Publish failed": "Falha ao publicar",
-  "Publish Webpage": "Publicar Página Web",
   "Published on {{date}}": "Publicado em {{date}}",
   "Purchase Plan": "Comprar Plano",
   "QR Code": "Código QR",
@@ -860,7 +857,6 @@
   "Waiting for authorization...": "A aguardar autorização...",
   "We've been chatting for a while now. To conserve resources, please complete the setup before continuing our conversation.": "Já estamos a conversar há algum tempo. Para poupar recursos, conclua a configuração antes de continuarmos a nossa conversa.",
   "Web Search": "Pesquisa na Internet",
-  "Webpage Published": "Página web publicada",
   "WeChat": "WeChat",
   "Welcome to WorkspAIce!": "Bem-vindo ao WorkspAIce!",
   "What can I help you with today?": "Como posso ajudar hoje?",
@@ -880,7 +876,6 @@
   "You haven't completed the setup yet. Your progress will be cleared if you leave now.": "Ainda não concluiu a configuração. O seu progresso será perdido se sair agora.",
   "You might also want to ask": "Também poderá querer perguntar",
   "Your conversation has exceeded the model's context limit. Try compressing the conversation, starting a new chat, or reducing the number of context messages in settings.": "A sua conversa excedeu o limite de contexto do modelo. Tente comprimir a conversa, iniciar um novo chat ou reduzir o número de mensagens de contexto nas definições.",
-  "Your HTML content has been published. You can access it via the link below.": "O seu conteúdo HTML foi publicado. Pode aceder a ele através do link abaixo.",
   "API Keys": "API Keys",
   "Connection to {{aiProvider}} failed. This typically occurs due to incorrect configuration or provider account issues. Please <buttonOpenSettings>check your settings</buttonOpenSettings> and verify your provider configuration.": "Connection to {{aiProvider}} failed. This typically occurs due to incorrect configuration or provider account issues. Please <buttonOpenSettings>check your settings</buttonOpenSettings> and verify your provider configuration."
 }

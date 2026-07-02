@@ -20,7 +20,6 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import * as latex from '../packages/latex'
 import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
-import NiceModal from '@ebay/nice-modal-react'
 import { ActionIcon, Flex, Loader, Stack, Text, Tooltip, useComputedColorScheme } from '@mantine/core'
 import {
   IconBrandCpp,
@@ -52,14 +51,11 @@ import {
   IconJson,
   IconPlayerPlayFilled,
   type IconProps,
-  IconWorldUpload,
 } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { visit } from 'unist-util-visit'
 import { useCopied } from '@/hooks/useCopied'
-import { deployHtmlToEdgeOne } from '../packages/edgeone'
 import { highlight, highlightSync, type ShikiTheme } from '../packages/shiki'
-import * as toastActions from '../stores/toastActions'
 import { ScalableIcon } from './common/ScalableIcon'
 import IconDart from './icons/Dart'
 import IconJava from './icons/Java'
@@ -90,7 +86,6 @@ function Markdown(props: {
   generating?: boolean
   forceColorScheme?: 'light' | 'dark'
   onCodeCopy?: () => void
-  onPreviewWebpage?: () => void
 }) {
   const {
     children,
@@ -102,7 +97,6 @@ function Markdown(props: {
     generating,
     forceColorScheme,
     onCodeCopy,
-    onPreviewWebpage,
   } = props
 
   const codeFences = useMemo(() => (children.match(/```/g) || []).length, [children])
@@ -134,7 +128,6 @@ function Markdown(props: {
                 generating={generating && generatingCodeIndex === codeIndex}
                 forceColorScheme={forceColorScheme}
                 onCodeCopy={onCodeCopy}
-                onPreviewWebpage={onPreviewWebpage}
               />
             )
           },
@@ -157,7 +150,6 @@ function Markdown(props: {
           generatingCodeIndex,
           forceColorScheme,
           onCodeCopy,
-          onPreviewWebpage,
         ]
       )}
     >
@@ -178,7 +170,6 @@ export const CodeRenderer = memo(
     enableMermaidRendering?: boolean
     forceColorScheme?: 'light' | 'dark'
     onCodeCopy?: () => void
-    onPreviewWebpage?: () => void
   }) => {
     const theme = useTheme()
     const {
@@ -189,7 +180,6 @@ export const CodeRenderer = memo(
       enableMermaidRendering,
       forceColorScheme,
       onCodeCopy,
-      onPreviewWebpage,
     } = props
     const language = /language-(\w+)/.exec(className || '')?.[1] || 'text'
     if (!String(children).includes('\n')) {
@@ -208,7 +198,6 @@ export const CodeRenderer = memo(
           generating={generating}
           forceColorScheme={forceColorScheme}
           onCodeCopy={onCodeCopy}
-          onPreviewWebpage={onPreviewWebpage}
         >
           {children}
         </BlockCode>
@@ -333,7 +322,6 @@ type BlockCodeProps = {
   generating?: boolean
   forceColorScheme?: 'light' | 'dark'
   onCodeCopy?: () => void
-  onPreviewWebpage?: () => void
 }
 
 const CodeIcons: { [key: string]: ElementType<IconProps> } = {
@@ -431,17 +419,12 @@ const BlockCode = memo(
     generating,
     forceColorScheme,
     onCodeCopy,
-    onPreviewWebpage,
   }: BlockCodeProps) => {
     const { t } = useTranslation()
     const computedColorScheme = useComputedColorScheme()
     const colorScheme = forceColorScheme || computedColorScheme
     const shikiTheme: ShikiTheme = colorScheme !== 'light' ? 'one-dark-pro' : 'one-light'
     const languageName = useMemo(() => language.toUpperCase(), [language])
-    const isHtmlCode = language.toLowerCase() === 'html'
-    const [deploying, setDeploying] = useState(false)
-    const canDeploy = useMemo(() => isHtmlCode && String(children).trim().length > 0, [children, isHtmlCode])
-
     const icon = useMemo(() => CodeIcons[languageName] || IconCode, [languageName])
 
     const { copied, copy } = useCopied(String(children))
@@ -453,28 +436,6 @@ const BlockCode = memo(
         onCodeCopy?.()
       },
       [copy, onCodeCopy]
-    )
-
-    const onClickDeploy = useCallback(
-      async (event: React.MouseEvent) => {
-        event.stopPropagation()
-        event.preventDefault()
-        if (!canDeploy) {
-          return
-        }
-        // 应投放侧要求改触发点为分享按钮。但注意现在语义上是 mismatch 的
-        onPreviewWebpage?.()
-        setDeploying(true)
-        try {
-          const url = await deployHtmlToEdgeOne(String(children))
-          await NiceModal.show('edgeone-deploy-success', { url })
-        } catch (error) {
-          toastActions.add((error as Error)?.message || t('Publish failed'))
-        } finally {
-          setDeploying(false)
-        }
-      },
-      [canDeploy, children, t, onPreviewWebpage]
     )
 
     const needCollapse = useMemo(
@@ -518,20 +479,6 @@ const BlockCode = memo(
                   onClick={onClickCopy}
                 >
                   {copied ? <IconCheck /> : <IconCopy />}
-                </ActionIcon>
-              </Tooltip>
-            )}
-
-            {canDeploy && (
-              <Tooltip label={t('Publish Webpage')} withArrow openDelay={1000}>
-                <ActionIcon
-                  variant="transparent"
-                  color="workspaice-tertiary"
-                  size={20}
-                  onClick={onClickDeploy}
-                  disabled={deploying}
-                >
-                  {deploying ? <Loader size={12} /> : <IconWorldUpload />}
                 </ActionIcon>
               </Tooltip>
             )}

@@ -256,12 +256,6 @@ function TaskMessageBubble({ message, sessionName }: { message: Message; session
       content: sessionName,
     })
   }, [sessionName])
-  const onPreviewWebpage = useCallback(() => {
-    trackJkClickEvent(JK_EVENTS.PREVIEW_WEBPAGE_CLICK, {
-      pageName: JK_PAGE_NAMES.TASK_PAGE,
-      content: sessionName,
-    })
-  }, [sessionName])
 
   return (
     <Flex justify={isUser ? 'flex-end' : 'flex-start'} w="100%">
@@ -317,7 +311,6 @@ function TaskMessageBubble({ message, sessionName }: { message: Message; session
                     uniqueId={`${message.id}-${i}`}
                     generating={message.generating}
                     onCodeCopy={onCodeCopy}
-                    onPreviewWebpage={onPreviewWebpage}
                   >
                     {text}
                   </Markdown>

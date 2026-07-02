@@ -11,6 +11,10 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 - External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
 - The main window now appears immediately on launch instead of waiting for knowledge-base initialization — a slow or corrupt knowledge-base database can no longer prevent the app from opening.
 
+### Local-First Cleanup
+
+- Removed the "Publish Webpage" button on HTML code blocks and the underlying EdgeOne integration — HTML artifacts are no longer sent to a third-party hosted service.
+
 ### Chat Organization
 
 - Added multi-select mode for regular chats across workspaces and the ungrouped Chat section.
