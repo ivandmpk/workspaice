@@ -5,8 +5,8 @@ import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
 import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js'
 
 export class IPCStdioTransport implements Transport {
-  static async create(serverParams: StdioServerParameters) {
-    const ipcTransportId = await window.electronAPI.invoke('mcp:stdio-transport:create', serverParams)
+  static async create(serverParams: StdioServerParameters, meta?: { name?: string }) {
+    const ipcTransportId = await window.electronAPI.invoke('mcp:stdio-transport:create', serverParams, meta)
     return new IPCStdioTransport(ipcTransportId)
   }
 

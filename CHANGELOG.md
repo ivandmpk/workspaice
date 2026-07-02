@@ -10,6 +10,7 @@ Future development after `1.0.1-beta` should be recorded here until the next bet
 
 - External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
 - The main window now appears immediately on launch instead of waiting for knowledge-base initialization — a slow or corrupt knowledge-base database can no longer prevent the app from opening.
+- Launching a local (stdio) MCP server now requires a one-time native approval that shows the exact command; approved servers run silently afterwards, and editing a server's command/args/env re-prompts. This blocks a compromised renderer from silently spawning arbitrary processes.
 
 ### Local-First Cleanup
 

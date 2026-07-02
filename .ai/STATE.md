@@ -10,7 +10,7 @@ For agents, not humans. What's true right now. Edit in place after every task (s
 ## In Flight / Next Up
 
 - QA expansion is active. Deterministic gates now enforce no skipped tests, measure all production TypeScript, run 1,109 unit + 37 integration + 7 Electron E2E scenarios, and ratchet repo-wide biome diagnostics (`qa:biome-ratchet`, baseline 0 errors / 826 warnings — reduce opportunistically and ratchet down). Current coverage floor is 20% statements/lines and 15% branches/functions. Next highest-risk coverage targets: `src/main/store-node.ts`, knowledge-base/session-attachment RAG main-process paths, `InputBox.tsx`, `MessageList.tsx`, and session CRUD/messages.
-- FABLE_REVIEW.md P0 items are done (SEC-4, PROD-1, STAB-1, DOC-1 + §8.1/8.2 dead code/deps + §8.3 ratchet). Next per its priority table: P1 — SEC-1 (constrain `mcp:stdio-transport:create` to main-side-resolved server configs) and SEC-2 (Electron 35 → supported major; re-verify the `app-builder-lib@26.8.1` patch).
+- FABLE_REVIEW.md done so far: all P0 (SEC-4, PROD-1, STAB-1, DOC-1) + §8.1/8.2 dead code/deps + §8.3 ratchet, and P1 SEC-1 (MCP stdio approval ledger — see `ARCHITECTURE_NOTES.md`). Next P1: **SEC-2** (Electron 35 → supported major). SEC-2 is its own session — it interacts with `patches/app-builder-lib@26.8.1.patch` (re-verify / maybe drop if upstream fixed the pnpm collector) and `electron-store@8`, and needs `qa:release:mac`/`qa:release:win` smoke.
 - Chat surface redesign (`MessageList.tsx`, `Message.tsx`, `InputBox.tsx`) — not started.
 - `InputBox.tsx` refactor, MUI→Mantine migration, state management consolidation — deferred architecture work, no active owner.
 

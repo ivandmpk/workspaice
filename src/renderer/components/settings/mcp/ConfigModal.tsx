@@ -85,7 +85,7 @@ const ConfigForm: FC<{
     setTesting(true)
     setTestingResult(null)
     try {
-      const server = new MCPServer(config.transport)
+      const server = new MCPServer(config.transport, config.name)
       testingAbortController.current = new AbortController()
       await pTimeout(server.start(), {
         milliseconds: 5 * 60_000,
