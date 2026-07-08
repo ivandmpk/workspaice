@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import platform from '../platform'
 
 export default function useVersion() {
@@ -9,7 +9,7 @@ export default function useVersion() {
       const v = await platform.getVersion()
       setVersion(v)
     }
-    handler()
+    void handler()
   }, [])
 
   return {

@@ -102,7 +102,8 @@ src/main/       Electron main process
 src/preload/    Electron preload bridge
 src/renderer/   React renderer app
 src/shared/     Shared types, providers, model code, utilities
-.ai/            AI-agent memory and workflow rules
+.ai/            AI-agent memory: AGENT_RULES.md (workflow), PROJECT.md (stable facts),
+                ARCHITECTURE_NOTES.md (gotchas), STATE.md (current work)
 ```
 
 ---

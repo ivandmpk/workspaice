@@ -1,5 +1,5 @@
-import type { ModelInterface } from '../models/types'
 import { enrichModelFromRegistry } from '../model-registry/enrich'
+import type { ModelInterface } from '../models/types'
 import { mergeSharedOAuthProviderSettings, resolveEffectiveApiKey } from '../oauth'
 import type { Config, ProviderModelInfo, ProviderSettings, SessionSettings, Settings } from '../types'
 import type { ModelDependencies } from '../types/adapters'

@@ -1,6 +1,6 @@
 import { getModel } from '@shared/models'
 import type { ModelInterface } from '@shared/models/types'
-import { OAuthIpcChannels, type OAuthCredentials, toOAuthSettingsProviderId } from '@shared/oauth'
+import { type OAuthCredentials, OAuthIpcChannels, toOAuthSettingsProviderId } from '@shared/oauth'
 import { createAfetch } from '@shared/request/request'
 import type { SessionSettings } from '@shared/types'
 import type { ApiRequestOptions, ModelDependencies } from '@shared/types/adapters'
@@ -11,8 +11,6 @@ import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import * as settingActions from '@/stores/settingActions'
 import { settingsStore } from '@/stores/settingsStore'
 import { apiRequest } from '@/utils/request'
-import { RendererSentryAdapter } from './sentry'
-
 export async function createModelDependencies(): Promise<ModelDependencies> {
   // 获取平台信息
   const platformInfo = {
@@ -67,7 +65,6 @@ export async function createModelDependencies(): Promise<ModelDependencies> {
         }
       },
     },
-    sentry: new RendererSentryAdapter(),
     oauth:
       platform.type === 'desktop'
         ? {

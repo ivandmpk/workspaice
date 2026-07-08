@@ -14,6 +14,7 @@ export type ActionMenuItemProps =
       icon?: React.ElementType<IconProps>
       color?: MenuItemProps['color']
       disabled?: boolean
+      testId?: string
       onClick?: MouseEventHandler<HTMLButtonElement>
       doubleCheck?:
         | boolean
@@ -80,9 +81,13 @@ const DesktopActionMenu: FC<ActionMenuProps> = ({
               leftSection={item.icon ? <ScalableIcon icon={item.icon} size={14} /> : undefined}
               color={item.color || 'workspaice-primary'}
               disabled={item.disabled}
+              data-testid={item.testId}
               style={{
-                color: theme.variantColorResolver({ color: item.color || 'workspaice-primary', theme, variant: 'light' })
-                  .color,
+                color: theme.variantColorResolver({
+                  color: item.color || 'workspaice-primary',
+                  theme,
+                  variant: 'light',
+                }).color,
               }}
               onClick={item.onClick}
             >
@@ -235,6 +240,7 @@ const DoubleCheckMenuItem = ({
   text,
   onClick,
   icon,
+  testId,
   doubleCheckText,
   doubleCheckIcon,
   doubleCheckColor,
@@ -244,6 +250,7 @@ const DoubleCheckMenuItem = ({
   text: string
   icon?: React.ElementType<IconProps>
   onClick?: MouseEventHandler<HTMLButtonElement>
+  testId?: string
   doubleCheckText?: string
   doubleCheckIcon?: React.ElementType<IconProps>
   doubleCheckColor?: MenuItemProps['color']
@@ -269,6 +276,7 @@ const DoubleCheckMenuItem = ({
       closeMenuOnClick={false}
       leftSection={icon ? <ScalableIcon icon={icon} size={14} /> : undefined}
       onClick={() => setShowConfirm(true)}
+      data-testid={testId}
       {...menuItemProps}
       style={{
         color: menuItemProps.color
@@ -296,6 +304,7 @@ const DoubleCheckMenuItem = ({
       }}
       {...menuItemProps}
       color={doubleCheckColor ?? menuItemProps.color}
+      data-testid={testId ? `${testId}-confirm` : undefined}
       style={{
         color:
           (doubleCheckColor ?? menuItemProps.color)

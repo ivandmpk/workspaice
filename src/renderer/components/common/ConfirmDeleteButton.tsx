@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import { MenuItem, Button } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
 import CheckIcon from '@mui/icons-material/Check'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Button, MenuItem } from '@mui/material'
 import { type SxProps, useTheme } from '@mui/material/styles'
-import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
 import { isHotkeyPressed } from 'react-hotkeys-hook'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   onDelete: () => void

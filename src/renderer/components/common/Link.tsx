@@ -1,5 +1,5 @@
-import platform from '@/platform'
 import { useTheme } from '@mui/material'
+import platform from '@/platform'
 
 export default function LinkTargetBlank(props: {
   children?: React.ReactNode | string

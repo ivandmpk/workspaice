@@ -64,9 +64,6 @@ import {
 } from '@/stores/taskSessionStore'
 import { useUIStore } from '@/stores/uiStore'
 
-/** Exclude DeepSeek models ≤ v3.2 (chat, v3, v3.1, v3.2, r1, reasoner) */
-const DEEPSEEK_EXCLUDED_RE = /^deepseek-(chat|r1|reasoner|(v(0|1|2|3(\.([0-2])?)?)))(-|$)/i
-
 export const Route = createFileRoute('/task/$taskId')({
   component: TaskSessionRoute,
 })
@@ -259,12 +256,6 @@ function TaskMessageBubble({ message, sessionName }: { message: Message; session
       content: sessionName,
     })
   }, [sessionName])
-  const onPreviewWebpage = useCallback(() => {
-    trackJkClickEvent(JK_EVENTS.PREVIEW_WEBPAGE_CLICK, {
-      pageName: JK_PAGE_NAMES.TASK_PAGE,
-      content: sessionName,
-    })
-  }, [sessionName])
 
   return (
     <Flex justify={isUser ? 'flex-end' : 'flex-start'} w="100%">
@@ -320,7 +311,6 @@ function TaskMessageBubble({ message, sessionName }: { message: Message; session
                     uniqueId={`${message.id}-${i}`}
                     generating={message.generating}
                     onCodeCopy={onCodeCopy}
-                    onPreviewWebpage={onPreviewWebpage}
                   >
                     {text}
                   </Markdown>
@@ -499,6 +489,7 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
               size={isSmallScreen ? 24 : 20}
               color={isSmallScreen ? 'workspaice-secondary' : 'workspaice-tertiary'}
               mr="xs"
+              aria-label={isSmallScreen ? t('Menu') : t('Expand')}
               onClick={() => setShowSidebar(!showSidebar)}
             >
               {isSmallScreen ? <IconMenu2 /> : <IconLayoutSidebarLeftExpand />}
@@ -662,7 +653,6 @@ function TaskChat({ session }: { session: NonNullable<ReturnType<typeof useTaskS
                   selectedModelId={model?.modelId}
                   modelFilter={(m, providerId) => {
                     if (!m.capabilities?.includes('tool_use')) return false
-                    if (providerId === 'workspaice-ai' && DEEPSEEK_EXCLUDED_RE.test(m.modelId)) return false
                     return true
                   }}
                   position="top-end"

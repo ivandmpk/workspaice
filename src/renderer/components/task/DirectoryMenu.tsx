@@ -1,8 +1,8 @@
 import { Flex, Menu, type MenuProps, Text, UnstyledButton } from '@mantine/core'
+import { TASK_DEFAULT_DIRECTORY } from '@shared/constants/task'
 import { IconCheck, IconChevronDown, IconFolder, IconFolderPlus } from '@tabler/icons-react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TASK_DEFAULT_DIRECTORY } from '@shared/constants/task'
 import platform from '@/platform'
 import { recentDirectoriesStore, useRecentDirectories } from '@/stores/recentDirectoriesStore'
 

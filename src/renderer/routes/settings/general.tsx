@@ -116,7 +116,6 @@ export function RouteComponent() {
             }
           />
         </Stack>
-
       </Stack>
 
       <Divider />
@@ -316,11 +315,8 @@ const ImportExportDataSection = () => {
                   // 对settings进行特殊处理，清理敏感数据
                   if (key === StorageKey.Settings) {
                     const cleanedSettings = { ...(value as Settings) }
-                    cleanedSettings.licenseDetail = undefined
-                    cleanedSettings.licenseInstances = undefined
 
                     if (!exportItems.includes(ExportDataItem.Key)) {
-                      delete cleanedSettings.licenseKey
                       if (cleanedSettings.providers) {
                         cleanedSettings.providers = mapValues(cleanedSettings.providers, (provider: ProviderInfo) => {
                           const cleanedProvider = { ...provider }
@@ -486,7 +482,7 @@ const ImportExportDataSection = () => {
         )}
         {[
           { label: t('Settings'), value: ExportDataItem.Setting },
-          { label: t('API KEY & License'), value: ExportDataItem.Key },
+          { label: t('API Keys'), value: ExportDataItem.Key },
           { label: t('Chat History'), value: ExportDataItem.Conversations },
         ].map(({ label, value }) => (
           <Checkbox

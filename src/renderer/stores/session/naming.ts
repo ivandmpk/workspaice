@@ -1,5 +1,5 @@
-import * as Sentry from '@/adapters/sentry_shim'
 import { ApiError, NetworkError } from '@shared/models/errors'
+import * as Sentry from '@shared/sentry-shim'
 import type { ModelProvider } from '@shared/types'
 import { createModel } from '@/adapters'
 import { languageNameMap } from '@/i18n/locales'

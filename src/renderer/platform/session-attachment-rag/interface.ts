@@ -1,9 +1,9 @@
 import type {
   SessionAttachment,
-  SessionAttachmentRagDebugSnapshot,
-  SessionAttachmentRagMaintenanceResult,
   SessionAttachmentParent,
   SessionAttachmentQueryPlan,
+  SessionAttachmentRagDebugSnapshot,
+  SessionAttachmentRagMaintenanceResult,
   SessionAttachmentSearchResult,
 } from '@shared/types'
 

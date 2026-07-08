@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <any> */
 import type { Config, Language, Settings, ShortcutSetting } from '@shared/types'
 import type { ImageGenerationStorage } from '@/storage/ImageGenerationStorage'
 import type { SessionMetaStorage } from '@/storage/SessionMetaStorage'
@@ -6,15 +5,19 @@ import type { TaskSessionStorage } from '@/storage/TaskSessionStorage'
 import type { KnowledgeBaseController } from './knowledge-base/interface'
 import type { SessionAttachmentRagController } from './session-attachment-rag/interface'
 
-export type PlatformType = 'web' | 'desktop' | 'mobile'
+export type PlatformType = 'desktop'
 
 export interface Storage {
   getStorageType(): string
+  // biome-ignore lint/suspicious/noExplicitAny: the store holds heterogeneous JSON payloads; callers narrow per key
   setStoreValue(key: string, value: any): Promise<void>
+  // biome-ignore lint/suspicious/noExplicitAny: the store holds heterogeneous JSON payloads; callers narrow per key
   getStoreValue(key: string): Promise<any>
   delStoreValue(key: string): Promise<void>
+  // biome-ignore lint/suspicious/noExplicitAny: the store holds heterogeneous JSON payloads; callers narrow per key
   getAllStoreValues(): Promise<{ [key: string]: any }>
   getAllStoreKeys(): Promise<string[]>
+  // biome-ignore lint/suspicious/noExplicitAny: the store holds heterogeneous JSON payloads; callers narrow per key
   setAllStoreValues(data: { [key: string]: any }): Promise<void>
 }
 
@@ -84,6 +87,14 @@ export interface Platform extends Storage {
 
   getKnowledgeBaseController(): KnowledgeBaseController
   getSessionAttachmentRagController(): SessionAttachmentRagController
+
+  // Cross-session full-text search index (main-process FTS5, FABLE F4)
+  chatSearchUpsertSession(sessionId: string, entries: { messageId: string; text: string }[]): Promise<void>
+  chatSearchDeleteSessions(sessionIds: string[]): Promise<void>
+  chatSearchQuery(query: string, limit?: number): Promise<{ sessionId: string; messageId: string }[]>
+  chatSearchGetMeta(key: string): Promise<string | null>
+  chatSearchSetMeta(key: string, value: string): Promise<void>
+  chatSearchClear(): Promise<void>
 
   getImageGenerationStorage(): ImageGenerationStorage
 

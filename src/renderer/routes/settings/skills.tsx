@@ -14,7 +14,7 @@ export function RouteComponent() {
     <Box p="md">
       <Title order={5}>{t('Skills')}</Title>
       <Text size="sm" c="dimmed" mt="xs">
-        {t('Enabled skills will be available in Task mode.')}
+        {t('Enabled skills can be invoked in chat by typing "/".')}
       </Text>
       <Box className="mt-8">
         <SkillsSection />

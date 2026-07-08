@@ -1,6 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: any */
-/** biome-ignore-all lint/suspicious/noFallthroughSwitchClause: migrate */
-
 import * as defaults from '@shared/defaults'
 import { type ProviderSettings, type Settings, SettingsSchema } from '@shared/types'
 import type { DocumentParserConfig } from '@shared/types/settings'
@@ -17,12 +14,11 @@ import { mergeProviderSettings, type ProviderSettingsUpdate } from './providerSe
 const log = getLogger('settings-store')
 
 /**
- * Returns platform-specific default document parser configuration.
- * - Desktop: 'local' (has full Node.js environment for local parsing)
- * - Mobile/Web: 'none' (only basic text file support by default, user can enable workspaice-ai)
+ * Returns the default document parser configuration.
+ * Desktop has a full Node.js environment, so local parsing is the default.
  */
 export function getPlatformDefaultDocumentParser(): DocumentParserConfig {
-  return platform.type === 'desktop' ? { type: 'local' } : { type: 'none' }
+  return { type: 'local' }
 }
 
 type Action = {
@@ -70,13 +66,16 @@ export const settingsStore = createStore<Settings & Action>()(
             return state
           }
         },
+        // biome-ignore lint/suspicious/noExplicitAny: pre-migration persisted state predates the current schema
         migrate: (persisted: any, version) => {
           // merge the newly added fields in defaults.settings() into the persisted values (deep merge).
+          // biome-ignore lint/suspicious/noExplicitAny: pre-migration persisted state predates the current schema
           const settings: any = deepmerge(defaults.settings(), persisted, {
             arrayMerge: (_target, source) => source,
           })
 
           switch (version) {
+            // biome-ignore lint/suspicious/noFallthroughSwitchClause: migrations from version N intentionally run every later step
             case 0:
               // fix typo
               settings.shortcuts.inputBoxSendMessage =
@@ -84,11 +83,7 @@ export const settingsStore = createStore<Settings & Action>()(
               settings.shortcuts.inputBoxSendMessageWithoutResponse =
                 settings.shortcuts.inpubBoxSendMessageWithoutResponse ||
                 settings.shortcuts.inputBoxSendMessageWithoutResponse
-            case 1:
-              if (settings.licenseKey && !settings.licenseActivationMethod) {
-                settings.licenseActivationMethod = 'manual'
-                settings.memorizedManualLicenseKey = settings.licenseKey
-              }
+            // biome-ignore lint/suspicious/noFallthroughSwitchClause: migrations from version N intentionally run every later step
             case 2:
               // Add skills defaults for existing users upgrading from before skills feature
               if (!settings.skills) {
@@ -159,6 +154,14 @@ export function useSettingsStore<U>(selector: Parameters<typeof useStore<typeof 
 export const useLanguage = () => useSettingsStore((state) => state.language)
 export const useTheme = () => useSettingsStore((state) => state.theme)
 export const useMcpSettings = () => useSettingsStore((state) => state.mcp)
+
+/** 是否已配置至少一个 AI provider（用于首次启动引导 / 空状态提示，FABLE F1/§9.4）。 */
+export function hasConfiguredProvider(settings: Pick<Settings, 'providers'> = settingsStore.getState()): boolean {
+  const providers = settings.providers
+  return !!providers && typeof providers === 'object' && !Array.isArray(providers) && Object.keys(providers).length > 0
+}
+
+export const useHasConfiguredProvider = () => useSettingsStore((state) => hasConfiguredProvider(state))
 
 export const useProviderSettings = (providerId: string) => {
   const providers = useSettingsStore((state) => state.providers)

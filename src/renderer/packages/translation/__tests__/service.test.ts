@@ -45,9 +45,9 @@ function makeGoogleResponse(translatedText: string) {
  */
 function makeMsJwt(expSecondsFromNow = 3600): string {
   const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url')
-  const payload = Buffer.from(
-    JSON.stringify({ exp: Math.floor(Date.now() / 1000) + expSecondsFromNow })
-  ).toString('base64url')
+  const payload = Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + expSecondsFromNow })).toString(
+    'base64url'
+  )
   return `${header}.${payload}.signature`
 }
 
@@ -137,11 +137,7 @@ describe('translation service', () => {
 
       expect(result).toEqual(['你好世界'])
       expect(mockFetch).toHaveBeenCalledTimes(2)
-      expect(mockFetch).toHaveBeenNthCalledWith(
-        1,
-        'https://edge.microsoft.com/translate/auth',
-        expect.any(Object)
-      )
+      expect(mockFetch).toHaveBeenNthCalledWith(1, 'https://edge.microsoft.com/translate/auth', expect.any(Object))
       expect(mockFetch).toHaveBeenNthCalledWith(
         2,
         expect.stringContaining('api-edge.cognitive.microsofttranslator.com/translate'),
@@ -256,10 +252,7 @@ describe('translation service', () => {
 
       expect(result).toEqual(['Hola mundo'])
       expect(mockFetch).toHaveBeenCalledTimes(1)
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('translate.googleapis.com'),
-        expect.any(Object)
-      )
+      expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('translate.googleapis.com'), expect.any(Object))
     })
 
     it('should stop probing Google mid-batch when explicit google opt-in hits failures', async () => {
@@ -269,9 +262,7 @@ describe('translation service', () => {
       mockFetch.mockResolvedValueOnce(makeFailedResponse()) // google 1
       mockFetch.mockResolvedValueOnce(makeFailedResponse()) // google 2 — trips
       mockFetch.mockResolvedValueOnce(makeMsAuthResponse())
-      mockFetch.mockResolvedValueOnce(
-        makeMsTranslateResponse(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
-      )
+      mockFetch.mockResolvedValueOnce(makeMsTranslateResponse(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']))
 
       const inputs = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9']
       const result = await translateTexts(inputs, 'zh-Hans', { provider: 'google' })

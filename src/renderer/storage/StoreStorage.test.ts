@@ -29,7 +29,7 @@ describe('StorageKeyGenerator', () => {
       path: '/tmp/demo.txt',
       size: 123,
       lastModified: 456,
-    } as File
+    } as unknown as File
 
     expect(StorageKeyGenerator.fileUniqKey(file)).toBe('file:/tmp/demo.txt-123-456')
   })

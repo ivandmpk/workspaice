@@ -3,10 +3,10 @@ import { CohereClient } from 'cohere-ai'
 import { getProviderSettings } from '../../shared/models'
 import type { CallChatCompletionOptions, ModelInterface } from '../../shared/models/types'
 import { getWorkspAIceAPIOrigin } from '../../shared/request/workspaiceai_pool'
+import { sentry } from '../../shared/sentry-shim'
 import { SessionSettingsSchema } from '../../shared/types'
 import { parseKnowledgeBaseModelString } from '../../shared/utils/knowledge-base-model-parser'
 import { createModel } from '../adapters'
-import { sentry } from '../adapters/sentry'
 import { cache } from '../cache'
 import { getSettings, store } from '../store-node'
 import { getLogger } from '../util'
@@ -267,8 +267,8 @@ export async function getRerankProvider(kbId: number) {
         const sessionSettings = getMergedSettings(providerId, modelId)
         const { providerSetting, formattedApiHost } = getProviderSettings(sessionSettings, getSettings())
 
-        let apiHost = formattedApiHost
-        let token = providerSetting.apiKey
+        const apiHost = formattedApiHost
+        const token = providerSetting.apiKey
 
         const client = new CohereClient({
           environment: apiHost,

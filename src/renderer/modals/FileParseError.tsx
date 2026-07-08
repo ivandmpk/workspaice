@@ -1,6 +1,6 @@
 import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import { Alert, Stack, Text } from '@mantine/core'
-import { WorkspAIceAIAPIError } from '@shared/models/errors'
+import { CodedError } from '@shared/models/errors'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { AdaptiveModal } from '@/components/common/AdaptiveModal'
@@ -29,7 +29,7 @@ const FileParseError = NiceModal.create(({ errorCode, fileName }: FileParseError
   }
 
   // 根据错误码获取错误详情
-  const errorDetail = WorkspAIceAIAPIError.codeNameMap[errorCode]
+  const errorDetail = CodedError.codeNameMap[errorCode]
 
   // 错误提示内容
   const renderErrorTips = () => {
@@ -37,7 +37,7 @@ const FileParseError = NiceModal.create(({ errorCode, fileName }: FileParseError
       return (
         <Text>
           {t(
-            'This large file needs WorkspAIce AI to finish indexing. Sign in to WorkspAIce AI, then retry this file. If you do not want to use WorkspAIce AI, remove the file and upload a smaller attachment instead.'
+            'Large-file chat indexing is not available in this local-only build. Remove the file and upload a smaller attachment, or add it to Knowledge Base instead.'
           )}
         </Text>
       )

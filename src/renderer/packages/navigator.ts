@@ -1,4 +1,4 @@
-import * as Sentry from '@/adapters/sentry_shim'
+import * as Sentry from '@shared/sentry-shim'
 import copyToClipboardFallback from 'copy-to-clipboard'
 
 export function copyToClipboard(text: string) {

@@ -71,7 +71,7 @@ export default class OpenAIResponses extends AbstractAISDKModel {
       fetch: fetchFunction || this.options.customFetch,
       headers: this.options.apiHost.includes('openrouter.ai')
         ? {
-            'X-Title': 'WorkspAIce AI',
+            'X-Title': 'WorkspAIce',
           }
         : this.options.apiHost.includes('aihubmix.com')
           ? {

@@ -3,8 +3,8 @@ import type { ProviderModelInfo } from '@shared/types'
 import { IconBulb, IconEye, IconStar, IconStarFilled, IconTool } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { ModelIcon } from '../icons/ModelIcon'
 import { ScalableIcon } from '../common/ScalableIcon'
+import { ModelIcon } from '../icons/ModelIcon'
 
 // Common styles
 export const SELECTED_BG_CLASS = '!bg-workspaice-background-brand-secondary'

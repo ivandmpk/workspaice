@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { settings } from '../defaults'
-import { getModelSettings } from './model_settings'
 import { ModelProviderEnum } from '../types'
+import { getModelSettings } from './model_settings'
 
 describe('getModelSettings', () => {
   it('throws when provider not found in settings.providers', () => {

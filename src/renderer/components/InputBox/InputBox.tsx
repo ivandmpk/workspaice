@@ -1,17 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react'
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Flex,
-  Loader,
-  Menu,
-  Stack,
-  Text,
-  Textarea,
-  Tooltip,
-  UnstyledButton,
-} from '@mantine/core'
+import { ActionIcon, Box, Button, Flex, Loader, Menu, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks'
 import {
   getFileAcceptConfig,
@@ -39,11 +27,12 @@ import {
   IconSettings,
   IconVocabulary,
   IconWorldWww,
+  IconX,
 } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useAtom, useAtomValue } from 'jotai'
-import _, { pick } from 'lodash'
+import { pick } from 'lodash'
 import type React from 'react'
 import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -52,7 +41,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { createModelDependencies } from '@/adapters'
 import useInputBoxHistory from '@/hooks/useInputBoxHistory'
 import { useKnowledgeBase } from '@/hooks/useKnowledgeBase'
-import { useMessageInput } from '@/hooks/useMessageInput'
 import { useProviders } from '@/hooks/useProviders'
 import { useSaveBlob } from '@/hooks/useSaveBlob'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
@@ -70,25 +58,24 @@ import {
   useModelRegistryVersion,
 } from '@/packages/model-registry'
 import * as picUtils from '@/packages/pic_utils'
+import { parseSlashInvocation } from '@/packages/skills/slash'
+import { useEnabledSkills } from '@/packages/skills/useEnabledSkills'
 import platform from '@/platform'
 import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import * as atoms from '@/stores/atoms'
 import { compactionUIStateMapAtom } from '@/stores/atoms/compactionAtoms'
 import * as chatStore from '@/stores/chatStore'
 import { useSession, useSessionSettings } from '@/stores/chatStore'
-import { settingsStore, useSettingsStore } from '@/stores/settingsStore'
+import { settingsStore, useHasConfiguredProvider, useSettingsStore } from '@/stores/settingsStore'
 import { useUIStore } from '@/stores/uiStore'
 import { delay } from '@/utils'
 import { featureFlags } from '@/utils/feature-flags'
-import { trackEvent } from '@/utils/track'
 import {
   type KnowledgeBase,
   type Message,
   ModelProviderEnum,
   type SessionAttachment,
-  type SessionAttachmentIndexingStage,
   type SessionType,
-  type ShortcutSendValue,
 } from '../../../shared/types'
 import * as dom from '../../hooks/dom'
 import { startPreparedSessionAttachmentIndexing } from '../../stores/sessionAttachmentRagIndexing'
@@ -105,7 +92,17 @@ import KnowledgeBaseMenu from '../knowledge-base/KnowledgeBaseMenu'
 import ModelSelector from '../ModelSelector'
 import MCPMenu from '../mcp/MCPMenu'
 import { FileMiniCard, ImageMiniCard, LinkMiniCard } from './Attachments'
+import {
+  findProviderModelInfo,
+  getUnsupportedFileMessage,
+  MAX_LINKS,
+  planLinkInsertion,
+  resolveModelDisplayText,
+} from './composerInsertion'
+import { resolveComposerKeyAction } from './composerKeyboard'
+import * as composerSubmit from './composerSubmit'
 import { ImageUploadInput } from './ImageUploadInput'
+import { MessageInputField, type MessageInputFieldRef } from './MessageInputField'
 import {
   cleanupFile,
   cleanupLink,
@@ -116,6 +113,7 @@ import {
   storeFilePromise,
   storeLinkPromise,
 } from './preprocessState'
+import { deriveAttachmentCardState, mergeSessionAttachmentStatesIntoFiles } from './sessionAttachmentDisplay'
 import TokenCountMenu from './TokenCountMenu'
 
 export type InputBoxPayload = {
@@ -145,76 +143,6 @@ export type InputBoxProps = {
   onClickSessionSettings?(): boolean | Promise<boolean>
 }
 
-function mergeSessionAttachmentStatesIntoFiles(
-  files: PreprocessedFile[],
-  attachments: SessionAttachment[]
-): { files: PreprocessedFile[]; changed: boolean } {
-  if (files.length === 0 || attachments.length === 0) {
-    return { files, changed: false }
-  }
-
-  const attachmentStateMap = new Map(attachments.map((attachment) => [attachment.id, attachment]))
-  let changed = false
-  const nextFiles = files.map((file) => {
-    if (!file.sessionAttachmentId) {
-      return file
-    }
-    const attachment = attachmentStateMap.get(file.sessionAttachmentId)
-    if (!attachment) {
-      return file
-    }
-    const nextFile = {
-      ...file,
-      sessionAttachmentAvailability: attachment.availability ?? file.sessionAttachmentAvailability,
-      sessionAttachmentIndexStatus: attachment.indexStatus ?? file.sessionAttachmentIndexStatus,
-      sessionAttachmentChunkCount: attachment.chunkCount ?? file.sessionAttachmentChunkCount,
-      sessionAttachmentTotalChunks: attachment.totalChunks ?? file.sessionAttachmentTotalChunks,
-      sessionAttachmentEmbeddedChunks: attachment.embeddedChunks ?? file.sessionAttachmentEmbeddedChunks,
-      sessionAttachmentIndexingStage: attachment.indexingStage ?? file.sessionAttachmentIndexingStage,
-      error: attachment.error ?? file.error,
-    }
-    const fileChanged =
-      nextFile.sessionAttachmentAvailability !== file.sessionAttachmentAvailability ||
-      nextFile.sessionAttachmentIndexStatus !== file.sessionAttachmentIndexStatus ||
-      nextFile.sessionAttachmentChunkCount !== file.sessionAttachmentChunkCount ||
-      nextFile.sessionAttachmentTotalChunks !== file.sessionAttachmentTotalChunks ||
-      nextFile.sessionAttachmentEmbeddedChunks !== file.sessionAttachmentEmbeddedChunks ||
-      nextFile.sessionAttachmentIndexingStage !== file.sessionAttachmentIndexingStage ||
-      nextFile.error !== file.error
-    if (fileChanged) {
-      changed = true
-    }
-    return fileChanged ? nextFile : file
-  })
-
-  return { files: nextFiles, changed }
-}
-
-function getSessionAttachmentProgressValue(embeddedChunks?: number, totalChunks?: number): number | undefined {
-  if (!totalChunks || totalChunks <= 0 || embeddedChunks === undefined) return undefined
-  return Math.max(0, Math.min(100, Math.round((embeddedChunks / totalChunks) * 100)))
-}
-
-function getSessionAttachmentStageLabel(
-  stage: SessionAttachmentIndexingStage | undefined,
-  t: (key: string) => string
-): string {
-  switch (stage) {
-    case 'queued':
-      return t('Queued')
-    case 'chunking':
-      return t('Preparing')
-    case 'embedding':
-      return t('Indexing')
-    case 'finalizing':
-      return t('Finishing')
-    case 'ready':
-      return t('Indexed')
-    default:
-      return t('Indexing')
-  }
-}
-
 const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
   (
     {
@@ -242,6 +170,9 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     const pasteLongTextAsAFile = useSettingsStore((state) => state.pasteLongTextAsAFile)
     const shortcuts = useSettingsStore((state) => state.shortcuts)
     const widthFull = useUIStore((s) => s.widthFull) || fullWidth
+    // One-shot first-use hint for the toolbar icon row (FABLE §9.3)
+    const composerHintDismissed = useUIStore((s) => s.composerHintDismissed)
+    const dismissComposerHint = useUIStore((s) => s.dismissComposerHint)
     const saveBlob = useSaveBlob()
 
     const currentSessionId = sessionId
@@ -277,6 +208,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     // The parent only keeps a ref to the latest text and a boolean for empty/non-empty.
     const messageInputFieldRef = useRef<MessageInputFieldRef>(null)
     const latestInputRef = useRef('')
+    const outerEnabledSkills = useEnabledSkills()
     const [hasTextContent, setHasTextContent] = useState(false)
     const draftMessageIdRef = useRef<string | undefined>(undefined)
 
@@ -376,53 +308,33 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     const pictureInputRef = useRef<HTMLInputElement | null>(null)
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-    // Check if any preprocessing is in progress
-    const isPreprocessing = useMemo(() => {
-      const hasProcessingFiles = Object.values(preConstructedMessage.preprocessingStatus.files || {}).some(
-        (status) => status === 'processing'
-      )
-      const hasProcessingLinks = Object.values(preConstructedMessage.preprocessingStatus.links || {}).some(
-        (status) => status === 'processing'
-      )
-      return hasProcessingFiles || hasProcessingLinks
-    }, [preConstructedMessage.preprocessingStatus])
-
-    // Check if any preprocessing has errors
-    const hasPreprocessErrors = useMemo(() => {
-      const hasErrorFiles = Object.values(preConstructedMessage.preprocessingStatus.files || {}).some(
-        (status) => status === 'error'
-      )
-      const hasErrorLinks = Object.values(preConstructedMessage.preprocessingStatus.links || {}).some(
-        (status) => status === 'error'
-      )
-      return hasErrorFiles || hasErrorLinks
-    }, [preConstructedMessage.preprocessingStatus])
-
+    const isPreprocessing = useMemo(
+      () => composerSubmit.isPreprocessingInProgress(preConstructedMessage.preprocessingStatus),
+      [preConstructedMessage.preprocessingStatus]
+    )
+    const hasPreprocessErrors = useMemo(
+      () => composerSubmit.hasPreprocessingErrors(preConstructedMessage.preprocessingStatus),
+      [preConstructedMessage.preprocessingStatus]
+    )
     const hasBlockedSessionRagFiles = useMemo(
-      () =>
-        preConstructedMessage.preprocessedFiles.some(
-          (file) => file.ragMode === 'session-retrieval' && file.sessionAttachmentAvailability === 'blocked'
-        ),
+      () => composerSubmit.hasBlockedSessionRagFiles(preConstructedMessage.preprocessedFiles),
       [preConstructedMessage.preprocessedFiles]
     )
     const hasSessionRetrievalFiles = useMemo(
-      () =>
-        preConstructedMessage.preprocessedFiles.some(
-          (file) => file.ragMode === 'session-retrieval' && file.sessionAttachmentAvailability !== 'blocked'
-        ),
+      () => composerSubmit.hasSessionRetrievalFiles(preConstructedMessage.preprocessedFiles),
       [preConstructedMessage.preprocessedFiles]
     )
     const hasLargeAttachmentWarning = useMemo(
       () =>
-        preConstructedMessage.preprocessedFiles.some(
-          (file) =>
-            file.sessionAttachmentWarningReason === sessionHelpers.SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING
+        composerSubmit.hasLargeAttachmentWarning(
+          preConstructedMessage.preprocessedFiles,
+          sessionHelpers.SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING
         ),
       [preConstructedMessage.preprocessedFiles]
     )
 
     const disableSubmit = useMemo(
-      () => !(hasTextContent || links?.length || attachments?.length || pictureKeys?.length),
+      () => composerSubmit.computeDisableSubmit({ hasTextContent, links, attachments, pictureKeys }),
       [hasTextContent, links, attachments, pictureKeys]
     )
 
@@ -491,23 +403,12 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
         return result.changed ? { ...prev, preprocessedFiles: result.files } : prev
       })
     }, [preprocessedAttachmentStates, setPreConstructedMessage])
-    const modelSelectorDisplayText = useMemo(() => {
-      if (!model) {
-        return t('Select Model')
-      }
-      const providerInfo = providers.find((p) => p.id === model.provider)
-
-      const modelInfo = (providerInfo?.models || providerInfo?.defaultSettings?.models)?.find(
-        (m) => m.modelId === model.modelId
-      )
-      return `${modelInfo?.nickname || model.modelId}`
-    }, [providers, model, t])
+    const modelSelectorDisplayText = useMemo(() => resolveModelDisplayText(providers, model, t), [providers, model, t])
 
     // Get model info for context window
     const modelInfo = useMemo(() => {
       if (!model) return null
-      const providerInfo = providers.find((p) => p.id === model.provider)
-      return (providerInfo?.models || providerInfo?.defaultSettings?.models)?.find((m) => m.modelId === model.modelId)
+      return findProviderModelInfo(providers, model)
     }, [providers, model])
 
     // Check if model supports tool use for files
@@ -627,6 +528,8 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     )
 
     const [showSelectModelErrorTip, setShowSelectModelErrorTip] = useState(false)
+    // 没有配置任何 provider 时，“请选择模型”提示改为指向 provider 设置（FABLE §9.4 的死胡同修复）
+    const hasProvider = useHasConfiguredProvider()
     useEffect(() => {
       if (showSelectModelErrorTip) {
         const clickEventListener = () => {
@@ -680,12 +583,14 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     const closeSelectModelErrorTipCb = useRef<NodeJS.Timeout>()
     const handleSubmit = async (needGenerating = true, options: SubmitOptions = {}) => {
       if (
-        disableSubmit ||
-        generating ||
-        isSubmitting ||
-        isPreprocessing ||
-        hasPreprocessErrors ||
-        hasBlockedSessionRagFiles
+        composerSubmit.isSubmitBlocked({
+          disableSubmit,
+          isPreprocessing,
+          isSubmitting,
+          hasPreprocessErrors,
+          hasBlockedSessionRagFiles,
+        }) ||
+        generating
       ) {
         return
       }
@@ -723,24 +628,29 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
             setPreConstructedMessage((prev) => ({ ...prev, preprocessedFiles: result.files }))
           }
         }
-        const unreadySessionAttachments = preprocessedFilesForSubmit.filter(
-          (file) =>
-            file.ragMode === 'session-retrieval' &&
-            file.sessionAttachmentAvailability !== 'blocked' &&
-            (file.sessionAttachmentIndexStatus ?? 'pending') !== 'ready'
-        )
+        const unreadySessionAttachments = composerSubmit.selectUnreadySessionAttachments(preprocessedFilesForSubmit)
         if (unreadySessionAttachments.length > 0 && !options.allowUnreadySessionAttachments) {
           setUnreadyAttachmentSubmitPrompt({ opened: true, count: unreadySessionAttachments.length })
           return
         }
 
+        // Deterministic skill invocation: strip a leading `/skill-name args` so the
+        // sent text is just the args; the skill itself is recorded on the message.
+        const slash = parseSlashInvocation(
+          latestInputRef.current,
+          outerEnabledSkills.map((s) => s.name)
+        )
+        const submitText = slash ? slash.cleanText : latestInputRef.current
+        const invokedSkills = slash ? [slash.invocation] : []
+
         // Build the message with the latest input text, bypassing debounce delay
         const latestMessage = sessionHelpers.constructUserMessage(
           preConstructedMessage.draftMessageId,
-          latestInputRef.current,
+          submitText,
           pictureKeys,
           preprocessedFilesForSubmit,
-          preConstructedMessage.preprocessedLinks
+          preConstructedMessage.preprocessedLinks,
+          invokedSkills
         )
         if (!latestMessage) {
           console.error('No constructed message available')
@@ -775,7 +685,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
               message: undefined,
             })
             setShowRollbackThreadButton(false)
-            if (platform.type !== 'mobile' && messageTextForHistory) {
+            if (messageTextForHistory) {
               addInputBoxHistory(messageTextForHistory)
             }
           },
@@ -795,64 +705,52 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
 
     const onKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        const isPressedHash: Record<ShortcutSendValue, boolean> = {
-          '': false,
-          Enter: event.keyCode === 13 && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey,
-          'CommandOrControl+Enter': event.keyCode === 13 && (event.ctrlKey || event.metaKey) && !event.shiftKey,
-          'Ctrl+Enter': event.keyCode === 13 && event.ctrlKey && !event.shiftKey,
-          'Command+Enter': event.keyCode === 13 && event.metaKey,
-          'Shift+Enter': event.keyCode === 13 && event.shiftKey,
-          'Ctrl+Shift+Enter': event.keyCode === 13 && event.ctrlKey && event.shiftKey,
-        }
-
-        // 发送消息
-        if (isPressedHash[shortcuts.inputBoxSendMessage]) {
-          if (platform.type === 'mobile' && isSmallScreen && shortcuts.inputBoxSendMessage === 'Enter') {
-            // 移动端点击回车不会发送消息
-            return
-          }
-          event.preventDefault()
-          handleSubmitRef.current()
-          return
-        }
-
-        // 发送消息但不生成回复
-        if (isPressedHash[shortcuts.inputBoxSendMessageWithoutResponse]) {
-          event.preventDefault()
-          handleSubmitRef.current(false)
-          return
-        }
-
-        // 向上向下键翻阅历史消息
         const currentInput = latestInputRef.current
         const inputElement = messageInputFieldRef.current?.getElement()
-        if (
-          (event.key === 'ArrowUp' || event.key === 'ArrowDown') &&
-          inputElement &&
-          inputElement === document.activeElement && // 聚焦在输入框
-          (currentInput.length === 0 || window.getSelection()?.toString() === currentInput) // 要么为空，要么输入框全选
-        ) {
-          event.preventDefault()
-          if (event.key === 'ArrowUp') {
+        const action = resolveComposerKeyAction(event, {
+          sendShortcut: shortcuts.inputBoxSendMessage,
+          sendWithoutResponseShortcut: shortcuts.inputBoxSendMessageWithoutResponse,
+          isInputFocused: !!inputElement && inputElement === document.activeElement,
+          isEmptyOrFullySelected: currentInput.length === 0 || window.getSelection()?.toString() === currentInput,
+        })
+
+        switch (action.type) {
+          case 'send':
+            event.preventDefault()
+            handleSubmitRef.current()
+            return
+          case 'send-without-response':
+            event.preventDefault()
+            handleSubmitRef.current(false)
+            return
+          case 'history-prev': {
+            // Arrow-up: recall the previous input from history.
+            event.preventDefault()
             const previousInput = getPreviousHistoryInputRef.current()
             if (previousInput !== undefined) {
               messageInputFieldRef.current?.setValue(previousInput)
               setTimeout(() => inputElement?.select(), 10)
             }
-          } else if (event.key === 'ArrowDown') {
+            return
+          }
+          case 'history-next': {
+            // Arrow-down: recall the next input from history.
+            event.preventDefault()
             const nextInput = getNextHistoryInputRef.current()
             if (nextInput !== undefined) {
               messageInputFieldRef.current?.setValue(nextInput)
               setTimeout(() => inputElement?.select(), 10)
             }
+            return
           }
-        }
-
-        // Prevent Chromium's native Escape behaviour which reverts textarea
-        // value to its defaultValue, causing controlled-input state to desync.
-        if (event.key === 'Escape') {
-          event.preventDefault()
-          messageInputFieldRef.current?.getElement()?.blur()
+          case 'blur':
+            // Prevent Chromium's native Escape behaviour which reverts textarea
+            // value to its defaultValue, causing controlled-input state to desync.
+            event.preventDefault()
+            messageInputFieldRef.current?.getElement()?.blur()
+            return
+          default:
+            return
         }
       },
       [shortcuts, isSmallScreen]
@@ -966,24 +864,17 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     }
 
     const insertLinks = (urls: string[]) => {
-      const MAX_LINKS = 6
-      const dedupedLinks = _.uniqBy([...(links || []), ...urls.map((u) => ({ url: u }))], 'url')
-      // 保留最先添加的前 6 个链接，多出来的直接丢弃（而非静默丢掉最早的）
-      const newLinks = dedupedLinks.slice(0, MAX_LINKS)
-      setLinks(newLinks)
+      const plan = planLinkInsertion(links, urls)
+      setLinks(plan.links)
 
-      if (dedupedLinks.length > newLinks.length) {
+      if (plan.droppedSome) {
         toastActions.add(
           t('Only the first {{limit}} links can be attached. The extra links were skipped.', { limit: MAX_LINKS })
         )
       }
 
-      // 只预处理实际保留下来的链接（findIndex 返回 -1 表示该链接已被裁剪，跳过）
-      for (const url of urls) {
-        const linkIndex = newLinks.findIndex((l) => l.url === url)
-        if (linkIndex >= 0 && linkIndex < MAX_LINKS) {
-          startLinkPreprocessing(url)
-        }
+      for (const url of plan.urlsToPreprocess) {
+        startLinkPreprocessing(url)
       }
     }
 
@@ -1027,22 +918,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
 
           // Check if file type is supported
           if (!isSupportedFile(file.name)) {
-            const unsupportedType = getUnsupportedFileType(file.name)
-            let errorMsg = t('Unsupported file type: {{fileName}}', { fileName: file.name })
-            if (unsupportedType === 'iwork') {
-              errorMsg = t('iWork files (Pages, Keynote) are not supported. Please export to PDF or Office format.')
-            } else if (unsupportedType === 'audio') {
-              errorMsg = t('Audio files are not supported')
-            } else if (unsupportedType === 'video') {
-              errorMsg = t('Video files are not supported')
-            } else if (unsupportedType === 'binary') {
-              errorMsg = t('Binary/executable files are not supported')
-            } else if (unsupportedType === 'archive') {
-              errorMsg = t('Archive files are not supported. Please extract and upload individual files.')
-            } else if (unsupportedType === 'image') {
-              errorMsg = t('Advanced image formats are not supported. Please convert to JPG or PNG.')
-            }
-            toastActions.add(errorMsg)
+            toastActions.add(getUnsupportedFileMessage(getUnsupportedFileType(file.name), file.name, t))
             continue
           }
 
@@ -1106,7 +982,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
       if (!event.target.files) {
         return
       }
-      insertFiles(Array.from(event.target.files))
+      void insertFiles(Array.from(event.target.files))
       event.target.value = ''
       dom.focusMessageInput()
     }
@@ -1191,7 +1067,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
     // 拖拽上传
     const { getRootProps, getInputProps } = useDropzone({
       onDrop: (acceptedFiles: File[], fileRejections) => {
-        insertFiles(acceptedFiles)
+        void insertFiles(acceptedFiles)
         // Show toast for rejected files
         if (fileRejections.length > 0) {
           const rejectedNames = fileRejections.map((r) => r.file.name).join(', ')
@@ -1229,14 +1105,23 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
       (kb: KnowledgeBase | null) => {
         if (!kb || kb.id === knowledgeBase?.id) {
           setKnowledgeBase(undefined)
-          trackEvent('knowledge_base_disabled', { knowledge_base_name: knowledgeBase?.name })
         } else {
           setKnowledgeBase(pick(kb, 'id', 'name'))
-          trackEvent('knowledge_base_enabled', { knowledge_base_name: kb.name })
         }
       },
       [knowledgeBase, setKnowledgeBase]
     )
+
+    // Send button: the shared submit-blocked predicate plus a running compaction.
+    // `generating` is intentionally excluded — while generating the button becomes "stop".
+    const sendButtonBlocked =
+      composerSubmit.isSubmitBlocked({
+        disableSubmit,
+        isPreprocessing,
+        isSubmitting,
+        hasPreprocessErrors,
+        hasBlockedSessionRagFiles,
+      }) || isCompactionRunning
 
     // Show deprecated notice for legacy picture sessions
     if (sessionType === 'picture') {
@@ -1290,40 +1175,17 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
 
               {/* Send Button */}
               <ActionIcon
-                disabled={
-                  (disableSubmit ||
-                    isPreprocessing ||
-                    isSubmitting ||
-                    isCompactionRunning ||
-                    hasPreprocessErrors ||
-                    hasBlockedSessionRagFiles) &&
-                  !generating
-                }
+                disabled={sendButtonBlocked && !generating}
                 size={32}
                 variant="filled"
                 color={generating ? 'dark' : 'workspaice-brand'}
                 radius="xl"
+                aria-label={generating ? t('Stop generating') : t('Send')}
                 onClick={generating ? onStopGenerating : () => handleSubmit()}
-                className={cn(
-                  'shrink-0 mb-1',
-                  !generating &&
-                    (disableSubmit ||
-                      isPreprocessing ||
-                      isSubmitting ||
-                      isCompactionRunning ||
-                      hasPreprocessErrors ||
-                      hasBlockedSessionRagFiles) &&
-                    'disabled:!opacity-100 !text-white'
-                )}
+                className={cn('shrink-0 mb-1', !generating && sendButtonBlocked && 'disabled:!opacity-100 !text-white')}
                 style={
-                  !generating &&
-                  (disableSubmit ||
-                    isPreprocessing ||
-                    isSubmitting ||
-                    isCompactionRunning ||
-                    hasPreprocessErrors ||
-                    hasBlockedSessionRagFiles)
-                    ? { backgroundColor: 'rgba(222, 226, 230, 1)' }
+                  !generating && sendButtonBlocked
+                    ? { backgroundColor: 'var(--workspaice-background-disabled)' }
                     : undefined
                 }
               >
@@ -1409,62 +1271,29 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                 ))}
                 {attachments?.map((file) => {
                   const fileKey = inputFileKeyByFileRef.current.get(file) ?? StorageKeyGenerator.fileUniqKey(file)
-                  const status = preConstructedMessage.preprocessingStatus.files[fileKey]
                   const preprocessedFile = preConstructedMessage.preprocessedFiles.find(
                     (f) => f.inputFileKey === fileKey || StorageKeyGenerator.fileUniqKey(f.file) === fileKey
                   )
-                  const effectiveIndexStatus = preprocessedFile?.sessionAttachmentId
-                    ? (preprocessedAttachmentIndexStatusMap.get(preprocessedFile.sessionAttachmentId) ??
-                      preprocessedFile.sessionAttachmentIndexStatus)
-                    : preprocessedFile?.sessionAttachmentIndexStatus
-                  const effectiveAttachmentError = preprocessedFile?.sessionAttachmentId
-                    ? (preprocessedAttachmentErrorMap.get(preprocessedFile.sessionAttachmentId) ??
-                      preprocessedFile?.error)
-                    : preprocessedFile?.error
-                  const attachmentProgress = preprocessedFile?.sessionAttachmentId
-                    ? preprocessedAttachmentProgressMap.get(preprocessedFile.sessionAttachmentId)
-                    : undefined
-                  const totalChunks =
-                    attachmentProgress?.totalChunks ?? preprocessedFile?.sessionAttachmentTotalChunks ?? 0
-                  const embeddedChunks =
-                    attachmentProgress?.embeddedChunks ?? preprocessedFile?.sessionAttachmentEmbeddedChunks ?? 0
-                  const indexingStage =
-                    attachmentProgress?.indexingStage ?? preprocessedFile?.sessionAttachmentIndexingStage
-                  const progressValue = getSessionAttachmentProgressValue(embeddedChunks, totalChunks)
-                  const isSessionAttachmentTakingLong =
-                    !!attachmentProgress?.processingStartedAt &&
-                    effectiveIndexStatus !== 'ready' &&
-                    Date.now() - attachmentProgress.processingStartedAt > 30000
-                  const statusText =
-                    preprocessedFile?.ragMode === 'session-retrieval' && effectiveIndexStatus !== 'ready'
-                      ? progressValue !== undefined
-                        ? `${isSessionAttachmentTakingLong ? t('Still indexing') : getSessionAttachmentStageLabel(indexingStage, t)} · ${progressValue}%`
-                        : isSessionAttachmentTakingLong
-                          ? t('Still indexing')
-                          : getSessionAttachmentStageLabel(indexingStage, t)
-                      : status === 'processing'
-                        ? t('Preparing')
-                        : undefined
+                  const cardState = deriveAttachmentCardState({
+                    fileStatus: preConstructedMessage.preprocessingStatus.files[fileKey],
+                    preprocessedFile,
+                    indexStatusMap: preprocessedAttachmentIndexStatusMap,
+                    errorMap: preprocessedAttachmentErrorMap,
+                    progressMap: preprocessedAttachmentProgressMap,
+                    t,
+                  })
                   return (
                     <FileMiniCard
                       key={fileKey}
                       name={file.name}
                       fileType={file.type}
-                      status={
-                        effectiveAttachmentError
-                          ? 'error'
-                          : preprocessedFile?.ragMode === 'session-retrieval'
-                            ? effectiveIndexStatus === 'ready'
-                              ? 'completed'
-                              : 'processing'
-                            : status
-                      }
-                      statusText={statusText}
-                      progressValue={progressValue}
-                      isTakingLong={isSessionAttachmentTakingLong}
-                      errorMessage={effectiveAttachmentError}
+                      status={cardState.cardStatus}
+                      statusText={cardState.statusText}
+                      progressValue={cardState.progressValue}
+                      isTakingLong={cardState.isTakingLong}
+                      errorMessage={cardState.errorMessage}
                       onErrorClick={() => {
-                        const errorCode = effectiveAttachmentError
+                        const errorCode = cardState.errorMessage
                         if (errorCode) {
                           void NiceModal.show('file-parse-error', {
                             errorCode,
@@ -1540,6 +1369,31 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
               </Flex>
             )}
 
+            {/* First-use hint for the toolbar icon row (FABLE §9.3); dismissed once, persisted */}
+            {!composerHintDismissed && (
+              <Flex
+                align="center"
+                gap={8}
+                className="rounded-md px-2.5 py-1.5"
+                style={{ background: 'var(--workspaice-background-brand-secondary)' }}
+              >
+                <Text size="xs" c="dimmed" lh={1.35} className="min-w-0 flex-1">
+                  {t(
+                    'Tip: the toolbar below attaches files and images, toggles web search, and picks the model for this chat.'
+                  )}
+                </Text>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={t('Dismiss hint')}
+                  onClick={dismissComposerHint}
+                >
+                  <ScalableIcon icon={IconX} size={14} />
+                </ActionIcon>
+              </Flex>
+            )}
+
             {/* Toolbar Row */}
             <Flex align="center" gap={0} className="shrink-0 w-full" justify="space-between">
               {/* Hidden file inputs */}
@@ -1565,7 +1419,10 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                 {featureFlags.mcp && (
                   <MCPMenu>
                     {(enabledTools) => (
-                      <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                      <UnstyledButton
+                        aria-label={t('Tools')}
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+                      >
                         <IconHammer
                           size={toolbarIconSize}
                           strokeWidth={1.8}
@@ -1587,12 +1444,17 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
 
                 {featureFlags.knowledgeBase && !isSmallScreen && (
                   <KnowledgeBaseMenu currentKnowledgeBaseId={knowledgeBase?.id} onSelect={handleKnowledgeBaseSelect}>
-                    <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                    <UnstyledButton
+                      aria-label={t('Knowledge Base')}
+                      className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+                    >
                       <IconVocabulary
                         size={toolbarIconSize}
                         strokeWidth={1.8}
                         className={
-                          knowledgeBase ? 'text-[var(--workspaice-tint-brand)]' : 'text-[var(--workspaice-tint-secondary)]'
+                          knowledgeBase
+                            ? 'text-[var(--workspaice-tint-brand)]'
+                            : 'text-[var(--workspaice-tint-secondary)]'
                         }
                       />
                     </UnstyledButton>
@@ -1601,6 +1463,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
 
                 <Tooltip label={t('Web Search')} position="top" withArrow disabled={isSmallScreen}>
                   <UnstyledButton
+                    aria-label={t('Web Search')}
                     onClick={() => {
                       setWebBrowsingMode(!webBrowsingMode)
                       dom.focusMessageInput()
@@ -1611,7 +1474,9 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                       size={toolbarIconSize}
                       strokeWidth={1.8}
                       className={
-                        webBrowsingMode ? 'text-[var(--workspaice-tint-brand)]' : 'text-[var(--workspaice-tint-secondary)]'
+                        webBrowsingMode
+                          ? 'text-[var(--workspaice-tint-brand)]'
+                          : 'text-[var(--workspaice-tint-secondary)]'
                       }
                     />
                   </UnstyledButton>
@@ -1621,6 +1486,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                   (showRollbackThreadButton ? (
                     <Tooltip label={t('Rollback Thread')} position="top" withArrow>
                       <UnstyledButton
+                        aria-label={t('Rollback Thread')}
                         onClick={rollbackThread}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
                       >
@@ -1634,6 +1500,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                   ) : (
                     <Tooltip label={t('New Thread')} position="top" withArrow>
                       <UnstyledButton
+                        aria-label={t('New Thread')}
                         onClick={startNewThread}
                         disabled={!onStartNewThread}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors disabled:opacity-50"
@@ -1650,6 +1517,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                 {!isSmallScreen && (
                   <Tooltip label={t('Conversation Settings')} position="top" withArrow>
                     <UnstyledButton
+                      aria-label={t('Conversation Settings')}
                       onClick={onClickSessionSettings}
                       disabled={!onClickSessionSettings}
                       className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors disabled:opacity-50"
@@ -1676,7 +1544,10 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                     }}
                   >
                     <Menu.Target>
-                      <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+                      <UnstyledButton
+                        aria-label={t('Settings')}
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+                      >
                         <IconSettings
                           size={toolbarIconSize}
                           strokeWidth={1.8}
@@ -1717,11 +1588,12 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                   contextWindowKnown={contextWindowKnown}
                   onAutoCompactionChange={sessionId && !isNewSession ? handleAutoCompactionChange : undefined}
                 >
-                  <Flex
-                    align="center"
-                    gap="2"
-                    className={`shrink-0 text-xs cursor-pointer hover:text-workspaice-tint-secondary transition-colors px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] ${
-                      tokenPercentage && tokenPercentage > 80 ? 'text-red-500' : 'text-workspaice-tint-tertiary'
+                  <UnstyledButton
+                    aria-label={t('Estimated Token Usage')}
+                    className={`flex items-center gap-0.5 shrink-0 text-xs cursor-pointer hover:text-workspaice-tint-secondary transition-colors px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] ${
+                      tokenPercentage && tokenPercentage > 80
+                        ? 'text-[var(--workspaice-tint-error)]'
+                        : 'text-workspaice-tint-tertiary'
                     }`}
                   >
                     <ScalableIcon icon={IconArrowUp} size={14} />
@@ -1731,7 +1603,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                       {formatNumber(totalTokens)}
                       {tokenPercentage !== null && tokenPercentage > 10 && ` (${tokenPercentage}%)`}
                     </Text>
-                  </Flex>
+                  </UnstyledButton>
                 </TokenCountMenu>
 
                 {/* Model Selector */}
@@ -1741,7 +1613,9 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                       <Flex align="center" c="white" gap="xxs" min-w-0>
                         <ScalableIcon icon={IconAlertCircle} size={12} className="text-inherit" />
                         <Text span size="xxs" c="white">
-                          {t('Please select a model')}
+                          {hasProvider
+                            ? t('Please select a model')
+                            : t('No AI provider configured yet — click here to set one up')}
                         </Text>
                       </Flex>
                     }
@@ -1762,7 +1636,7 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
                       <UnstyledButton
                         className={cn(
                           'flex min-w-0 max-w-full items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors',
-                          !model && 'animate-pulse bg-blue-500/20'
+                          !model && 'animate-pulse bg-[var(--workspaice-background-brand-secondary-hover)]'
                         )}
                       >
                         {!!model && <ProviderImageIcon size={18} provider={model.provider} />}
@@ -1787,7 +1661,8 @@ const InputBox = forwardRef<InputBoxRef, InputBoxProps>(
             </Flex>
           </Stack>
 
-          <Disclaimer />
+          {/* Only surface the AI-accuracy disclaimer while the session is empty (FABLE §9.5) */}
+          {(isNewSession || !currentSession?.messages?.length) && <Disclaimer />}
         </Stack>
         {currentSession && (
           <CompressionModal
@@ -1856,8 +1731,15 @@ const AttachmentMenu: React.FC<{
       }}
     >
       <Menu.Target>
-        <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
-          <IconCirclePlus size={toolbarIconSize} strokeWidth={1.8} className="text-[var(--workspaice-tint-secondary)]" />
+        <UnstyledButton
+          aria-label={t('Add Attachment')}
+          className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+        >
+          <IconCirclePlus
+            size={toolbarIconSize}
+            strokeWidth={1.8}
+            className="text-[var(--workspaice-tint-secondary)]"
+          />
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
@@ -1877,105 +1759,3 @@ const AttachmentMenu: React.FC<{
 
 // Memoize the InputBox component to prevent unnecessary re-renders during streaming
 export default memo(InputBox)
-
-// ============================================================================
-// MessageInputField — isolated textarea to prevent parent re-renders on typing
-// ============================================================================
-
-export type MessageInputFieldRef = {
-  getValue: () => string
-  setValue: (val: string | ((prev: string) => string)) => void
-  clearDraft: () => void
-  getElement: () => HTMLTextAreaElement | null
-}
-
-type MessageInputFieldProps = {
-  isNewSession: boolean
-  isSmallScreen: boolean
-  viewportHeight: number
-  isReadOnly: boolean
-  placeholder: string
-  autoFocus: boolean
-  /** Called on every value change (including programmatic setValue). */
-  onValueChange: (value: string) => void
-  /** Called only on real user typing (onChange), not programmatic setValue. */
-  onUserInput?: () => void
-  onKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void
-  onPaste: (event: React.ClipboardEvent<HTMLTextAreaElement>) => void
-}
-
-const MessageInputField = memo(
-  forwardRef<MessageInputFieldRef, MessageInputFieldProps>(
-    (
-      {
-        isNewSession,
-        isSmallScreen,
-        viewportHeight,
-        isReadOnly,
-        placeholder,
-        autoFocus,
-        onValueChange,
-        onUserInput,
-        onKeyDown,
-        onPaste,
-      },
-      ref
-    ) => {
-      const { messageInput, setMessageInput, clearDraft } = useMessageInput('', { isNewSession })
-      const inputRef = useRef<HTMLTextAreaElement | null>(null)
-      const messageInputRef = useRef(messageInput)
-      messageInputRef.current = messageInput
-
-      useEffect(() => {
-        onValueChange(messageInput)
-      }, [messageInput, onValueChange])
-
-      useImperativeHandle(
-        ref,
-        () => ({
-          getValue: () => messageInputRef.current,
-          setValue: (val) => setMessageInput(val),
-          clearDraft: () => clearDraft(),
-          getElement: () => inputRef.current,
-        }),
-        [setMessageInput, clearDraft]
-      )
-
-      const onChange = useCallback(
-        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setMessageInput(event.target.value)
-          onUserInput?.()
-        },
-        [setMessageInput, onUserInput]
-      )
-
-      return (
-        <Textarea
-          unstyled={true}
-          styles={{ input: { fontSize: 14 } }}
-          classNames={{
-            root: 'flex-1',
-            wrapper: 'flex-1',
-            input:
-              'block w-full outline-none border-none px-2 py-1 resize-none bg-transparent text-workspaice-tint-primary leading-6',
-          }}
-          size="sm"
-          id={dom.messageInputID}
-          ref={inputRef}
-          placeholder={placeholder || ''}
-          bg="transparent"
-          autosize={true}
-          minRows={2}
-          maxRows={Math.max(4, Math.floor(viewportHeight / 100))}
-          value={messageInput}
-          autoFocus={autoFocus}
-          readOnly={isReadOnly}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          onPaste={onPaste}
-          data-testid="message-input"
-        />
-      )
-    }
-  )
-)

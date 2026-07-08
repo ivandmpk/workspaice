@@ -3,11 +3,22 @@ import { spawn } from 'child_process'
 import { app, ipcMain, shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import {
+  parseIpcPayload,
+  skillNamePayload,
+  skillsCreatePayload,
+  skillsExecuteScriptPayload,
+  skillsInstallMarketplacePayload,
+  skillsInstallPayload,
+  skillsReadScriptPayload,
+  skillsScanRepoPayload,
+} from '../ipc-payloads'
 import { getLogger } from '../util'
 import { discoverSkills } from './discovery'
 import { detectSkillsInRepo } from './github-fetcher'
 import { checkForUpdates, deleteSkill, installSkillFromGitHub, installSkillFromMarketplace } from './installer'
 import { parseSkillFile } from './parser'
+import { readSkillScript } from './script-reader'
 import { isValidScriptName, isValidSkillName } from './validation'
 
 const log = getLogger('skills:ipc-handlers')
@@ -26,9 +37,10 @@ export function registerSkillsHandlers() {
     }
   })
 
-  ipcMain.handle('skills:load', async (_event, name: string) => {
+  ipcMain.handle('skills:load', async (_event, rawName: string) => {
+    const name = parseIpcPayload('skills:load', skillNamePayload, rawName)
     try {
-      if (!name || typeof name !== 'string') {
+      if (!name) {
         return null
       }
       if (!isValidSkillName(name)) {
@@ -62,6 +74,42 @@ export function registerSkillsHandlers() {
     return getSkillsDir()
   })
 
+  ipcMain.handle('skills:create', async (_event, rawParams: { name: string; description: string; body: string }) => {
+    try {
+      const { name, description, body } = parseIpcPayload('skills:create', skillsCreatePayload, rawParams)
+      if (!isValidSkillName(name)) {
+        return {
+          success: false,
+          skillName: name,
+          error: 'Invalid name. Use lowercase letters, numbers and hyphens (max 64 chars).',
+        }
+      }
+      const trimmedDescription = (description ?? '').trim()
+      if (!trimmedDescription) {
+        return { success: false, skillName: name, error: 'Description is required.' }
+      }
+      if (trimmedDescription.length > 1024) {
+        return { success: false, skillName: name, error: 'Description must be 1024 characters or fewer.' }
+      }
+
+      const skillDir = path.join(getSkillsDir(), name)
+      if (fs.existsSync(skillDir)) {
+        return { success: false, skillName: name, error: 'A skill with this name already exists.' }
+      }
+      fs.mkdirSync(skillDir, { recursive: true })
+      // name is validated kebab-case; description is double-quoted + escaped for YAML safety.
+      const yamlDescription = `"${trimmedDescription.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+      const content = `---\nname: ${name}\ndescription: ${yamlDescription}\n---\n\n${(body ?? '').trim()}\n`
+      fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content, 'utf-8')
+      return { success: true, skillName: name }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
+      log.error('skills:create failed', error)
+      const fallbackName = typeof rawParams?.name === 'string' ? rawParams.name : ''
+      return { success: false, skillName: fallbackName, error: msg }
+    }
+  })
+
   ipcMain.handle('skills:open-directory', async () => {
     try {
       const skillsDir = getSkillsDir()
@@ -82,9 +130,14 @@ export function registerSkillsHandlers() {
       _event,
       params: { skillName: string; scriptName: string; args?: string[] }
     ): Promise<{ success: boolean; stdout: string; stderr: string; exitCode: number | null }> => {
-      const { skillName, scriptName, args = [] } = params
-
+      let skillName = ''
+      let scriptName = ''
       try {
+        const parsed = parseIpcPayload('skills:execute-script', skillsExecuteScriptPayload, params)
+        skillName = parsed.skillName
+        scriptName = parsed.scriptName
+        const args = parsed.args ?? []
+
         if (!skillName || !scriptName) {
           throw new Error('Skill name and script name are required')
         }
@@ -116,9 +169,20 @@ export function registerSkillsHandlers() {
 
         return await new Promise((resolve) => {
           const TIMEOUT_MS = 30_000
+          const KILL_GRACE_MS = 3_000
           let stdout = ''
           let stderr = ''
           let settled = false
+          let timedOut = false
+          let timeoutTimer: NodeJS.Timeout | undefined
+          let killTimer: NodeJS.Timeout | undefined
+
+          const clearTimers = () => {
+            if (timeoutTimer) clearTimeout(timeoutTimer)
+            if (killTimer) clearTimeout(killTimer)
+            timeoutTimer = undefined
+            killTimer = undefined
+          }
 
           const resolveOnce = (result: {
             success: boolean
@@ -130,12 +194,12 @@ export function registerSkillsHandlers() {
               return
             }
             settled = true
+            clearTimers()
             resolve(result)
           }
 
           const child = spawn(resolvedScriptPath, args, {
             cwd: scriptDir,
-            timeout: TIMEOUT_MS,
             stdio: ['ignore', 'pipe', 'pipe'],
             env: {
               PATH: process.env.PATH,
@@ -160,22 +224,33 @@ export function registerSkillsHandlers() {
             resolveOnce({ success: false, stdout, stderr: stderr || error.message, exitCode: null })
           })
 
+          // Resolve only on the real process exit ('close' fires after the child's
+          // stdio streams have flushed) so a killed child's streams are never
+          // abandoned mid-write.
           child.on('close', (code, signal) => {
-            if (signal === 'SIGTERM') {
-              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out', exitCode: null })
+            if (timedOut) {
+              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out (30s)', exitCode: null })
+            } else if (signal) {
+              resolveOnce({ success: false, stdout, stderr: stderr || `Script terminated (${signal})`, exitCode: null })
             } else {
               resolveOnce({ success: code === 0, stdout, stderr, exitCode: code })
             }
           })
 
-          setTimeout(() => {
-            if (settled) {
+          timeoutTimer = setTimeout(() => {
+            if (settled || child.killed) {
               return
             }
-            if (!child.killed) {
-              child.kill('SIGTERM')
-              resolveOnce({ success: false, stdout, stderr: stderr || 'Script timed out (30s)', exitCode: null })
-            }
+            timedOut = true
+            child.kill('SIGTERM')
+            // Escalate to SIGKILL if the child ignores SIGTERM. Resolution still
+            // happens on 'close', so output collected so far isn't lost and the
+            // child is guaranteed to be reaped.
+            killTimer = setTimeout(() => {
+              if (!settled) {
+                child.kill('SIGKILL')
+              }
+            }, KILL_GRACE_MS)
           }, TIMEOUT_MS)
         })
       } catch (error) {
@@ -190,7 +265,18 @@ export function registerSkillsHandlers() {
     }
   )
 
-  ipcMain.handle('skills:scan-repo', async (_event, owner: string, repo: string) => {
+  ipcMain.handle('skills:read-script', (_event, rawParams: { skillName: string; scriptName: string }) => {
+    try {
+      const { skillName, scriptName } = parseIpcPayload('skills:read-script', skillsReadScriptPayload, rawParams)
+      return readSkillScript(getSkillsDir(), skillName, scriptName)
+    } catch (error) {
+      log.error('skills:read-script failed', error)
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+    }
+  })
+
+  ipcMain.handle('skills:scan-repo', async (_event, rawOwner: string, rawRepo: string) => {
+    const [owner, repo] = parseIpcPayload('skills:scan-repo', skillsScanRepoPayload, [rawOwner, rawRepo])
     try {
       return await detectSkillsInRepo(owner, repo)
     } catch (error) {
@@ -199,8 +285,9 @@ export function registerSkillsHandlers() {
     }
   })
 
-  ipcMain.handle('skills:install', async (_event, params: { owner: string; repo: string; skillPath: string }) => {
+  ipcMain.handle('skills:install', async (_event, rawParams: { owner: string; repo: string; skillPath: string }) => {
     try {
+      const params = parseIpcPayload('skills:install', skillsInstallPayload, rawParams)
       return await installSkillFromGitHub(params.owner, params.repo, params.skillPath)
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
@@ -209,32 +296,36 @@ export function registerSkillsHandlers() {
     }
   })
 
-  ipcMain.handle('skills:install-marketplace', async (_event, skill: MarketplaceSkill) => {
+  ipcMain.handle('skills:install-marketplace', async (_event, rawSkill: MarketplaceSkill) => {
     try {
+      const skill = parseIpcPayload('skills:install-marketplace', skillsInstallMarketplacePayload, rawSkill)
       return await installSkillFromMarketplace(skill)
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
       log.error('skills:install-marketplace failed', error)
-      return { success: false, skillName: skill?.name ?? '', error: msg }
+      const fallbackName = typeof rawSkill?.name === 'string' ? rawSkill.name : ''
+      return { success: false, skillName: fallbackName, error: msg }
     }
   })
 
-  ipcMain.handle('skills:delete', async (_event, skillName: string) => {
+  ipcMain.handle('skills:delete', async (_event, rawSkillName: string) => {
     try {
+      const skillName = parseIpcPayload('skills:delete', skillNamePayload, rawSkillName)
       return await deleteSkill(skillName)
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
-      log.error(`skills:delete failed for "${skillName}"`, error)
+      log.error(`skills:delete failed for "${String(rawSkillName)}"`, error)
       return { success: false, error: msg }
     }
   })
 
-  ipcMain.handle('skills:check-update', async (_event, skillName: string) => {
+  ipcMain.handle('skills:check-update', async (_event, rawSkillName: string) => {
     try {
+      const skillName = parseIpcPayload('skills:check-update', skillNamePayload, rawSkillName)
       return await checkForUpdates(skillName)
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
-      log.error(`skills:check-update failed for "${skillName}"`, error)
+      log.error(`skills:check-update failed for "${String(rawSkillName)}"`, error)
       return { hasUpdate: false, error: msg }
     }
   })

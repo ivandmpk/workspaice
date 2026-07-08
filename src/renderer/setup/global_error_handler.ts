@@ -47,7 +47,6 @@ console.error = (...args: unknown[]) => {
         reportedErrors.add(error)
 
         log.error('Console error that might be uncaught:', error)
-
       }
     }
     return
@@ -70,7 +69,6 @@ console.error = (...args: unknown[]) => {
     reportedMessages.add(messageHash)
 
     log.error('Console error that might be uncaught:', errorMessage)
-
   }
 }
 

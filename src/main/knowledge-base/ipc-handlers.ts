@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import type { FileMeta } from 'src/shared/types'
 import { KNOWLEDGE_BASE_MAX_FILE_SIZE } from '../../shared/knowledge-base'
-import { sentry } from '../adapters/sentry'
+import { sentry } from '../../shared/sentry-shim'
 import { getLogger } from '../util'
 import { getDatabase, getVectorStore, parseSQLiteTimestamp, withTransaction } from './db'
 import { readChunks, searchKnowledgeBase } from './file-loaders'
@@ -636,7 +636,10 @@ export function registerKnowledgeBaseHandlers() {
         throw new Error('Invalid file ID')
       }
 
-      return withTransaction(async () => {
+      // `await` is required: without it the surrounding catch never sees a
+      // rejected transaction, so failures would reject the IPC call instead of
+      // returning the {success:false} envelope the renderer expects.
+      return await withTransaction(async () => {
         const db = getDatabase()
         const vectorStore = getVectorStore()
 

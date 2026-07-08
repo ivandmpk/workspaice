@@ -1,5 +1,5 @@
-import type { Exporter } from './interfaces'
 import * as base64 from '@/packages/base64'
+import type { Exporter } from './interfaces'
 
 export default class WebExporter implements Exporter {
   constructor() {}

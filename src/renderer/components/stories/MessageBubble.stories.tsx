@@ -1,7 +1,7 @@
 import { ActionIcon, Avatar, Box, Flex, Stack, Text, Title } from '@mantine/core'
-import { IconCopy, IconDotsVertical, IconPencil, IconReload, IconRobot, IconUser } from '@tabler/icons-react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import React from 'react'
+import { IconCopy, IconDotsVertical, IconPencil, IconReload, IconRobot, IconUser } from '@tabler/icons-react'
+import type React from 'react'
 
 const meta: Meta = {
   title: 'Chat/Message Bubble',

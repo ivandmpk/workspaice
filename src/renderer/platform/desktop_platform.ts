@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <any> */
-
 import type { ElectronIPC } from '@shared/electron-types'
 import type { Config, Settings, ShortcutSetting } from '@shared/types'
 import { cache } from '@shared/utils/cache'
@@ -104,6 +102,7 @@ export default class DesktopPlatform implements Platform {
     return key === 'configs' || key === 'settings' || key === 'configVersion'
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: implements the untyped Storage interface (heterogeneous JSON payloads)
   public async setStoreValue(key: string, value: any) {
     // 为什么序列化成 JSON？
     // 因为 IndexedDB 作为底层驱动时，可以直接存储对象，但是如果对象中包含函数或引用，将会直接报错
@@ -141,7 +140,9 @@ export default class DesktopPlatform implements Platform {
       return await store.removeItem(key)
     }
   }
+  // biome-ignore lint/suspicious/noExplicitAny: implements the untyped Storage interface (heterogeneous JSON payloads)
   public async getAllStoreValues(): Promise<{ [key: string]: any }> {
+    // biome-ignore lint/suspicious/noExplicitAny: implements the untyped Storage interface (heterogeneous JSON payloads)
     const ret: { [key: string]: any } = {}
     await store.iterate((json, key) => {
       const value = typeof json === 'string' ? JSON.parse(json) : null
@@ -160,6 +161,7 @@ export default class DesktopPlatform implements Platform {
     const ipcKeys: string[] = await this.ipc.invoke('getAllStoreKeys')
     return [...keys, ...ipcKeys]
   }
+  // biome-ignore lint/suspicious/noExplicitAny: implements the untyped Storage interface (heterogeneous JSON payloads)
   public async setAllStoreValues(data: { [key: string]: any }): Promise<void> {
     for (const [key, value] of Object.entries(data)) {
       await this.setStoreValue(key, value)
@@ -305,6 +307,31 @@ export default class DesktopPlatform implements Platform {
       this._sessionMetaStorage = new IndexedDBSessionMetaStorage()
     }
     return this._sessionMetaStorage
+  }
+
+  // Cross-session full-text search index (main-process FTS5, FABLE F4)
+  public chatSearchUpsertSession(sessionId: string, entries: { messageId: string; text: string }[]): Promise<void> {
+    return this.ipc.invoke('chat-search:upsert-session', { sessionId, entries })
+  }
+
+  public chatSearchDeleteSessions(sessionIds: string[]): Promise<void> {
+    return this.ipc.invoke('chat-search:delete-sessions', { sessionIds })
+  }
+
+  public chatSearchQuery(query: string, limit?: number): Promise<{ sessionId: string; messageId: string }[]> {
+    return this.ipc.invoke('chat-search:query', { query, limit })
+  }
+
+  public chatSearchGetMeta(key: string): Promise<string | null> {
+    return this.ipc.invoke('chat-search:get-meta', { key })
+  }
+
+  public chatSearchSetMeta(key: string, value: string): Promise<void> {
+    return this.ipc.invoke('chat-search:set-meta', { key, value })
+  }
+
+  public chatSearchClear(): Promise<void> {
+    return this.ipc.invoke('chat-search:clear')
   }
 
   public async sandboxInit(config: { workingDirectory: string }) {

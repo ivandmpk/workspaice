@@ -1,8 +1,8 @@
 import { Theme } from '@shared/types'
 import { z } from 'zod'
+import CommandPalette from '@/components/CommandPalette'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import Toasts from '@/components/common/Toasts'
-import DesktopDownloadReminder from '@/components/layout/DesktopDownloadReminder'
 import ExitFullscreenButton from '@/components/layout/ExitFullscreenButton'
 import useAppTheme from '@/hooks/useAppTheme'
 import { useSystemLanguageWhenInit } from '@/hooks/useDefaultSystemLanguage'
@@ -56,8 +56,15 @@ import { router } from '@/router'
 import Sidebar from '@/Sidebar'
 import storage from '@/storage'
 import { useSession } from '@/stores/chatStore'
-import { initSettingsStore, settingsStore, useLanguage, useSettingsStore, useTheme } from '@/stores/settingsStore'
-import { useUIStore } from '@/stores/uiStore'
+import {
+  hasConfiguredProvider,
+  initSettingsStore,
+  settingsStore,
+  useLanguage,
+  useSettingsStore,
+  useTheme,
+} from '@/stores/settingsStore'
+import { uiStore, useUIStore } from '@/stores/uiStore'
 import { blobToDataUrl } from './image-creator/-components/constants'
 
 function BackgroundImageOverlay() {
@@ -150,6 +157,24 @@ function Root() {
 
       initialized.current = true
 
+      // 首次启动引导（FABLE F1）：没有配置任何 provider 且未被关闭过时，展示欢迎弹窗。
+      if (!uiStore.persist.hasHydrated()) {
+        await new Promise<void>((resolve) => {
+          const unsub = uiStore.persist.onFinishHydration(() => {
+            unsub()
+            resolve()
+          })
+        })
+      }
+      if (!hasConfiguredProvider() && !uiStore.getState().onboardingDismissed) {
+        const result = await NiceModal.show('welcome')
+        if (result !== 'setup') {
+          // “稍后设置”：不再自动弹出；点击“设置 Provider”则留待下次启动继续引导
+          uiStore.getState().dismissOnboarding()
+        }
+        return
+      }
+
       const shouldShowAboutDialogWhenStartUp = await platform.shouldShowAboutDialogWhenStartUp()
       if (shouldShowAboutDialogWhenStartUp) {
         setOpenAboutDialog(true)
@@ -204,7 +229,7 @@ function Root() {
     } else if (pathname === '/' || pathname.startsWith('/session/')) {
       setSidebarMode('chat')
     }
-    // Other routes (settings, copilots, about, etc.) don't change sidebarMode
+    // Other routes (settings, about, etc.) don't change sidebarMode
   }, [location.pathname, setSidebarMode])
 
   const { needRoomForMacWindowControls } = useNeedRoomForWinControls()
@@ -239,7 +264,6 @@ function Root() {
         </Box>
       </Grid>
       {/* 对话设置 */}
-      {/* <AppStoreRatingDialog /> */}
       {/* 代码预览 */}
       {/* <ArtifactDialog /> */}
       {/* 对话列表清理 */}
@@ -256,12 +280,10 @@ function Root() {
       {/* <OpenAttachLinkDialog /> */}
       {/* 图片预览 */}
       <PictureDialog />
-      {/* Hosted remote dialogs are disabled for the local-first fork. */}
-      {/* 手机端举报内容 */}
-      {/* <ReportContentDialog /> */}
       {/* 搜索 */}
       <SearchDialog />
-      <DesktopDownloadReminder />
+      {/* 全局命令面板 ⌘K */}
+      <CommandPalette />
       {/* 没有配置模型时的欢迎弹窗 */}
       {/* <WelcomeDialog /> */}
       <Toasts /> {/* mui */}

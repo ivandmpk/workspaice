@@ -114,7 +114,12 @@ export function ProviderList({ providers, onAddProvider }: ProviderListProps) {
         </Stack>
       </ScrollArea>
       <Stack gap="xs" mx="md" my="sm">
-        <Button variant="outline" leftSection={<ScalableIcon icon={IconPlus} />} onClick={onAddProvider}>
+        <Button
+          data-testid="add-provider-button"
+          variant="outline"
+          leftSection={<ScalableIcon icon={IconPlus} />}
+          onClick={onAddProvider}
+        >
           {t('Add')}
         </Button>
       </Stack>

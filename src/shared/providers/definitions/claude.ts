@@ -1,5 +1,5 @@
-import { ModelProviderEnum, ModelProviderType } from '../../types'
 import { createBearerOAuthFetch, createOAuthCredentialManager } from '../../oauth'
+import { ModelProviderEnum, ModelProviderType } from '../../types'
 import { defineProvider } from '../registry'
 import Claude from './models/claude'
 

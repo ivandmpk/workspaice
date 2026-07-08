@@ -1,41 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const {
-  blobStore,
-  licenseState,
-  licenseActivationState,
-  authTokensState,
-  sessionRagCapabilityState,
-  parserState,
-  mockParseFileLocally,
-  mockSetBlob,
-  mockGetBlob,
-  mockSetItem,
-  mockGetItem,
-} = vi.hoisted(() => {
-  const blobs = new Map<string, string>()
-  const license = { key: 'licensed-key' as string | undefined }
-  const licenseActivation = { method: 'manual' as 'login' | 'manual' | undefined }
-  const authTokens = { hasTokens: true }
-  const sessionRagCapability = { enabled: true }
-  const parser = { type: 'local' as 'local' | 'workspaice-ai' | 'none' | 'mineru' }
+const { blobStore, parserState, mockParseFileLocally, mockSetBlob, mockGetBlob, mockSetItem, mockGetItem } = vi.hoisted(
+  () => {
+    const blobs = new Map<string, string>()
+    const parser = { type: 'local' as 'local' | 'none' | 'mineru' }
 
-  return {
-    blobStore: blobs,
-    licenseState: license,
-    licenseActivationState: licenseActivation,
-    authTokensState: authTokens,
-    sessionRagCapabilityState: sessionRagCapability,
-    parserState: parser,
-    mockParseFileLocally: vi.fn(),
-    mockSetBlob: vi.fn(async (key: string, value: string) => {
-      blobs.set(key, value)
-    }),
-    mockGetBlob: vi.fn(async (key: string) => blobs.get(key) ?? null),
-    mockSetItem: vi.fn(async () => undefined),
-    mockGetItem: vi.fn(async <T>(_key: string, initialValue: T) => initialValue),
+    return {
+      blobStore: blobs,
+      parserState: parser,
+      mockParseFileLocally: vi.fn(),
+      mockSetBlob: vi.fn(async (key: string, value: string) => {
+        blobs.set(key, value)
+      }),
+      mockGetBlob: vi.fn(async (key: string) => blobs.get(key) ?? null),
+      mockSetItem: vi.fn(async () => undefined),
+      mockGetItem: vi.fn(async <T>(_key: string, initialValue: T) => initialValue),
+    }
   }
-})
+)
 
 vi.mock('@/platform', () => ({
   default: {
@@ -53,25 +35,9 @@ vi.mock('@/storage', () => ({
   },
 }))
 
-vi.mock('./settingActions', () => ({
-  getLicenseKey: () => licenseState.key,
-  isPro: () => Boolean(licenseState.key),
-}))
-
-vi.mock('@/stores/authInfoStore', () => ({
-  authInfoStore: {
-    getState: () => ({
-      getTokens: () =>
-        authTokensState.hasTokens ? { accessToken: 'access-token', refreshToken: 'refresh-token' } : null,
-    }),
-  },
-}))
-
 vi.mock('./settingsStore', () => ({
   settingsStore: {
     getState: () => ({
-      licenseKey: licenseState.key,
-      licenseActivationMethod: licenseActivationState.method,
       extension: {
         documentParser: { type: parserState.type },
       },
@@ -122,7 +88,6 @@ import {
   prepareFileAttachment,
   SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING,
   SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH,
-  SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR,
 } from './sessionHelpers'
 
 function createFile(name: string, content = 'binary-content'): File {
@@ -137,10 +102,6 @@ function createFile(name: string, content = 'binary-content'): File {
 describe('preprocessFile local parser fallback', () => {
   beforeEach(() => {
     blobStore.clear()
-    licenseState.key = 'licensed-key'
-    licenseActivationState.method = 'manual'
-    authTokensState.hasTokens = true
-    sessionRagCapabilityState.enabled = true
     parserState.type = 'local'
     mockParseFileLocally.mockReset()
     mockSetBlob.mockClear()
@@ -149,7 +110,7 @@ describe('preprocessFile local parser fallback', () => {
     mockGetItem.mockClear()
   })
 
-  it('returns local_parser_failed when local parsing throws', async () => {
+  it('returns parser error message when local parsing throws', async () => {
     const file = createFile('report.pdf')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
 
@@ -158,7 +119,7 @@ describe('preprocessFile local parser fallback', () => {
     expect(mockParseFileLocally).toHaveBeenCalledWith(file)
     expect(result.content).toBe('')
     expect(result.storageKey).toBe('')
-    expect(result.error).toBe('local_parser_failed')
+    expect(result.error).toBe('local failed')
   })
 
   it('returns empty content when local parsing returns whitespace-only content', async () => {
@@ -172,7 +133,7 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.content).toBe('   \n\t')
   })
 
-  it('returns local_parser_failed for text files when local parsing fails', async () => {
+  it('returns parser error message for text files when local parsing fails', async () => {
     const file = createFile('readme.txt', 'text content')
     mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
 
@@ -180,19 +141,7 @@ describe('preprocessFile local parser fallback', () => {
 
     expect(result.content).toBe('')
     expect(result.storageKey).toBe('')
-    expect(result.error).toBe('local_parser_failed')
-  })
-
-  it('returns local_parser_failed when local parsing throws without a license', async () => {
-    const file = createFile('no-license.pdf')
-    licenseState.key = undefined
-    mockParseFileLocally.mockRejectedValueOnce(new Error('local failed'))
-
-    const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
-
-    expect(result.content).toBe('')
-    expect(result.storageKey).toBe('')
-    expect(result.error).toBe('local_parser_failed')
+    expect(result.error).toBe('local failed')
   })
 
   it('keeps high-token attachments inline when parsed content stays below byte threshold', async () => {
@@ -265,11 +214,9 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.tokenCountMap?.default).toBe(parsedContent.length)
   })
 
-  it('keeps over-threshold attachments inline without a WorkspAIce license', async () => {
+  it('keeps over-threshold attachments inline in the local-only build', async () => {
     const file = createFile('byok-large.pdf')
     const parsedContent = 'a'.repeat(256 * 1024 + 1)
-    licenseState.key = undefined
-    sessionRagCapabilityState.enabled = false
     blobStore.set('local-key', parsedContent)
     mockParseFileLocally.mockResolvedValueOnce({ isSupported: true, key: 'local-key' })
 
@@ -285,8 +232,6 @@ describe('preprocessFile local parser fallback', () => {
   it('keeps very large BYOK attachments inline with a warning', async () => {
     const file = createFile('byok-very-large.pdf')
     const parsedContent = 'a'.repeat(SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH + 1)
-    licenseState.key = undefined
-    sessionRagCapabilityState.enabled = false
     blobStore.set('local-key', parsedContent)
     mockParseFileLocally.mockResolvedValueOnce({ isSupported: true, key: 'local-key' })
 
@@ -299,27 +244,8 @@ describe('preprocessFile local parser fallback', () => {
     expect(result.tokenCountMap?.default).toBe(parsedContent.length)
   })
 
-  it('keeps over-threshold attachments inline for stale login licenses without auth tokens', async () => {
-    const file = createFile('stale-login-large.pdf')
-    const parsedContent = 'a'.repeat(256 * 1024 + 1)
-    licenseState.key = 'stale-login-license'
-    licenseActivationState.method = 'login'
-    authTokensState.hasTokens = false
-    blobStore.set('local-key', parsedContent)
-    mockParseFileLocally.mockResolvedValueOnce({ isSupported: true, key: 'local-key' })
-
-    const result = await prepareFileAttachment(file, { provider: '', modelId: '' })
-
-    expect(result.error).toBeUndefined()
-    expect(result.ragMode).toBe('inline')
-    expect(result.sessionAttachmentAvailability).toBe('allowed')
-    expect(result.tokenCountMap?.default).toBe(parsedContent.length)
-  })
-
-  it('recognizes raw session RAG auth failures from existing failed attachments', () => {
-    expect(isSessionAttachmentRagAuthError(SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR)).toBe(true)
-    expect(isSessionAttachmentRagAuthError('provider workspaice-ai not set')).toBe(true)
-    expect(isSessionAttachmentRagAuthError('Missing token for rerank provider: workspaice-ai')).toBe(true)
+  it('recognizes legacy hosted session RAG failures from existing failed attachments', () => {
+    expect(isSessionAttachmentRagAuthError('session_attachment_rag_requires_hosted_service')).toBe(true)
     expect(isSessionAttachmentRagAuthError('local_parser_failed')).toBe(false)
   })
 

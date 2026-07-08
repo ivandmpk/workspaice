@@ -1,4 +1,4 @@
-import { sentry } from '../adapters/sentry'
+import { sentry } from '../../shared/sentry-shim'
 import { getLogger } from '../util'
 import { initializeDatabase } from './db'
 import { startWorkerLoop } from './file-loaders'
@@ -22,7 +22,7 @@ async function initializeKnowledgeBase() {
     log.debug('[KB] Database initialized')
 
     // Start background file processing worker
-    startWorkerLoop()
+    void startWorkerLoop()
     log.debug('[KB] Worker loop started')
 
     const duration = Date.now() - startTime

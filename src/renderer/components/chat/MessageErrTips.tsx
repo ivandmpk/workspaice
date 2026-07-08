@@ -1,14 +1,13 @@
-import { ActionIcon, Flex, Loader, Text, Tooltip } from '@mantine/core'
-import { Link } from '@mui/material'
+import { ActionIcon, Anchor, Flex, Loader, Text, Tooltip } from '@mantine/core'
 import { aiProviderNameHash } from '@shared/models'
-import { WorkspAIceAIAPIError } from '@shared/models/errors'
+import { CodedError } from '@shared/models/errors'
 import type { Message } from '@shared/types'
 import { ModelProviderEnum } from '@shared/types/provider'
 import { IconCheck, IconChevronDown, IconChevronUp, IconCopy, IconLanguage, IconReload } from '@tabler/icons-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { WorkspAIceAIErrorMessage } from '@/components/common/WorkspAIceAIErrorMessage'
+import { CodedErrorMessage } from '@/components/common/CodedErrorMessage'
 import { useCopied } from '@/hooks/useCopied'
 import { navigateToSettings } from '@/modals/Settings'
 import { translateTexts } from '@/packages/translation'
@@ -207,12 +206,14 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
         }}
         components={{
           OpenSettingButton: (
-            <Link
+            // underline="always" matches the old MUI Link default
+            <Anchor
+              underline="always"
               className="cursor-pointer italic"
               onClick={() => {
                 navigateToSettings('/default-models')
               }}
-            ></Link>
+            ></Anchor>
           ),
         }}
       />
@@ -250,7 +251,6 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
                 }}
               />
             ),
-            LinkToLicensePricing: <span />,
             a: <span />,
           }}
         />
@@ -279,30 +279,23 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
             : 'AI Provider',
         }}
         components={[
-          <Link
+          <Anchor
+            underline="always"
             key="link"
             className="cursor-pointer font-bold"
             onClick={() => {
               navigateToSettings()
             }}
-          ></Link>,
+          ></Anchor>,
         ]}
       />
     )
-  } else if (msg.errorCode && WorkspAIceAIAPIError.getDetail(msg.errorCode)) {
+  } else if (msg.errorCode && CodedError.getDetail(msg.errorCode)) {
     onlyShowTips = true
-    tips.push(<WorkspAIceAIErrorMessage errorCode={msg.errorCode} model={msg.model} />)
+    tips.push(<CodedErrorMessage errorCode={msg.errorCode} model={msg.model} />)
   } else {
     tips.push(
-      <Trans
-        i18nKey="unknown error tips"
-        components={[
-          <a
-            key="a"
-            onClick={() => navigateToSettings()}
-          ></a>,
-        ]}
-      />
+      <Trans i18nKey="unknown error tips" components={[<a key="a" onClick={() => navigateToSettings()}></a>]} />
     )
   }
   return (
@@ -360,7 +353,7 @@ export default function MessageErrTips(props: { msg: Message; onRetry?: () => vo
                 onTranslate={(e) => {
                   e.stopPropagation()
                   if (!expanded) setExpanded(true)
-                  handleTranslate()
+                  void handleTranslate()
                 }}
                 onCopy={(e) => {
                   e.stopPropagation()

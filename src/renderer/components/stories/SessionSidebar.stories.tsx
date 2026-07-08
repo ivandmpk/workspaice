@@ -16,6 +16,7 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   IconCirclePlus,
   IconDots,
@@ -30,7 +31,6 @@ import {
   IconStar,
   IconStarFilled,
 } from '@tabler/icons-react'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import React from 'react'
 
 const meta: Meta = {
@@ -49,7 +49,7 @@ const meta: Meta = {
    With many sessions, this becomes hard to navigate.
 3. **Limited Visual Hierarchy**: All sessions look identical except for the selected state highlight.
    No visual distinction between session types, ages, or activity.
-4. **Bottom Navigation Density**: Settings, Help, About, Copilots are all in a flat NavLink list
+4. **Bottom Navigation Density**: Settings, Help, and About are all in a flat NavLink list
    with equal visual weight.
 
 ### Optimization Suggestions
@@ -154,7 +154,7 @@ export const CurrentSidebar: StoryObj = {
             <IconPhotoPlus size={16} className="mr-2" /> Create Image
           </Button>
           <NavLink
-            label="My Copilots"
+            label="Assistants"
             leftSection={<IconMessageChatbot size={18} />}
             c="workspaice-secondary"
             p="xs"
@@ -352,7 +352,7 @@ export const OptimizedSidebar: StoryObj = {
         {/* Compact Bottom Nav */}
         <Divider />
         <Flex align="center" justify="center" gap="md" py="sm">
-          <Tooltip label="My Copilots" withArrow>
+          <Tooltip label="Assistants" withArrow>
             <ActionIcon variant="subtle" color="gray" size={32} radius="md">
               <IconMessageChatbot size={18} />
             </ActionIcon>

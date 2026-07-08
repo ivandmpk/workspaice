@@ -241,7 +241,11 @@ export function RouteComponent() {
                 )}
               </FileButton>
               {!!settings.backgroundImageKey && (
-                <Button color="workspaice-gray" size="xs" onClick={() => setSettings({ backgroundImageKey: undefined })}>
+                <Button
+                  color="workspaice-gray"
+                  size="xs"
+                  onClick={() => setSettings({ backgroundImageKey: undefined })}
+                >
                   {t('Remove')}
                 </Button>
               )}

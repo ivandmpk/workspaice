@@ -80,5 +80,4 @@ export {
   findTargetMessageIndex,
   handleGenerationError,
   initializeTargetMessage,
-  trackGenerateEvent,
 } from './utils'

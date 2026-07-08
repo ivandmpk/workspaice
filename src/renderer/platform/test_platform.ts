@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { type ImageGenerationStorage, IndexedDBImageGenerationStorage } from '@/storage/ImageGenerationStorage'
 import { IndexedDBSessionMetaStorage, type SessionMetaStorage } from '@/storage/SessionMetaStorage'
 import { IndexedDBTaskSessionStorage, type TaskSessionStorage } from '@/storage/TaskSessionStorage'
+import type { FileWithLegacyPath } from '@/utils/file-native-path'
 import type { Exporter, Platform, PlatformType, Storage } from './interfaces'
 import type { KnowledgeBaseController } from './knowledge-base/interface'
 import type { SessionAttachmentRagController } from './session-attachment-rag/interface'
@@ -114,7 +115,7 @@ class TestExporter implements Exporter {
  * TestPlatform 实现
  */
 export default class TestPlatform implements Platform {
-  public type: PlatformType = 'web'
+  public type: PlatformType = 'desktop'
   public exporter: TestExporter = new TestExporter()
 
   private storage = new InMemoryStorage()
@@ -286,7 +287,7 @@ export default class TestPlatform implements Platform {
   }
 
   public getLocalFilePath(file: File): string {
-    return file.path || ''
+    return (file as FileWithLegacyPath).path || ''
   }
 
   public async isFullscreen(): Promise<boolean> {
@@ -303,6 +304,31 @@ export default class TestPlatform implements Platform {
 
   public getSessionAttachmentRagController(): SessionAttachmentRagController {
     throw new Error('Session attachment RAG not implemented in test platform.')
+  }
+
+  // Chat-search index: in-memory no-ops so store code paths run in tests
+  public chatSearchUpsertSession(_sessionId: string, _entries: { messageId: string; text: string }[]): Promise<void> {
+    return Promise.resolve()
+  }
+
+  public chatSearchDeleteSessions(_sessionIds: string[]): Promise<void> {
+    return Promise.resolve()
+  }
+
+  public chatSearchQuery(_query: string, _limit?: number): Promise<{ sessionId: string; messageId: string }[]> {
+    return Promise.resolve([])
+  }
+
+  public chatSearchGetMeta(_key: string): Promise<string | null> {
+    return Promise.resolve(null)
+  }
+
+  public chatSearchSetMeta(_key: string, _value: string): Promise<void> {
+    return Promise.resolve()
+  }
+
+  public chatSearchClear(): Promise<void> {
+    return Promise.resolve()
   }
 
   public getImageGenerationStorage(): ImageGenerationStorage {

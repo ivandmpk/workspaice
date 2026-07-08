@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { OAuthIpcChannels } from '@shared/oauth'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 type IpcHandler = (...args: unknown[]) => Promise<string> | string
 type MockProvider = {

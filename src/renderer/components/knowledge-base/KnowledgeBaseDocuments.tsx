@@ -48,7 +48,6 @@ import { useChunksPreview } from '@/hooks/useChunksPreview'
 import { toastError } from '@/packages/toast'
 import platform from '@/platform'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { trackEvent } from '@/utils/track'
 import ChunksPreviewModal from './ChunksPreviewModal'
 
 interface KnowledgeBaseDocumentsProps {
@@ -301,17 +300,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
           // Don't show additional error toast here since individual errors were already shown
         }
 
-        // Track successful uploads only
         if (successfulUploads.length > 0) {
-          trackEvent('knowledge_base_document_added', {
-            knowledge_base_id: knowledgeBase.id,
-            knowledge_base_name: knowledgeBase.name,
-            file_count: successfulUploads.length,
-            total_attempted: files.length,
-            failed_count: blockedUploadCount,
-            file_types: Array.from(new Set(correctedFiles.map((f) => f.type || 'unknown'))),
-          })
-
           // Immediately refresh the data to show the new files
           await Promise.all([refetch(), refetchCount()])
 
@@ -572,7 +561,11 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         return <IconCircleCheck size={16} color="var(--workspaice-tint-success)" />
       case 'processing':
         return (
-          <IconLoader size={16} color="var(--workspaice-tint-warning)" style={{ animation: 'spin 1s linear infinite' }} />
+          <IconLoader
+            size={16}
+            color="var(--workspaice-tint-warning)"
+            style={{ animation: 'spin 1s linear infinite' }}
+          />
         )
       case 'pending':
         return <IconLoader size={16} color="var(--workspaice-tint-gray)" />
@@ -589,7 +582,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
             case 'mineru':
               return t('MinerU parse failed')
             case 'local':
-              return t('WorkspAIce AI parse failed')
+              return t('Local parse failed')
             default:
               return t('Local parse failed')
           }
@@ -870,7 +863,7 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
                                     {doc.parser_type && (
                                       <Pill size="xs" c="dimmed">
                                         {doc.parser_type === 'local'
-                                          ? 'WorkspAIce AI'
+                                          ? 'Local'
                                           : doc.parser_type === 'mineru'
                                             ? 'MinerU'
                                             : 'Local'}
@@ -1019,7 +1012,6 @@ const KnowledgeBaseDocuments: React.FC<KnowledgeBaseDocumentsProps> = ({ knowled
         file={chunksPreview.selectedFile}
         knowledgeBaseId={knowledgeBase?.id}
       />
-
     </Stack>
   )
 }

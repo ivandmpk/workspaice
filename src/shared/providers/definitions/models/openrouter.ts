@@ -36,7 +36,7 @@ export default class OpenRouter extends AbstractAISDKModel {
     return createOpenRouter({
       apiKey: this.options.apiKey,
       headers: {
-        'X-Title': 'WorkspAIce AI',
+        'X-Title': 'WorkspAIce',
       },
     })
   }

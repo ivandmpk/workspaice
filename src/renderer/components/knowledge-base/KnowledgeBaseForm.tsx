@@ -78,12 +78,12 @@ export const KnowledgeBaseModelSelectors: React.FC<ModelSelectorsProps> = ({
   )
 }
 
-interface KnowledgeBaseWorkspAIceAIInfoProps {
+interface KnowledgeBaseLocalInfoProps {
   showModelsLabel?: boolean
   hasError?: boolean
 }
 
-export const KnowledgeBaseWorkspAIceAIInfo: React.FC<KnowledgeBaseWorkspAIceAIInfoProps> = ({
+export const KnowledgeBaseLocalInfo: React.FC<KnowledgeBaseLocalInfoProps> = ({
   showModelsLabel = false,
   hasError = false,
 }) => {
@@ -93,17 +93,15 @@ export const KnowledgeBaseWorkspAIceAIInfo: React.FC<KnowledgeBaseWorkspAIceAIIn
     <Stack gap="sm">
       {showModelsLabel && (
         <Group>
-          {t('Models')}: <Pill>WorkspAIce AI</Pill>
+          {t('Models')}: <Pill>{t('Local')}</Pill>
         </Group>
       )}
       <Text size="sm" c="dimmed">
-        {t(
-          'WorkspAIce AI provides all the essential model support required for knowledge base processing. Consumes compute points.'
-        )}
+        {t('WorkspAIce uses your configured local or external models for knowledge base processing.')}
       </Text>
       {hasError && (
         <Text size="sm" c="red">
-          {t('Failed to load WorkspAIce AI models configuration')}
+          {t('Failed to load knowledge base model configuration')}
         </Text>
       )}
     </Stack>
@@ -113,24 +111,20 @@ export const KnowledgeBaseWorkspAIceAIInfo: React.FC<KnowledgeBaseWorkspAIceAIIn
 interface KnowledgeBaseProviderModeSelectProps {
   value: 'local' | 'custom'
   onChange: (value: 'local' | 'custom') => void
-  isWorkspAIceAIDisabled?: boolean
+  isLocalDisabled?: boolean
 }
 
 export const KnowledgeBaseProviderModeSelect: React.FC<KnowledgeBaseProviderModeSelectProps> = ({
   value,
   onChange,
-  isWorkspAIceAIDisabled = false,
+  isLocalDisabled = false,
 }) => {
   const { t } = useTranslation()
 
   return (
-    <Radio.Group
-      label={t('Model Provider')}
-      value={value}
-      onChange={(value) => onChange(value as 'local' | 'custom')}
-    >
+    <Radio.Group label={t('Model Provider')} value={value} onChange={(value) => onChange(value as 'local' | 'custom')}>
       <Group mt="xs">
-        <Radio value='local' label="WorkspAIce AI" disabled={isWorkspAIceAIDisabled} />
+        <Radio value="local" label={t('Local')} disabled={isLocalDisabled} />
         <Radio value="custom" label={t('Custom')} />
       </Group>
     </Radio.Group>
@@ -221,12 +215,6 @@ const PARSER_OPTIONS: { value: DocumentParserType; label: string; description: s
     label: 'Local',
     description:
       'Uses built-in document parsing feature, supports common file types. Free usage, no compute points will be consumed.',
-  },
-  {
-    value: 'local',
-    label: 'WorkspAIce AI',
-    description:
-      'Cloud-based document parsing service, supports PDF, Office files, EPUB and many other file types. Consumes compute points.',
   },
   {
     value: 'mineru',

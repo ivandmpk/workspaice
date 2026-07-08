@@ -1,5 +1,5 @@
-import { ModelProviderEnum, ModelProviderType } from '../../types'
 import { createOAuthCredentialManager, createOpenAIOAuthFetch } from '../../oauth'
+import { ModelProviderEnum, ModelProviderType } from '../../types'
 import { defineProvider } from '../registry'
 import OpenAIResponses from './models/openai-responses'
 

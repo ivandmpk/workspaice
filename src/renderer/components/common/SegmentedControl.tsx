@@ -1,5 +1,5 @@
-import type { ComponentProps } from 'react'
 import { SegmentedControl as MantineSegmentedControl } from '@mantine/core'
+import type { ComponentProps } from 'react'
 
 type SegmentedControlProps = Omit<ComponentProps<typeof MantineSegmentedControl>, 'value' | 'onChange' | 'data'> & {
   value: string

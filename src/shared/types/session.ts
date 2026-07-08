@@ -209,6 +209,8 @@ export const MessageSchema = z.object({
   style: z.string().optional(),
   files: z.array(MessageFileSchema).optional(),
   links: z.array(MessageLinkSchema).optional(),
+  // Skills explicitly invoked via `/slash` in the composer for this message.
+  invokedSkills: z.array(z.object({ name: z.string(), args: z.string().optional() })).optional(),
   reasoningContent: z.string().optional().describe('deprecated, moved to contentParts'),
   contentParts: MessageContentPartsSchema,
   isStreamingMode: z.boolean().optional(),

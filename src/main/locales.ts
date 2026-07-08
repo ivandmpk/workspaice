@@ -83,4 +83,20 @@ const translations = {
     en: 'Zoom Out',
     zh: '缩小',
   },
+  MCP_Run_Title: {
+    en: 'Run MCP server?',
+    zh: '运行 MCP 服务器？',
+  },
+  MCP_Run_Message: {
+    en: 'Allow WorkspAIce to run this local command? Only approve servers you trust — it runs with your account’s permissions.',
+    zh: '允许 WorkspAIce 运行此本地命令吗？请仅批准你信任的服务器——它将以你的账户权限运行。',
+  },
+  MCP_Allow: {
+    en: 'Allow',
+    zh: '允许',
+  },
+  MCP_Cancel: {
+    en: 'Cancel',
+    zh: '取消',
+  },
 }

@@ -1,5 +1,5 @@
+import { Box, Slider, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { TextField, Slider, Typography, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 export interface Props {

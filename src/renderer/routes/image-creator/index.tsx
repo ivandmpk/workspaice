@@ -118,13 +118,16 @@ function InputToolbar({
           </UnstyledButton>
         ) : (
           <ImageModelSelect modelGroups={modelGroups} onSelect={onModelSelect}>
-            <UnstyledButton className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors">
+            <Box
+              component="span"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--workspaice-background-tertiary)] transition-colors"
+            >
               <IconSparkles size={16} className="text-[var(--workspaice-tint-secondary)]" />
               <Text size="sm" className="text-[var(--workspaice-tint-secondary)] max-w-[120px] truncate">
                 {modelDisplayName}
               </Text>
               <IconChevronRight size={14} className="text-[var(--workspaice-tint-tertiary)] rotate-90" />
-            </UnstyledButton>
+            </Box>
           </ImageModelSelect>
         )}
 
@@ -406,20 +409,6 @@ function ImageCreatorPage() {
     })
   }, [])
 
-  const handleReportGeneratedImage = useCallback(async (record: ImageGeneration) => {
-    const contentId = [
-      `Image generation prompt: ${record.prompt}`,
-      `Record ID: ${record.id}`,
-      record.taskId ? `Task ID: ${record.taskId}` : undefined,
-      record.generatedImages.length > 0 ? `Images: ${record.generatedImages.join(', ')}` : undefined,
-      `Model: ${record.model.provider}/${record.model.modelId}`,
-    ]
-      .filter((item): item is string => Boolean(item))
-      .join('\n')
-
-    await NiceModal.show('report-content', { contentId })
-  }, [])
-
   const handleHistoryClick = useCallback(
     async (record: ImageGeneration) => {
       await cleanupTempUploads()
@@ -534,7 +523,6 @@ function ImageCreatorPage() {
                       <GeneratedImagesGallery
                         images={currentRecord.generatedImages}
                         onUseAsReference={(urlOrKey) => handleUseAsReference(urlOrKey, currentRecord.id)}
-                        onReport={isSmallScreen ? () => void handleReportGeneratedImage(currentRecord) : undefined}
                       />
                     </Flex>
                   )}

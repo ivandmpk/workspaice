@@ -84,8 +84,6 @@ export function settings(): Settings {
     defaultPrompt: getDefaultPrompt(),
 
     allowReportingAndTracking: false,
-    hasExpiredLicense: false,
-    workspaiceAIDesktopPromptDismissed: true,
 
     enableMarkdownRendering: true,
     enableLaTeXRendering: true,

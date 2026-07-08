@@ -1,4 +1,3 @@
-import type { SentryAdapter } from '../utils/sentry_adapter'
 import type { OAuthCredentials } from '../oauth/types'
 
 export interface ApiRequestOptions {
@@ -34,7 +33,6 @@ export interface RequestAdapter {
 export interface ModelDependencies {
   request: RequestAdapter
   storage: StorageAdapter
-  sentry: SentryAdapter
   oauth?: OAuthAdapter
   /** Current platform type, used for OAuth auth resolution */
   platformType?: 'desktop' | 'web' | 'mobile'

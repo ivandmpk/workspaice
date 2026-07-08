@@ -1,8 +1,8 @@
+import { Box } from '@mantine/core'
 import type { Message, MessageReasoningPart } from '@shared/types'
 import { MessageRoleEnum } from '@shared/types/session'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import React from 'react'
-import { Box } from '@mantine/core'
+import type React from 'react'
 import { ReasoningContentUI } from '../message-parts/ToolCallPartUI'
 
 const meta: Meta<typeof ReasoningContentUI> = {

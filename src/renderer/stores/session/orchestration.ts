@@ -1,5 +1,5 @@
 import { buildContext } from '@shared/context'
-import { WorkspAIceAIAPIError, OCRError } from '@shared/models/errors'
+import { CodedError, OCRError } from '@shared/models/errors'
 import type { ChatStreamOptions, ModelStreamPart } from '@shared/models/types'
 import { type Message, type MessageContentParts, ModelProviderEnum } from '@shared/types'
 import { getMessageText, sequenceMessages } from '@shared/utils/message'
@@ -7,8 +7,8 @@ import type { ToolSet } from 'ai'
 import { t } from 'i18next'
 import { createModel, createModelDependencies } from '@/adapters'
 import { getLogger } from '@/lib/utils'
-import * as appleAppStore from '@/packages/apple_app_store'
 import { convertToModelMessages, injectModelSystemPrompt } from '@/packages/model-calls/message-utils'
+import { skillsController } from '@/packages/skills/controller'
 import { estimateTokensFromMessages } from '@/packages/token'
 import platform from '@/platform'
 import storage from '@/storage'
@@ -24,15 +24,33 @@ import { persistStreamingMessage, updateStreamingCache } from './messages'
 import { getOCRModel, ocrImagesInMessages } from './ocr-helper'
 import { createInitialState, processStreamChunk } from './stream-chunk-processor'
 import { buildToolsForSession } from './tools-builder'
-import {
-  findTargetMessageIndex,
-  getSessionWebBrowsing,
-  handleGenerationError,
-  initializeTargetMessage,
-  trackGenerateEvent,
-} from './utils'
+import { findTargetMessageIndex, getSessionWebBrowsing, handleGenerationError, initializeTargetMessage } from './utils'
 
 const log = getLogger('session-orchestration')
+
+// Deterministic skill invocation: when the user invoked skills via `/slash`,
+// load each SKILL.md body fresh (so edits take effect) and return a system-prompt
+// block that forces the model to follow them this turn. Bodies are re-loaded
+// rather than stored on the message so editing a skill changes future regenerations.
+async function buildInvokedSkillInstructions(messages: Message[]): Promise<string> {
+  if (!featureFlags.skills) return ''
+  const lastUser = [...messages].reverse().find((m) => m.role === 'user')
+  const invoked = lastUser?.invokedSkills
+  if (!invoked || invoked.length === 0) return ''
+
+  const blocks: string[] = []
+  for (const { name, args } of invoked) {
+    try {
+      const loaded = await skillsController.loadSkill(name)
+      if (!loaded) continue
+      blocks.push(`<skill name="${name}">\n${loaded.body.trim()}${args ? `\n\nUser input: ${args}` : ''}\n</skill>`)
+    } catch (err) {
+      log.error(`Failed to load invoked skill "${name}"`, err)
+    }
+  }
+  if (blocks.length === 0) return ''
+  return `\n\nThe user explicitly invoked the following skill(s) for this turn. Follow their instructions:\n${blocks.join('\n')}\n`
+}
 
 async function refreshSessionAttachmentStatuses(messages: Message[]): Promise<Message[]> {
   if (platform.type !== 'desktop') {
@@ -109,8 +127,6 @@ export async function orchestrateGeneration(
     return
   }
 
-  trackGenerateEvent(sessionId, settings, globalSettings, session.type, options)
-
   const startTime = Date.now()
   let firstTokenLatency: number | undefined
   const persistInterval = 2000
@@ -150,7 +166,7 @@ export async function orchestrateGeneration(
     ) {
       const ocrResult = getOCRModel(globalSettings, configs, dependencies)
       if (!ocrResult) {
-        throw WorkspAIceAIAPIError.fromCodeName('model_not_support_image_2', 'model_not_support_image_2')
+        throw CodedError.fromCodeName('model_not_support_image_2', 'model_not_support_image_2')
       }
       try {
         await ocrImagesInMessages(promptMsgs, ocrResult.model)
@@ -180,10 +196,12 @@ export async function orchestrateGeneration(
       messages: promptMsgs,
     })
 
+    const fullInstructions = instructions + (await buildInvokedSkillInstructions(messagesForPrompt))
+
     let injectedMessages = injectModelSystemPrompt(
       model.modelId,
       promptMsgs,
-      instructions,
+      fullInstructions,
       model.isSupportSystemMessage() ? 'system' : 'user'
     )
 
@@ -286,7 +304,6 @@ export async function orchestrateGeneration(
     }
 
     await persistStreamingMessage(sessionId, targetMsg, { refreshCounting: true })
-    appleAppStore.tickAfterMessageGenerated()
   } catch (err: unknown) {
     if (controller.signal.aborted) {
       targetMsg = {

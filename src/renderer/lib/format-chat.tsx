@@ -191,7 +191,7 @@ export function formatChatAsMarkdown(sessionName: string, threads: SessionThread
   content += `
 <a href="https://github.com/ivandmpk/workspaice" style="display: flex; align-items: center;">
 <img src='https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png' style='width: 40px; height: 40px; padding-right: 6px'>
-<b style='font-size:30px'>WorkspAIce AI</b>
+<b style='font-size:30px'>WorkspAIce</b>
 </a>
 `
   return content
@@ -362,7 +362,7 @@ export async function formatChatAsHtml(sessionName: string, threads: SessionThre
         <hr />
         <a href="https://github.com/ivandmpk/workspaice" style="display: flex; align-items: center;" class="text-sky-500" target="_blank">
             <img src='https://github.com/ivandmpk/workspaice/raw/dev/src/renderer/static/icon.png' class="w-12 pr-2">
-            <b style='font-size:30px'>WorkspAIce AI</b>
+            <b style='font-size:30px'>WorkspAIce</b>
         </a>
         <p><a a href="https://github.com/ivandmpk/workspaice" target="_blank">https://github.com/ivandmpk/workspaice</a></p>
     </div>

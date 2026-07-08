@@ -17,45 +17,31 @@ import { formatChatAsHtml, formatChatAsMarkdown, formatChatAsTxt } from '@/lib/f
 import { getLogger } from '@/lib/utils'
 import { PREVIEW_LINES } from '@/packages/context-management/attachment-payload'
 import * as localParser from '@/packages/local-parser'
-import * as remote from '@/packages/remote'
 import { estimateTokens } from '@/packages/token'
 import platform from '@/platform'
 import storage from '@/storage'
-import { StorageKey, StorageKeyGenerator } from '@/storage/StoreStorage'
+import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import { getMetaStorage } from '@/stores/chatStore'
-import { migrateSession, sortSessions } from '@/utils/session-utils'
+import { migrateSession } from '@/utils/session-utils'
 import * as defaults from '../../shared/defaults'
 import { SESSION_ATTACHMENT_RAG_LOG_PREFIX } from '../../shared/session-attachment-rag/logging'
 import { createMessage, type Message, SessionSettingsSchema, TOKEN_CACHE_KEYS } from '../../shared/types'
 import type { AttachmentPreparationResult, PreprocessedFile } from '../types/input-box'
 import { lastUsedModelStore } from './lastUsedModelStore'
-import * as settingActions from './settingActions'
 import { getPlatformDefaultDocumentParser, settingsStore } from './settingsStore'
 
 const log = getLogger('session-helpers')
 const SESSION_ATTACHMENT_RAG_INLINE_BYTE_THRESHOLD = 256 * 1024
 export const SESSION_ATTACHMENT_RAG_MAX_PARSED_BYTE_LENGTH = 6 * 1024 * 1024
-export const SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR = 'session_attachment_rag_requires_workspaice_ai'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_KNOWLEDGE_BASE_ERROR = 'session_attachment_rag_requires_knowledge_base'
 export const SESSION_ATTACHMENT_RAG_REQUIRES_TOOL_USE_MODEL_ERROR = 'session_attachment_rag_requires_tool_use_model'
 export const SESSION_ATTACHMENT_RAG_PARSED_CONTENT_TOO_LARGE_ERROR = 'session_attachment_rag_parsed_content_too_large'
 export const SESSION_ATTACHMENT_RAG_LARGE_ATTACHMENT_WARNING = 'session_attachment_rag_large_attachment_warning'
-const SESSION_ATTACHMENT_RAG_AUTH_ERROR_PATTERNS = [
-  'provider workspaice-ai not set',
-  'workspaice-ai not set',
-  'missing token for rerank provider: workspaice-ai',
-]
 const SESSION_ATTACHMENT_RAG_INDEXING_ERROR_PATTERNS = [
   'workspaice_session_rag_vectors.db',
   'connectionfailed("unable to open connection to local database',
   'session attachment rag vector store not initialized',
 ]
-let sessionRagCapabilityCache:
-  | {
-      key: string
-      value: boolean
-    }
-  | undefined
 
 type ContentStats = {
   lineCount: number
@@ -121,14 +107,7 @@ function getEffectiveDocumentParserConfig(): DocumentParserConfig {
 }
 
 export function isSessionAttachmentRagAuthError(errorCode: string | undefined): boolean {
-  if (!errorCode) {
-    return false
-  }
-  if (errorCode === SESSION_ATTACHMENT_RAG_REQUIRES_WORKSPAICE_AI_ERROR) {
-    return true
-  }
-  const normalized = errorCode.toLowerCase()
-  return SESSION_ATTACHMENT_RAG_AUTH_ERROR_PATTERNS.some((pattern) => normalized.includes(pattern))
+  return errorCode === 'session_attachment_rag_requires_hosted_service'
 }
 
 export function isSessionAttachmentRagIndexingError(errorCode: string | undefined): boolean {
@@ -139,37 +118,8 @@ export function isSessionAttachmentRagIndexingError(errorCode: string | undefine
   return SESSION_ATTACHMENT_RAG_INDEXING_ERROR_PATTERNS.some((pattern) => normalized.includes(pattern))
 }
 
-function hasUsableSessionAttachmentRagLicense(): boolean {
-  const settings = settingsStore.getState()
-  if (!settings.licenseKey) {
-    return false
-  }
-  if (settings.licenseActivationMethod === 'login') {
-    return false
-  }
-  return true
-}
-
-async function canUseSessionAttachmentRag(): Promise<boolean> {
-  const licenseKey = settingActions.getLicenseKey() || ''
-  const hasUsableLicense = hasUsableSessionAttachmentRagLicense()
-  const capabilityCacheKey = `${licenseKey}:${hasUsableLicense ? 'active' : 'inactive'}`
-  if (sessionRagCapabilityCache?.key === capabilityCacheKey) {
-    log.debug(
-      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability cache hit: embedding=${sessionRagCapabilityCache.value}, hasLicense=${Boolean(licenseKey)}`
-    )
-    return sessionRagCapabilityCache.value
-  }
-
-  if (!hasUsableLicense) {
-    log.debug(
-      `${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Capability skipped: missing active WorkspAIce license, hasLicense=${Boolean(licenseKey)}, method=${settingsStore.getState().licenseActivationMethod ?? 'none'}, platform=${platform.type}`
-    )
-    sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
-    return false
-  }
-
-  sessionRagCapabilityCache = { key: capabilityCacheKey, value: false }
+function canUseSessionAttachmentRag(): boolean {
+  log.debug(`${SESSION_ATTACHMENT_RAG_LOG_PREFIX} Session retrieval is disabled in the local-only build.`)
   return false
 }
 
@@ -246,7 +196,7 @@ async function parseFileWithMineruService(
  */
 export async function prepareFileAttachment(
   file: File,
-  settings: SessionSettings
+  _settings: SessionSettings
 ): Promise<AttachmentPreparationResult> {
   try {
     const uniqKey = StorageKeyGenerator.fileUniqKey(file)
@@ -278,9 +228,7 @@ export async function prepareFileAttachment(
         platform.type === 'desktop' &&
         isSessionAttachmentRagFileType &&
         stats.byteLength > SESSION_ATTACHMENT_RAG_INLINE_BYTE_THRESHOLD
-      const sessionAttachmentRagAllowed = exceedsSessionAttachmentRagThreshold
-        ? await canUseSessionAttachmentRag()
-        : false
+      const sessionAttachmentRagAllowed = exceedsSessionAttachmentRagThreshold ? canUseSessionAttachmentRag() : false
       const shouldUseSessionAttachmentRag =
         exceedsSessionAttachmentRagThreshold && sessionAttachmentRagAllowed && !sessionAttachmentWarningReason
       const { lineCount, byteLength, tokenCountMap } = computePreviewMetadata(existingContent, existingTokenMap, {
@@ -363,9 +311,7 @@ export async function prepareFileAttachment(
       platform.type === 'desktop' &&
       isSessionAttachmentRagFileType &&
       stats.byteLength > SESSION_ATTACHMENT_RAG_INLINE_BYTE_THRESHOLD
-    const sessionAttachmentRagAllowed = exceedsSessionAttachmentRagThreshold
-      ? await canUseSessionAttachmentRag()
-      : false
+    const sessionAttachmentRagAllowed = exceedsSessionAttachmentRagThreshold ? canUseSessionAttachmentRag() : false
     const shouldUseSessionAttachmentRag =
       exceedsSessionAttachmentRagThreshold && sessionAttachmentRagAllowed && !sessionAttachmentWarningReason
     const { lineCount, byteLength, tokenCountMap } = computePreviewMetadata(result.content, result.tokenCountMap, {
@@ -410,7 +356,7 @@ export async function prepareFileAttachment(
  */
 export async function preprocessLink(
   url: string,
-  settings: SessionSettings
+  _settings: SessionSettings
 ): Promise<{
   url: string
   title: string
@@ -422,7 +368,6 @@ export async function preprocessLink(
   error?: string
 }> {
   try {
-    const isPro = settingActions.isPro()
     const uniqKey = StorageKeyGenerator.linkUniqKey(url)
 
     // 检查是否已经处理过这个链接
@@ -453,65 +398,29 @@ export async function preprocessLink(
       }
     }
 
-    if (isPro) {
-      // WorkspAIceAI 方案：使用远程解析
-      const licenseKey = settingActions.getLicenseKey()
-      const parsed = await remote.parseUserLinkPro({ licenseKey: licenseKey || '', url })
+    const { key, title } = await localParser.parseUrl(url)
+    const content = (await storage.getBlob(key).catch(() => '')) || ''
 
-      // 获取解析后的内容
-      const content = (await storage.getBlob(parsed.storageKey).catch(() => '')) || ''
+    if (content) {
+      await storage.setBlob(uniqKey, content)
+    }
 
-      // 将内容存储到唯一键下
-      if (content) {
-        await storage.setBlob(uniqKey, content)
-      }
+    const { lineCount, byteLength, tokenCountMap } = content
+      ? computePreviewMetadata(content)
+      : { lineCount: undefined, byteLength: undefined, tokenCountMap: {} }
 
-      // Calculate token counts including preview metadata
-      const { lineCount, byteLength, tokenCountMap } = content
-        ? computePreviewMetadata(content)
-        : { lineCount: undefined, byteLength: undefined, tokenCountMap: {} }
+    if (content) {
+      await storage.setItem(`${uniqKey}_tokenMap`, tokenCountMap)
+    }
 
-      // Store token map for future use
-      if (content) {
-        await storage.setItem(`${uniqKey}_tokenMap`, tokenCountMap)
-      }
-
-      return {
-        url,
-        title: parsed.title,
-        content,
-        storageKey: uniqKey,
-        tokenCountMap,
-        lineCount,
-        byteLength,
-      }
-    } else {
-      // 本地方案：解析链接内容
-      const { key, title } = await localParser.parseUrl(url)
-      const content = (await storage.getBlob(key).catch(() => '')) || ''
-
-      // 将内容存储到唯一键下
-      if (content) {
-        await storage.setBlob(uniqKey, content)
-      }
-
-      const { lineCount, byteLength, tokenCountMap } = content
-        ? computePreviewMetadata(content)
-        : { lineCount: undefined, byteLength: undefined, tokenCountMap: {} }
-
-      if (content) {
-        await storage.setItem(`${uniqKey}_tokenMap`, tokenCountMap)
-      }
-
-      return {
-        url,
-        title,
-        content,
-        storageKey: uniqKey,
-        tokenCountMap,
-        lineCount,
-        byteLength,
-      }
+    return {
+      url,
+      title,
+      content,
+      storageKey: uniqKey,
+      tokenCountMap,
+      lineCount,
+      byteLength,
     }
   } catch (error) {
     return {
@@ -545,12 +454,17 @@ export function constructUserMessage(
     tokenCountMap?: Record<string, number>
     lineCount?: number
     byteLength?: number
-  }> = []
+  }> = [],
+  invokedSkills: Array<{ name: string; args?: string }> = []
 ): Message {
   // 只使用原始文本，不添加文件和链接内容
   const msg = createMessage('user', text)
   if (messageId) {
     msg.id = messageId
+  }
+
+  if (invokedSkills.length > 0) {
+    msg.invokedSkills = invokedSkills
   }
 
   // 添加图片
@@ -718,6 +632,66 @@ function _searchSessions(regexp: RegExp, s: Session) {
 
 const SEARCH_PAGE_SIZE = 30
 const SEARCH_RESULT_LIMIT = 50
+const SEARCH_INDEX_HIT_LIMIT = 300
+
+/**
+ * Serve a global search from the main-process FTS index. Hits are re-verified
+ * against the live session blob with the same regexp as the scan path, so
+ * match semantics (and stale index rows) behave identically. Returns false if
+ * the index isn't ready yet.
+ */
+async function searchSessionsViaIndex(
+  searchInput: string,
+  regexp: RegExp,
+  emitBatch: (batch: Session[]) => void
+): Promise<boolean> {
+  const { isChatSearchReady } = await import('./chatSearchIndexing')
+  if (!(await isChatSearchReady())) {
+    return false
+  }
+
+  const hits = await platform.chatSearchQuery(searchInput, SEARCH_INDEX_HIT_LIMIT)
+
+  // Group hit message ids by session, preserving the index's rank order.
+  const hitsBySession = new Map<string, Set<string>>()
+  for (const hit of hits) {
+    let ids = hitsBySession.get(hit.sessionId)
+    if (!ids) {
+      ids = new Set()
+      hitsBySession.set(hit.sessionId, ids)
+    }
+    ids.add(hit.messageId)
+  }
+
+  let matchedMessageTotal = 0
+  for (const [hitSessionId, messageIds] of hitsBySession) {
+    const stored = await storage.getItem<Session | null>(StorageKeyGenerator.session(hitSessionId), null)
+    if (!stored) continue
+    const session = migrateSession(stored)
+
+    const matchedMessages: Message[] = []
+    const collect = (messages: Message[]) => {
+      for (let i = messages.length - 1; i >= 0; i--) {
+        const message = messages[i]
+        if (messageIds.has(message.id) && regexp.test(getMessageText(message))) {
+          matchedMessages.push(message)
+        }
+      }
+    }
+    collect(session.messages)
+    for (const thread of session.threads || []) {
+      collect(thread.messages)
+    }
+
+    if (matchedMessages.length === 0) continue
+    matchedMessageTotal += matchedMessages.length
+    emitBatch([{ ...session, messages: matchedMessages.map((m) => migrateMessage(m)) }])
+    if (matchedMessageTotal >= SEARCH_RESULT_LIMIT) {
+      break
+    }
+  }
+  return true
+}
 
 export async function searchSessions(searchInput: string, sessionId?: string, onResult?: (result: Session[]) => void) {
   const safeInput = searchInput.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -739,6 +713,19 @@ export async function searchSessions(searchInput: string, sessionId?: string, on
       emitBatch([{ ...session, messages: matchedMessages }])
     }
     return
+  }
+
+  // FTS5 index path (FABLE F4): the trigram tokenizer needs >= 3 chars; shorter
+  // queries and not-yet-backfilled indexes fall through to the brute-force scan.
+  if (searchInput.trim().length >= 3) {
+    try {
+      const served = await searchSessionsViaIndex(searchInput, regexp, emitBatch)
+      if (served) {
+        return
+      }
+    } catch (error) {
+      log.error('chat-search index query failed, falling back to scan:', error)
+    }
   }
 
   const metaStorage = await getMetaStorage()

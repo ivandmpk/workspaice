@@ -12,7 +12,7 @@
 import canvasConfetti from 'canvas-confetti'
 
 /** Track active intervals for cleanup */
-let activeIntervals: Set<ReturnType<typeof setInterval>> = new Set()
+const activeIntervals: Set<ReturnType<typeof setInterval>> = new Set()
 
 /** Preset effect types */
 export type ConfettiPreset = 'default' | 'burst' | 'fireworks'

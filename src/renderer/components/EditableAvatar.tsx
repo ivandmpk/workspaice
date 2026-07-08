@@ -1,9 +1,9 @@
+import DeleteIcon from '@mui/icons-material/Delete'
 import { Badge, Box, IconButton, useTheme } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
-import React, { useRef } from 'react'
-import type { SxProps } from '@mui/system'
 import type { Theme } from '@mui/material/styles'
-import DeleteIcon from '@mui/icons-material/Delete'
+import type { SxProps } from '@mui/system'
+import React, { useRef } from 'react'
 import { useIsSmallScreen } from '@/hooks/useScreenChange'
 
 interface Props {

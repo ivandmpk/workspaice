@@ -2,6 +2,61 @@
 
 All notable WorkspAIce changes are tracked here.
 
+## [1.0.3] - 2026-07-08
+
+First non-beta release. The `-beta` designation has been dropped and the in-app BETA badge removed; macOS packages (arm64 + Intel) built for this version.
+
+## [1.0.2-beta] - 2026-07-08
+
+Final beta release, closing out the `1.0.x-beta` line.
+
+### Security And Stability
+
+- Removed the vulnerable `node-fetch@2` HTTP library from the packaged app entirely. It was shipped and loaded at startup by an unused rerank API client (`zeroentropy`, pulled in by the document-chunking library); that client is now stripped at packaging time, and the one remaining — never loaded — dependency path is forced onto the fixed v3 release. Document chunking (knowledge base and chat attachments) is unaffected.
+- The packaged app now enforces a real Content-Security-Policy. The previous CSP was delivered as an HTTP response header, which never applies to the `file://`-loaded production window — so packaged builds effectively ran with no CSP. It is now injected into the built page itself at build time, and the production policy drops `'unsafe-eval'`: injected scripts can no longer use `eval()`/`new Function` at all (`'wasm-unsafe-eval'` is kept for the code-highlighting engine's WebAssembly). Verified end-to-end in the packaged app: eval blocked, code highlighting, math, and diagrams all render normally.
+- Re-enabled Chromium's same-origin policy (`webSecurity`) in the app window — the largest remaining renderer hardening item. AI-provider and other cross-origin requests are now routed through a main-process streaming fetch proxy (with abort and user-proxy support) instead of being fetched directly from the page, so an injected script can no longer exfiltrate data to arbitrary hosts from the renderer. The Content-Security-Policy `connect-src` was tightened from `*` to same-origin accordingly.
+- Blocked programmatic reads of local files from the app window (fetch/XHR to `file://`) — Chromium would otherwise allow them from the packaged app's `file://` context even with the same-origin policy on. Static app assets are unaffected.
+- Upgraded Electron from 35 (end-of-support) to 42 (Chromium 148, Node 24), restoring Chromium security-patch coverage for the app shell.
+- Fixed a config-encryption regression the Electron upgrade would otherwise have introduced: on Electron 42 the OS-keychain check reports unavailable until the app is ready, so the config store is now initialized after readiness. Without this, `config.json` (which holds provider API keys) would silently be written unencrypted — and an existing encrypted config would have been wiped on first launch.
+- External links opened from the app (rendered markdown, `openLink`, in-page navigation) are now restricted to `http:`, `https:`, and `mailto:` URLs; other schemes are blocked and logged.
+- The main window now appears immediately on launch instead of waiting for knowledge-base initialization — a slow or corrupt knowledge-base database can no longer prevent the app from opening.
+- Launching a local (stdio) MCP server now requires a one-time native approval that shows the exact command; approved servers run silently afterwards, and editing a server's command/args/env re-prompts. This blocks a compromised renderer from silently spawning arbitrary processes.
+- Sandbox file edits now pass the search/replace program as a single shell-escaped argument, so strings containing backticks or quotes can no longer break out of the command or trigger shell command substitution.
+- Malformed JSON sent to the internal store, shortcut-config, and proxy handlers now returns a clear error instead of an opaque failure through the IPC bridge.
+- Device-name lookup on macOS no longer briefly blocks the main process (moved from a synchronous to an asynchronous subprocess call).
+- A skill script that ignores the 30-second timeout is now force-terminated (SIGTERM then SIGKILL) and reaped instead of being left running, and its result is finalized only after the process fully exits.
+- Tool failures now surface consistently across all integrations (MCP, web search, knowledge base, file reading, sandbox, skills): the model receives a clear error message it can react to, and the chat UI shows the failed-tool state. Previously, a failed MCP tool call rendered as a successful call with an empty result, several tools reported errors as ordinary-looking text, and stack traces were persisted into chat history.
+
+### Local-First Cleanup
+
+- Removed the "Publish Webpage" button on HTML code blocks and the underlying EdgeOne integration — HTML artifacts are no longer sent to a third-party hosted service.
+- Removed the inherited iOS App Store rating prompt, which was never applicable to this desktop fork.
+- Removed the dead telemetry plumbing (`trackEvent`/`trackGenerateEvent`) — all tracking was already a no-op stub; nothing was ever sent.
+- Dropped four unused dependencies (`react-router-dom`, `swr`, `javascript-obfuscator`, `web-vitals`) and the CRA-era `reportWebVitals` scaffold.
+
+### Accessibility
+
+- Every icon-only button now exposes a proper accessible name for screen readers and assistive tech (previously announced as an unnamed "button"): the sidebar collapse and expand/menu controls on all pages, the small-screen settings and about buttons, the composer's attachment, tools, knowledge-base, web-search, thread, and settings buttons, the token-usage counter, and the send/stop button.
+- The composer's token-usage counter is now a real, keyboard-focusable button instead of a clickable text element.
+
+### Maintenance
+
+- Removed nine dead webpack/CRA-era build scripts from `.erb/scripts` and ratcheted the repo-wide Biome diagnostic baseline down to 0 errors / 824 warnings.
+- Migrated the two `atomFamily` stores from jotai's deprecated built-in (slated for removal in jotai v3) to the `jotai-family` package — the deprecation warning no longer fires at startup. Dropped a set of unused imports along the way (Biome baseline now 0 errors / 819 warnings).
+- Renamed the internal error-code mapper `WorkspAIceAIAPIError` to `CodedError` (and its message component to `CodedErrorMessage`) — it was never a hosted-API error class — and removed the relic `WorkspAIceAIModel` type.
+- Collapsed the five leftover Sentry stub modules into a single shared no-op (`src/shared/sentry-shim.ts`), made the React `ErrorBoundary` a self-contained component, and removed the unused `sentry` adapter from the model-dependency injection.
+- Removed the unused `material-ui-popup-state` dependency (completing the earlier dependency audit; `store` and `react-swipeable-views` are still genuinely used).
+- Replaced all five whole-file lint-suppression directives with per-line suppressions carrying real justifications; the settings screen's default-model pickers lost their non-null assertions outright via a proper nullability fix.
+- Marked every fire-and-forget promise call explicitly with `void` (49 sites across renderer startup, hooks, mobile platform, and main-process backup/worker paths) so unintentionally dropped promises can no longer hide; Biome baseline ratcheted down to 0 errors / 769 warnings.
+- Fixed the broken `delete-sourcemaps` npm script (used by the web and mobile build paths): it pointed at a file that never existed, and the underlying script imported webpack-era config that was removed long ago. It now actually strips production sourcemaps from `release/app/dist`.
+- The packaged desktop app no longer bundles sourcemaps or bundle-analysis reports: hidden production sourcemaps (app and node_modules) and the `stats.html` visualizer output are now excluded at packaging time, shrinking the macOS app archive from 313 MB to 160 MB (−49%). Verified with a full arm64 package build, an archive audit (zero map/stats files, all packages intact), and a packaged-app launch probe.
+
+### Chat Organization
+
+- Added multi-select mode for regular chats across workspaces and the ungrouped Chat section.
+- Added bulk move to any workspace or back to Chat, preserving selected chat order at the top of the destination.
+- Added confirmed bulk deletion with selected-count feedback and retry-safe partial failure handling.
+
 ## [1.0.1-beta] - 2026-06-23
 
 Second WorkspAIce beta release, focused on workspace organization, release readiness, and making the beta state visible in the app shell.
@@ -9,6 +64,13 @@ Second WorkspAIce beta release, focused on workspace organization, release readi
 ### UI And Release Polish
 
 - Added a compact red/orange `BETA` badge beside the WorkspAIce sidebar title so users have a persistent visual reminder that this is a beta build.
+- Removed remaining hosted license, subscription, and WorkspAIce AI service labels from settings, defaults, exports, parser flows, image generation recovery, and locale scan surfaces.
+- Renamed the desktop reminder dismissal setting to remove hosted-era licensing terminology.
+
+### Local Dev And Settings Stability
+
+- Guarded the Knowledge Base settings route on non-desktop renderers so local browser smoke tests show the unsupported state instead of calling the desktop-only controller.
+- Cleaned up floating-promise warnings in the Knowledge Base settings page.
 
 ### Workspaces
 

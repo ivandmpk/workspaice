@@ -7,7 +7,7 @@ export { getRatioOptionsForModel } from '@shared/providers/definitions/image-mod
 // Display-only fallback for old generation records. Do not use this for selectable image models.
 export const HISTORY_IMAGE_MODEL_DISPLAY_NAMES: Record<string, string> = {
   '': 'GPT Image',
-  'workspaiceai-paint': 'WorkspAIce AI Paint',
+  'workspaiceai-paint': 'WorkspAIce Paint',
   'gemini-2.5-flash-image': 'Nano Banana',
   'gemini-3-pro-image-preview': 'Nano Banana Pro',
   'gemini-3-pro-image': 'Nano Banana Pro',

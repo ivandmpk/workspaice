@@ -182,7 +182,11 @@
   --mantine-color-workspaice-accent2-light-hover: var(--workspaice-background-accent2-secondary-hover);
   --mantine-color-workspaice-accent2-light-color: var(--workspaice-tint-accent2);
   --mantine-color-workspaice-accent2-outline: var(--workspaice-border-accent2);
-  --mantine-color-workspaice-accent2-outline-hover: color-mix(in srgb, var(--workspaice-border-accent2), transparent 95%);
+  --mantine-color-workspaice-accent2-outline-hover: color-mix(
+    in srgb,
+    var(--workspaice-border-accent2),
+    transparent 95%
+  );
 
   /* success */
   --mantine-color-workspaice-success-text: var(--workspaice-tint-success);
@@ -192,7 +196,11 @@
   --mantine-color-workspaice-success-light-hover: var(--workspaice-background-success-secondary-hover);
   --mantine-color-workspaice-success-light-color: var(--workspaice-tint-success);
   --mantine-color-workspaice-success-outline: var(--workspaice-border-success);
-  --mantine-color-workspaice-success-outline-hover: color-mix(in srgb, var(--workspaice-border-success), transparent 95%);
+  --mantine-color-workspaice-success-outline-hover: color-mix(
+    in srgb,
+    var(--workspaice-border-success),
+    transparent 95%
+  );
 
   /* error */
   --mantine-color-workspaice-error-text: var(--workspaice-tint-error);
@@ -212,7 +220,11 @@
   --mantine-color-workspaice-warning-light-hover: var(--workspaice-background-warning-secondary-hover);
   --mantine-color-workspaice-warning-light-color: var(--workspaice-tint-warning);
   --mantine-color-workspaice-warning-outline: var(--workspaice-border-warning);
-  --mantine-color-workspaice-warning-outline-hover: color-mix(in srgb, var(--workspaice-border-warning), transparent 95%);
+  --mantine-color-workspaice-warning-outline-hover: color-mix(
+    in srgb,
+    var(--workspaice-border-warning),
+    transparent 95%
+  );
 
   /* warning */
   --mantine-color-workspaice-gray-text: var(--workspaice-tint-gray);
@@ -231,7 +243,11 @@
   --mantine-color-workspaice-primary-light-hover: var(--workspaice-background-secondary-hover);
   --mantine-color-workspaice-primary-light-color: var(--workspaice-tint-primary);
   --mantine-color-workspaice-primary-outline: var(--workspaice-border-primary);
-  --mantine-color-workspaice-primary-outline-hover: color-mix(in srgb, var(--workspaice-border-primary), transparent 95%);
+  --mantine-color-workspaice-primary-outline-hover: color-mix(
+    in srgb,
+    var(--workspaice-border-primary),
+    transparent 95%
+  );
 }
 
 .mantine-Spotlight-actionsGroup {

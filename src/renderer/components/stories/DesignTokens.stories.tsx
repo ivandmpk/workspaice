@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Stack, Text, Title } from '@mantine/core'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import React from 'react'
+import type React from 'react'
 
 const meta: Meta = {
   title: 'Design System/Design Tokens',

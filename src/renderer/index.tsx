@@ -1,4 +1,3 @@
-import { SplashScreen } from '@capacitor/splash-screen'
 import '@mantine/core/styles.css'
 import '@mantine/spotlight/styles.css'
 import { RouterProvider } from '@tanstack/react-router'
@@ -10,36 +9,31 @@ import { ErrorBoundary } from './components/common/ErrorBoundary'
 import i18n from './i18n'
 import { getLogger } from './lib/utils'
 import platform from './platform'
-import reportWebVitals from './reportWebVitals'
 import { router } from './router'
 import './static/globals.css'
 import './static/index.css'
 import { initLogAtom, migrationProcessAtom } from './stores/atoms/utilAtoms'
 import * as migration from './stores/migration'
 import queryClient from './stores/queryClient'
-import { WORKSPAICE_BUILD_PLATFORM, WORKSPAICE_BUILD_TARGET } from './variables'
 
 const log = getLogger('index')
 
-// 按需加载 polyfill
-import './setup/load_polyfill'
+// SEC-3: route cross-origin fetches through the main-process net proxy
+// (desktop only). Must be installed before any provider/network call.
+import './setup/net_proxy_fetch'
 
 // 全局错误处理
 import './setup/global_error_handler'
 
 import { QueryClientProvider } from '@tanstack/react-query'
 import { initSessionAttachmentRagMaintenance } from './setup/session_attachment_rag_maintenance'
+import { ensureChatSearchBackfill } from './stores/chatSearchIndexing'
 import { initLastUsedModelStore } from './stores/lastUsedModelStore'
 import { initRecentDirectoriesStore } from './stores/recentDirectoriesStore'
 import { initSettingsStore } from './stores/settingsStore'
 
 // Token estimation system initialization (runs in all environments)
-import('./setup/token_estimation_init')
-
-// 引入移动端安全区域代码，主要为了解决异形屏幕的问题
-if (WORKSPAICE_BUILD_TARGET === 'mobile_app' && WORKSPAICE_BUILD_PLATFORM === 'ios') {
-  import('./setup/mobile_safe_area')
-}
+void import('./setup/token_estimation_init')
 
 // ==========执行初始化==============
 async function initializeApp() {
@@ -53,11 +47,8 @@ async function initializeApp() {
     log.error('migrate error', e)
   }
 
-  // 最后执行 storage 清理，清理不 block 进入UI
-  import('./setup/storage_clear')
-
   // 启动mcp服务器
-  import('./setup/mcp_bootstrap')
+  void import('./setup/mcp_bootstrap')
 }
 
 // ==========渲染节点==============
@@ -105,9 +96,6 @@ const tid = setTimeout(() => {
       </ErrorBoundary>
     </StrictMode>
   )
-  if (platform.type === 'mobile') {
-    SplashScreen.hide()
-  }
 }, 1000)
 
 // 等待初始化完成后再渲染
@@ -120,17 +108,12 @@ initializeApp()
     clearTimeout(tid)
 
     // 等待settings和onboarding初始化完成，避免闪屏
-    const [settings] = await Promise.all([
-      initSettingsStore(),
-      initLastUsedModelStore(),
-      initRecentDirectoriesStore(),
-    ])
+    const [settings] = await Promise.all([initSettingsStore(), initLastUsedModelStore(), initRecentDirectoriesStore()])
 
-    i18n.changeLanguage(settings.language)
-    if (platform.type === 'desktop') {
-      initSessionAttachmentRagMaintenance()
-      window.location.hash = '/'
-    }
+    void i18n.changeLanguage(settings.language)
+    initSessionAttachmentRagMaintenance()
+    ensureChatSearchBackfill()
+    window.location.hash = '/'
 
     // 初始化完成，可以开始渲染
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -143,9 +126,6 @@ initializeApp()
       </StrictMode>
     )
 
-    if (platform.type === 'mobile') {
-      SplashScreen.hide()
-    }
     const el = document.querySelector('.splash-screen')
     if (el) {
       el.addEventListener('animationend', () => {
@@ -162,8 +142,3 @@ initializeApp()
       })
     }
   })
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()

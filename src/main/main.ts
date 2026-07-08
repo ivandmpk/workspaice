@@ -14,7 +14,7 @@ import './legacy-database-migration'
  */
 
 import fs from 'node:fs'
-import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, nativeTheme, session, shell, Tray } from 'electron'
+import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, nativeTheme, session, Tray } from 'electron'
 import electronDebug from 'electron-debug'
 import log from 'electron-log/main'
 import os from 'os'
@@ -28,7 +28,9 @@ import { parseFile } from './file-parser'
 import Locale from './locales'
 import * as mcpIpc from './mcp/ipc-stdio-transport'
 import MenuBuilder from './menu'
+import { registerNetProxyHandlers } from './net-proxy'
 import { registerOAuthHandlers } from './oauth'
+import { openExternalSafe } from './open-external'
 import * as proxy from './proxy'
 import { registerSandboxHandlers } from './sandbox'
 import { registerSkillsHandlers } from './skills'
@@ -37,6 +39,7 @@ import {
   getConfig,
   getSettings,
   getStoreBlob,
+  initStore,
   listStoreBlobKeys,
   setStoreBlob,
   store,
@@ -320,6 +323,8 @@ async function createWindow() {
   }
 
   const [state] = windowState.getState()
+  const devPreloadPath = path.join(__dirname, '../../out/preload/index.js')
+  const builtPreloadPath = path.join(__dirname, '../preload/index.js')
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -337,18 +342,17 @@ async function createWindow() {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       spellcheck: true,
-      // SECURITY: webSecurity is intentionally disabled because the renderer
-      // makes provider API requests (OpenAI, Anthropic, Ollama, user-configured
-      // custom hosts, etc.) via `fetch()` directly from the page. Those third
-      // party APIs do not return CORS headers, so enabling the same-origin
-      // policy would break every AI provider call. The residual XSS risk is
-      // mitigated by: contextIsolation, the preload IPC channel allowlist
-      // (src/shared/ipc-channels.ts), denying in-page navigation
-      // (setWindowOpenHandler below), and the Content-Security-Policy applied in
-      // onHeadersReceived. Properly re-enabling this requires routing all
-      // provider requests through the main process (no CORS) — tracked as a
-      // dedicated follow-up.
-      webSecurity: false,
+      // SECURITY: webSecurity stays enabled. Cross-origin provider API
+      // requests (OpenAI, Anthropic, Ollama, user-configured custom hosts,
+      // etc.) don't send CORS headers, so the renderer cannot call them
+      // directly — its global fetch forwards them to the main-process proxy
+      // instead (src/main/net-proxy.ts + src/renderer/setup/net_proxy_fetch.ts).
+      // Defense in depth on top of this: contextIsolation, the preload IPC
+      // channel allowlist (src/shared/ipc-channels.ts), denying in-page
+      // navigation (setWindowOpenHandler below), and the
+      // Content-Security-Policy (build-time <meta> tag in production, see
+      // electron.vite.config.ts; onHeadersReceived header in dev).
+      webSecurity: true,
       allowRunningInsecureContent: false,
       // Pin secure defaults explicitly so a future Electron upgrade cannot
       // silently regress them.
@@ -356,7 +360,9 @@ async function createWindow() {
       contextIsolation: true,
       preload: app.isPackaged
         ? path.join(__dirname, '../preload/index.js')
-        : path.join(__dirname, '../../out/preload/index.js'),
+        : fs.existsSync(builtPreloadPath)
+          ? builtPreloadPath
+          : devPreloadPath,
     },
   })
 
@@ -414,7 +420,7 @@ async function createWindow() {
 
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url)
+    void openExternalSafe(edata.url)
     return { action: 'deny' }
   })
 
@@ -422,28 +428,49 @@ async function createWindow() {
   // https://www.computerhope.com/jargon/m/menubar.htm
   mainWindow.setMenuBarVisibility(false)
 
-  // Content-Security-Policy.
-  // The app calls user-configured AI provider hosts (and loads remote avatars /
-  // images) directly from the renderer, so connect-src and img-src must stay
-  // broad. The valuable restriction here is on script/object/base/frame: an
-  // injected remote <script src> or <object> is blocked, shrinking the
-  // XSS-to-exfiltration surface that webSecurity:false would otherwise leave
-  // wide open. 'unsafe-inline'/'unsafe-eval' are required by the bundler,
-  // Vite HMR (dev), and some UI libraries.
+  // Content-Security-Policy — header delivery, which only reaches documents
+  // served over HTTP (the Vite dev server). The packaged app loads the
+  // renderer via loadFile() (file://), where injected response headers never
+  // apply; its CSP is a <meta> tag injected at build time instead — see
+  // injectDesktopProdCsp() in electron.vite.config.ts and KEEP THE TWO IN
+  // SYNC. Cross-origin provider/API traffic goes through the main-process
+  // net proxy (src/main/net-proxy.ts), so connect-src no longer needs
+  // arbitrary hosts — only same-origin, data:/blob:, and the dev HMR
+  // websocket. img-src/media-src stay broad because rendered markdown can
+  // reference remote images/avatars (plain element loads, not CORS-gated).
+  // The script/object/base/frame restrictions block injected remote
+  // <script src> or <object>. 'unsafe-eval' is dev-only (Vite HMR /
+  // react-refresh); production uses 'wasm-unsafe-eval' instead, which
+  // shiki's oniguruma WebAssembly engine (code highlighting) needs, while
+  // eval()/new Function stay blocked (FABLE_REVIEW SEC-8).
+  const devConnectSrc = app.isPackaged ? [] : ['ws://localhost:1212', 'http://localhost:1212']
+  const scriptSrc = app.isPackaged
+    ? "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'"
+    : "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
   const cspDirectives = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    scriptSrc,
     "style-src 'self' 'unsafe-inline'",
     'img-src * data: blob:',
     "font-src 'self' data:",
     'media-src * data: blob:',
-    // Allow arbitrary provider hosts, localhost, and dev HMR websockets.
-    'connect-src * data: blob:',
+    ["connect-src 'self' data: blob:", ...devConnectSrc].join(' '),
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
     "frame-ancestors 'none'",
   ].join('; ')
+  // Chromium treats file:// documents as same-origin with all file: URLs, so
+  // even with webSecurity enabled a compromised renderer could read arbitrary
+  // local files via fetch()/XHR in the packaged (loadFile) build. Block
+  // programmatic file: subresource requests; static asset loads (scripts,
+  // styles, images, fonts) are typed differently and keep working.
+  session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+    const isProgrammaticFileRead =
+      details.url.startsWith('file:') && (details.resourceType === 'xhr' || details.resourceType === 'other')
+    callback({ cancel: isProgrammaticFileRead })
+  })
+
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -541,9 +568,10 @@ if (!gotTheLock) {
   app
     .whenReady()
     .then(async () => {
-      await knowledgeBaseInitPromise
+      // Must run before any store access: safeStorage (config encryption key)
+      // is only available once the app is ready on Electron >=42.
+      initStore()
       await createWindow()
-      await initializeSessionAttachmentRagAfterAppReady()
       ensureTray()
 
       // 处理启动时的 Deep Link (Windows/Linux)
@@ -567,7 +595,7 @@ if (!gotTheLock) {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (mainWindow === null) {
-          createWindow()
+          void createWindow()
         }
         if (mainWindow && !mainWindow.isVisible()) {
           mainWindow.show()
@@ -597,12 +625,23 @@ if (!gotTheLock) {
       app.on('before-quit', () => {
         destroyTray()
       })
+
+      // Deliberately last (STAB-1): a hung/slow knowledge-base init (corrupt
+      // DB, locked file) must not prevent the window, tray, shortcuts, or
+      // deep links from coming up. The renderer accesses the KB lazily via
+      // IPC, and session-attachment RAG still waits for the KB to be ready.
+      void import('./chat-search/index.js')
+        .then((mod) => mod.getInitPromise())
+        .catch((error) => log.error('[ChatSearch] Failed to initialize during bootstrap:', error))
+      await knowledgeBaseInitPromise
+      await initializeSessionAttachmentRagAfterAppReady()
     })
     .catch((err: unknown) => log.error('App initialization failed:', err))
 }
 
 // macos uses this event to handle deep links
 app.on('open-url', async (_event, url) => {
+  await app.whenReady() // createWindow (and the config store) require ready
   if (!mainWindow) {
     // 窗口未创建，立即创建
     await createWindow()
@@ -630,12 +669,24 @@ app.on('open-url', async (_event, url) => {
 
 // --------- IPC 监听 ---------
 
+// Renderer-supplied JSON crosses the IPC boundary as a string. Parse it through
+// this guard so malformed input surfaces as a clear, typed error instead of an
+// opaque `SyntaxError: Unexpected token` propagating back through `invoke`.
+function parseJsonArg<T>(json: string, channel: string): T {
+  try {
+    return JSON.parse(json) as T
+  } catch (e: unknown) {
+    const detail = e instanceof Error ? e.message : String(e)
+    throw new Error(`Invalid JSON payload for IPC channel "${channel}": ${detail}`)
+  }
+}
+
 ipcMain.handle('getStoreValue', (event, key) => {
   return store.get(key)
 })
 ipcMain.handle('setStoreValue', (event, key, dataJson) => {
   // 仅在传输层用 JSON 序列化，存储层用原生数据，避免存储层 JSON 损坏后无法自动处理的情况
-  const data = JSON.parse(dataJson)
+  const data = parseJsonArg(dataJson, 'setStoreValue')
   return store.set(key, data)
 })
 ipcMain.handle('delStoreValue', (event, key) => {
@@ -648,7 +699,7 @@ ipcMain.handle('getAllStoreKeys', (event) => {
   return Object.keys(store.store)
 })
 ipcMain.handle('setAllStoreValues', (event, dataJson) => {
-  const data = JSON.parse(dataJson)
+  const data = parseJsonArg<Record<string, unknown>>(dataJson, 'setAllStoreValues')
   store.store = { ...store.store, ...data }
 })
 
@@ -677,13 +728,16 @@ ipcMain.handle('getArch', () => {
 ipcMain.handle('getHostname', () => {
   return os.hostname()
 })
-ipcMain.handle('getDeviceName', () => {
+ipcMain.handle('getDeviceName', async () => {
   if (process.platform === 'darwin') {
     try {
-      const { execSync } = require('child_process')
-      const computerName = execSync('scutil --get ComputerName', { encoding: 'utf8' }).trim()
-      return computerName || os.hostname()
-    } catch (error) {
+      // execFile (async, argv form — no shell) so the main process event loop
+      // isn't blocked while `scutil` runs.
+      const { execFile } = require('node:child_process')
+      const { promisify } = require('node:util')
+      const { stdout } = await promisify(execFile)('scutil', ['--get', 'ComputerName'], { timeout: 5_000 })
+      return stdout.trim() || os.hostname()
+    } catch {
       return os.hostname()
     }
   } else if (process.platform === 'win32') {
@@ -699,11 +753,11 @@ ipcMain.handle('getLocale', () => {
     return ''
   }
 })
-ipcMain.handle('openLink', (event, link) => {
-  return shell.openExternal(link)
+ipcMain.handle('openLink', (_event, link) => {
+  return openExternalSafe(link)
 })
 ipcMain.handle('ensureShortcutConfig', (event, json) => {
-  const config: ShortcutSetting = JSON.parse(json)
+  const config = parseJsonArg<ShortcutSetting>(json, 'ensureShortcutConfig')
   unregisterShortcuts()
   registerShortcuts(config)
 })
@@ -711,7 +765,7 @@ ipcMain.handle('ensureShortcutConfig', (event, json) => {
 ipcMain.handle('shouldUseDarkColors', () => nativeTheme.shouldUseDarkColors)
 
 ipcMain.handle('ensureProxy', (event, json) => {
-  const config: { proxy?: string } = JSON.parse(json)
+  const config = parseJsonArg<{ proxy?: string }>(json, 'ensureProxy')
   proxy.ensure(config.proxy)
 })
 
@@ -869,3 +923,4 @@ ipcMain.handle('window:is-maximized', () => {
 registerSandboxHandlers()
 registerSkillsHandlers()
 registerOAuthHandlers()
+registerNetProxyHandlers()

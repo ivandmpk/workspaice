@@ -1,4 +1,4 @@
-import { Button, Flex, Select, Stack, Text, TextInput } from '@mantine/core'
+import { Button, Stack, Text, TextInput } from '@mantine/core'
 import { ModelProviderType } from '@shared/types'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -48,6 +48,7 @@ export function AddProviderModal({ opened, onClose }: AddProviderModalProps) {
       <Stack gap="xs">
         <Text>{t('Name')}</Text>
         <TextInput
+          data-testid="custom-provider-name-input"
           value={newProviderName}
           onChange={(e) => setNewProviderName(e.currentTarget.value)}
           required
@@ -79,7 +80,11 @@ export function AddProviderModal({ opened, onClose }: AddProviderModalProps) {
         />
         <AdaptiveModal.Actions>
           <AdaptiveModal.CloseButton onClick={onClose} />
-          <Button onClick={handleAddProvider} disabled={!newProviderName.trim()}>
+          <Button
+            data-testid="custom-provider-add-button"
+            onClick={handleAddProvider}
+            disabled={!newProviderName.trim()}
+          >
             {t('Add')}
           </Button>
         </AdaptiveModal.Actions>

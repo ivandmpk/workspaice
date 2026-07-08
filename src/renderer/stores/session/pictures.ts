@@ -1,13 +1,12 @@
 import type { Message, MessageImagePart, MessagePicture, SessionSettings } from '@shared/types'
 import { createModel } from '@/adapters'
-import * as appleAppStore from '@/packages/apple_app_store'
 import { generateImage } from '@/packages/model-calls'
 import storage from '@/storage'
 import { StorageKeyGenerator } from '@/storage/StoreStorage'
 import type * as chatStore from '../chatStore'
 import { settingsStore } from '../settingsStore'
 import { modifyMessage } from './messages'
-import { handleGenerationError, initializeTargetMessage, trackGenerateEvent } from './utils'
+import { handleGenerationError, initializeTargetMessage } from './utils'
 
 /**
  * Create n empty picture messages (loading state, for placeholders)
@@ -33,9 +32,6 @@ export async function orchestratePictureGeneration(
   options?: { operationType?: 'send_message' | 'regenerate' }
 ) {
   const globalSettings = settingsStore.getState().getSettings()
-
-  // Track generation event
-  trackGenerateEvent(sessionId, settings, globalSettings, session.type, options)
 
   // Reset message state to initial state
   targetMsg = {
@@ -107,7 +103,6 @@ export async function orchestratePictureGeneration(
     } else {
       throw new Error(`Unknown session type: ${session.type}, generate failed`)
     }
-    appleAppStore.tickAfterMessageGenerated()
   } catch (err: unknown) {
     targetMsg = handleGenerationError(err, targetMsg, settings)
     await modifyMessage(sessionId, targetMsg, true)

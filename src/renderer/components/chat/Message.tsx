@@ -1,6 +1,15 @@
 import NiceModal from '@ebay/nice-modal-react'
-import { ActionIcon, type ActionIconProps, Flex, Image as Img, Loader, Text, Tooltip as Tooltip1 } from '@mantine/core'
-import { Box, Grid, useTheme } from '@mui/material'
+import {
+  ActionIcon,
+  type ActionIconProps,
+  Badge,
+  Box,
+  Flex,
+  Image as Img,
+  Loader,
+  Text,
+  Tooltip as Tooltip1,
+} from '@mantine/core'
 import type { Message, MessagePicture, MessageToolCallPart, SessionType } from '@shared/types'
 import { getMessageText } from '@shared/utils/message'
 import {
@@ -10,18 +19,17 @@ import {
   IconCopy,
   IconDotsVertical,
   IconInfoCircle,
-  IconMessageReport,
   IconPencil,
   IconPhotoPlus,
   type IconProps,
   IconQuoteFilled,
   IconReload,
   IconTrash,
+  IconWand,
 } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import * as dateFns from 'date-fns'
-import { concat } from 'lodash'
 import type { UIElementData } from 'photoswipe'
 import type React from 'react'
 import { type FC, forwardRef, type MouseEventHandler, memo, useCallback, useMemo, useRef, useState } from 'react'
@@ -78,7 +86,6 @@ const _Message: FC<Props> = (props) => {
   } = props
 
   const { t } = useTranslation()
-  const theme = useTheme()
   const isSmallScreen = useIsSmallScreen()
   const {
     userAvatarKey,
@@ -152,10 +159,6 @@ const _Message: FC<Props> = (props) => {
         toastActions.add(t('copied to clipboard'))
       }
     }
-
-  const onReport = useCallback(async () => {
-    await NiceModal.show('report-content', { contentId: getMessageText(msg) || msg.id })
-  }, [msg])
 
   const onDelMsg = useCallback(() => {
     removeMessage(sessionId, msg.id)
@@ -238,10 +241,7 @@ const _Message: FC<Props> = (props) => {
     [sessionId]
   )
   const onCodeCopy = useCallback(() => {
-    trackWithSessionName(JK_EVENTS.COPY_CODE_CLICK)
-  }, [trackWithSessionName])
-  const onPreviewWebpage = useCallback(() => {
-    trackWithSessionName(JK_EVENTS.PREVIEW_WEBPAGE_CLICK)
+    void trackWithSessionName(JK_EVENTS.COPY_CODE_CLICK)
   }, [trackWithSessionName])
 
   const contentParts = msg.contentParts || []
@@ -321,15 +321,6 @@ const _Message: FC<Props> = (props) => {
         onClick: quoteMsg,
       },
       { divider: true },
-      ...(msg.role === 'assistant' && platform.type === 'mobile'
-        ? [
-            {
-              text: t('report'),
-              icon: IconMessageReport,
-              onClick: onReport,
-            },
-          ]
-        : []),
       // 开发环境添加测试错误按钮
       ...(process.env.NODE_ENV === 'development'
         ? [
@@ -355,7 +346,6 @@ const _Message: FC<Props> = (props) => {
     [
       t,
       msg.role,
-      onReport,
       quoteMsg,
       onDelMsg,
       onViewMessageJson,
@@ -399,8 +389,24 @@ const _Message: FC<Props> = (props) => {
         {isBubbleLayout && statusElements}
         <Box
           className={cn('msg-content', { 'msg-content-small': small })}
-          sx={small ? { fontSize: theme.typography.body2.fontSize } : {}}
+          // MUI body2 font size (theme kept MUI's default 14px scale)
+          style={small ? { fontSize: '0.875rem' } : undefined}
         >
+          {msg.invokedSkills && msg.invokedSkills.length > 0 && (
+            <Flex gap="xxs" wrap="wrap" mb="xs">
+              {msg.invokedSkills.map((s) => (
+                <Badge
+                  key={s.name}
+                  size="sm"
+                  variant={isUserBubble ? 'white' : 'light'}
+                  color="workspaice-brand"
+                  leftSection={<IconWand size={12} />}
+                >
+                  {s.name}
+                </Badge>
+              ))}
+            </Flex>
+          )}
           {msg.reasoningContent && <ReasoningContentUI message={msg} onCopyReasoningContent={onCopyReasoningContent} />}
           {getMessageText(msg, true, true).trim() === '' && <p></p>}
           {groupedContentParts.length > 0 && (
@@ -421,7 +427,6 @@ const _Message: FC<Props> = (props) => {
                         enableMermaidRendering={enableMermaidRendering}
                         generating={msg.generating}
                         onCodeCopy={onCodeCopy}
-                        onPreviewWebpage={onPreviewWebpage}
                       >
                         {item.text || ''}
                       </Markdown>
@@ -500,10 +505,7 @@ const _Message: FC<Props> = (props) => {
           )}
         </Box>
         {props.sessionType === 'picture' && contentParts.filter((p) => p.type === 'image').length > 0 && (
-          <PictureGallery
-            pictures={contentParts.filter((p) => p.type === 'image')}
-            onReport={platform.type === 'mobile' ? onReport : undefined}
-          />
+          <PictureGallery pictures={contentParts.filter((p) => p.type === 'image')} />
         )}
         <MessageErrTips
           msg={msg}
@@ -626,12 +628,11 @@ const _Message: FC<Props> = (props) => {
           className,
           'w-full'
         )}
-        sx={{
+        // isSmallScreen is the same MUI down('sm') query the old sx used
+        style={{
           paddingBottom: '0.1rem',
-          paddingX: '1rem',
-          [theme.breakpoints.down('sm')]: {
-            paddingX: '0.3rem',
-          },
+          paddingLeft: isSmallScreen ? '0.3rem' : '1rem',
+          paddingRight: isSmallScreen ? '0.3rem' : '1rem',
         }}
       >
         <Flex justify="flex-end" gap="xs" className="w-full">
@@ -665,17 +666,17 @@ const _Message: FC<Props> = (props) => {
         className,
         'w-full'
       )}
-      sx={{
+      // isSmallScreen is the same MUI down('sm') query the old sx used
+      style={{
         paddingBottom: '0.1rem',
-        paddingX: '1rem',
-        [theme.breakpoints.down('sm')]: {
-          paddingX: '0.3rem',
-        },
+        paddingLeft: isSmallScreen ? '0.3rem' : '1rem',
+        paddingRight: isSmallScreen ? '0.3rem' : '1rem',
       }}
     >
-      <Grid container wrap="nowrap" spacing={1.5}>
+      {/* Former MUI Grid (nowrap, spacing 1.5 → 12px gutter); text column keeps flex:1/min-w-0 */}
+      <Flex wrap="nowrap" gap={12}>
         {(showAvatar ?? true) && (
-          <Grid item>
+          <Box className="shrink-0">
             <Box className={cn('relative', msg.role !== 'assistant' ? 'mt-1' : 'mt-2')}>
               {
                 {
@@ -690,7 +691,7 @@ const _Message: FC<Props> = (props) => {
                   user: !isBubbleLayout ? (
                     <UserAvatar avatarKey={userAvatarKey} onClick={() => navigateToSettings('/chat')} />
                   ) : null,
-                  system: <SystemAvatar sessionType={props.sessionType} onClick={onClickAssistantAvatar} />,
+                  system: <SystemAvatar onClick={onClickAssistantAvatar} />,
                   tool: null,
                 }[msg.role]
               }
@@ -700,19 +701,17 @@ const _Message: FC<Props> = (props) => {
                 </Flex>
               )}
             </Box>
-          </Grid>
+          </Box>
         )}
-        <Grid item xs sm container sx={{ width: '0px', paddingRight: (showAvatar ?? true) ? '15px' : '0px' }}>
-          <Grid item xs>
-            {messageContent}
-            {(msg.files || msg.links) && (
-              <MessageAttachmentGrid files={msg.files} links={msg.links} align={isUserBubble ? 'end' : 'start'} />
-            )}
-            {meta}
-            {actionButtons}
-          </Grid>
-        </Grid>
-      </Grid>
+        <Box className="min-w-0 flex-1" style={{ paddingRight: (showAvatar ?? true) ? '15px' : '0px' }}>
+          {messageContent}
+          {(msg.files || msg.links) && (
+            <MessageAttachmentGrid files={msg.files} links={msg.links} align={isUserBubble ? 'end' : 'start'} />
+          )}
+          {meta}
+          {actionButtons}
+        </Box>
+      </Flex>
     </Box>
   )
 }
@@ -747,69 +746,39 @@ function getBase64ImageSize(base64: string): Promise<{ width: number; height: nu
 type PictureGalleryProps = {
   pictures: MessagePicture[]
   compact?: boolean
-  onReport?(picture: MessagePicture): void
 }
 
-const PictureGallery = memo(({ pictures, compact, onReport }: PictureGalleryProps) => {
+const PictureGallery = memo(({ pictures, compact }: PictureGalleryProps) => {
   const isSmallScreen = useIsSmallScreen()
   const imageHeight = compact ? (isSmallScreen ? 60 : 100) : isSmallScreen ? 100 : 200
   const fetchBlob = useFetchBlob()
-  const uiElements: UIElementData[] = concat(
-    [
-      {
-        name: 'custom-download-button',
-        ariaLabel: 'Download',
-        order: 9,
-        isButton: true,
-        html: {
-          isCustomSVG: true,
-          inner:
-            '<path d="M20.5 14.3 17.1 18V10h-2.2v7.9l-3.4-3.6L10 16l6 6.1 6-6.1ZM23 23H9v2h14Z" id="pswp__icn-download"/>',
-          outlineID: 'pswp__icn-download',
-        },
-        appendTo: 'bar',
-        onClick: async (_e: MouseEvent, _el: HTMLElement, pswp: import('photoswipe').default) => {
-          const picture = pictures[pswp.currIndex]
-          if (picture.storageKey) {
-            const base64 = await fetchBlob(picture.storageKey)
-            if (!base64) {
-              return
-            }
-            // storageKey中含有冒号，会在android端导致存储失败，且android端在同文件名的情况下不会再次保存图片，也无提示，可能对用户造成困扰，所以增加随机后缀
-            const filename =
-              platform.type === 'mobile'
-                ? `${picture.storageKey.replaceAll(':', '_')}_${Math.random().toString(36).substring(7)}`
-                : picture.storageKey
-            platform.exporter.exportImageFile(filename, base64)
-          } else if (picture.url) {
-            platform.exporter.exportByUrl(`image_${Math.random().toString(36).substring(7)}`, picture.url)
-          }
-        },
+  const uiElements: UIElementData[] = [
+    {
+      name: 'custom-download-button',
+      ariaLabel: 'Download',
+      order: 9,
+      isButton: true,
+      html: {
+        isCustomSVG: true,
+        inner:
+          '<path d="M20.5 14.3 17.1 18V10h-2.2v7.9l-3.4-3.6L10 16l6 6.1 6-6.1ZM23 23H9v2h14Z" id="pswp__icn-download"/>',
+        outlineID: 'pswp__icn-download',
       },
-    ],
-    onReport
-      ? [
-          {
-            name: 'report-button',
-            ariaLabel: 'Report',
-            order: 8,
-            isButton: true,
-            html: {
-              isCustomSVG: true,
-              inner:
-                '<path d="M 16 6 A 10 10 0 0 1 16 26 L 16 24 A 8 8 0 0 0 16 8 L 16 6 A 10 10 0 0 0 16 26 L 16 24 A 8 8 0 0 1 16 8 M 15 11 A 1 1 0 0 1 17 11 L 17 16 A 1 1 0 0 1 15 16 M 16 19 A 1.5 1.5 0 0 1 16 22 A 1.5 1.5 0 0 1 16 19 Z" id="pswp__icn-report">',
-              outlineID: 'pswp__icn-report',
-            },
-            appendTo: 'bar',
-            onClick: (_e, _el, pswp) => {
-              const picture = pictures[pswp.currIndex]
-              pswp.close()
-              onReport(picture)
-            },
-          },
-        ]
-      : []
-  )
+      appendTo: 'bar',
+      onClick: async (_e: MouseEvent, _el: HTMLElement, pswp: import('photoswipe').default) => {
+        const picture = pictures[pswp.currIndex]
+        if (picture.storageKey) {
+          const base64 = await fetchBlob(picture.storageKey)
+          if (!base64) {
+            return
+          }
+          platform.exporter.exportImageFile(picture.storageKey, base64)
+        } else if (picture.url) {
+          platform.exporter.exportByUrl(`image_${Math.random().toString(36).substring(7)}`, picture.url)
+        }
+      },
+    },
+  ]
   return (
     <Flex gap="sm" wrap="wrap">
       <Gallery uiElements={uiElements}>

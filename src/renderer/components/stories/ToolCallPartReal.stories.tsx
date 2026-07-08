@@ -1,8 +1,8 @@
+import { Box, Stack, Text } from '@mantine/core'
 import type { MessageReasoningPart, MessageToolCallPart } from '@shared/types'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import React from 'react'
-import { Box, Stack, Text } from '@mantine/core'
-import { ToolCallPartUI, ReasoningContentUI } from '../message-parts/ToolCallPartUI'
+import { ReasoningContentUI, ToolCallPartUI } from '../message-parts/ToolCallPartUI'
 
 // ─── ToolCallPartUI Stories ─────────────────────────────────────────
 

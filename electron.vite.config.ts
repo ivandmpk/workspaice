@@ -5,58 +5,66 @@ import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import type { Plugin } from 'vite'
 import packageJson from './release/app/package.json'
-/**
- * Vite plugin to inject <base href="/"> for web builds
- * This ensures relative paths resolve correctly for SPA routes like /session/xxx
- */
-export function injectBaseTag(): Plugin {
-  return {
-    name: 'inject-base-tag',
-    transformIndexHtml() {
-      return [
-        {
-          tag: 'base',
-          attrs: { href: '/' },
-          injectTo: 'head-prepend', // Inject at the beginning of <head>
-        },
-      ]
-    },
-  }
-}
 
 /**
- * Vite plugin to inject window.workspaice_release_date for web builds
- */
-export function injectReleaseDate(): Plugin {
-  const releaseDate = new Date().toISOString().slice(0, 10)
-  return {
-    name: 'inject-release-date',
-    transformIndexHtml() {
-      return [
-        {
-          tag: 'script',
-          children: `window.workspaice_release_date="${releaseDate}";`,
-          injectTo: 'head-prepend',
-        },
-      ]
-    },
-  }
-}
-
-/**
- * Vite plugin to inject platform-appropriate viewport meta content.
- * Desktop builds omit `height=device-height` and `viewport-fit=cover` which trigger
+ * Vite plugin to inject the viewport meta content.
+ * Omits `height=device-height` and `viewport-fit=cover` which trigger
  * Chromium's Virtual Keyboard API on macOS, causing an empty bottom margin on input focus.
  * See: https://github.com/workspaiceai/workspaice/issues/2023
  */
-export function injectViewportContent(isDesktop: boolean): Plugin {
-  const content = isDesktop
-    ? 'width=device-width, initial-scale=1, user-scalable=no'
-    : 'height=device-height, width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'
+export function injectViewportContent(): Plugin {
+  const content = 'width=device-width, initial-scale=1, user-scalable=no'
   return {
     name: 'inject-viewport-content',
     transformIndexHtml(html) {
       return html.replace('%VIEWPORT_CONTENT%', content)
+    },
+  }
+}
+
+/**
+ * Vite plugin to inject the production Content-Security-Policy as a <meta>
+ * tag at build time (desktop builds only).
+ *
+ * Why a meta tag: the packaged app loads the renderer via loadFile()
+ * (file://), and the onHeadersReceived CSP header in src/main/main.ts never
+ * applies there — file: responses carry no HTTP headers, so without this tag
+ * the packaged renderer runs with NO CSP at all. Dev mode is served over
+ * http://localhost:1212 and gets the (eval-permitting, HMR-compatible) header
+ * CSP instead; this plugin is build-only so the two never overlap.
+ *
+ * Keep these directives in sync with the packaged-variant header CSP in
+ * src/main/main.ts. Differences from the header version:
+ * - no frame-ancestors: not enforceable via <meta> (Chromium ignores it with
+ *   a console warning); the top-level BrowserWindow cannot be framed anyway.
+ * - script-src uses 'wasm-unsafe-eval' (not 'unsafe-eval'): shiki's oniguruma
+ *   WebAssembly engine needs wasm compilation, but eval()/new Function stay
+ *   blocked (FABLE_REVIEW SEC-8).
+ */
+export function injectDesktopProdCsp(): Plugin {
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
+    "style-src 'self' 'unsafe-inline'",
+    'img-src * data: blob:',
+    "font-src 'self' data:",
+    'media-src * data: blob:',
+    "connect-src 'self' data: blob:",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+  ].join('; ')
+  return {
+    name: 'inject-desktop-prod-csp',
+    apply: 'build',
+    transformIndexHtml() {
+      return [
+        {
+          tag: 'meta',
+          attrs: { 'http-equiv': 'Content-Security-Policy', content: csp },
+          injectTo: 'head-prepend',
+        },
+      ]
     },
   }
 }
@@ -82,9 +90,6 @@ export function dvhToVh(): Plugin {
 
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production'
-  const isWeb = process.env.WORKSPAICE_BUILD_PLATFORM === 'web'
-  const isMobile = process.env.WORKSPAICE_BUILD_TARGET === 'mobile_app'
-  const isDesktop = !isWeb && !isMobile
 
   return {
     main: {
@@ -124,10 +129,6 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.type': '"browser"',
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'process.env.WORKSPAICE_BUILD_TARGET': JSON.stringify(process.env.WORKSPAICE_BUILD_TARGET || 'unknown'),
-        'process.env.WORKSPAICE_BUILD_PLATFORM': JSON.stringify(process.env.WORKSPAICE_BUILD_PLATFORM || 'unknown'),
-        'process.env.WORKSPAICE_BUILD_CHANNEL': JSON.stringify(process.env.WORKSPAICE_BUILD_CHANNEL || 'unknown'),
-        'process.env.USE_LOCAL_API': JSON.stringify(process.env.USE_LOCAL_API || ''),
       },
     },
     preload: {
@@ -170,9 +171,11 @@ export default defineConfig(({ mode }) => {
         }),
         react({}),
         dvhToVh(),
-        injectViewportContent(isDesktop),
-        isWeb ? injectBaseTag() : undefined,
-        injectReleaseDate(),
+        injectViewportContent(),
+        // Must come after the other head-prepend plugins: the last prepended
+        // tag ends up first in <head>, and the CSP meta must precede every
+        // script so all of them are governed by it.
+        injectDesktopProdCsp(),
         visualizer({
           filename: 'release/app/dist/renderer/stats.html',
           open: false,
@@ -237,10 +240,6 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.type': '"renderer"',
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'process.env.WORKSPAICE_BUILD_TARGET': JSON.stringify(process.env.WORKSPAICE_BUILD_TARGET || 'unknown'),
-        'process.env.WORKSPAICE_BUILD_PLATFORM': JSON.stringify(process.env.WORKSPAICE_BUILD_PLATFORM || 'unknown'),
-        'process.env.WORKSPAICE_BUILD_CHANNEL': JSON.stringify(process.env.WORKSPAICE_BUILD_CHANNEL || 'unknown'),
-        'process.env.USE_LOCAL_API': JSON.stringify(process.env.USE_LOCAL_API || ''),
       },
       optimizeDeps: {
         // Force a fresh dep optimization on dev startup. This avoids stale .vite

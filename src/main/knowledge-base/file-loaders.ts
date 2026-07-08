@@ -5,10 +5,10 @@ import {
   KNOWLEDGE_BASE_MAX_PARSED_CONTENT_SIZE,
   KNOWLEDGE_BASE_PARSED_CONTENT_TOO_LARGE_ERROR,
 } from '../../shared/knowledge-base'
-import { WorkspAIceAIAPIError } from '../../shared/models/errors'
+import { CodedError } from '../../shared/models/errors'
 import { rerank } from '../../shared/models/rerank'
+import { sentry } from '../../shared/sentry-shim'
 import type { DocumentParserConfig } from '../../shared/types/settings'
-import { sentry } from '../adapters/sentry'
 import { getLogger } from '../util'
 import { checkProcessingTimeouts, getDatabase, getVectorStore } from './db'
 import { getEmbeddingProvider, getRerankProvider } from './model-providers'
@@ -18,8 +18,8 @@ const log = getLogger('knowledge-base:file-loaders')
 
 /**
  * Parse error message to extract user-friendly message
- * Handles JSON error responses from WorkspAIce AI API
- * Uses i18nKey from WorkspAIceAIAPIError.codeNameMap for known error codes
+ * Handles JSON error responses from parser/provider APIs.
+ * Uses i18nKey from the shared error map for known error codes.
  */
 function parseErrorMessage(errorMessage: string): string {
   // Try to extract error code from JSON error response
@@ -32,9 +32,9 @@ function parseErrorMessage(errorMessage: string): string {
       const parsed = JSON.parse(jsonStr)
       const errorCode = parsed.error?.code
 
-      // Try to get i18nKey from WorkspAIceAIAPIError.codeNameMap
-      if (errorCode && WorkspAIceAIAPIError.codeNameMap[errorCode]) {
-        return WorkspAIceAIAPIError.codeNameMap[errorCode].i18nKey
+      // Try to get i18nKey from the shared error map.
+      if (errorCode && CodedError.codeNameMap[errorCode]) {
+        return CodedError.codeNameMap[errorCode].i18nKey
       }
 
       // Fallback to detail or title

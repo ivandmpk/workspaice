@@ -164,11 +164,7 @@ function isInvalidTranslatedText(translated: string): boolean {
 /**
  * Translate a single text using Google Translate free endpoint
  */
-async function translateOneWithGoogle(
-  text: string,
-  targetLang: string,
-  sourceLang: string
-): Promise<string | null> {
+async function translateOneWithGoogle(text: string, targetLang: string, sourceLang: string): Promise<string | null> {
   try {
     const mappedLang = mapLanguageCode(targetLang)
     const params = new URLSearchParams({

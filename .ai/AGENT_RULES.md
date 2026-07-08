@@ -1,13 +1,24 @@
 # Agent Rules
 
-These rules apply to all AI agents working in this repository.
+These rules apply to all AI agents working in this repository. The `.ai/*.md` files exist to brief the *next agent*, not to inform a human reader — write tersely, no narration, no "I did X" prose.
 
-## Required Memory Updates
+## Start-of-Task Checklist
 
-- Always read `.ai/CONTEXT.md` before starting substantial work.
-- Always update `.ai/CONTEXT.md` after code changes.
-- Update `.ai/CONTEXT.md` when goals, architecture, product decisions, risks, blockers, verification results, or workflow rules change.
-- Keep `.ai/CONTEXT.md` useful for future fresh-session agents, not as a user-facing changelog.
+1. Read `.ai/PROJECT.md`, `.ai/ARCHITECTURE_NOTES.md`, and `.ai/STATE.md` in full before substantial work.
+2. Check `STATE.md`'s "In Flight / Next Up" for anything related to the current task before assuming a clean slate.
+
+## End-of-Task Checklist
+
+Run this **automatically at the end of every task, without being asked** — keeping `.ai/` current is part of "done," not a separate request the user has to make. Updating these files is as much a part of finishing a task as the code change itself; a task with stale `.ai/` files is not finished. Run through all four questions in order. Most tasks only trigger one or two.
+
+1. **Did a stable fact change?** (goals, tech stack, file/folder structure, product direction) → edit `PROJECT.md` in place. Rare.
+2. **Did you discover or fix something non-obvious that cost you time to figure out** (a packaging gotcha, a version-pinning constraint, a security/IPC rule, an encryption/migration behavior, a footgun a future agent would otherwise re-trip)? → add an entry to `ARCHITECTURE_NOTES.md`. Keep entries even after related work ships — only remove an entry once the underlying issue is actually gone from the code.
+3. **Did the current task finish completely, with nothing left to decide or do?** → delete its entry from `STATE.md`'s "In Flight / Next Up" (or "Open Product Questions" if it was a question). Do not replace it with a "done" note — the commit and `CHANGELOG.md` are the record of what happened. If you started something but it's not finished, update its `STATE.md` entry to describe what's left, not what you did.
+4. **Did the task surface a new decision, blocker, or follow-up the next agent needs to know about?** → add or update an entry in `STATE.md` under "In Flight / Next Up" or "Open Product Questions".
+
+If none of the four apply (e.g. a one-off question, a read-only investigation), touch nothing in `.ai/`.
+
+**Never** add a running history/changelog of completed work to any `.ai/` file — `git log` and `CHANGELOG.md` already are that record. If you're about to write a bullet describing what you *did* rather than what the next agent needs to *know* or *do differently*, delete it instead.
 
 ## Git Workflow
 
@@ -38,4 +49,4 @@ These rules apply to all AI agents working in this repository.
 - Do not overwrite unrelated user changes.
 - Prefer small, correct changes over broad rewrites.
 - Preserve existing behavior unless intentionally changing it for the WorkspAIce direction.
-- Run relevant verification when possible and record limitations in `.ai/CONTEXT.md`.
+- Run relevant verification when possible; record durable limitations in `ARCHITECTURE_NOTES.md` and open/in-flight ones in `STATE.md` (see End-of-Task Checklist above).

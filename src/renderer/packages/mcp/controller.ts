@@ -9,9 +9,10 @@ import type { MCPServerConfig, MCPServerStatus } from './types'
 type TransportConfig = MCPServerConfig['transport']
 type MCPClient = Awaited<ReturnType<typeof createMCPClient>>
 
-async function createClient(transportConfig: TransportConfig, name = 'workspaice-mcp-client'): Promise<MCPClient> {
+async function createClient(transportConfig: TransportConfig, options?: { displayName?: string }): Promise<MCPClient> {
+  const name = 'workspaice-mcp-client'
   if (transportConfig.type === 'stdio') {
-    const transport = await IPCStdioTransport.create(transportConfig)
+    const transport = await IPCStdioTransport.create(transportConfig, { name: options?.displayName })
     let errorMessage = ''
     try {
       return await createMCPClient({
@@ -66,7 +67,10 @@ export class MCPServer extends Emittery<{ status: MCPServerStatus }> {
   private client?: MCPClient
   private tools?: ToolSet
 
-  constructor(private readonly transportConfig: TransportConfig) {
+  constructor(
+    private readonly transportConfig: TransportConfig,
+    private readonly displayName?: string
+  ) {
     super()
   }
 
@@ -85,7 +89,7 @@ export class MCPServer extends Emittery<{ status: MCPServerStatus }> {
     }
     this.status = { state: 'starting' }
     try {
-      this.client = await createClient(this.transportConfig)
+      this.client = await createClient(this.transportConfig, { displayName: this.displayName })
       this.tools = await this.client.tools()
     } catch (err) {
       console.error('mcp:client:start', err)
@@ -130,7 +134,7 @@ export const mcpController = {
     if (!serverConfig.enabled) {
       return
     }
-    const server = new MCPServer(serverConfig.transport)
+    const server = new MCPServer(serverConfig.transport, serverConfig.name)
     this.servers.set(serverConfig.id, { instance: server, config: serverConfig })
 
     // 如果有订阅者，重新连接他们
@@ -195,22 +199,16 @@ export const mcpController = {
   },
 
   getAvailableTools(): ToolSet {
+    // Execution errors are left to throw: the AI SDK (v5+) converts a throwing
+    // tool into a `tool-error` stream part and continues the step loop, and
+    // `normalizeToolSetErrors` in tools-builder.ts is the shared safety net.
+    // (An older SDK needed errors returned as values; returning an Error object
+    // serializes to `{}` in the tool result, so the model saw nothing useful.)
     const toolSet: ToolSet = {}
     for (const { instance, config } of this.servers.values()) {
       const mcpTools = instance.getAvailableTools()
       for (const [toolName, tool] of Object.entries(mcpTools)) {
-        const rawExecute = tool.execute?.bind(tool)
-        toolSet[normalizeToolName(config.name, toolName)] = {
-          ...tool,
-          execute: async (args, options) => {
-            try {
-              return await rawExecute?.(args, options)
-            } catch (err) {
-              // 返回而非抛出，否则会导致流程中断
-              return err
-            }
-          },
-        }
+        toolSet[normalizeToolName(config.name, toolName)] = tool
       }
     }
     return toolSet

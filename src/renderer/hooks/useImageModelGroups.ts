@@ -74,10 +74,5 @@ export function useImageModelGroups(): ImageModelGroup[] {
     }
 
     return groups
-  }, [
-    openAIProvider,
-    geminiProvider,
-    customGeminiProviders,
-    providerSettingsMap,
-  ])
+  }, [openAIProvider, geminiProvider, customGeminiProviders, providerSettingsMap])
 }

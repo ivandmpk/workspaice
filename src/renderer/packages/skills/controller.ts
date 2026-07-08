@@ -11,6 +11,14 @@ interface SkillInstallResult {
   success: boolean
   skillName: string
   error?: string
+  scriptNames?: string[]
+}
+
+interface SkillScriptReadResult {
+  success: boolean
+  content?: string
+  truncated?: boolean
+  error?: string
 }
 
 interface SkillUpdateResult {
@@ -33,12 +41,20 @@ export const skillsController = {
     return window.electronAPI.invoke('skills:get-directory')
   },
 
+  createSkill(name: string, description: string, body: string): Promise<SkillInstallResult> {
+    return window.electronAPI.invoke('skills:create', { name, description, body })
+  },
+
   async openSkillsDirectory(): Promise<void> {
     await window.electronAPI.invoke('skills:open-directory')
   },
 
   executeScript(skillName: string, scriptName: string, args?: string[]): Promise<SkillScriptResult> {
     return window.electronAPI.invoke('skills:execute-script', { skillName, scriptName, args })
+  },
+
+  readScript(skillName: string, scriptName: string): Promise<SkillScriptReadResult> {
+    return window.electronAPI.invoke('skills:read-script', { skillName, scriptName })
   },
 
   installSkill(owner: string, repo: string, skillPath: string): Promise<SkillInstallResult> {
