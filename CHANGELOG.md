@@ -4,7 +4,7 @@ All notable WorkspAIce changes are tracked here.
 
 ## [1.0.3] - 2026-07-08
 
-First non-beta release. The `-beta` designation has been dropped and the in-app BETA badge removed; macOS packages (arm64 + Intel) built for this version.
+First non-beta release. The `-beta` designation has been dropped and the in-app BETA badge removed; macOS packages (arm64 + Intel) and Windows packages (x64 + arm64, combined NSIS installer) built for this version.
 
 ## [1.0.2-beta] - 2026-07-08
 

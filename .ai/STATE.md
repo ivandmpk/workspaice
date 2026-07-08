@@ -4,8 +4,10 @@ For agents, not humans. What's true right now. Edit in place after every task (s
 
 ## Active Cycle
 
-- `1.0.3` is **released** (dated 2026-07-08 in `CHANGELOG.md`) — the first non-beta release; manifests (root + `release/app`) are at `1.0.3`. **The beta line is retired**: `1.0.2-beta` was the final beta, all versions from `1.0.3` on are non-beta, and there is no in-app BETA badge anymore (removed from `Sidebar.tsx` — the sidebar shows the plain version number). Bump to `1.0.4` (not `-beta`) when starting the next release cut.
+- `1.0.3` is **released** (dated 2026-07-08 in `CHANGELOG.md`) — the first non-beta release. **The beta line is retired**: `1.0.2-beta` was the final beta, all versions from `1.0.3` on are non-beta, and there is no in-app BETA badge anymore (removed from `Sidebar.tsx` — the sidebar shows the plain version number).
 - Released macOS packages: `1.0.3` arm64 (`WorkspAIce-1.0.3-arm64.dmg`) + x64 (`WorkspAIce-1.0.3.dmg`, no arch suffix — electron-builder omits it for x64), both ad-hoc signed, `hdiutil verify` VALID, binaries confirmed arm64/x86_64, `CFBundleShortVersionString` 1.0.3.
+- Released Windows package: `1.0.3` combined NSIS installer (`WorkspAIce-1.0.3-Setup.exe`, x64 + arm64 in one installer, per `electron-builder.yml` `win.target`), built 2026-07-08, signed with `signtool.exe`.
+- **Now developing `1.0.4`**: manifests (root + `release/app`, including `release/app/package-lock.json`) are bumped to `1.0.4`. Add a new `## [1.0.4]` section to `CHANGELOG.md` when the next release is cut.
 
 ## In Flight / Next Up
 
