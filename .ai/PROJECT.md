@@ -85,7 +85,21 @@ Generic workflow rules (branch, commits, pushing, ambiguity) live in `AGENT_RULE
 - `src/main/chat-search/`: FTS5 chat-search index (db + IPC); renderer sync in `src/renderer/stores/chatSearchIndexing.ts`.
 - `electron-builder.yml`: desktop packaging metadata.
 - `package.json`: package metadata and scripts.
-- `README.md` and `doc/`: project documentation.
+- `AGENTS.md`: canonical bootstrap briefing for all AI agents (`CLAUDE.md` imports it).
+- `README.md`: public-facing readme.
+
+## Documentation Map
+
+Trust order for anything written in this repo: **`.ai/` → the code itself → nothing else.** The folders below predate the fork's direction (inherited from upstream Chatbox or from pre-fork planning). They are historical reference only — some actively contradict the local-first direction (e.g. `docs/plans/` contains an email-login/hosted-service plan; `team-sharing/` is an upstream hosted-sharing service). Never take product or architectural direction from them; verify anything they claim against the code.
+
+- `docs/`: upstream technical/product notes, plans, PRDs-adjacent material.
+- `doc/`: upstream FAQ + QA runbook.
+- `tasks/`: upstream PRD documents.
+- `features/`: upstream Gherkin feature specs.
+- `openspec/`: a single pre-fork change spec.
+- `team-sharing/`: upstream hosted-sharing service (contradicts product direction).
+
+Whether to delete or archive these folders is an open user decision tracked in `STATE.md`.
 
 ## Design Surface Inventory
 

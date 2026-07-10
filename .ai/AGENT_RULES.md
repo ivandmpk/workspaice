@@ -4,8 +4,18 @@ These rules apply to all AI agents working in this repository. The `.ai/*.md` fi
 
 ## Start-of-Task Checklist
 
-1. Read `.ai/PROJECT.md`, `.ai/ARCHITECTURE_NOTES.md`, and `.ai/STATE.md` in full before substantial work.
+1. Read `.ai/PROJECT.md` and `.ai/STATE.md` in full before substantial work. In `.ai/ARCHITECTURE_NOTES.md`, read at minimum every section touching your task's domain (always including it in full before build/deps/packaging, security/IPC, or main-process work).
 2. Check `STATE.md`'s "In Flight / Next Up" for anything related to the current task before assuming a clean slate.
+3. Take direction ONLY from `.ai/` and the code. Everything else in the repo that looks like documentation (`docs/`, `doc/`, `tasks/`, `features/`, `openspec/`, `team-sharing/`) is upstream-era historical material and may contradict the current product direction — see the Documentation Map in `PROJECT.md`.
+
+## Staleness Discipline
+
+- `.ai/` notes describe the code as of when they were written. Before relying on a note that names a specific file, function, flag, or version, verify it still exists in the code.
+- If you find a stale or contradictory `.ai/` claim while working, fixing it is part of your task — correct it in place (or delete it) rather than working around it silently.
+
+## Agent Bootstrap Files
+
+- `AGENTS.md` (repo root) is the canonical bootstrap briefing for every AI tool; `CLAUDE.md` only imports it. If the bootstrap content must change, change `AGENTS.md` — never let the two diverge.
 
 ## End-of-Task Checklist
 
