@@ -9,6 +9,12 @@
         "WORKSPAICE_E2E_USER_DATA_DIR=/private/tmp/claude-501/-Users-ivandmpk-Workspace-workspaice/dd34df04-942a-4c83-8fa1-97fa9525382d/scratchpad/e2e-userdata PATH=\"/opt/homebrew/opt/node@22/bin:$PATH\" pnpm dev"
       ],
       "port": 1212
+    },
+    {
+      "name": "landing",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8090", "-d", "landing"],
+      "port": 8090
     }
   ]
 }
