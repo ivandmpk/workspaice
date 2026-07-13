@@ -1,7 +1,9 @@
 <svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="8" y="8" width="240" height="240" rx="48" fill="#F5F5F5"/>
-  <path d="M60 88 L88 200 L120 136 L136 168 L152 136 L168 200 L196 88" stroke="#303841" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M88 88 L168 88" stroke="#76ABAE" stroke-width="22" stroke-linecap="round" fill="none"/>
-  <rect x="148" y="148" width="56" height="56" rx="13" fill="#FF5722"/>
-  <text x="176" y="190" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="32" font-weight="700" fill="#F5F5F5" text-anchor="middle">AI</text>
+  <!-- WorkspAIce mark: W + teal slash + AI badge (matches design-materials/icon-main.png) -->
+  <rect x="16" y="16" width="224" height="224" rx="50" fill="#F5F5F5"/>
+  <path d="M44 84 L78 196 L108 128 L121 160 L134 128 L164 196 L188 92" stroke="#303841" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M202 60 L172 176" stroke="#76ABAE" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <rect x="170" y="170" width="62" height="62" rx="14" fill="#FF5722"/>
+  <path d="M186 216 L196 186 L206 216 M190.5 207 L201.5 207" stroke="#F5F5F5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M215 186 L215 216" stroke="#F5F5F5" stroke-width="6" stroke-linecap="round" fill="none"/>
 </svg>

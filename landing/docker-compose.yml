@@ -1,0 +1,8 @@
+services:
+  landing:
+    build: .
+    image: workspaice-landing:latest
+    container_name: workspaice-landing
+    ports:
+      - "9988:80"
+    restart: unless-stopped
