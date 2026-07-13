@@ -2,6 +2,12 @@
 
 All notable WorkspAIce changes are tracked here.
 
+## [1.0.4] - Unreleased
+
+### Chat
+
+- Added keyboard zoom for chat text: Cmd/Ctrl `+` and `−` step the message text size in 10% increments (70%–160%), and Cmd/Ctrl `0` resets to 100%. The font-size slider in Settings → General now shows the zoom level as a percentage and stays in sync with the shortcuts.
+
 ## [1.0.3] - 2026-07-08
 
 First non-beta release. The `-beta` designation has been dropped and the in-app BETA badge removed; macOS packages (arm64 + Intel) and Windows packages (x64 + arm64, combined NSIS installer) built for this version.
