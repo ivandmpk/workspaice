@@ -23,6 +23,13 @@ import { useTranslation } from 'react-i18next'
 import { AdaptiveSelect } from '@/components/AdaptiveSelect'
 import LazySlider from '@/components/common/LazySlider'
 import { languageNameMap, languages } from '@/i18n/locales'
+import {
+  CHAT_ZOOM_MAX_PERCENT,
+  CHAT_ZOOM_MIN_PERCENT,
+  CHAT_ZOOM_STEP_PERCENT,
+  fontSizeFromPercent,
+  percentFromFontSize,
+} from '@/lib/chatFontZoom'
 import platform from '@/platform'
 import storage, { StorageKey } from '@/storage'
 import { getMetaStorage, recoverSessionList } from '@/stores/chatStore'
@@ -99,19 +106,20 @@ export function RouteComponent() {
         <Stack>
           <Text>{t('Font Size')}</Text>
           <LazySlider
-            step={1}
-            min={10}
-            max={22}
+            step={CHAT_ZOOM_STEP_PERCENT}
+            min={CHAT_ZOOM_MIN_PERCENT}
+            max={CHAT_ZOOM_MAX_PERCENT}
             maw={320}
             marks={[
               {
-                value: 14,
+                value: 100,
               },
             ]}
-            value={settings.fontSize}
+            label={(val) => `${val}%`}
+            value={percentFromFontSize(settings.fontSize)}
             onChange={(val) =>
               setSettings({
-                fontSize: val,
+                fontSize: fontSizeFromPercent(val),
               })
             }
           />

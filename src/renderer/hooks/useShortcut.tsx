@@ -4,10 +4,12 @@ import { commandPalette } from '@/components/commandPaletteStore'
 import { navigateToSettings } from '@/modals/Settings'
 import { router } from '@/router'
 import { uiStore } from '@/stores/uiStore'
+import { CHAT_FONT_BASE_PX, stepChatZoom } from '../lib/chatFontZoom'
 import { getOS } from '../packages/navigator'
 import platform from '../platform'
 import { currentSessionIdAtom } from '../stores/atoms'
 import { switchToIndex, switchToNext } from '../stores/sessionActions'
+import { settingsStore } from '../stores/settingsStore'
 import * as dom from './dom'
 import { useIsSmallScreen } from './useScreenChange'
 
@@ -93,6 +95,25 @@ export default function useShortcut() {
     if (e.key === ',' && ctrlKey) {
       e.preventDefault()
       navigateToSettings()
+      return
+    }
+
+    // 聊天文字缩放 CmdOrCtrl + / - / 0 ('=' 覆盖未按 shift 的 Cmd+=，'+' 覆盖 shift 与小键盘)
+    if ((e.key === '=' || e.key === '+') && ctrlKey) {
+      e.preventDefault()
+      const { fontSize, setSettings } = settingsStore.getState()
+      setSettings({ fontSize: stepChatZoom(fontSize, 1) })
+      return
+    }
+    if (e.key === '-' && ctrlKey) {
+      e.preventDefault()
+      const { fontSize, setSettings } = settingsStore.getState()
+      setSettings({ fontSize: stepChatZoom(fontSize, -1) })
+      return
+    }
+    if (e.key === '0' && ctrlKey) {
+      e.preventDefault()
+      settingsStore.getState().setSettings({ fontSize: CHAT_FONT_BASE_PX })
       return
     }
   }

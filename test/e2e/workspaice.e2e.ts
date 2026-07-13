@@ -184,6 +184,34 @@ test('opens the command palette with Cmd/Ctrl+K and navigates via an action', as
   await expect(searchInput).toBeHidden()
 })
 
+test('zooms chat text with Cmd/Ctrl +/− and resets with Cmd/Ctrl+0', async ({ page }) => {
+  // The keydown listener is attached on React mount — wait for the app to be interactive first
+  await expect(page.getByTestId('message-input')).toBeVisible()
+
+  const msgFontSize = () =>
+    page.evaluate(() => document.documentElement.style.getPropertyValue('--workspaice-msg-font-size'))
+
+  await expect.poll(msgFontSize).toBe('14px')
+
+  // 10% steps of the 14px base: 110% → 120% → back to 110%
+  await page.keyboard.press('ControlOrMeta+Equal')
+  await expect.poll(msgFontSize).toBe('15.4px')
+  await page.keyboard.press('ControlOrMeta+Equal')
+  await expect.poll(msgFontSize).toBe('16.8px')
+  await page.keyboard.press('ControlOrMeta+Minus')
+  await expect.poll(msgFontSize).toBe('15.4px')
+
+  // Cmd/Ctrl+0 resets to 100%
+  await page.keyboard.press('ControlOrMeta+Digit0')
+  await expect.poll(msgFontSize).toBe('14px')
+
+  // Clamps at the 160% ceiling
+  for (let i = 0; i < 8; i++) {
+    await page.keyboard.press('ControlOrMeta+Equal')
+  }
+  await expect.poll(msgFontSize).toBe('22.4px')
+})
+
 test('finds a locally-sent message via cross-conversation search', async ({ page }) => {
   // Seed a mock provider + model so the composer accepts a message (no network:
   // Ctrl+Enter sends without generating a response)
