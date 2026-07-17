@@ -15,7 +15,7 @@ These rules apply to all AI agents working in this repository. The `.ai/*.md` fi
 
 ## Agent Bootstrap Files
 
-- `AGENTS.md` (repo root) is the canonical bootstrap briefing for every AI tool; `CLAUDE.md` only imports it. If the bootstrap content must change, change `AGENTS.md` — never let the two diverge.
+- `AGENTS.md` (repo root) is the single canonical bootstrap briefing for every AI tool. If bootstrap content must change, change that file; do not create tool-specific copies that can diverge.
 
 ## End-of-Task Checklist
 

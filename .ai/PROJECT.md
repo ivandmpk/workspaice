@@ -85,7 +85,7 @@ Generic workflow rules (branch, commits, pushing, ambiguity) live in `AGENT_RULE
 - `src/main/chat-search/`: FTS5 chat-search index (db + IPC); renderer sync in `src/renderer/stores/chatSearchIndexing.ts`.
 - `electron-builder.yml`: desktop packaging metadata.
 - `package.json`: package metadata and scripts.
-- `AGENTS.md`: canonical bootstrap briefing for all AI agents (`CLAUDE.md` imports it).
+- `AGENTS.md`: single canonical bootstrap briefing for all AI agents.
 - `README.md`: public-facing readme.
 
 ## Documentation Map
