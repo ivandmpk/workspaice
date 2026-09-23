@@ -9,39 +9,50 @@
 
   <title>WorkspAIce — Your AI, your machine, your rules</title>
   <meta name="description" content="A local-first desktop AI workspace for macOS and Windows. Fast, private, multi-provider. No accounts, no telemetry, no subscriptions. Bring your own API keys or run models locally with Ollama and LM Studio." />
-  <meta name="keywords" content="local AI, desktop AI client, Ollama, LM Studio, OpenAI, Anthropic, privacy, GPLv3, Chatbox fork" />
   <meta name="author" content="WorkspAIce" />
 
+  <!-- TODO on deploy: set the production origin below and uncomment og:url,
+       og:image, twitter:image, and the canonical link. Scrapers require
+       absolute URLs, and the real domain isn't decided yet.
+  <link rel="canonical" href="https://YOUR-DOMAIN/" />
+  <meta property="og:url" content="https://YOUR-DOMAIN/" />
+  <meta property="og:image" content="https://YOUR-DOMAIN/assets/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:image" content="https://YOUR-DOMAIN/assets/og-card.png" />
+  -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="WorkspAIce" />
   <meta property="og:title" content="WorkspAIce — Your AI, your machine, your rules" />
   <meta property="og:description" content="A local-first desktop AI workspace. No accounts, no telemetry, no subscriptions." />
-  <meta property="og:image" content="assets/icon.png" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="WorkspAIce — Your AI, your machine, your rules" />
   <meta name="twitter:description" content="A local-first desktop AI workspace. No accounts, no telemetry, no subscriptions." />
-  <meta name="twitter:image" content="assets/icon.png" />
 
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
-  <link rel="apple-touch-icon" href="assets/icon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <link rel="preload" href="assets/icon.png" as="image" />
+  <link rel="preload" href="assets/icon.svg" as="image" />
   <link rel="stylesheet" href="style.css" />
 
-  <script>
-    // Apply theme before paint to avoid flash
-    (function () {
-      try {
-        var saved = localStorage.getItem('workspaice-theme');
-        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', theme);
-      } catch (e) {
-        // localStorage unavailable; default to light
-      }
-    })();
+  <!-- Applies saved/system theme before paint; external file so CSP stays script-src 'self' -->
+  <script src="theme-init.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "WorkspAIce",
+    "operatingSystem": "macOS, Windows",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "A local-first desktop AI workspace. No accounts, no telemetry, no subscriptions.",
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "downloadUrl": "https://github.com/ivandmpk/workspaice/releases/latest",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
   </script>
 </head>
 
@@ -51,7 +62,7 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a class="brand" href="#" aria-label="WorkspAIce home">
-        <img class="brand-mark" src="assets/icon.png" alt="" width="40" height="40" />
+        <img class="brand-mark" src="assets/icon.svg" alt="" width="40" height="40" />
         <span class="brand-name">WorkspAIce</span>
       </a>
 
@@ -81,9 +92,14 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true">
+        <span class="hero-glow-teal"></span>
+        <span class="hero-glow-orange"></span>
+      </div>
+
       <div class="container hero-inner">
         <div class="hero-mark" aria-hidden="true">
-          <img src="assets/icon.png" alt="" width="128" height="128" />
+          <img src="assets/icon.svg" alt="" width="128" height="128" />
         </div>
 
         <h1 id="hero-title" class="hero-title">
@@ -96,7 +112,7 @@
         </p>
 
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="https://github.com/ivandmpk/workspaice/releases/tag/1.0.0-beta" rel="noopener noreferrer">
+          <a class="btn btn-primary" href="https://github.com/ivandmpk/workspaice/releases/latest" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
               <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/>
             </svg>
@@ -104,18 +120,16 @@
           </a>
           <a class="btn btn-secondary" href="https://github.com/ivandmpk/workspaice" rel="noopener noreferrer">
             <span>View on GitHub</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
               <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H9m8 0v8"/>
             </svg>
           </a>
         </div>
 
         <ul class="hero-platforms" aria-label="Available platforms">
-          <li>macOS</li>
+          <li>macOS <span class="platform-detail">(Apple Silicon &amp; Intel)</span></li>
           <li aria-hidden="true">·</li>
-          <li>Windows</li>
-          <li aria-hidden="true">·</li>
-          <li>Apple Silicon &amp; Intel</li>
+          <li>Windows <span class="platform-detail">(x64 &amp; ARM64)</span></li>
         </ul>
       </div>
     </section>
@@ -123,13 +137,13 @@
     <!-- WHY -->
     <section id="why" class="section" aria-labelledby="why-title">
       <div class="container">
-        <header class="section-head">
+        <header class="section-head" data-reveal>
           <h2 id="why-title" class="section-title">Why WorkspAIce</h2>
           <p class="section-lead">A desktop AI client that respects your machine and your decisions.</p>
         </header>
 
         <div class="grid grid-3">
-          <article class="card">
+          <article class="card" data-reveal="0">
             <div class="card-icon card-icon--teal" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="22" height="22">
                 <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 11 12 3l9 8v9a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2v-9Z"/>
@@ -141,7 +155,7 @@
             </p>
           </article>
 
-          <article class="card">
+          <article class="card" data-reveal="1">
             <div class="card-icon card-icon--orange" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="22" height="22">
                 <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 10V8a6 6 0 0 1 12 0v2m-13 0h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>
@@ -153,7 +167,7 @@
             </p>
           </article>
 
-          <article class="card">
+          <article class="card" data-reveal="2">
             <div class="card-icon card-icon--teal" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="22" height="22">
                 <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
@@ -172,12 +186,12 @@
     <!-- PROVIDERS -->
     <section id="providers" class="section section-alt" aria-labelledby="providers-title">
       <div class="container">
-        <header class="section-head">
+        <header class="section-head" data-reveal>
           <h2 id="providers-title" class="section-title">Run it your way</h2>
           <p class="section-lead">Pick a local model or bring your own API key. WorkspAIce stays out of the way.</p>
         </header>
 
-        <div class="providers">
+        <div class="providers" data-reveal="0">
           <span class="provider-tag provider-tag--local">Local</span>
           <ul class="provider-list" aria-label="Local providers">
             <li>Ollama</li>
@@ -186,7 +200,7 @@
           </ul>
         </div>
 
-        <div class="providers">
+        <div class="providers" data-reveal="1">
           <span class="provider-tag provider-tag--cloud">Cloud</span>
           <ul class="provider-list" aria-label="Cloud providers">
             <li>OpenAI</li>
@@ -202,7 +216,7 @@
 
     <!-- CREDITS -->
     <section id="credits" class="section section-credits" aria-labelledby="credits-title">
-      <div class="container credits-inner">
+      <div class="container credits-inner" data-reveal>
         <p class="credits-eyebrow">Built on the shoulders of giants</p>
         <h2 id="credits-title" class="credits-title">
           Forked with <span aria-hidden="true" class="heart">♥</span> from
@@ -223,7 +237,7 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <img class="footer-mark" src="assets/icon.png" alt="" width="28" height="28" />
+        <img class="footer-mark" src="assets/icon.svg" alt="" width="28" height="28" />
         <span>WorkspAIce</span>
       </div>
 

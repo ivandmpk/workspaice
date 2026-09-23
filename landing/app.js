@@ -2,6 +2,8 @@
    - Theme toggle (persists in localStorage, respects prefers-color-scheme)
    - Year stamp in footer
    - Live update of theme-color meta tags
+   - Scroll-reveal animations (IntersectionObserver, honors reduced motion)
+   Theme pre-paint bootstrap lives in theme-init.js (loaded in <head>).
 */
 (function () {
   'use strict';
@@ -59,10 +61,40 @@
     if (y) y.textContent = String(new Date().getFullYear());
   }
 
+  /* Scroll-reveal: elements with [data-reveal] fade/rise in when they enter
+     the viewport. Progressive enhancement — without JS (or with reduced
+     motion) everything is simply visible. */
+  function initReveals() {
+    if (!('IntersectionObserver' in window)) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    var targets = document.querySelectorAll('[data-reveal]');
+    if (!targets.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    targets.forEach(function (el) {
+      var delay = el.getAttribute('data-reveal');
+      if (delay && delay !== '') {
+        el.style.transitionDelay = (Number(delay) * 90) + 'ms';
+      }
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+
   function init() {
     initThemeButton();
     initSystemThemeListener();
     initYear();
+    initReveals();
   }
 
   if (document.readyState === 'loading') {
